@@ -1,5 +1,5 @@
 {
-  "name": "moyennesed-v3",
+  "name": "moyennesed",
   "version": "3.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
@@ -24,6 +24,7 @@
     "react": "18.2.0",
     "react-native": "0.72.5",
     "react-native-dropdown-picker": "^5.4.6",
+    "react-native-gesture-handler": "^2.13.1",
     "react-native-paper": "^5.10.4",
     "react-native-pressable-scale": "^2.1.0",
     "react-native-reanimated": "3.3.0",

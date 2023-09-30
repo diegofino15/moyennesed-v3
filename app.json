@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "MoyennesED-ReactNative",
-    "slug": "MoyennesED-ReactNative",
+    "name": "MoyennesED",
+    "slug": "moyennesed-v3",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -26,6 +26,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "d0d65866-3ae7-431c-8a9d-56cd1056ac7a"
+      }
     }
   }
 }
