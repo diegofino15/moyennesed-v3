@@ -1,15 +1,16 @@
 import { ActivityIndicator, SafeAreaView, Text, View, ScrollView, Dimensions, Image } from 'react-native';
 import MoyennesEDButton from '../../components/moyennesed_button';
 import MoyennesEDSquareButton from '../../components/moyennesed_square_button';
-import { ChevronLeft, UserIcon } from 'lucide-react-native';
+import { Check, ChevronLeft, Cross, UserIcon } from 'lucide-react-native';
 import { UserData } from '../../core/UserData';
-import TextTicker from 'react-native-text-ticker'
+import { PressableScale } from 'react-native-pressable-scale';
 
 
 function ProfilePage({
-  connectedRef, connectingRef,
+  connectedRef,
+  connectingRef,
   scrollViewRef,
-  profilePhotoRef, refreshProfilePhoto,
+  profilePhotoRef,
   logout,
   theme
 }) {
@@ -100,9 +101,29 @@ function ProfilePage({
             </View>
             <Text style={theme.fonts.labelMedium}>Compte {UserData.mainAccount.isParent ? "parent" : "élève"}</Text>
           </View>
+          {/* Connection status */}
+          <View style= {{
+            position: 'absolute',
+            top: -10,
+            right: -10,
+          }}>
+            <PressableScale>
+              <View style={{
+                backgroundColor: connectedRef.current ? '#4CAF50' : connectingRef.current ? '#2296F3' : '#DA3633',
+                borderRadius: 10,
+                padding: 5,
+              }}>
+                {connectedRef.current
+                ? <Check size={20} color='white' />
+                : connectingRef.current
+                  ? <ActivityIndicator size={20} color={theme.colors.onPrimary} />
+                  : <Cross />}
+              </View>
+            </PressableScale>
+          </View>
         </View>
-
         
+
         {/* Debug buttons */}
         <MoyennesEDButton
           theme={theme}

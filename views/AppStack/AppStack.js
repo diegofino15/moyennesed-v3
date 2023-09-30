@@ -77,8 +77,6 @@ function AppStack({ theme }) {
         connectingRef={connectingRef}
         scrollViewRef={scrollViewRef}
         profilePhotoRef={profilePhotoRef}
-        setProfilePhoto={setProfilePhoto}
-        gettingProfilePhotoRef={gettingProfilePhotoRef}
         theme={theme}
       />
 

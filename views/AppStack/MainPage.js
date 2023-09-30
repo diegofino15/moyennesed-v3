@@ -14,7 +14,7 @@ import { UserData } from "../../core/UserData";
 function MainPage({
   connectedRef, connectingRef,
   scrollViewRef,
-  profilePhotoRef, setProfilePhoto, gettingProfilePhotoRef,
+  profilePhotoRef, 
   theme
 }) {
   // Account shown on screen

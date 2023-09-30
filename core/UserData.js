@@ -15,13 +15,7 @@ export class UserData {
 
   static async login(username, password) {
     this.API_URL = "https://api.ecoledirecte.com";
-    if (username == "demo" || username == "demo-parent") {
-      if (password != "1408") {
-        console.log("Couldn't connect, wrong password for demo account")
-        return false;
-      }
-      this.API_URL = "http://api.moyennesed.my.to:777/test-api";
-    }
+    if (username == "demo" || username == "demo-parent") { this.API_URL = "http://api.moyennesed.my.to:777/test-api"; }
     
     console.log(`Logging-in ${username}...`);
     this.connected = false;
