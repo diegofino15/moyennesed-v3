@@ -15,7 +15,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "me.diegof.moyennesed"
     },
     "android": {
       "adaptiveIcon": {
