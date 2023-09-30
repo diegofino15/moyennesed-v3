@@ -1,5 +1,5 @@
 import { ScrollView, Dimensions } from 'react-native';
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import useState from 'react-usestateref'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -40,8 +40,24 @@ function AppStack({ theme }) {
     appCtx.setLoggedIn(false);
   }
   
-  // For profile page
+  // For switching between pages
   const scrollViewRef = useRef(null);
+
+  // Profile photo
+  const [_profilePhoto, setProfilePhoto, profilePhotoRef] = useState(UserData.temporaryProfilePhoto);
+  const [_gettingProfilePhoto, _setGettingProfilePhoto, gettingProfilePhotoRef] = useState(false);
+  function refreshProfilePhoto(force=false) {
+    gettingProfilePhotoRef.current = true;
+    UserData.loadProfilePhoto(UserData.mainAccount, (photo) => {
+      setProfilePhoto(photo);
+      gettingProfilePhotoRef.current = false;
+    }, force);
+  }
+  useEffect(() => {
+    if (!UserData.mainAccount.isParent && !profilePhotoRef.current && !gettingProfilePhotoRef.current) {
+      refreshProfilePhoto(false);
+    }
+  }, []);
 
   return (
     <ScrollView
@@ -60,6 +76,9 @@ function AppStack({ theme }) {
         connectedRef={connectedRef}
         connectingRef={connectingRef}
         scrollViewRef={scrollViewRef}
+        profilePhotoRef={profilePhotoRef}
+        setProfilePhoto={setProfilePhoto}
+        gettingProfilePhotoRef={gettingProfilePhotoRef}
         theme={theme}
       />
 
@@ -68,6 +87,8 @@ function AppStack({ theme }) {
         connectedRef={connectedRef}
         connectingRef={connectingRef}
         scrollViewRef={scrollViewRef}
+        profilePhotoRef={profilePhotoRef}
+        refreshProfilePhoto={refreshProfilePhoto}
         logout={logout}
         theme={theme}
       />

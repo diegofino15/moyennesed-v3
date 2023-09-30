@@ -1,4 +1,4 @@
-import { useRef, useCallback } from 'react';
+import { useRef, useEffect, useCallback, } from 'react';
 import { View, SafeAreaView, ScrollView, Text, ActivityIndicator, Dimensions, Linking, StyleSheet, Alert } from 'react-native';
 import LottieView from 'lottie-react-native';
 import { User, KeyRound, ChevronRight } from 'lucide-react-native';
@@ -58,6 +58,15 @@ function AuthStack({ theme }) {
     }
   }, [forgotPasswordURL]);
 
+  // Welcome animation
+  const welcomeAnimation = useRef(null);
+  useEffect(() => {
+    welcomeAnimation.current?.reset();
+    setTimeout(() => {
+      welcomeAnimation.current?.play();
+    }, 100)
+  }, []);
+
   return (
     <SafeAreaView style={[
       styles.mainView,
@@ -75,13 +84,7 @@ function AuthStack({ theme }) {
         ref={scrollViewRef}
         scrollEventThrottle={240} // 5 x second
         onScroll={(event) => {
-          if (event.nativeEvent.contentOffset.x < Dimensions.get('window').width / 2) {
-            setScreenIndex(0);
-          } else if (event.nativeEvent.contentOffset.x < Dimensions.get('window').width * 1.5) {
-            setScreenIndex(1);
-          } else {
-            setScreenIndex(2);
-          }
+          setScreenIndex(Math.floor((event.nativeEvent.contentOffset.x + Dimensions.get('window').width / 2) / Dimensions.get('window').width));
         }}
       >
         {/* Welcome page */}
@@ -98,8 +101,7 @@ function AuthStack({ theme }) {
             top: 180,
           }}>
             <LottieView
-              autoPlay
-              loop={true}
+              ref={welcomeAnimation}
               source={require("../assets/lottie/welcome-animation.json")}
               style={{
                 width: Dimensions.get('window').width,

@@ -11,7 +11,12 @@ import MoyennesEDSeparator from "../../components/moyennesed_separator";
 import { UserData } from "../../core/UserData";
 
 
-function MainPage({ connectedRef, connectingRef, scrollViewRef, theme }) {
+function MainPage({
+  connectedRef, connectingRef,
+  scrollViewRef,
+  profilePhotoRef, setProfilePhoto, gettingProfilePhotoRef,
+  theme
+}) {
   // Account shown on screen
   const [_selectedChildAccount, setSelectedChildAccount, selectedChildAccountRef] = useState("");
   function getAccount() {
@@ -33,7 +38,6 @@ function MainPage({ connectedRef, connectingRef, scrollViewRef, theme }) {
   const [_refreshing, setRefreshing, refreshingRef] = useState(false);
   const [_manualRefreshing, setManualRefreshing, manualRefreshingRef] = useState(false);
 
-  // All possible statuses
   // All possible statuses
   const [_gotMarks, _setGotMarks, gotMarksRef] = useState(UserData.gotMarksFor);
   const [_gettingMarks, _setGettingMarks, gettingMarksRef] = useState(new Map());
@@ -101,19 +105,6 @@ function MainPage({ connectedRef, connectingRef, scrollViewRef, theme }) {
     }
   }, [shownAccountRef.current, connectingRef.current, manualRefreshingRef.current]);
 
-  // Account photo
-  const [_profilePhoto, setProfilePhoto, profilePhotoRef] = useState(UserData.temporaryProfilePhoto);
-  const [_gettingProfilePhoto, _setGettingProfilePhoto, gettingProfilePhotoRef] = useState(false);
-  useEffect(() => {
-    if (!UserData.mainAccount.isParent && !profilePhotoRef.current && !gettingProfilePhotoRef.current) {
-      gettingProfilePhotoRef.current = true;
-      UserData.loadProfilePhoto(shownAccountRef.current, (photo) => {
-        setProfilePhoto(photo);
-        gettingProfilePhotoRef.current = false;
-      });
-    }
-  }, []);
-
   // Open profile page
   async function openProfilePage() { scrollViewRef.current?.scrollTo({ x: Dimensions.get('window').width, animated: true }); }
 
@@ -128,22 +119,23 @@ function MainPage({ connectedRef, connectingRef, scrollViewRef, theme }) {
         `Pas toujours facile de devoir gérer ${UserData.childrenAccounts.size} enfant${UserData.childrenAccounts.size > 1 ? "s" : ""}...`,
         `La clé du succès de ${UserData.childrenAccounts.size > 1 ? "vos" : "votre"} enfant${UserData.childrenAccounts.size > 1 ? "s" : ""} ? Votre soutien !`,
         `Il${UserData.childrenAccounts.size > 1 ? "s" : ""} en donne${UserData.childrenAccounts.size > 1 ? "nt" : ""} du ${UserData.childrenAccounts.size > 1 ? "leur" : "sien"} ! Chacun son niveau.`,
-      );
+        "Si vous aimez bien l'appli hésitez pas à aller la noter !",
+        );
     } else {
       welcomeMessages.push(
         "Allez, les cours sont bientôt finis !",
         "Plus que quelques jours avant le week-end...",
-        "Les profs plombent les notes c'est obligé",
         `Quelques nouvelles notes pour ${UserData.mainAccount.gender == "M" ? "monsieur" : "madame"} ?`,
         "Perd pas la forme, les notes c'est pas tout !",
         "Pense juste pas au bac et tout va bien",
         `Tu seras ${UserData.mainAccount.gender == "M" ? "premier" : "première"} de classe un jour t'inquiète 🔥`,
         "Allez, pense aux grandes vacances c'est pas si loin...",
-        "Déjà des contrôles toutes les semaines..."
+        "Déjà des contrôles toutes les semaines...",
+        "Si t'aimes bien l'appli hésite pas à aller la noter !",
       );
     }
     setWelcomeMessage(welcomeMessages[Math.floor(Math.random() * welcomeMessages.length)]);
-  }, [connectedRef.current]);
+  }, []);
 
   // Refresh marks
   function refresh() {
