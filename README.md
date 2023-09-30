@@ -1,21 +1,30 @@
 # MoyennesED - v3
 
-## Présentation
+## 📖 Présentation
+MoyennesED est une application mobile conçue pour permettre aux élèves de consulter leurs **moyennes scolaires** et aux parents celles de leurs enfants, si leur école utilise le service EcoleDirecte.
 
-MoyennesED est une application mobile conçue pour permettre aux élèves et aux parents de consulter les moyennes scolaires si leur école utilise EcoleDirecte. Elle a été entièrement codée par Diego Finocchiaro.
+## ⚛️ Fonctionnement
+Langage : **JavaScript** avec **React Native** et **Expo**
+L'application imite le fonctionnement du site web [ÉcoleDirecte] (https://www.ecoledirecte.com/) pour se connecter, récupérer une clé de connexion, et ensuite récupérer les notes de l'élève automatiquement. Selon les paramètres décidés par l'utilisateur, les moyennes sont calculées avec des coefficients personnalisés.
 
-## Comment ça marche
+## La v3 ?
+Et oui, c'est la troisième version de l'application. Les deux premières étaient codées en **Flutter**, mais pour cette v3, **React Native** semblait plus approprié. Grâce à ce changement, l'amélioration de l'application dans le futur sera plus simple.
 
-L'application est codée en React Native. Pour l'utiliser, vous devez d'abord cloner le dépôt GitHub en exécutant la commande suivante dans votre terminal :
+## Installation
+L'application est dispo sur l'AppStore et bientôt le GooglePlay (seulement la v2 pour l'instant).
 
+## Comment participer ?
+N'hésitez pas à faire des pulls requests pour ajouter des fonctionnalités ou régler des bugs !
+Pour se faire, clonez le projet :
 ```bash
 git clone https://github.com/diegofino15/moyennesed-v3.git
+cd moyennesed-v3
 ```
-
-Ensuite, vous pouvez lancer l’application en suivant les instructions de déploiement.
-
-## Comment participer
-Si vous souhaitez contribuer à ce projet, n’hésitez pas à faire un fork du projet et à soumettre une pull request. Toutes les contributions sont les bienvenues !
+Ensuite, installez les dependencies et lancez le projet avec expo :
+```bash
+npm install
+npx expo start
+```
 
 ## Contact
 Si vous avez des questions ou des suggestions, n’hésitez pas à ouvrir une issue sur GitHub ou à me contacter directement via mail à moyennesed@gmail.com
