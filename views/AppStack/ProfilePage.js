@@ -1,7 +1,7 @@
 import { ActivityIndicator, SafeAreaView, Text, View, ScrollView, Dimensions, Image } from 'react-native';
 import MoyennesEDButton from '../../components/moyennesed_button';
 import MoyennesEDSquareButton from '../../components/moyennesed_square_button';
-import { Check, ChevronLeft, Cross, RefreshCcw, UserIcon } from 'lucide-react-native';
+import { Check, ChevronLeft, RefreshCcw, UserIcon, X } from 'lucide-react-native';
 import { UserData } from '../../core/UserData';
 import { PressableScale } from 'react-native-pressable-scale';
 
@@ -126,7 +126,7 @@ function ProfilePage({
               ? null
               : connectedRef.current
                 ? <Check size={20} color='white' />
-                : <Cross size={20} color='white' />}
+                : <X size={20} color='white' />}
               <Text style={[
                 theme.fonts.labelLarge,
                 { color: 'white', marginLeft: 10 }

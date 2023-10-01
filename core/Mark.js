@@ -13,7 +13,7 @@ function getFormattedMark(jsonData) {
     "dateEntered": new Date(jsonData.dateSaisie),
     "isEffective": !(jsonData.nonSignificatif || jsonData.enLettre),
     "value": parseFloat(jsonData.valeur.toString().replace(",", ".")),
-    "classValue": parseFloat(jsonData.moyenneClasse.toString().replace(",", ".")),
+    "classValue": jsonData.moyenneClasse ? parseFloat(jsonData.moyenneClasse.toString().replace(",", ".")) : undefined,
     "valueOn": parseFloat(jsonData.noteSur.toString().replace(",", ".")),
     "coefficient": Preferences.guessMarksCoefficients ? getMarkCoefficient(jsonData.devoir) : coefficient,
     "periodCode": jsonData.codePeriode,

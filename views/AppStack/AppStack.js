@@ -1,7 +1,6 @@
 import { ScrollView, Dimensions } from 'react-native';
 import { useRef, useEffect } from 'react';
 import useState from 'react-usestateref'
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { useAppContext } from '../../utils/AppContext';
 import { UserData } from '../../core/UserData';
@@ -20,17 +19,7 @@ function AppStack({ theme }) {
   if (!(connectedRef.current || connectingRef.current) && !triedToConnectRef.current) {
     setTriedToConnect(true);
     console.log("Auto-connecting...");
-    AsyncStorage.getItem('credentials').then((jsonValue) => {
-      const value = JSON.parse(jsonValue);
-      if (value !== null && !connectedRef.current && !connectingRef.current) {
-        setConnecting(true);
-        setConnected(false);
-        UserData.login(value.username, value.password).then((result) => {
-          setConnected(result);
-          setConnecting(false);
-        });
-      }
-    });
+    refreshLogin();
   }
 
   function refreshLogin() {

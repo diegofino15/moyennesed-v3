@@ -183,6 +183,7 @@ export class UserData {
     await AsyncStorage.getItem("cache").then(jsonValue => {
       if (jsonValue != null) {
         const cache = JSON.parse(jsonValue);
+
         this.mainAccount = new Account();
         this.mainAccount.fromCache(cache.mainAccount);
         if (!this.mainAccount.isParent) { this.marksDataCache.set(this.mainAccount.id.toString(), this.mainAccount.periods); }
@@ -191,7 +192,7 @@ export class UserData {
         const cacheChildrenAccounts = new Map(cache.childrenAccounts);
         cacheChildrenAccounts.forEach((cacheChildAccount, key) => {
           const childAccount = new Account();
-          childAccount.fromCache(JSON.parse(cacheChildAccount));
+          childAccount.fromCache(cacheChildAccount);
           this.childrenAccounts.set(childAccount.id.toString(), childAccount);
           this.marksDataCache.set(childAccount.id.toString(), childAccount.periods); 
         });
@@ -203,7 +204,8 @@ export class UserData {
   }
   static async saveCache() {
     const savableChildrenAccounts = new Map();
-    this.childrenAccounts.forEach((childAccount, key) => { savableChildrenAccounts.set(key, JSON.stringify(childAccount.toCache())); });
+    this.childrenAccounts.forEach((childAccount, key) => { savableChildrenAccounts.set(key, childAccount.toCache()); });
+    
     await AsyncStorage.setItem("cache", JSON.stringify({
       gotMarksFor: Array.from(this.gotMarksFor.entries()),
       mainAccount: this.mainAccount.toCache(),

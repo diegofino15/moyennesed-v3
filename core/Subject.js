@@ -35,14 +35,14 @@ function addMark(subject, mark) {
 }
 
 function sortMarks(subject) {
-  subject.marks = _getSortedMarks(subject.marks);
+  _sortMarks(subject.marks);
   for (let [_, subSubject] of subject.subSubjects) {
-    sortMarks(subSubject);
+    _sortMarks(subSubject.marks);
   }
 }
 
-function _getSortedMarks(marks) {
-  return marks.sort((a, b) => {
+function _sortMarks(marks) {
+  marks.sort((a, b) => {
     if (a.date > b.date) {
       return 1;
     }
@@ -73,11 +73,12 @@ function _getCalculatedAverage(subject) {
     }
   });
 
-  for (let [_, subSubject] of subject.subSubjects) {
-    if (subSubject.marks.length === 0) { continue; }
-    sum += (subSubject.average ? subSubject.average : _getCalculatedAverage(subSubject)) * subSubject.coefficient;
-    coefficient += subSubject.coefficient;
-  }
+  subject.subSubjects.forEach((subSubject, _) => {
+    if (subSubject.marks.length != 0) {
+      sum += (subSubject.average ? subSubject.average : _getCalculatedAverage(subSubject)) * subSubject.coefficient;
+      coefficient += subSubject.coefficient;
+    }
+  });
 
   if (coefficient === 0) { return undefined; }
   return sum / coefficient;
@@ -94,11 +95,12 @@ function _getCalculatedClassAverage(subject) {
     }
   });
 
-  for (let [_, subSubject] of subject.subSubjects) {
-    if (subSubject.marks.length === 0) { continue; }
-    sum += (subSubject.classAverage ? subSubject.classAverage : _getCalculatedClassAverage(subSubject)) * subSubject.coefficient;
-    coefficient += subSubject.coefficient;
-  }
+  subject.subSubjects.forEach((subSubject, _) => {
+    if (subSubject.marks.length != 0) {
+      sum += (subSubject.classAverage ? subSubject.classAverage : _getCalculatedClassAverage(subSubject)) * subSubject.coefficient;
+      coefficient += subSubject.coefficient;
+    }
+  });
 
   if (coefficient === 0) { return undefined; }
   return sum / coefficient;
@@ -111,14 +113,29 @@ function getCacheSubject(subject) {
     "code": subject.code,
     "subCode": subject.subCode,
     "isSubSubject": subject.isSubSubject,
-    "subSubjects": Array.from(subject.subSubjects.values()),
+    "subSubjects": Array.from(subject.subSubjects.entries()),
     "teachers": subject.teachers,
-    "marks": Array.from(subject.marks),
+    "marks": subject.marks,
     "average": subject.average,
     "classAverage": subject.classAverage,
     "coefficient": subject.coefficient,
   };
 }
 
+function getSubjectFromCache(cacheSubject) {
+  return {
+    "id": cacheSubject.id,
+    "name": cacheSubject.name,
+    "code": cacheSubject.code,
+    "subCode": cacheSubject.subCode,
+    "isSubSubject": cacheSubject.isSubSubject,
+    "subSubjects": new Map(cacheSubject.subSubjects),
+    "teachers": cacheSubject.teachers,
+    "marks": cacheSubject.marks,
+    "average": cacheSubject.average,
+    "classAverage": cacheSubject.classAverage,
+    "coefficient": cacheSubject.coefficient,
+  };
+}
 
-export { getFormattedSubject, addSubSubject, addMark, sortMarks, _getSortedMarks, calculateAverages, getCacheSubject };
+export { getFormattedSubject, addSubSubject, addMark, sortMarks, _sortMarks, calculateAverages, getCacheSubject, getSubjectFromCache };

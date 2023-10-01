@@ -1,4 +1,4 @@
-import { getFormattedPeriod, addMark, sortAllMarks, calculateAllAverages, getCachePeriod } from "./Period";
+import { getFormattedPeriod, addMark, sortAllMarks, calculateAllAverages, getCachePeriod, getPeriodFromCache } from "./Period";
 import { getFormattedMark } from "./Mark";
 import { Preferences } from "./Preferences";
 
@@ -34,45 +34,31 @@ export class Account {
     this.id = cacheData.id;
     this.firstName = cacheData.firstName;
     this.lastName = cacheData.lastName;
-    this.isParent = cacheData.isParent;
     this.gender = cacheData.gender;
-    if (!this.isParent) {
-      this.photoURL = cacheData.photoURL;
-      cacheData.periods.forEach(periodData => {
-        var formattedPeriodData = periodData;
-        formattedPeriodData.marks = new Array(periodData.marks);
-        formattedPeriodData.subjects = new Map();
-        periodData.subjects.forEach(subjectData => {
-          var formattedSubjectData = subjectData;
-          formattedSubjectData.marks = new Map(subjectData.marks);
-          formattedSubjectData.subSubjects = new Map();
-          subjectData.subSubjects.forEach(subSubjectData => {
-            var formattedSubSubjectData = subSubjectData;
-            formattedSubSubjectData.marks = new Map(subSubjectData.marks);
-            formattedSubjectData.subSubjects.set(subSubjectData.subCode, formattedSubSubjectData);
-          });
-          formattedPeriodData.subjects.set(subjectData.code, formattedSubjectData);
-        });
+    this.isParent = cacheData.isParent;
+    this.photoURL = cacheData.photoURL;
 
-        this.periods.set(periodData.code, formattedPeriodData);
+    if (!this.isParent) {
+      const cachePeriods = new Map(cacheData.periods);
+      cachePeriods.forEach((cachePeriodData, key) => {
+        this.periods.set(key, getPeriodFromCache(cachePeriodData));
       });
     }
   }
   toCache() {
-    var periods;
-    if (!this.isParent) {
-      periods = new Array();
-      for (let [_, period] of this.periods) { periods.push(getCachePeriod(period)); }
-    }
-
+    var savablePeriods = new Map();
+    this.periods.forEach((period, key) => {
+      savablePeriods.set(period.code, getCachePeriod(period));
+    });
+    
     return {
       id: this.id,
       firstName: this.firstName,
       lastName: this.lastName,
       isParent: this.isParent,
       gender: this.gender,
-      photoURL: this.isParent ? "" : this.photoURL,
-      periods: this.isParent ? {} : periods,
+      photoURL: this.photoURL,
+      periods: this.isParent ? {} : Array.from(savablePeriods.entries()),
     };
   }
 
