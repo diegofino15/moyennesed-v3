@@ -3,7 +3,7 @@
 ## 📖 Présentation
 MoyennesED est une application mobile conçue pour permettre aux élèves de consulter leurs **moyennes scolaires** et aux parents celles de leurs enfants, si leur école utilise le service EcoleDirecte.
 
-## Fonctionnalités
+## 🚀 Fonctionnalités
 - [x] Authentification
   - [x] Compte élève
   - [x] Compte parent
