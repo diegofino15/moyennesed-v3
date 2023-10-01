@@ -4,6 +4,7 @@ import MoyennesEDSquareButton from '../../components/moyennesed_square_button';
 import { Check, ChevronLeft, RefreshCcw, UserIcon, X } from 'lucide-react-native';
 import { UserData } from '../../core/UserData';
 import { PressableScale } from 'react-native-pressable-scale';
+import * as Haptics from "expo-haptics";
 
 
 function ProfilePage({
@@ -132,9 +133,14 @@ function ProfilePage({
                 { color: 'white', marginLeft: 10 }
               ]}>{connectedRef.current ? "Connecté" : connectingRef.current ? "Connexion en cours..." : "Non connecté"}</Text>
             </View>
-            {<PressableScale
+            <PressableScale
               onPress={() => {
-                if (!connectingRef.current) { refreshLogin(); }
+                if (!connectingRef.current) {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                  refreshLogin().then(() => {
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                  });
+                }
               }}
               style={{
                 borderColor: 'white',
@@ -147,7 +153,7 @@ function ProfilePage({
               {connectingRef.current
               ? <ActivityIndicator size={25} color='white' />
               : <RefreshCcw size={25} color='white' />}
-            </PressableScale>}
+            </PressableScale>
           </View>
         </PressableScale>
         

@@ -22,13 +22,12 @@ function AppStack({ theme }) {
     refreshLogin();
   }
 
-  function refreshLogin() {
+  async function refreshLogin() {
     setConnecting(true);
     setConnected(false);
-    UserData.refreshLogin().then((result) => {
-      setConnected(result);
-      setConnecting(false);
-    });
+    const successful = await UserData.refreshLogin();
+    setConnected(successful);
+    setConnecting(false);
   }
 
   // Log-out of account
