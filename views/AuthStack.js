@@ -94,7 +94,7 @@ function AuthStack({ theme }) {
             theme.fonts.titleLarge,
             { marginBottom: 10 }
           ]}>Bienvenue sur <Text style={theme.fonts.titleLarge}>MoyennesED</Text></Text>
-          <Text style={theme.fonts.labelLarge}>L'appli pour consulter vos moyennes facilement et simplement</Text>
+          <Text style={theme.fonts.labelLarge}>L'appli pour consulter vos moyennes facilement et rapidement</Text>
           {/* Animation */}
           <View style={{
             position: 'absolute',

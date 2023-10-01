@@ -1,4 +1,4 @@
-import { View, TextInput } from 'react-native';
+import { View, TextInput, Dimensions } from 'react-native';
 
 
 function MoyennesEDInput({
@@ -25,7 +25,7 @@ function MoyennesEDInput({
         style={{
           ...theme.fonts.bodyLarge,
           marginLeft: 10,
-          width: '100%',
+          width: Dimensions.get('window').width - 105,
         }}
         placeholder={label}
         onChangeText={onChangeText}

@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from 'axios';
 import { Account } from "./Account";
+import { Preferences } from "./Preferences";
 
 export class UserData {
   static connected = false;
@@ -123,6 +124,7 @@ export class UserData {
     this.marksNeedUpdate.clear();
     this.marksDataCache.clear();
     await AsyncStorage.removeItem("cache");
+    Preferences.haveBeenChanged = false;
     await AsyncStorage.removeItem("preferences");
     this.temporaryProfilePhoto = "";
     await AsyncStorage.removeItem("photo");
