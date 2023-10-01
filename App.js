@@ -159,6 +159,7 @@ export default App;
 
 /*
 TODO:
+  -> Fix possible empty data like class mark values
   -> Make the preferences customizable
   -> Create marks UI (marks, popups, sliders...)
   -> Bug report system
