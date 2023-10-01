@@ -1,7 +1,7 @@
 import { ActivityIndicator, SafeAreaView, Text, View, ScrollView, Dimensions, Image } from 'react-native';
 import MoyennesEDButton from '../../components/moyennesed_button';
 import MoyennesEDSquareButton from '../../components/moyennesed_square_button';
-import { Check, ChevronLeft, Cross, UserIcon } from 'lucide-react-native';
+import { Check, ChevronLeft, Cross, RefreshCcw, UserIcon } from 'lucide-react-native';
 import { UserData } from '../../core/UserData';
 import { PressableScale } from 'react-native-pressable-scale';
 
@@ -9,6 +9,7 @@ import { PressableScale } from 'react-native-pressable-scale';
 function ProfilePage({
   connectedRef,
   connectingRef,
+  refreshLogin,
   scrollViewRef,
   profilePhotoRef,
   logout,
@@ -67,7 +68,7 @@ function ProfilePage({
           paddingHorizontal: 10,
           paddingVertical: 10,
           borderRadius: 10,
-          marginBottom: 20,
+          marginBottom: 10,
           marginTop: UserData.mainAccount.isParent ? 0 : 20,
           height: 60,
         }}>
@@ -100,30 +101,56 @@ function ProfilePage({
               </ScrollView>
             </View>
             <Text style={theme.fonts.labelMedium}>Compte {UserData.mainAccount.isParent ? "parent" : "élève"}</Text>
-          </View>
-          {/* Connection status */}
-          <View style= {{
-            position: 'absolute',
-            top: -10,
-            right: -10,
-          }}>
-            <PressableScale>
-              <View style={{
-                backgroundColor: connectedRef.current ? '#4CAF50' : connectingRef.current ? '#2296F3' : '#DA3633',
-                borderRadius: 10,
-                padding: 5,
-              }}>
-                {connectedRef.current
-                ? <Check size={20} color='white' />
-                : connectingRef.current
-                  ? <ActivityIndicator size={20} color={theme.colors.onPrimary} />
-                  : <Cross />}
-              </View>
-            </PressableScale>
-          </View>
+          </View>          
         </View>
-        
 
+        {/* Connection status */}
+        <PressableScale style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between'
+        }}>
+          <View style={{
+            backgroundColor: connectedRef.current ? '#4CAF50' : connectingRef.current ? '#2296F3' : '#DA3633',
+            borderRadius: 10,
+            marginBottom: 20,
+            width: '100%',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
+            <View style={{
+              padding: 10,
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+            }}>
+              {connectingRef.current
+              ? null
+              : connectedRef.current
+                ? <Check size={20} color='white' />
+                : <Cross size={20} color='white' />}
+              <Text style={[
+                theme.fonts.labelLarge,
+                { color: 'white', marginLeft: 10 }
+              ]}>{connectedRef.current ? "Connecté" : connectingRef.current ? "Connexion en cours..." : "Non connecté"}</Text>
+            </View>
+            {<PressableScale
+              onPress={() => {
+                if (!connectingRef.current) { refreshLogin(); }
+              }}
+              style={{
+                borderColor: 'white',
+                borderLeftWidth: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: 50
+              }}
+            >
+              {connectingRef.current
+              ? <ActivityIndicator size={25} color='white' />
+              : <RefreshCcw size={25} color='white' />}
+            </PressableScale>}
+          </View>
+        </PressableScale>
+        
         {/* Debug buttons */}
         <MoyennesEDButton
           theme={theme}

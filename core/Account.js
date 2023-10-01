@@ -82,7 +82,7 @@ export class Account {
 
   // Only for students accounts
   gotMarks() { return this.periods.size > 0; }
-  formatReceivedMarks(jsonData) {
+  formatReceivedMarks(jsonData, saveCalculatedMarks) {
     // Set preferences
     if (!Preferences.haveBeenChanged) {
       Preferences.setGuessMarksCoefficients(!(jsonData.parametrage.coefficientNote ?? false));
@@ -112,6 +112,8 @@ export class Account {
       sortAllMarks(period);
       calculateAllAverages(period);
     }
+
+    saveCalculatedMarks(this.periods);
   }
 
   // Erase all data when logging-out

@@ -33,6 +33,15 @@ function AppStack({ theme }) {
     });
   }
 
+  function refreshLogin() {
+    setConnecting(true);
+    setConnected(false);
+    UserData.refreshLogin().then((result) => {
+      setConnected(result);
+      setConnecting(false);
+    });
+  }
+
   // Log-out of account
   const appCtx = useAppContext();
   async function logout() {
@@ -84,6 +93,7 @@ function AppStack({ theme }) {
       <ProfilePage
         connectedRef={connectedRef}
         connectingRef={connectingRef}
+        refreshLogin={refreshLogin}
         scrollViewRef={scrollViewRef}
         profilePhotoRef={profilePhotoRef}
         refreshProfilePhoto={refreshProfilePhoto}

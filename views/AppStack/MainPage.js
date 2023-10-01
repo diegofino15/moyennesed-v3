@@ -62,7 +62,9 @@ function MainPage({
           return;
         }
 
-        accountToUpdate.formatReceivedMarks(marks);
+        accountToUpdate.formatReceivedMarks(marks, (periods) => {
+          UserData.marksDataCache.set(accountToUpdate.id.toString(), periods);
+        });
         gotMarksRef.current.set(accountToUpdate.id, true); UserData.gotMarksFor.set(accountToUpdate.id, true);
         gettingMarksRef.current.set(accountToUpdate.id, false);
         await UserData.saveCache();
@@ -87,7 +89,9 @@ function MainPage({
           return;
         }
 
-        accountToUpdate.formatReceivedMarks(marks);
+        accountToUpdate.formatReceivedMarks(marks, (periods) => {
+          UserData.marksDataCache.set(accountToUpdate.id.toString(), periods);
+        });
         gettingMarksRef.current.set(accountToUpdate.id, false);
         await UserData.saveCache();
         console.log(`Refreshed marks for ${accountToUpdate.id} !`);

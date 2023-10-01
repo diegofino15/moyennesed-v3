@@ -80,6 +80,15 @@ export class UserData {
     }
   }
 
+  static async refreshLogin() {
+    console.log("Refreshing login...");
+    const credentials = JSON.parse(await AsyncStorage.getItem("credentials"));
+    if (credentials) {
+      return await this.login(credentials.username, credentials.password);
+    }
+    return false;
+  }
+
   static async getMarks(accountID) {
     console.log(`Getting marks for account ${accountID}...`);
     const response = await axios.post(
@@ -98,9 +107,11 @@ export class UserData {
             return response.data.data;
           case 520: // Outdated token
             console.log("Outdated token, reconnecting...");
-            const credentials = JSON.parse(await AsyncStorage.getItem("credentials"));
-            await this.login(credentials.username, credentials.password);
-            return await this.getMarks(accountID);
+            const reloginSuccessful = await this.refreshLogin();
+            if (reloginSuccessful) {
+              return await this.getMarks(accountID);
+            }
+            return null;
           default:
             console.log(`API responded with unknown code ${response.data.code}`);
             return null;
