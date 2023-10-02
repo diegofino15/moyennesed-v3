@@ -1,10 +1,12 @@
 import { ActivityIndicator, SafeAreaView, Text, View, ScrollView, Dimensions, Image } from 'react-native';
 import MoyennesEDButton from '../../components/moyennesed_button';
 import MoyennesEDSquareButton from '../../components/moyennesed_square_button';
-import { Check, ChevronLeft, RefreshCcw, UserIcon, X } from 'lucide-react-native';
+import { BadgeInfoIcon, Check, ChevronLeft, HelpCircleIcon, RefreshCcw, Settings2Icon, UserIcon, X } from 'lucide-react-native';
 import { UserData } from '../../core/UserData';
 import { PressableScale } from 'react-native-pressable-scale';
 import * as Haptics from "expo-haptics";
+import MoyennesEDSeparator from '../../components/moyennesed_separator';
+import MoyennesEDPageButton from '../../components/moyennesed_page_button';
 
 
 function ProfilePage({
@@ -83,6 +85,7 @@ function ProfilePage({
               icon={profilePhotoRef.current ? <Image source={{ uri: profilePhotoRef.current }} style={{ width: 80, height: 80 }} /> : <UserIcon size={40} color={theme.colors.onSurfaceDisabled} />}
               theme={theme}
               onPress={() => {}}
+              hasBorders={true}
             />
           </View>}
           <View style={{
@@ -107,13 +110,11 @@ function ProfilePage({
 
         {/* Connection status */}
         <PressableScale style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between'
+          marginBottom: 20,
         }}>
           <View style={{
             backgroundColor: connectedRef.current ? '#4CAF50' : connectingRef.current ? '#2296F3' : '#DA3633',
             borderRadius: 10,
-            marginBottom: 20,
             width: '100%',
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -156,6 +157,28 @@ function ProfilePage({
             </PressableScale>
           </View>
         </PressableScale>
+
+        <MoyennesEDSeparator theme={theme} style={{ marginBottom: 20 }}/>
+
+        {/* Settings  */}
+        <Text style={[theme.fonts.headlineLarge, { marginBottom: 10 }]}>Paramètres</Text>
+        <View style={{
+          backgroundColor: theme.colors.surface,
+          borderRadius: 20,
+          marginBottom: 20,
+          height: 100,
+        }}>
+        </View>
+
+        {/* Informations */}
+        <Text style={[theme.fonts.headlineLarge, { marginBottom: 10 }]}>Informations</Text>
+        <View style={{
+          backgroundColor: theme.colors.surface,
+          borderRadius: 20,
+          marginBottom: 20,
+          height: 100,
+        }}>
+        </View>
         
         {/* Debug buttons */}
         <MoyennesEDButton
@@ -164,9 +187,14 @@ function ProfilePage({
           confirmTitle={`Êtes vous sûr${UserData.mainAccount.getSuffix()} ?`}
           onPress={logout}
           willLoad={true}
-          loadIcon={<ActivityIndicator size={20} color={theme.colors.onPrimary} />}
+          loadIcon={<ActivityIndicator size={20} color='#DA3633' />}
           style={{
-            backgroundColor: '#DA3633'
+            backgroundColor: theme.colors.background,
+            borderWidth: 2,
+            borderColor: '#DA3633'
+          }}
+          textStyle={{
+            color: '#DA3633',
           }}
         />
       </SafeAreaView>

@@ -4,7 +4,7 @@ import { PressableScale } from 'react-native-pressable-scale';
 import * as Haptics from 'expo-haptics';
 
 
-function MoyennesEDButton({ title, confirmTitle, onPress, theme, leftIcon, rightIcon, loadIcon, willLoad, style }) {
+function MoyennesEDButton({ title, confirmTitle, onPress, theme, leftIcon, rightIcon, loadIcon, willLoad, style, textStyle }) {
   const [isLoading, setIsLoading] = useState(false);
   const [waitingForConfirmation, setWaitingForConfirmation] = useState(false);
   
@@ -58,6 +58,7 @@ function MoyennesEDButton({ title, confirmTitle, onPress, theme, leftIcon, right
             <Text style={{
               ...theme.fonts.bodyLarge,
               color: theme.colors.onPrimary,
+              ...textStyle,
             }}>
               {waitingForConfirmation ? confirmTitle : title}
             </Text>

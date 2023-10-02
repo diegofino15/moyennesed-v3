@@ -1,25 +1,14 @@
-import { useState } from 'react';
 import { View } from 'react-native';
 import { PressableScale } from 'react-native-pressable-scale';
 import * as Haptics from 'expo-haptics';
 
 
-function MoyennesEDSquareButton({ icon, onPress, theme, loadIcon, willLoad }) {
-  const [isLoading, setIsLoading] = useState(false);
-  
+function MoyennesEDSquareButton({ icon, onPress, theme, hasBorders }) {
   let pressScale = 0.95;
   if (!onPress) { pressScale = 1; }
   function onPressActive() {
-    if (onPress) { // && !isLoading
-      if (willLoad) {
-        setIsLoading(true);
-        onPress().then(() => {
-          setIsLoading(false);
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-        });
-      } else {
-        onPress();
-      }
+    if (onPress) {
+      onPress();
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     }
   }
@@ -32,8 +21,8 @@ function MoyennesEDSquareButton({ icon, onPress, theme, loadIcon, willLoad }) {
     >
       <View style={{
         backgroundColor: theme.colors.surface,
-        borderColor: theme.colors.background,
-        borderWidth: 1,
+        borderWidth: hasBorders ? 1 : 0,
+        borderColor: 'black',
         borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
@@ -42,7 +31,7 @@ function MoyennesEDSquareButton({ icon, onPress, theme, loadIcon, willLoad }) {
         overflow: 'hidden',
         padding: 10,
       }}>
-        {isLoading && loadIcon ? loadIcon : icon}
+        {icon}
       </View>
     </PressableScale>
   );
