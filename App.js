@@ -69,21 +69,21 @@ function App() {
     },
 
     headlineLarge: {
-      fontSize: 20.0,
+      fontSize: 35.0,
       fontWeight: 'bold',
-      fontFamily: 'Montserrat-Medium',
+      fontFamily: 'Bitter-Bold',
       color: theme.colors.onBackground,
     },
     headlineMedium: {
       fontSize: 17.0,
       fontWeight: 'bold',
-      fontFamily: 'Montserrat-Medium',
+      fontFamily: 'Bitter-Medium',
       color: theme.colors.onBackground,
     },
     headlineSmall: {
-      fontSize: 15.0,
+      fontSize: 12.0,
       fontWeight: 'bold',
-      fontFamily: 'Montserrat-Medium',
+      fontFamily: 'Bitter-Medium',
       color: theme.colors.onBackground,
     },
 

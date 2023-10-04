@@ -3,7 +3,7 @@ import { PressableScale } from 'react-native-pressable-scale';
 import * as Haptics from 'expo-haptics';
 
 
-function MoyennesEDSquareButton({ icon, onPress, theme, hasBorders }) {
+function MoyennesEDSquareButton({ icon, onPress, theme }) {
   let pressScale = 0.95;
   if (!onPress) { pressScale = 1; }
   function onPressActive() {
@@ -21,8 +21,6 @@ function MoyennesEDSquareButton({ icon, onPress, theme, hasBorders }) {
     >
       <View style={{
         backgroundColor: theme.colors.surface,
-        borderWidth: hasBorders ? 1 : 0,
-        borderColor: 'black',
         borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',

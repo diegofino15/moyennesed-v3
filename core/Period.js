@@ -1,4 +1,5 @@
 import { getFormattedSubject, addSubSubject, sortMarks, _sortMarks, calculateAverages, getCacheSubject, getSubjectFromCache } from "./Subject";
+import { registerSubject } from "../utils/Colors";
 
 function getFormattedPeriod(jsonData) {
   var subjects = new Map();
@@ -7,6 +8,7 @@ function getFormattedPeriod(jsonData) {
     const subjectCode = subject.code.length === 0 ? "---" : subject.code;
     if (!subject.isSubSubject) { subjects.set(subjectCode, subject); }
     else { addSubSubject(subjects.get(subjectCode), subject); }
+    registerSubject(subject.code);
   })
   
   return {

@@ -35,7 +35,7 @@ function MoyennesEDSection({
           alignItems: 'center',
         }}>
           <Text style={{
-            ...theme.fonts.headlineSmall,
+            ...theme.fonts.bodyMedium,
             marginBottom: 5,
           }}>
             {title}

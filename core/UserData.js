@@ -23,7 +23,7 @@ export class UserData {
     this.connecting = true;
 
     const response = await axios.post(
-      `${this.API_URL}/login.awp`,
+      `${this.API_URL}/v3/login.awp`,
       `data={"identifiant":"${username}", "motdepasse":"${password}"}`,
       { headers: { "Content-Type": "text/plain" } },
     );

@@ -6,7 +6,6 @@ import { UserData } from '../../core/UserData';
 import { PressableScale } from 'react-native-pressable-scale';
 import * as Haptics from "expo-haptics";
 import MoyennesEDSeparator from '../../components/moyennesed_separator';
-import MoyennesEDPageButton from '../../components/moyennesed_page_button';
 
 
 function ProfilePage({
@@ -99,7 +98,7 @@ function ProfilePage({
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
               >
-                <Text style={[theme.fonts.headlineLarge, { overflow: 'visible' }]} numberOfLines={1}>
+                <Text style={[theme.fonts.titleSmall, { overflow: 'visible' }]} numberOfLines={1}>
                   {UserData.mainAccount.fullName()}
                 </Text>
               </ScrollView>
@@ -132,7 +131,7 @@ function ProfilePage({
               <Text style={[
                 theme.fonts.labelLarge,
                 { color: 'white', marginLeft: 10 }
-              ]}>{connectedRef.current ? "Connecté" : connectingRef.current ? "Connexion en cours..." : "Non connecté"}</Text>
+              ]}>{connectedRef.current ? `Connecté${UserData.mainAccount.getSuffix()}` : connectingRef.current ? "Connexion en cours..." : `Non connecté${UserData.mainAccount.getSuffix()}`}</Text>
             </View>
             <PressableScale
               onPress={() => {
@@ -161,7 +160,7 @@ function ProfilePage({
         <MoyennesEDSeparator theme={theme} style={{ marginBottom: 20 }}/>
 
         {/* Settings  */}
-        <Text style={[theme.fonts.headlineLarge, { marginBottom: 10 }]}>Paramètres</Text>
+        <Text style={[theme.fonts.titleSmall, { marginBottom: 10 }]}>Paramètres</Text>
         <View style={{
           backgroundColor: theme.colors.surface,
           borderRadius: 20,
@@ -171,7 +170,7 @@ function ProfilePage({
         </View>
 
         {/* Informations */}
-        <Text style={[theme.fonts.headlineLarge, { marginBottom: 10 }]}>Informations</Text>
+        <Text style={[theme.fonts.titleSmall, { marginBottom: 10 }]}>Informations</Text>
         <View style={{
           backgroundColor: theme.colors.surface,
           borderRadius: 20,
