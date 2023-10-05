@@ -1,5 +1,4 @@
 import { loadAsync } from 'expo-font';
-import { useTheme } from 'react-native-paper';
 
 const useFonts = async () => await loadAsync({
   'Montserrat-Regular': require('../assets/fonts/Montserrat-Regular.ttf'),

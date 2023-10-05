@@ -3,7 +3,7 @@ import { PaperProvider, useTheme } from 'react-native-paper';
 import useState from 'react-usestateref'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { useFonts, setThemeData } from './hooks/useFonts';
+import { useFonts, setThemeData } from './hooks/useStyles';
 import { AuthStack } from './views/AuthStack';
 import { AppStack } from './views/AppStack/AppStack';
 import { AppContextProvider } from './utils/AppContext';
