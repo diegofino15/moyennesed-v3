@@ -6,8 +6,8 @@ import useState from "react-usestateref";
 import * as Haptics from "expo-haptics";
 
 import { EmbeddedMarksView } from './EmbeddedMarksView';
-import MoyennesEDSquareButton from "../../components/moyennesed_square_button";
-import MoyennesEDSeparator from "../../components/moyennesed_separator";
+import MoyennesEDSquareButton from "../../components/appstack/moyennesed_square_button";
+import MoyennesEDSeparator from "../../components/global/moyennesed_separator";
 import { UserData } from "../../core/UserData";
 
 

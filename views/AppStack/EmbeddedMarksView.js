@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import useState from "react-usestateref";
 import { getSubjectColor } from "../../utils/Colors";
 import { formatAverage, formatMark } from "../../utils/Utils";
-import MoyennesEDSeparator from "../../components/moyennesed_separator";
+import MoyennesEDSeparator from "../../components/global/moyennesed_separator";
 
 
 function EmbeddedMarksView({ shownAccountRef, gotMarks, gettingMarks, marksNeedUpdate, refreshing, theme }) {

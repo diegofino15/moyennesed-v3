@@ -1,11 +1,11 @@
 import { ActivityIndicator, SafeAreaView, Text, View, ScrollView, Dimensions, Image } from 'react-native';
-import MoyennesEDButton from '../../components/moyennesed_button';
-import MoyennesEDSquareButton from '../../components/moyennesed_square_button';
+import MoyennesEDButton from '../../components/global/moyennesed_button';
+import MoyennesEDSquareButton from '../../components/appstack/moyennesed_square_button';
 import { BadgeInfoIcon, Check, ChevronLeft, HelpCircleIcon, RefreshCcw, Settings2Icon, UserIcon, X } from 'lucide-react-native';
 import { UserData } from '../../core/UserData';
 import { PressableScale } from 'react-native-pressable-scale';
 import * as Haptics from "expo-haptics";
-import MoyennesEDSeparator from '../../components/moyennesed_separator';
+import MoyennesEDSeparator from '../../components/global/moyennesed_separator';
 
 
 function ProfilePage({

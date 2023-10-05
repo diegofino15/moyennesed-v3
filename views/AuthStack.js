@@ -6,9 +6,9 @@ import useState from 'react-usestateref'
 
 import { UserData } from '../core/UserData';
 import { useAppContext } from '../utils/AppContext';
-import MoyennesEDSection from '../components/moyennesed_section';
-import MoyennesEDButton from '../components/moyennesed_button';
-import MoyennesEDInput from '../components/moyennesed_input';
+import MoyennesEDSection from '../components/authstack/moyennesed_section';
+import MoyennesEDInput from '../components/authstack/moyennesed_input';
+import MoyennesEDButton from '../components/global/moyennesed_button';
 
 
 function AuthStack({ theme }) {
