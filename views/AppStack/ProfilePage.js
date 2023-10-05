@@ -1,11 +1,11 @@
 import { ActivityIndicator, SafeAreaView, Text, View, ScrollView, Dimensions, Image } from 'react-native';
-import MoyennesEDButton from '../../components/global/moyennesed_button';
-import MoyennesEDSquareButton from '../../components/appstack/moyennesed_square_button';
+import CustomButton from '../../components/global/custom_button';
+import CustomSquareButton from '../../components/appstack/custom_square_button';
 import { BadgeInfoIcon, Check, ChevronLeft, HelpCircleIcon, RefreshCcw, Settings2Icon, UserIcon, X } from 'lucide-react-native';
 import { UserData } from '../../core/UserData';
 import { PressableScale } from 'react-native-pressable-scale';
 import * as Haptics from "expo-haptics";
-import MoyennesEDSeparator from '../../components/global/moyennesed_separator';
+import Separator from '../../components/global/separator';
 
 
 function ProfilePage({
@@ -42,7 +42,7 @@ function ProfilePage({
           height: 70,
           marginBottom: 20,
         }}>
-          <MoyennesEDSquareButton
+          <CustomSquareButton
             icon={<ChevronLeft size={40} color={theme.colors.onSurfaceDisabled} />}
             theme={theme}
             onPress={closeProfilePage}
@@ -79,7 +79,7 @@ function ProfilePage({
             top: -20,
             left: 10,
           }}>
-            <MoyennesEDSquareButton
+            <CustomSquareButton
               key={profilePhotoRef.current}
               icon={profilePhotoRef.current ? <Image source={{ uri: profilePhotoRef.current }} style={{ width: 80, height: 80 }} /> : <UserIcon size={40} color={theme.colors.onSurfaceDisabled} />}
               theme={theme}
@@ -157,7 +157,7 @@ function ProfilePage({
           </View>
         </PressableScale>
 
-        <MoyennesEDSeparator theme={theme} style={{ marginBottom: 20 }}/>
+        <Separator theme={theme} style={{ marginBottom: 20 }}/>
 
         {/* Settings  */}
         <Text style={[theme.fonts.titleSmall, { marginBottom: 10 }]}>Paramètres</Text>
@@ -180,7 +180,7 @@ function ProfilePage({
         </View>
         
         {/* Debug buttons */}
-        <MoyennesEDButton
+        <CustomButton
           theme={theme}
           title="Déconnexion"
           confirmTitle={`Êtes vous sûr${UserData.mainAccount.getSuffix()} ?`}

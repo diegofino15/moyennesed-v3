@@ -1,7 +1,7 @@
 import { View, TextInput, Dimensions } from 'react-native';
 
 
-function MoyennesEDInput({
+function CustomInput({
   label,
   icon,
   onChangeText,
@@ -38,5 +38,5 @@ function MoyennesEDInput({
   );
 }
 
-export default MoyennesEDInput;
+export default CustomInput;
 

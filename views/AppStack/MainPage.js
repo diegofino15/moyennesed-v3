@@ -6,8 +6,8 @@ import useState from "react-usestateref";
 import * as Haptics from "expo-haptics";
 
 import { EmbeddedMarksView } from './EmbeddedMarksView';
-import MoyennesEDSquareButton from "../../components/appstack/moyennesed_square_button";
-import MoyennesEDSeparator from "../../components/global/moyennesed_separator";
+import CustomSquareButton from "../../components/appstack/custom_square_button";
+import Separator from "../../components/global/separator";
 import { UserData } from "../../core/UserData";
 
 
@@ -187,7 +187,7 @@ function MainPage({
               { overflow: 'visible', maxHeight: 50, }
             ]}>{welcomeMessage}</Text>
           </View>
-          <MoyennesEDSquareButton
+          <CustomSquareButton
             key={profilePhotoRef.current}
             icon={profilePhotoRef.current ? <Image source={{ uri: profilePhotoRef.current }} style={{ width: 80, height: 80 }} /> : <UserIcon size={40} color={theme.colors.onSurfaceDisabled} />}
             theme={theme}
@@ -198,7 +198,7 @@ function MainPage({
         
         {/* Children account chooser for parents */}
         {UserData.mainAccount.isParent && <View>
-          <MoyennesEDSeparator theme={theme} style={{ marginBottom: 10 }}/>
+          <Separator theme={theme} style={{ marginBottom: 10 }}/>
           <ScrollView
             horizontal={true}
             bounces={true}
@@ -233,7 +233,7 @@ function MainPage({
               );
             })}
           </ScrollView>
-          <MoyennesEDSeparator theme={theme} style={{ marginBottom: 20 }}/>
+          <Separator theme={theme} style={{ marginBottom: 20 }}/>
         </View>}
 
         {/* Shown account grades */}

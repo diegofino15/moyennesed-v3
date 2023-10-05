@@ -6,9 +6,9 @@ import useState from 'react-usestateref'
 
 import { UserData } from '../core/UserData';
 import { useAppContext } from '../utils/AppContext';
-import MoyennesEDSection from '../components/authstack/moyennesed_section';
-import MoyennesEDInput from '../components/authstack/moyennesed_input';
-import MoyennesEDButton from '../components/global/moyennesed_button';
+import InfoCard from '../components/authstack/info_card';
+import CustomInput from '../components/authstack/custom_input';
+import CustomButton from '../components/global/custom_button';
 
 
 function AuthStack({ theme }) {
@@ -122,19 +122,19 @@ function AuthStack({ theme }) {
           ]}>À la fois pour les élèves, mais aussi pour les parents !</Text>
 
           {/* Features */}
-          <MoyennesEDSection
+          <InfoCard
             title="🚀 L'ajout parfait à ÉcoleDirecte"
             description="Retrouvez votre moyenne générale et vos moyennes par matière, parfois cachées sur ÉcoleDirecte !"
             theme={theme}
             style={{ marginBottom: 30 }}
           />
-          <MoyennesEDSection
+          <InfoCard
             title="🌟 Élève ou parent ?"
             description="MoyennesED fonctionne pour les élèves et les parents ! Consultez vos moyennes ou celles de vos enfants."
             theme={theme}
             style={{ marginBottom: 30 }}
           />
-          <MoyennesEDSection
+          <InfoCard
             title="🔒 Plus sécurisée que jamais"
             description="Toutes vos données sont stockées sur votre appareil uniquement. Vos identifiants de connexion ne sont pas partagés."
             theme={theme}
@@ -153,7 +153,7 @@ function AuthStack({ theme }) {
           ]}>MoyennesED fonctionne avec vos identifiants ÉcoleDirecte</Text>
           
           {/* Login input */}
-          <MoyennesEDInput
+          <CustomInput
             label="Identifiant"
             icon={<User size={30} color={theme.colors.onSurfaceDisabled} />}
             onChangeText={(text) => setUsername(text)}
@@ -161,7 +161,7 @@ function AuthStack({ theme }) {
             theme={theme}
             style={{ marginBottom: 10 }}
           />
-          <MoyennesEDInput
+          <CustomInput
             label="Mot de passe"
             icon={<KeyRound size={30} color={theme.colors.onSurfaceDisabled} />}
             onChangeText={(text) => setPassword(text)}
@@ -172,7 +172,7 @@ function AuthStack({ theme }) {
               borderColor: connectionFailedRef.current ? 'red' : theme.colors.surface,
             }}
           />
-          <MoyennesEDSection
+          <InfoCard
             title="🤔 Mot de passe oublié ?"
             description={`Pas de panique, ça arrive à tout le monde ! Cliquez ici pour réinitialiser votre mot de passe.`}
             onPress={openForgotPasswordURL}
@@ -227,7 +227,7 @@ function AuthStack({ theme }) {
       {/* Continue button */}
       <SafeAreaView>
         <View style={styles.buttonView}>
-          <MoyennesEDButton
+          <CustomButton
             title={screenIndexRef.current < 2 ? "Continuer" : loggedInRef.current ? "C'est parti !" : "Connexion"}
             onPress={buttonClick}
             rightIcon={screenIndexRef.current < 2 ? <ChevronRight size={20} color={theme.colors.onPrimary} /> : null}

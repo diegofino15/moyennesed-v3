@@ -1,7 +1,7 @@
 import { View } from "react-native";
 
 
-function MoyennesEDSeparator({ style, theme }) {
+function Separator({ style, theme }) {
   return (
     <View
       style={[{
@@ -14,4 +14,4 @@ function MoyennesEDSeparator({ style, theme }) {
   );
 }
 
-export default MoyennesEDSeparator;
+export default Separator;

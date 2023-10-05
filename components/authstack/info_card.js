@@ -3,7 +3,7 @@ import { PressableScale } from 'react-native-pressable-scale';
 import { ChevronRight } from 'lucide-react-native';
 
 
-function MoyennesEDSection({
+function InfoCard({
   title,
   description,
   theme,
@@ -52,5 +52,5 @@ function MoyennesEDSection({
   );
 }
 
-export default MoyennesEDSection;
+export default InfoCard;
 
