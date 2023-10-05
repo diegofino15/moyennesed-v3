@@ -84,7 +84,7 @@ function ProfilePage({
               icon={profilePhotoRef.current ? <Image source={{ uri: profilePhotoRef.current }} style={{ width: 80, height: 80 }} /> : <UserIcon size={40} color={theme.colors.onSurfaceDisabled} />}
               theme={theme}
               onPress={() => {}}
-              hasBorders={true}
+              hasShadow={true}
             />
           </View>}
           <View style={{

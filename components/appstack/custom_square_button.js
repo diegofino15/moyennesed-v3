@@ -3,7 +3,7 @@ import { PressableScale } from 'react-native-pressable-scale';
 import * as Haptics from 'expo-haptics';
 
 
-function CustomSquareButton({ icon, onPress, theme }) {
+function CustomSquareButton({ icon, onPress, hasShadow, theme }) {
   let pressScale = 0.95;
   if (!onPress) { pressScale = 1; }
   function onPressActive() {
@@ -18,6 +18,16 @@ function CustomSquareButton({ icon, onPress, theme }) {
       onPress={() => onPressActive()}
       weight="light"
       activeScale={pressScale}
+      style={{
+        backgroundColor: 'black',
+        borderRadius: 10,
+        shadowColor: 'black',
+        shadowOpacity: hasShadow ? 0.8 : 0,
+        shadowRadius: 2,
+        shadowOffset: {
+          width: 0,
+        },
+      }}
     >
       <View style={{
         backgroundColor: theme.colors.surface,
