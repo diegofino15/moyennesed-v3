@@ -59,6 +59,7 @@ function MainPage({
         if (!marks) {
           gettingMarksRef.current.set(accountToUpdate.id, false);
           console.log(`Couldn't get marks for ${accountToUpdate.id}`);
+          setManualRefreshing(false);
           return;
         }
 
@@ -86,6 +87,7 @@ function MainPage({
           gotMarksRef.current.set(accountToUpdate.id, false); UserData.gotMarksFor.set(accountToUpdate.id, false);
           gettingMarksRef.current.set(accountToUpdate.id, false);
           console.log(`Couldn't get marks for ${accountToUpdate.id}`);
+          setManualRefreshing(false);
           return;
         }
 

@@ -7,6 +7,7 @@ import { PressableScale } from "react-native-pressable-scale";
 import MarkCard from "../../components/appstack/mark_card";
 import { ActivityIndicator } from 'react-native';
 import { AlertTriangleIcon, CheckCircle2Icon } from "lucide-react-native";
+import * as Haptics from "expo-haptics";
 
 
 function EmbeddedMarksView({
@@ -36,8 +37,6 @@ function EmbeddedMarksView({
       shownAccountRef.current.periods?.forEach((period, key) => {
         periodSelectorItemsRef.current.push({ label: period.title, value: key });
       });
-    } else {
-      setShownPeriod({});
     }
   }, [shownAccountRef.current, gettingMarks]);
 
@@ -56,7 +55,10 @@ function EmbeddedMarksView({
           alignItems: 'center'
       }}>
         {periodSelectorItemsRef.current.map((period, periodKey) => <PressableScale
-          onPress={() => setShownPeriod(shownAccountRef.current.periods.get(period.value))}
+          onPress={() => {
+            setShownPeriod(shownAccountRef.current.periods.get(period.value));
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          }}
           key={periodKey}
           style={{
             width: 95 / periodSelectorItemsRef.current.length + '%',
@@ -91,7 +93,7 @@ function EmbeddedMarksView({
             marginBottom: 20,
           }}>
             <Text style={[theme.fonts.labelMedium, { alignSelf: 'flex-start', height: 30 }]}>{shownPeriodRef.current.title}</Text>
-            {(autoRefreshing || isConnecting)
+            {((autoRefreshing && gotMarks) || isConnecting)
               ? <ActivityIndicator size={30} color={theme.colors.onSurface} />
               : (!isConnected || marksNeedUpdate)
                 ? <AlertTriangleIcon size={30} color='red' />
