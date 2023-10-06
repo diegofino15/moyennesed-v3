@@ -5562,11 +5562,6 @@ react-native-safe-modules@^1.0.3:
     css-select "^5.1.0"
     css-tree "^1.1.3"
 
-react-native-text-ticker@^1.14.0:
-  version "1.14.0"
-  resolved "https://registry.npmjs.org/react-native-text-ticker/-/react-native-text-ticker-1.14.0.tgz"
-  integrity sha512-8TNGTcW43dfnCqIuXVA7F1Ny8SKGrw0pIrNS5nM7eda+6AsuPTZh3JQ2CwmSRYfsrlnS4QFrpyo5ykpI8nvtCw==
-
 react-native-vector-icons@*:
   version "10.0.0"
   resolved "https://registry.npmjs.org/react-native-vector-icons/-/react-native-vector-icons-10.0.0.tgz"
@@ -5574,6 +5569,11 @@ react-native-vector-icons@*:
   dependencies:
     prop-types "^15.7.2"
     yargs "^16.1.1"
+
+react-native-virtualized-view@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npmjs.org/react-native-virtualized-view/-/react-native-virtualized-view-1.0.0.tgz"
+  integrity sha512-7YyFMMkNzJ787/giGkKcm0JEx0IcLEE/XHREGz2I4K1RISQGFjEDe6iWsapOnHSR/e1vhebZJ8VmqhSpg5YPzg==
 
 react-native@*, "react-native@^0.0.0-0 || 0.60 - 0.72 || 1000.0.0", "react-native@>= 0.63", react-native@>=0.46, react-native@0.72.5:
   version "0.72.5"

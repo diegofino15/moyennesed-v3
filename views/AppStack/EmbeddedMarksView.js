@@ -4,6 +4,8 @@ import useState from "react-usestateref";
 import { getSubjectColor } from "../../utils/Colors";
 import { formatAverage, formatMark } from "../../utils/Utils";
 import Separator from "../../components/global/separator";
+import DropDownPicker from "react-native-dropdown-picker";
+import { PressableScale } from "react-native-pressable-scale";
 
 
 function EmbeddedMarksView({ shownAccountRef, gotMarks, gettingMarks, marksNeedUpdate, refreshing, theme }) {
@@ -21,13 +23,44 @@ function EmbeddedMarksView({ shownAccountRef, gotMarks, gettingMarks, marksNeedU
         }
       });
       if (!shownPeriodRef.current.code) { setShownPeriod(shownAccountRef.periods.get(shownAccountRef.current.periods.keys().next().value)); }
+    
+      periodSelectorItemsRef.current.length = 0;
+      shownAccountRef.current.periods?.forEach((period, key) => {
+        periodSelectorItemsRef.current.push({ label: period.title, value: key });
+      });
     } else {
       setShownPeriod({});
     }
   }, [shownAccountRef.current, gettingMarks]);
-  
+
+  const [periodSelectorOpen, setPeriodSelectorOpen] = useState(false);
+  const [periodSelectorItems, setPeriodSelectorItems, periodSelectorItemsRef] = useState([]);
+
   return (
     <View>
+      {/* Period chooser */}
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center'
+      }}>
+        {periodSelectorItems.map((period, periodKey) => <PressableScale
+          onPress={() => setShownPeriod(shownAccountRef.current.periods.get(period.value))}
+          key={periodKey}
+          style={{
+            width: 90 / periodSelectorItems.length + '%',
+            borderRadius: 10,
+            padding: 10,
+            backgroundColor: shownPeriodRef.current.code == period.value ? theme.colors.primary : theme.colors.surface,
+            marginBottom: 20,
+        }}>
+          <Text style={[theme.fonts.labelMedium, {
+            color: shownPeriodRef.current.code == period.value ? theme.colors.onPrimary : theme.colors.onSurfaceDisabled,
+          }]}>{period.label}</Text>
+        </PressableScale>)}
+      </View>
+
       <View style={{
         width: '100%',
         backgroundColor: theme.colors.surface,
