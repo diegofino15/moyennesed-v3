@@ -59,7 +59,7 @@ function ProfilePage({
             <Text style={[
               theme.fonts.labelMedium,
               { overflow: 'visible', maxHeight: 40 }
-            ]}>Gérez vos paramètres et préférences de l'appli</Text>
+            ]}>{UserData.mainAccount.isParent ? "Gérez vos" : "Gère tes"} paramètres et préférences de l'appli</Text>
           </View>
         </View>
 
