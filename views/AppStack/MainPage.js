@@ -184,7 +184,7 @@ function MainPage({
             ]}>{UserData.mainAccount.firstName.length === 0 && connectingRef.current ? "Connexion..." : UserData.mainAccount.firstName.length === 0 ? "Déconnecté" : `Bonjour ${UserData.mainAccount.firstName} !`}</Text>
             <Text style={[
               theme.fonts.labelMedium,
-              { overflow: 'visible', maxHeight: 50, }
+              { overflow: 'visible', maxHeight: 50 }
             ]}>{welcomeMessage}</Text>
           </View>
           <CustomSquareButton
@@ -239,10 +239,12 @@ function MainPage({
         {/* Shown account grades */}
         <EmbeddedMarksView
           shownAccountRef={shownAccountRef}
+          isConnected={connectedRef.current}
+          isConnecting={connectingRef.current}
           gotMarks={gotMarksRef.current.get(shownAccountRef.current.id)}
           gettingMarks={gettingMarksRef.current.get(shownAccountRef.current.id)}
           marksNeedUpdate={marksNeedUpdateRef.current.get(shownAccountRef.current.id)}
-          refreshing={refreshingRef.current}
+          autoRefreshing={!manualRefreshingRef.current && refreshingRef.current}
           theme={theme}
         />
       </SafeAreaView>

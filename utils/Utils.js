@@ -9,5 +9,34 @@ function formatAverage(average) {
     return average.toFixed(2).replace(".", ",");
 }
 
+const daysNames = [
+"",
+"Lundi",
+"Mardi",
+"Mercredi",
+"Jeudi",
+"Vendredi",
+"Samedi",
+"Dimanche"
+];
+const monthsNames = [
+    "",
+    "Janvier",
+    "Février",
+    "Mars",
+    "Avril",
+    "Mai",
+    "Juin",
+    "Juillet",
+    "Aout",
+    "Septembre",
+    "Octobre",
+    "Novembre",
+    "Décembre"
+];
+function formatDate(givenDate) {
+    const date = new Date(givenDate);
+    return `${daysNames[date.getDay()]} ${date.getDate()} ${monthsNames[date.getMonth()]}`;
+}
 
-export { formatMark, formatAverage };
+export { formatMark, formatAverage, formatDate };

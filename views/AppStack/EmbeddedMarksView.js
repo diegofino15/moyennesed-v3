@@ -1,12 +1,21 @@
-import { View, Text } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import { useEffect } from "react";
 import useState from "react-usestateref";
 import { getSubjectColor } from "../../utils/Colors";
 import { formatAverage, formatMark } from "../../utils/Utils";
 import { PressableScale } from "react-native-pressable-scale";
+import MarkCard from "../../components/appstack/mark_card";
+import { ActivityIndicator } from 'react-native';
+import { AlertTriangleIcon, CheckCircle2Icon } from "lucide-react-native";
 
 
-function EmbeddedMarksView({ shownAccountRef, gotMarks, gettingMarks, marksNeedUpdate, refreshing, theme }) {
+function EmbeddedMarksView({
+  shownAccountRef, isConnected, isConnecting,
+  gotMarks, gettingMarks,
+  marksNeedUpdate,
+  autoRefreshing,
+  theme,
+}) {
   const [_shownPeriod, setShownPeriod, shownPeriodRef] = useState({});
   const [_periodSelectorItems, _setPeriodSelectorItems, periodSelectorItemsRef] = useState([]);
   useEffect(() => {
@@ -31,6 +40,11 @@ function EmbeddedMarksView({ shownAccountRef, gotMarks, gettingMarks, marksNeedU
       setShownPeriod({});
     }
   }, [shownAccountRef.current, gettingMarks]);
+
+  // Open bottom sheet to display mark data
+  const openMarkSheet = (mark) => {
+    console.log(`Open mark infos for ${mark.title}`);
+  }
 
   return (
     <View>
@@ -63,19 +77,53 @@ function EmbeddedMarksView({ shownAccountRef, gotMarks, gettingMarks, marksNeedU
         borderRadius: 20,
         marginBottom: 20,
         padding: 20,
+        paddingBottom: 0,
       }}>
         {/* Currently shown period */}
         <View style={{
           flexDirection: 'column',
           alignItems: 'center',
         }}>
-          <Text style={[theme.fonts.labelMedium, { alignSelf: 'flex-start', marginBottom: 30 }]}>{shownPeriodRef.current.title}</Text>
+          <View style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            width: '100%',
+            marginBottom: 20,
+          }}>
+            <Text style={[theme.fonts.labelMedium, { alignSelf: 'flex-start', height: 30 }]}>{shownPeriodRef.current.title}</Text>
+            {(autoRefreshing || isConnecting)
+              ? <ActivityIndicator size={30} color={theme.colors.onSurface} />
+              : (!isConnected || marksNeedUpdate)
+                ? <AlertTriangleIcon size={30} color='red' />
+                : <CheckCircle2Icon size={25} color='green' />}
+          </View>
           
           <Text style={theme.fonts.headlineLarge}>{formatAverage(shownPeriodRef.current.average)}</Text>
-          <Text style={[theme.fonts.labelSmall, { marginBottom: 30 }]}>MOYENNE GÉNÉRALE</Text>
+          <Text style={[theme.fonts.labelMedium, { marginBottom: 30 }]}>MOYENNE GÉNÉRALE</Text>
           
-          <Text style={[theme.fonts.bodyLarge, { alignSelf: 'flex-start', marginBottom: 20 }]}>Dernières notes</Text>
-          {shownPeriodRef.current.marks?.map((mark, markKey) => <Text key={markKey} style={[theme.fonts.labelMedium, { color: theme.colors.onSurfaceDisabled, marginRight: 20 }]}>{formatMark(mark)}</Text>)}
+          <Text style={[theme.fonts.bodyLarge, { alignSelf: 'flex-start', marginBottom: 10 }]}>Dernières notes</Text>
+          <View style={{
+            height: 90,
+            marginBottom: 10,
+          }}>
+            <ScrollView
+              key={shownAccountRef.current.id + "-" + shownPeriodRef.current.code}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+            >
+              {shownPeriodRef.current.marks?.map((mark, markKey) => {
+                if (markKey < 10) {
+                  return <View
+                    key={markKey}
+                    style={{
+                      paddingRight: (markKey == 9 || markKey == shownPeriodRef.current.marks.length - 1) ? 0 : 20,
+                  }}>
+                    <MarkCard mark={mark} onPress={() => openMarkSheet(mark)} theme={theme} />
+                  </View>;
+                }
+              })}
+            </ScrollView>
+          </View>
         </View>
       </View>
 

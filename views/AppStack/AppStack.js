@@ -84,7 +84,6 @@ function AppStack({ theme }) {
         refreshLogin={refreshLogin}
         scrollViewRef={scrollViewRef}
         profilePhotoRef={profilePhotoRef}
-        refreshProfilePhoto={refreshProfilePhoto}
         logout={logout}
         theme={theme}
       />

@@ -9,8 +9,7 @@ import Separator from '../../components/global/separator';
 
 
 function ProfilePage({
-  connectedRef,
-  connectingRef,
+  connectedRef, connectingRef,
   refreshLogin,
   scrollViewRef,
   profilePhotoRef,
