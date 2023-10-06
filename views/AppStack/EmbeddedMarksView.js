@@ -8,6 +8,7 @@ import MarkCard from "../../components/appstack/mark_card";
 import { ActivityIndicator } from 'react-native';
 import { AlertTriangleIcon, CheckCircle2Icon } from "lucide-react-native";
 import * as Haptics from "expo-haptics";
+import SubjectCard from "../../components/appstack/subject_card";
 
 
 function EmbeddedMarksView({
@@ -44,6 +45,8 @@ function EmbeddedMarksView({
   const openMarkSheet = (mark) => {
     console.log(`Open mark infos for ${mark.title}`);
   }
+
+  const openSubjectSheet = (subject) => {}
 
   return (
     <View>
@@ -132,27 +135,22 @@ function EmbeddedMarksView({
 
       <View style={{
         width: '100%',
-        height: 400,
         backgroundColor: theme.colors.surface,
         borderRadius: 20,
         padding: 20,
+        paddingBottom: 10,
         marginBottom: 20,
       }}>
         {/* Loop trough all subjects in selected period, and show their name */}
-        {[...(shownPeriodRef.current.subjects?.values() ?? [])].map((subject, subjectKey) => <View
-          key={subjectKey}
-          style={{
-            flexDirection: 'column',
-          }}
-        >
-          <Text style={[theme.fonts.labelMedium, { color: getSubjectColor(subject.code) }]}>
-            {`${subject.name} -> ${formatAverage(subject.average)}`}
-          </Text>
-          <View style={{
-            flexDirection: 'row',
-          }}>
-            {/* {subject.marks.map((mark, markKey) => <Text key={markKey} style={[theme.fonts.labelMedium, { color: theme.colors.onSurfaceDisabled, marginRight: 20 }]}>{formatMark(mark)}</Text>)} */}
-          </View>
+        {[...(shownPeriodRef.current.subjects?.values() ?? [])].map((subject, subjectKey) => <View style={{
+          paddingBottom: 10,
+        }}>
+          <SubjectCard
+            subject={subject}
+            onPress={openSubjectSheet}
+            theme={theme}
+            key={subjectKey}
+          />
         </View>)}
       </View>
     </View>
