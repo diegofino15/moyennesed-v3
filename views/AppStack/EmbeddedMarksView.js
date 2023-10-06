@@ -10,6 +10,7 @@ import { PressableScale } from "react-native-pressable-scale";
 
 function EmbeddedMarksView({ shownAccountRef, gotMarks, gettingMarks, marksNeedUpdate, refreshing, theme }) {
   const [_shownPeriod, setShownPeriod, shownPeriodRef] = useState({});
+  const [periodSelectorItems, setPeriodSelectorItems, periodSelectorItemsRef] = useState([]);
   useEffect(() => {
     if (gotMarks) {
       var preferredSelectedPeriod = "";
@@ -32,9 +33,6 @@ function EmbeddedMarksView({ shownAccountRef, gotMarks, gettingMarks, marksNeedU
       setShownPeriod({});
     }
   }, [shownAccountRef.current, gettingMarks]);
-
-  const [periodSelectorOpen, setPeriodSelectorOpen] = useState(false);
-  const [periodSelectorItems, setPeriodSelectorItems, periodSelectorItemsRef] = useState([]);
 
   return (
     <View>
