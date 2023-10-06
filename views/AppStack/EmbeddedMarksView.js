@@ -3,14 +3,12 @@ import { useEffect } from "react";
 import useState from "react-usestateref";
 import { getSubjectColor } from "../../utils/Colors";
 import { formatAverage, formatMark } from "../../utils/Utils";
-import Separator from "../../components/global/separator";
-import DropDownPicker from "react-native-dropdown-picker";
 import { PressableScale } from "react-native-pressable-scale";
 
 
 function EmbeddedMarksView({ shownAccountRef, gotMarks, gettingMarks, marksNeedUpdate, refreshing, theme }) {
   const [_shownPeriod, setShownPeriod, shownPeriodRef] = useState({});
-  const [periodSelectorItems, setPeriodSelectorItems, periodSelectorItemsRef] = useState([]);
+  const [_periodSelectorItems, _setPeriodSelectorItems, periodSelectorItemsRef] = useState([]);
   useEffect(() => {
     if (gotMarks) {
       var preferredSelectedPeriod = "";
@@ -43,11 +41,11 @@ function EmbeddedMarksView({ shownAccountRef, gotMarks, gettingMarks, marksNeedU
           justifyContent: 'space-between',
           alignItems: 'center'
       }}>
-        {periodSelectorItems.map((period, periodKey) => <PressableScale
+        {periodSelectorItemsRef.current.map((period, periodKey) => <PressableScale
           onPress={() => setShownPeriod(shownAccountRef.current.periods.get(period.value))}
           key={periodKey}
           style={{
-            width: 90 / periodSelectorItems.length + '%',
+            width: 95 / periodSelectorItemsRef.current.length + '%',
             borderRadius: 10,
             padding: 10,
             backgroundColor: shownPeriodRef.current.code == period.value ? theme.colors.primary : theme.colors.surface,
@@ -105,15 +103,6 @@ function EmbeddedMarksView({ shownAccountRef, gotMarks, gettingMarks, marksNeedU
             {/* {subject.marks.map((mark, markKey) => <Text key={markKey} style={[theme.fonts.labelMedium, { color: theme.colors.onSurfaceDisabled, marginRight: 20 }]}>{formatMark(mark)}</Text>)} */}
           </View>
         </View>)}
-      </View>
-
-      <View style={{
-        width: '100%',
-        height: 800,
-        backgroundColor: theme.colors.surface,
-        borderRadius: 20,
-        marginBottom: 20,
-      }}>
       </View>
     </View>
   );
