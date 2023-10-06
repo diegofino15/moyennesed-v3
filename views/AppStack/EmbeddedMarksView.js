@@ -122,6 +122,7 @@ function EmbeddedMarksView({
                   </View>;
                 }
               })}
+              {shownPeriodRef.current.marks?.length == 0 && <Text style={[theme.fonts.labelLarge, { alignSelf: 'center' }]}>Aucune note pour l'instant</Text>}
             </ScrollView>
           </View>
         </View>
