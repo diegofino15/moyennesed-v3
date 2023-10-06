@@ -19,7 +19,7 @@ function CustomSquareButton({ icon, onPress, hasShadow, theme }) {
       weight="light"
       activeScale={pressScale}
       style={{
-        backgroundColor: 'black',
+        backgroundColor: hasShadow ? 'black' : theme.colors.background,
         borderRadius: 10,
         shadowColor: 'black',
         shadowOpacity: hasShadow ? 0.8 : 0,
