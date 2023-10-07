@@ -11,9 +11,13 @@ function MarkCard({ mark, onPress, theme }) {
         width: 250,
         height: 80,
         backgroundColor: theme.colors.background,
+        shadowOpacity: 0.6,
+        shadowRadius: 2,
+        shadowOffset: { width: 0 },
         flexDirection: 'row',
         borderRadius: 10,
         padding: 5,
+        margin: 2,
       }}
     >
       <View style={{
@@ -30,7 +34,7 @@ function MarkCard({ mark, onPress, theme }) {
           backgroundColor: getSubjectColor(mark.subjectCode, true),
           borderRadius: 10,
         }}>
-          <Text style={theme.fonts.headlineMedium}>{mark.value.toString().replace(".", ",")}</Text>
+          <Text style={[theme.fonts.headlineMedium, { fontFamily: 'Bitter-Bold' }]}>{mark.value.toString().replace(".", ",")}</Text>
         </View>
 
         {mark.valueOn != 20 && <View
@@ -55,8 +59,8 @@ function MarkCard({ mark, onPress, theme }) {
       }}>
         <Text
           style={[
-            theme.fonts.labelMedium,
-            { maxWidth: 160 }
+            theme.fonts.bodyMedium,
+            { maxWidth: 160, marginBottom: 5 }
         ]} numberOfLines={2}>{mark.title}</Text>
         <Text style={theme.fonts.labelSmall}>{formatDate(mark.date)}</Text>
       </View>

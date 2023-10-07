@@ -57,7 +57,7 @@ function setThemeData(theme) {
       color: theme.colors.onBackground,
     },
     headlineMedium: {
-      fontSize: 17.0,
+      fontSize: 20.0,
       fontWeight: 'bold',
       fontFamily: 'Bitter-Medium',
       color: theme.colors.onBackground,

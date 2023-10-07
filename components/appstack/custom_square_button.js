@@ -22,7 +22,7 @@ function CustomSquareButton({ icon, onPress, hasShadow, theme }) {
         backgroundColor: hasShadow ? 'black' : theme.colors.background,
         borderRadius: 10,
         shadowColor: 'black',
-        shadowOpacity: hasShadow ? 0.8 : 0,
+        shadowOpacity: hasShadow ? 0.6 : 0,
         shadowRadius: 2,
         shadowOffset: {
           width: 0,

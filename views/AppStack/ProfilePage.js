@@ -26,7 +26,7 @@ function ProfilePage({
       style={{
         paddingHorizontal: 20,
         width: Dimensions.get('window').width,
-        height: Dimensions.get('window').height,
+        backgroundColor: theme.colors.background,
       }}
     >
       <SafeAreaView style={{
@@ -174,7 +174,7 @@ function ProfilePage({
           backgroundColor: theme.colors.surface,
           borderRadius: 20,
           marginBottom: 20,
-          height: 100,
+          height: 300,
         }}>
         </View>
         

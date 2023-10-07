@@ -83,6 +83,9 @@ function EmbeddedMarksView({
         marginBottom: 20,
         padding: 20,
         paddingBottom: 0,
+        shadowOpacity: 0.6,
+        shadowRadius: 2,
+        shadowOffset: { width: 0 },
       }}>
         {/* Currently shown period */}
         <View style={{
@@ -108,8 +111,8 @@ function EmbeddedMarksView({
           
           <Text style={[theme.fonts.bodyLarge, { alignSelf: 'flex-start', marginBottom: 10 }]}>Dernières notes</Text>
           <View style={{
-            height: 90,
-            marginBottom: 10,
+            height: 92,
+            marginBottom: 8,
           }}>
             <ScrollView
               key={shownAccountRef.current.id + "-" + shownPeriodRef.current.code}
@@ -133,26 +136,16 @@ function EmbeddedMarksView({
         </View>
       </View>
 
-      <View style={{
-        width: '100%',
-        backgroundColor: theme.colors.surface,
-        borderRadius: 20,
-        padding: 20,
+      {/* Loop trough all subjects in selected period, and show their name */}
+      {[...(shownPeriodRef.current.subjects?.values() ?? [])].map((subject, subjectKey) => <View key={subjectKey} style={{
         paddingBottom: 10,
-        marginBottom: 20,
       }}>
-        {/* Loop trough all subjects in selected period, and show their name */}
-        {[...(shownPeriodRef.current.subjects?.values() ?? [])].map((subject, subjectKey) => <View style={{
-          paddingBottom: 10,
-        }}>
-          <SubjectCard
-            subject={subject}
-            onPress={openSubjectSheet}
-            theme={theme}
-            key={subjectKey}
-          />
-        </View>)}
-      </View>
+        <SubjectCard
+          mainSubject={subject}
+          onPress={openSubjectSheet}
+          theme={theme}
+        />
+      </View>)}
     </View>
   );
 }

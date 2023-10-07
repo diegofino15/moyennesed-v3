@@ -161,6 +161,7 @@ function MainPage({
         paddingHorizontal: 20,
         width: Dimensions.get('window').width,
         height: Dimensions.get('window').height,
+        backgroundColor: theme.colors.background,
       }}
     >
       <SafeAreaView style={{
