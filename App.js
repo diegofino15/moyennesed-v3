@@ -9,6 +9,7 @@ import { AppStack } from './views/AppStack/AppStack';
 import { AppContextProvider } from './utils/AppContext';
 import { UserData } from './core/UserData';
 import { Preferences } from './core/Preferences';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 
 function App() {
@@ -41,23 +42,25 @@ function App() {
   }
 
   return (
-    // Provider needed to update UI when logging-in/out
-    <AppContextProvider state={{ loggedIn, setLoggedIn }}>
-      {/* Set status bar color for app */}
-      <StatusBar
-        animated={true}
-        barStyle='dark-content'
-      />
-      {/* Theme provider */}
-      <PaperProvider theme={theme}>
-        {/* AuthStack / AppStack */}
-        {loggedInLoadedRef.current
-          ? loggedInRef.current
-            ? <AppStack theme={theme}/>
-            : <AuthStack theme={theme} />
-          : null}
-      </PaperProvider>
-    </AppContextProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      {/* Provider needed to update UI when logging-in/out */}
+      <AppContextProvider state={{ loggedIn, setLoggedIn }}>
+        {/* Set status bar color for app */}
+        <StatusBar
+          animated={true}
+          barStyle='dark-content'
+        />
+        {/* Theme provider */}
+        <PaperProvider theme={theme}>
+          {/* AuthStack / AppStack */}
+          {loggedInLoadedRef.current
+            ? loggedInRef.current
+              ? <AppStack theme={theme}/>
+              : <AuthStack theme={theme} />
+            : null}
+        </PaperProvider>
+      </AppContextProvider>
+    </GestureHandlerRootView>
   );
 }
 

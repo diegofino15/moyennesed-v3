@@ -1,14 +1,36 @@
-import { View, Text, ScrollView, Dimensions } from 'react-native';
+import { View, Text, Dimensions } from 'react-native';
 import { PressableScale } from 'react-native-pressable-scale';
 import { getSubjectColor } from '../../utils/Colors';
 import { formatAverage, formatMark } from '../../utils/Utils';
 import { ArrowRightIcon } from 'lucide-react-native';
+import { useState, useRef } from 'react';
+import { BottomSheetModal, useBottomSheetModal } from '@gorhom/bottom-sheet';
 
-function SubjectCard({ mainSubject, onPress, theme }) {
+function SubjectCard({ mainSubject, theme }) {
+  const { dismissAll: dismissAllModals } = useBottomSheetModal();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const handleOpenModal = () => {
+    if (isModalOpen) { return; }
+    dismissAllModals();
+    setIsModalOpen(true);
+    bottomSheetModalRef.current.present();
+  };
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    bottomSheetModalRef.current.dismiss();
+  };
+  
+  const bottomSheetModalRef = useRef(null);
+  const snapPoints = [
+    "25",
+    "75%"
+  ];
+
   function subjectCard(subject) {
     return (
       <PressableScale
-        onPress={onPress}
+        onPress={handleOpenModal}
         style={{
           width: Dimensions.get('window').width - 40 - (subject.isSubSubject ? 40 : 0),
           backgroundColor: getSubjectColor(subject.code, true),
@@ -56,18 +78,36 @@ function SubjectCard({ mainSubject, onPress, theme }) {
   }
 
   return (
-    <View style={{
-      flexDirection: 'column'
-    }}>
-      {subjectCard(mainSubject)}
-      {[...(mainSubject.subSubjects?.values() ?? [])].map((subSubject, key) => <View key={key} style={{
-        flexDirection: 'row',
-        marginTop: 10,
-        alignItems: 'center'
+    <View>
+      <View style={{
+        flexDirection: 'column'
       }}>
-        <ArrowRightIcon size={30} color={theme.colors.onSurface} style={{ marginRight: 10 }} />
-        {subjectCard(subSubject)}
-      </View>)}
+        {subjectCard(mainSubject)}
+        {[...(mainSubject.subSubjects?.values() ?? [])].map((subSubject, key) => <View key={key} style={{
+          flexDirection: 'row',
+          marginTop: 10,
+          alignItems: 'center'
+        }}>
+          <ArrowRightIcon size={30} color={theme.colors.onSurface} style={{ marginRight: 10 }} />
+          {subjectCard(subSubject)}
+        </View>)}
+      </View>
+
+      <BottomSheetModal
+        ref={bottomSheetModalRef}
+        snapPoints={snapPoints}
+        index={0}
+        onDismiss={handleCloseModal}
+        style={{
+          width: Dimensions.get('window').width,
+          borderRadius: 20,
+        }}
+        backgroundStyle={{
+          backgroundColor: getSubjectColor(mainSubject.code),
+        }}
+      >
+
+      </BottomSheetModal>
     </View>
   );
 }
