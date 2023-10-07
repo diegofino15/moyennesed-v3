@@ -73,6 +73,9 @@ function MarkCard({ mark, onPress, theme }) {
           paddingHorizontal: 5,
           paddingVertical: 3,
           borderRadius: 5,
+          shadowOpacity: 0.6,
+          shadowRadius: 2,
+          shadowOffset: { width: 0 },
         }}
       >
         <Text style={[theme.fonts.labelSmall, { color: 'white' }]}>Non effective</Text>
