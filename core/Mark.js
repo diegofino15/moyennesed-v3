@@ -18,6 +18,7 @@ function getFormattedMark(jsonData) {
     "coefficient": Preferences.guessMarksCoefficients ? getMarkCoefficient(jsonData.devoir) : coefficient,
     "periodCode": jsonData.codePeriode,
     "subjectCode": jsonData.codeMatiere,
+    "subjectTitle": jsonData.libelleMatiere,
     "subSubjectCode": jsonData.codeSousMatiere,
   };
 }

@@ -62,7 +62,7 @@ function MarkCard({ mark, onPress, theme }) {
             theme.fonts.bodyMedium,
             { maxWidth: 160, marginBottom: 5 }
         ]} numberOfLines={2}>{mark.title}</Text>
-        <Text style={theme.fonts.labelSmall}>{formatDate(mark.date)}</Text>
+        <Text style={[theme.fonts.labelSmall, { maxWidth: 160 }]} numberOfLines={1}>{mark.subjectTitle}</Text>
       </View>
       {!mark.isEffective && <View
         style={{
