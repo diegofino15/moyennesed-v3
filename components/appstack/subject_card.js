@@ -29,7 +29,7 @@ function SubjectCard({ mainSubject, onPress, theme }) {
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-            <Text style={[theme.fonts.bodyLarge, { color: theme.colors.onSurface, width: 240 }]} numberOfLines={1} >{subject.name}</Text>
+            <Text style={[theme.fonts.bodyLarge, { color: theme.colors.onSurface, width: 240 - (subject.isSubSubject ? 40 : 0) }]} numberOfLines={1} >{subject.name}</Text>
             <View style={{
               flexDirection: 'row',
               alignItems: 'flex-end',
@@ -39,11 +39,12 @@ function SubjectCard({ mainSubject, onPress, theme }) {
             </View>
           </View>
           <View style={{
-            backgroundColor: getSubjectColor(subject.code, true),
             flexDirection: 'row',
             paddingVertical: subject.marks.length > 0 ? 8 : 0,
             paddingHorizontal: 10,
             borderRadius: 10,
+            width: Dimensions.get('window').width - 40 - (subject.isSubSubject ? 40 : 0),
+            overflow: 'hidden',
           }}>
             {subject.marks.map((mark) => <Text key={mark.id} style={[
               theme.fonts.headlineMedium, { color: theme.colors.onSurface, marginRight: 15 }

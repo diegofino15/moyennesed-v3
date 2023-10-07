@@ -1,20 +1,22 @@
 const subjectColors = [
-  ['#FF6242', '#FFA590'], // Red
-  ['#5BAEB7', '#A5DEF2'], // Blue
-  ['#FCCF55', '#FDDF8E'], // Yellow
-  ['#658354', '#A3C585'], // Green
-  ['#A17BB9', '#C09ADB'], // Purple
-  ['#C58940', '#E5BA73'], // Brown
-  ['#AA8E85', '#D7C0AE'], // Gray
+  ['#FF6242', '#FF7C69'],   // Red
+  ['#5BAEB7', '#81C8D1'],   // Blue
+  ['#87CEFA', '#A2D9FF'],   // Pastel Blue
+  ['#A17BB9', '#B99BCB'],   // Purple
+  ['#C58940', '#D9A468'],   // Brown
+  ['#AA8E85', '#C2B4A9'],   // Gray
+  ['#FA8072', '#FFA8A1'],   // Salmon
+  ['#FFA07A', '#FFB59F'],   // Light Salmon
+  ['#FFC300', '#FFD955'],   // Vivid Yellow
+  ['#FFD700', '#FFE877'],   // Pastel Yellow
+  ['#FFB6C1', '#FFC3D0'],   // Pastel Pink
 ];
 
 const attribuatedSubjectColors = {};
 
-var currentIndex = 0;
 function registerSubject(subjectCode) {
   if (attribuatedSubjectColors[subjectCode]) { return; }
-  attribuatedSubjectColors[subjectCode] = subjectColors[currentIndex];
-  currentIndex = (currentIndex + 1) % subjectColors.length;
+  attribuatedSubjectColors[subjectCode] = subjectColors[Math.floor(Math.random() * subjectColors.length)];
 }
 
 function getSubjectColor(subjectCode, isLight = false) {
@@ -23,8 +25,7 @@ function getSubjectColor(subjectCode, isLight = false) {
     return attribuatedSubjectColors[subjectCode][0];
   }
 
-  attribuatedSubjectColors[subjectCode] = subjectColors[currentIndex];
-  currentIndex = (currentIndex + 1) % subjectColors.length;
+  registerSubject(subjectCode);
   if (isLight) { return attribuatedSubjectColors[subjectCode][1]; }
   return attribuatedSubjectColors[subjectCode][0];
 }
