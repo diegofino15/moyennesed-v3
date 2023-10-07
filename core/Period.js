@@ -1,10 +1,10 @@
-import { getFormattedSubject, addSubSubject, sortMarks, _sortMarks, calculateAverages, getCacheSubject, getSubjectFromCache } from "./Subject";
+import { getFormattedSubject, addSubSubject, sortMarks, _sortMarks, calculateAverages, getCacheSubject, getSubjectFromCache, addMarkToSubject } from "./Subject";
 import { registerSubject } from "../utils/Colors";
 
 function getFormattedPeriod(jsonData) {
   var subjects = new Map();
   jsonData.ensembleMatieres.disciplines.map(subjectData => {
-    var subject = getFormattedSubject(subjectData)
+    var subject = getFormattedSubject(subjectData);
     const subjectCode = subject.code.length === 0 ? "---" : subject.code;
     if (!subject.isSubSubject) { subjects.set(subjectCode, subject); }
     else { addSubSubject(subjects.get(subjectCode), subject); }
@@ -24,7 +24,7 @@ function getFormattedPeriod(jsonData) {
 
 function addMark(period, mark) {
   period.marks.push(mark);
-  period.subjects.get(mark.subjectCode).marks.push(mark);
+  addMarkToSubject(period.subjects.get(mark.subjectCode), mark);
 }
 
 function sortAllMarks(period) {

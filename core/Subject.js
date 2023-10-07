@@ -30,7 +30,15 @@ function addSubSubject(subject, subSubject) {
   subject.subSubjects.set(subSubject.subCode, subSubject);
 }
 
-function addMark(subject, mark) {
+function addMarkToSubject(subject, mark) {
+  if (mark.subSubjectCode) {
+    console.log("Mark has sub subject code !");
+    if (subject.subSubjects.has(mark.subSubjectCode)) {
+      console.log("Added mark to sub subject ! " + mark.subSubjectCode);
+      addMarkToSubject(subject.subSubjects.get(mark.subSubjectCode), mark);
+      return;
+    }
+  }
   subject.marks.push(mark);
 }
 
@@ -138,4 +146,4 @@ function getSubjectFromCache(cacheSubject) {
   };
 }
 
-export { getFormattedSubject, addSubSubject, addMark, sortMarks, _sortMarks, calculateAverages, getCacheSubject, getSubjectFromCache };
+export { getFormattedSubject, addSubSubject, addMarkToSubject, sortMarks, _sortMarks, calculateAverages, getCacheSubject, getSubjectFromCache };
