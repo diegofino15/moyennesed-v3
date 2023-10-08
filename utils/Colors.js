@@ -14,9 +14,11 @@ const subjectColors = [
 
 const attribuatedSubjectColors = {};
 
+var currentIndex = 0;
 function registerSubject(subjectCode) {
   if (attribuatedSubjectColors[subjectCode]) { return; }
-  attribuatedSubjectColors[subjectCode] = subjectColors[Math.floor(Math.random() * subjectColors.length)];
+  attribuatedSubjectColors[subjectCode] = subjectColors[currentIndex];
+  currentIndex = (currentIndex + 1) % subjectColors.length;
 }
 
 function getSubjectColor(subjectCode, isLight = false) {

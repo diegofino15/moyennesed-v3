@@ -174,7 +174,7 @@ function ProfilePage({
           backgroundColor: theme.colors.surface,
           borderRadius: 20,
           marginBottom: 20,
-          height: 300,
+          height: 100,
         }}>
         </View>
         
