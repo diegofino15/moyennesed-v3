@@ -32,9 +32,7 @@ function addSubSubject(subject, subSubject) {
 
 function addMarkToSubject(subject, mark) {
   if (mark.subSubjectCode) {
-    console.log("Mark has sub subject code !");
     if (subject.subSubjects.has(mark.subSubjectCode)) {
-      console.log("Added mark to sub subject ! " + mark.subSubjectCode);
       addMarkToSubject(subject.subSubjects.get(mark.subSubjectCode), mark);
       return;
     }

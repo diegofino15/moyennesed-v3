@@ -3,34 +3,16 @@ import { PressableScale } from 'react-native-pressable-scale';
 import { getSubjectColor } from '../../utils/Colors';
 import { formatAverage, formatMark } from '../../utils/Utils';
 import { ArrowRightIcon } from 'lucide-react-native';
-import { useState, useRef } from 'react';
-import { BottomSheetModal, useBottomSheetModal } from '@gorhom/bottom-sheet';
+import BottomSheet from './bottom_sheet';
+import { useState } from 'react';
 
 function SubjectCard({ mainSubject, theme }) {
-  const { dismissAll: dismissAllModals } = useBottomSheetModal();
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const handleOpenModal = () => {
-    if (isModalOpen) { return; }
-    dismissAllModals();
-    setIsModalOpen(true);
-    bottomSheetModalRef.current.present();
-  };
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    bottomSheetModalRef.current.dismiss();
-  };
-  
-  const bottomSheetModalRef = useRef(null);
-  const snapPoints = [
-    "25",
-    "75%"
-  ];
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
 
   function subjectCard(subject) {
     return (
       <PressableScale
-        onPress={handleOpenModal}
+        onPress={() => setIsBottomSheetOpen(true)}
         style={{
           width: Dimensions.get('window').width - 40 - (subject.isSubSubject ? 40 : 0),
           backgroundColor: getSubjectColor(subject.code, true),
@@ -69,7 +51,15 @@ function SubjectCard({ mainSubject, theme }) {
             overflow: 'hidden',
           }}>
             {subject.marks.map((mark) => <Text key={mark.id} style={[
-              theme.fonts.headlineMedium, { color: theme.colors.onSurface, marginRight: 15 }
+              theme.fonts.headlineMedium,
+              {
+                marginRight: 15,
+
+                color: mark.isEffective ? theme.colors.onSurface : theme.colors.onSurfaceDisabled,
+                fontStyle: mark.isEffective ? 'normal' : 'italic',
+                textDecorationColor: theme.colors.onSurfaceDisabled,
+                textDecorationLine: mark.isEffective ? 'none' : 'line-through',
+              }
             ]}>{formatMark(mark)}</Text>)}
           </View>
         </View>
@@ -93,21 +83,16 @@ function SubjectCard({ mainSubject, theme }) {
         </View>)}
       </View>
 
-      <BottomSheetModal
-        ref={bottomSheetModalRef}
-        snapPoints={snapPoints}
-        index={0}
-        onDismiss={handleCloseModal}
-        style={{
-          width: Dimensions.get('window').width,
-          borderRadius: 20,
-        }}
+      <BottomSheet
+        key={mainSubject.code}
+        isOpen={isBottomSheetOpen}
+        onClose={() => setIsBottomSheetOpen(false)}
+        children={[]}
         backgroundStyle={{
           backgroundColor: getSubjectColor(mainSubject.code),
         }}
-      >
-
-      </BottomSheetModal>
+        snapPoints={["25%", "75%"]}
+      />
     </View>
   );
 }
