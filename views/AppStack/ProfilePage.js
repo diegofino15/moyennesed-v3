@@ -80,7 +80,7 @@ function ProfilePage({
           }}>
             <CustomSquareButton
               key={profilePhotoRef.current}
-              icon={profilePhotoRef.current ? <Image source={{ uri: profilePhotoRef.current }} style={{ width: 80, height: 80 }} /> : <UserIcon size={40} color={theme.colors.onSurfaceDisabled} />}
+              icon={profilePhotoRef.current ? <Image source={{ uri: profilePhotoRef.current }} style={{ width: 80, height: 80, transform: [{ translateY: 5 }] }} /> : <UserIcon size={40} color={theme.colors.onSurfaceDisabled} />}
               theme={theme}
               onPress={() => {}}
               hasShadow={true}

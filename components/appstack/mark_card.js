@@ -38,7 +38,7 @@ function MarkCard({ mark, onPress, theme }) {
             backgroundColor: getSubjectColor(mark.subjectCode, true),
             borderRadius: 10,
           }}>
-            <Text style={[theme.fonts.headlineMedium, { fontFamily: 'Bitter-Bold' }]}>{mark.value.toString().replace(".", ",")}</Text>
+            <Text style={[theme.fonts.headlineMedium, { fontFamily: 'Bitter-Bold' }]}>{(mark.value ?? "--").toString().replace(".", ",")}</Text>
           </View>
 
           {mark.valueOn != 20 && <View
