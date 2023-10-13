@@ -1,10 +1,9 @@
 import { Dimensions } from 'react-native';
-import { useState, useRef, useEffect } from 'react';
-import { BottomSheetModal, useBottomSheetModal } from '@gorhom/bottom-sheet';
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { BottomSheetModal, BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 
 
 function BottomSheet({ isOpen, onClose, children, backgroundStyle, snapPoints }) {
-  const { dismissAll: dismissAllModals } = useBottomSheetModal();
   const [isModalOpen, setIsModalOpen] = useState(false);
   useEffect(() => {
     if (isOpen) { handleOpenModal(); }
@@ -12,7 +11,6 @@ function BottomSheet({ isOpen, onClose, children, backgroundStyle, snapPoints })
 
   const handleOpenModal = () => {
     if (isModalOpen) { return; }
-    dismissAllModals();
     setIsModalOpen(true);
     bottomSheetModalRef.current?.present();
   };
@@ -20,9 +18,16 @@ function BottomSheet({ isOpen, onClose, children, backgroundStyle, snapPoints })
     setIsModalOpen(false);
     bottomSheetModalRef.current?.dismiss();
     onClose();
-    dismissAllModals();
   };
   const bottomSheetModalRef = useRef(null);
+
+  const renderBackdrop = useCallback(
+    (props) => <BottomSheetBackdrop
+      disappearsOnIndex={-1}
+      {...props}
+    />,
+    []
+  );
   
   return (
     <BottomSheetModal
@@ -35,6 +40,7 @@ function BottomSheet({ isOpen, onClose, children, backgroundStyle, snapPoints })
         borderTopEndRadius: 20,
       }}
       backgroundStyle={backgroundStyle}
+      backdropComponent={renderBackdrop}
     >
       {children}
     </BottomSheetModal>
