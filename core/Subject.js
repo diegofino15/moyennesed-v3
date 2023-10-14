@@ -49,10 +49,10 @@ function sortMarks(subject) {
 
 function _sortMarks(marks) {
   marks.sort((a, b) => {
-    if (a.date < b.date) {
+    if (a.dateEntered < b.dateEntered) {
       return 1;
     }
-    if (a.date > b.date) {
+    if (a.dateEntered > b.dateEntered) {
       return -1;
     }
     return 0;

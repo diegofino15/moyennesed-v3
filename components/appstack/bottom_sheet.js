@@ -38,6 +38,7 @@ function BottomSheet({ isOpen, onClose, children, backgroundStyle, snapPoints })
       style={{
         width: Dimensions.get('window').width,
         borderTopEndRadius: 20,
+        paddingHorizontal: 20,
       }}
       backgroundStyle={backgroundStyle}
       backdropComponent={renderBackdrop}
