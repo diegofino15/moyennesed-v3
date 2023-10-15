@@ -85,27 +85,22 @@ function SubjectPopup({ subject, changeMarkCoefficient, changeSubjectCoefficient
           }}>
             {mark.classValue && <View style={{ flexDirection: 'row' }}>
               <Text style={theme.fonts.labelMedium}>Classe : </Text>
-              <Text style={[theme.fonts.labelMedium, { fontFamily: 'Bitter-Regular' }]}>{mark.classValue.toString().replace(".", ",")}</Text>
+              <Text style={[theme.fonts.labelMedium, { fontFamily: 'Bitter-Regular' }]}>{formatMark(mark, true)}</Text>
             </View>}
             <Text style={theme.fonts.labelMedium} numberOfLines={1}>{mark.classValue ? formatDate2(mark.dateEntered) : formatDate(mark.dateEntered)}</Text>
           </View>
         </View>
 
-        {!mark.isEffective ? <View
-          style={{
-            position: 'absolute',
-            bottom: -7.5,
-            right: 10,
-            backgroundColor: '#DA3633',
-            paddingHorizontal: 5,
-            paddingVertical: 3,
-            borderRadius: 5,
-            shadowOpacity: 0.6,
-            shadowRadius: 2,
-            shadowOffset: { width: 0 },
-          }}
-        >
-          <Text style={[theme.fonts.labelSmall, { color: 'white' }]}>Non effective</Text>
+        {!mark.isEffective ? <View style={{
+          position: 'absolute',
+          bottom: -7.5,
+          right: 10,
+          backgroundColor: '#DA3633',
+          paddingHorizontal: 5,
+          paddingVertical: 3,
+          borderRadius: 5,
+        }}>
+          <Text style={[theme.fonts.labelSmall, { color: 'white' }]}>Non significative</Text>
         </View> : <PressableScale
           onPress={() => changeMarkCoefficient(mark, mark.coefficient + 1)}
           style={{

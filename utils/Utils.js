@@ -1,7 +1,13 @@
-function formatMark(mark) {
-    if (mark.value == null) { return "N/A"; }
-    if (mark.valueOn != 20) { return `${mark.value.toString().replace(".", ",")}/${mark.valueOn}`; }
-    return mark.valueStr;
+function formatMark(mark, isClass) {
+    if (!isClass) {
+        if (mark.value == null) { return mark.valueStr; }
+        if (mark.valueOn != 20) { return `${mark.value.toString().replace(".", ",")}/${mark.valueOn}`; }
+        return mark.value.toString().replace(".", ",");
+    } else {
+        if (mark.classValue == null) { return "--"; }
+        if (mark.valueOn != 20) { return `${mark.classValue.toString().replace(".", ",")}/${mark.valueOn}`; }
+        return mark.classValue.toString().replace(".", ","); 
+    }
 }
 
 function formatAverage(average) {
