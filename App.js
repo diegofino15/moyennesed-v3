@@ -68,10 +68,8 @@ export default App;
 
 /*
 TODO:
-  -> Fix date bugs !!
+  -> Integrate sub subjects in popups
   -> Sliders for coefficients
-    -> Update coefficients for same subject on different period
-  -> Make more components clickable
   -> Make the preferences customizable
   -> Bug report system
 
