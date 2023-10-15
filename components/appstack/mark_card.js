@@ -3,9 +3,21 @@ import { PressableScale } from 'react-native-pressable-scale';
 import { getSubjectColor } from '../../utils/Colors';
 import { useState } from 'react';
 import BottomSheet from './bottom_sheet';
+import SubjectPopup from './subject_popup';
 
-function MarkCard({ mark, onPress, theme }) {
+function MarkCard({ mark, subject, changeMarkCoefficient, changeSubjectCoefficient, theme }) {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+
+  function renderPopup() {
+    if (!isBottomSheetOpen) { return; }
+    return <BottomSheet
+      key={mark.id}
+      isOpen={isBottomSheetOpen}
+      onClose={() => setIsBottomSheetOpen(false)}
+      snapPoints={["40%", "75%"]}
+      children={<SubjectPopup subject={subject} changeMarkCoefficient={changeMarkCoefficient} changeSubjectCoefficient={changeSubjectCoefficient} clickedOnMark={mark.id} theme={theme} />}
+    />;
+  }
 
   return (
     <View>
@@ -86,16 +98,7 @@ function MarkCard({ mark, onPress, theme }) {
         </View> : null}
       </PressableScale>
 
-      <BottomSheet
-        key={mark.id}
-        isOpen={isBottomSheetOpen}
-        onClose={() => setIsBottomSheetOpen(false)}
-        backgroundStyle={{
-          backgroundColor: getSubjectColor(mark.subjectCode),
-        }}
-        snapPoints={["25%"]}
-        children={[]}
-      />
+      {renderPopup()}
     </View>
   );
 }

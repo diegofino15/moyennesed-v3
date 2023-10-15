@@ -6,7 +6,7 @@ import Separator from '../global/separator';
 import { PressableScale } from 'react-native-pressable-scale';
 
 
-function SubjectPopup({ subject, changeMarkCoefficient, changeSubjectCoefficient, theme }) {
+function SubjectPopup({ subject, changeMarkCoefficient, changeSubjectCoefficient, clickedOnMark, theme }) {
   function teacherCard(teacher, key) {
     return <PressableScale key={key} style={{
       backgroundColor: theme.colors.surface,
@@ -22,18 +22,22 @@ function SubjectPopup({ subject, changeMarkCoefficient, changeSubjectCoefficient
     </PressableScale>;
   }
 
-  function markCard(mark, key) {
+  function markCard(mark, key, special) {
+    if (mark.id == clickedOnMark && !special) { return null; }
+
     return (
       <PressableScale
         key={key}
         style={{
-          height: 80,
+          height: 80 + (clickedOnMark == mark.id ? 2 : 0),
           flexDirection: 'row',
           borderRadius: 10,
           padding: 5,
           marginTop: 10,
           marginBottom: 5,
           backgroundColor: theme.colors.surface,
+          borderWidth: clickedOnMark == mark.id ? 2 : 0,
+          borderColor: getSubjectColor(mark.subjectCode),
         }}
       >
         <View style={{
@@ -191,6 +195,7 @@ function SubjectPopup({ subject, changeMarkCoefficient, changeSubjectCoefficient
       <ScrollView style={{
         height: Dimensions.get('window').height - 400 - ((subject.teachers.size ?? 0) * 100),
       }} showsVerticalScrollIndicator={false} >
+        {clickedOnMark ? markCard(subject.marks.find((mark) => mark.id == clickedOnMark), clickedOnMark, true) : null}
         {subject.marks.map((mark) => markCard(mark, mark.id))}
         <View style={{ height: 50 }} />
         {subject.marks?.length == 0 ? <Text style={[theme.fonts.labelLarge, { alignSelf: 'center' }]}>Aucune note pour l'instant</Text> : null}

@@ -163,12 +163,20 @@ function EmbeddedMarksView({
             >
               {shownPeriodRef.current.marks?.map((mark, markKey) => {
                 if (markKey < 10) {
+                  const subject = shownPeriodRef.current.subjects.get(mark.subjectCode);
+                  const realSubject = mark.subSubjectCode ? subject.subSubjects.get(mark.subSubjectCode) : subject;
                   return <View
                     key={markKey}
                     style={{
                       paddingRight: (markKey == 9 || markKey == shownPeriodRef.current.marks.length - 1) ? 0 : 20,
                   }}>
-                    <MarkCard mark={mark} onPress={() => openMarkSheet(mark)} theme={theme} />
+                    <MarkCard
+                      mark={mark} 
+                      subject={realSubject}
+                      changeMarkCoefficient={changeMarkCoefficient}
+                      changeSubjectCoefficient={changeSubjectCoefficient}
+                      theme={theme}
+                    />
                   </View>;
                 }
               })}
