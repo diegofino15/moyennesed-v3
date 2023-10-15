@@ -3,23 +3,23 @@
 ## 📖 Présentation
 MoyennesED est une application mobile conçue pour permettre aux élèves de consulter leurs **moyennes scolaires** et aux parents celles de leurs enfants, si leur école utilise le service EcoleDirecte.
 
-## 🚀 Fonctionnalités
-- [x] Authentification
-  - [x] Compte élève
-  - [x] Compte parent
-- [x] Récup des notes + calcul moyennes
+## 🚀 Fonctionnalités (en cours de dev)
+- [x] Authentification (élève + parent)
+- [x] Récupération des notes + calcul des moyennes
+- [x] Devine coefficients (notes + matières)
+  - [x] Coefficients personnalisables
 - [ ] Système de signalement de bugs
 - [ ] Statistiques sur les lieux de téléchargement (établissements)
 
 ## ⚛️ Fonctionnement
-Langage : **JavaScript** avec **React Native** et **Expo**  
-L'application imite le fonctionnement du site web [ÉcoleDirecte](https://www.ecoledirecte.com/) pour se connecter, récupérer une clé de connexion, et ensuite récupérer les notes de l'élève automatiquement. Selon les paramètres décidés par l'utilisateur, les moyennes sont calculées avec des coefficients personnalisés.
+Structure : **JavaScript** avec **React Native** et **Expo**  
+L'application imite le fonctionnement du site web [ÉcoleDirecte](https://www.ecoledirecte.com) pour se connecter, récupérer une clé de connexion, et ensuite récupérer les notes de l'élève automatiquement. Selon les paramètres décidés par l'utilisateur, les moyennes sont calculées avec des coefficients personnalisés.
 
 ## La v3 ?
-Et oui, c'est la troisième version de l'application. Les deux premières étaient codées en **Flutter**, mais pour cette v3, **React Native** semblait plus approprié. Grâce à ce changement, l'amélioration de l'application dans le futur sera plus simple.
+Et oui, c'est la troisième version de l'application. Les deux premières étaient codées en **Flutter**, mais pour cette v3, **React Native** semblait plus approprié. Grâce à ce changement, l'amélioration de l'application dans le futur sera plus simple, et des animations et nouvelles interfaces plus stilisées.
 
 ## Installation
-L'application est dispo sur l'AppStore et bientôt le GooglePlay (seulement la v2 pour l'instant).
+L'application est disponible sur l'AppStore (seulement la v2 pour l'instant), et la v3 sera disponible sur le GooglePlay !
 
 ## Comment participer ?
 N'hésitez pas à faire des pulls requests pour ajouter des fonctionnalités ou régler des bugs !  
@@ -35,4 +35,4 @@ npx expo start
 ```
 
 ## Contact
-Si vous avez des questions ou des suggestions, n’hésitez pas à ouvrir une issue sur GitHub ou à me contacter directement via mail à moyennesed@gmail.com
+Si vous avez des questions ou des suggestions, n’hésitez pas à ouvrir une issue sur GitHub ou à me contacter directement via mail à moyennesed@gmail.com.
