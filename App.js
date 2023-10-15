@@ -68,17 +68,20 @@ export default App;
 
 /*
 TODO:
-  -> Fix possible empty data like class mark values
+  -> Sliders for coefficients
+    -> Update coefficients for same subject on different period
+  -> Make more components clickable
   -> Make the preferences customizable
-  -> Create marks UI (marks, popups, sliders...)
   -> Bug report system
-  -> Infos about the app (on profile page)
 
 DONE:
   -> AuthStack + Log-in/out
   -> Profile photo (+ cache)
-  -> Auto-connect + auto-get marks
+  -> Auto-connect + auto-get marks (+ cache)
   -> UI structure
-  -> Finish implementing cache
+  -> Account switcher + period switcher
+  -> Subject cards
+    -> Subject popups
+  -> Marks cards
 */
 
