@@ -1,4 +1,4 @@
-import { Dimensions } from 'react-native';
+import { View, Dimensions } from 'react-native';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { BottomSheetModal, BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 
@@ -38,12 +38,15 @@ function BottomSheet({ isOpen, onClose, children, backgroundStyle, snapPoints })
       style={{
         width: Dimensions.get('window').width,
         borderTopEndRadius: 20,
-        paddingHorizontal: 20,
       }}
       backgroundStyle={backgroundStyle}
       backdropComponent={renderBackdrop}
     >
-      {children}
+      <View style={{
+        paddingHorizontal: 20,
+      }}>
+        {children}
+      </View>
     </BottomSheetModal>
   );
 }
