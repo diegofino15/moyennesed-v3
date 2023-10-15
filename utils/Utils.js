@@ -10,17 +10,15 @@ function formatAverage(average) {
 }
 
 const daysNames = [
-"",
-"Lundi",
-"Mardi",
-"Mercredi",
-"Jeudi",
-"Vendredi",
-"Samedi",
-"Dimanche"
+    "Dimanche",
+    "Lundi",
+    "Mardi",
+    "Mercredi",
+    "Jeudi",
+    "Vendredi",
+    "Samedi",
 ];
 const monthsNames = [
-    "",
     "Janvier",
     "Février",
     "Mars",
@@ -32,7 +30,7 @@ const monthsNames = [
     "Septembre",
     "Octobre",
     "Novembre",
-    "Décembre"
+    "Décembre",
 ];
 function formatDate(givenDate) {
     const date = new Date(givenDate);
