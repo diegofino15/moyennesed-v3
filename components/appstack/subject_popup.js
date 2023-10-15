@@ -1,6 +1,6 @@
 import { View, Text, Dimensions, ScrollView } from 'react-native';
 import { getSubjectColor } from '../../utils/Colors';
-import { formatAverage, formatDate } from '../../utils/Utils';
+import { formatAverage, formatDate, formatDate2, formatMark } from '../../utils/Utils';
 import { ChevronDownIcon, GraduationCapIcon, XIcon } from 'lucide-react-native';
 import Separator from '../global/separator';
 import { PressableScale } from 'react-native-pressable-scale';
@@ -77,8 +77,20 @@ function SubjectPopup({ subject, changeMarkCoefficient, changeSubjectCoefficient
             marginBottom: 5,
             maxWidth: Dimensions.get('window').width - 130,
           }]} numberOfLines={2}>{mark.title}</Text>
-          <Text style={theme.fonts.labelMedium} numberOfLines={1}>{formatDate(mark.dateEntered)}</Text>
+          
+          <View style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            width: Dimensions.get('window').width - 200,
+          }}>
+            {mark.classValue && <View style={{ flexDirection: 'row' }}>
+              <Text style={theme.fonts.labelMedium}>Classe : </Text>
+              <Text style={[theme.fonts.labelMedium, { fontFamily: 'Bitter-Regular' }]}>{mark.classValue.toString().replace(".", ",")}</Text>
+            </View>}
+            <Text style={theme.fonts.labelMedium} numberOfLines={1}>{mark.classValue ? formatDate2(mark.dateEntered) : formatDate(mark.dateEntered)}</Text>
+          </View>
         </View>
+
         {!mark.isEffective ? <View
           style={{
             position: 'absolute',
@@ -143,7 +155,10 @@ function SubjectPopup({ subject, changeMarkCoefficient, changeSubjectCoefficient
           height: 100,
         }}>
           <Text style={theme.fonts.bodyLarge}>{subject.name}</Text>
-          <Text style={theme.fonts.labelMedium}>Classe : {formatAverage(subject.classAverage)}</Text>
+          {subject.classAverage ? <View style={{ flexDirection: 'row' }}>
+            <Text style={theme.fonts.labelMedium}>Classe : </Text>
+            <Text style={[theme.fonts.labelMedium, { fontFamily: 'Bitter-Regular' }]}>{formatAverage(subject.classAverage)}</Text>
+          </View> : null}
           <PressableScale
             onPress={() => changeSubjectCoefficient(subject, subject.coefficient + 1)}
             style={{

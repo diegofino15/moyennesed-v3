@@ -11,6 +11,17 @@ function SubjectCard({ mainSubject, changeMarkCoefficient, changeSubjectCoeffici
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [subSubjectOpened, setSubSubjectOpened] = useState("");
 
+  function renderPopup(subject) {
+    if (!isBottomSheetOpen) { return; }
+    return <BottomSheet
+      key={subject.code + subject.subCode}
+      isOpen={isBottomSheetOpen && (subject.code + subject.subCode) == subSubjectOpened}
+      onClose={() => setIsBottomSheetOpen(false)}
+      snapPoints={["30%", "75%"]}
+      children={<SubjectPopup subject={subject} changeMarkCoefficient={changeMarkCoefficient} changeSubjectCoefficient={changeSubjectCoefficient} theme={theme} />}
+    />;
+  }
+
   function subjectCard(subject) {
     return (
       <View>
@@ -70,16 +81,7 @@ function SubjectCard({ mainSubject, changeMarkCoefficient, changeSubjectCoeffici
             </View>
           </View>
         </PressableScale>
-        <BottomSheet
-          key={subject.code + subject.subCode}
-          isOpen={isBottomSheetOpen && (subject.code + subject.subCode) == subSubjectOpened}
-          onClose={() => setIsBottomSheetOpen(false)}
-          backgroundStyle={{
-            // backgroundColor: getSubjectColor(mainSubject.code),
-          }}
-          snapPoints={["30%", "75%"]}
-          children={<SubjectPopup subject={subject} changeMarkCoefficient={changeMarkCoefficient} changeSubjectCoefficient={changeSubjectCoefficient} theme={theme} />}
-        />
+        {renderPopup(subject)}
       </View>
     );
   }

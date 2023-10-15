@@ -139,9 +139,9 @@ function EmbeddedMarksView({
           
           <Text style={theme.fonts.headlineLarge}>{formatAverage(shownPeriodRef.current.average)}</Text>
           <Text style={[theme.fonts.labelMedium, { marginBottom: 5 }]}>MOYENNE GÉNÉRALE</Text>
-          <Text style={[theme.fonts.labelSmall, { marginBottom: 30 }]}>Classe : {formatAverage(shownPeriodRef.current.classAverage)}</Text>
+          {shownPeriodRef.current.classAverage && <Text style={theme.fonts.labelSmall}>Classe : {formatAverage(shownPeriodRef.current.classAverage)}</Text>}
           
-          <Text style={[theme.fonts.bodyLarge, { alignSelf: 'flex-start', marginBottom: 10 }]}>Dernières notes</Text>
+          <Text style={[theme.fonts.bodyLarge, { alignSelf: 'flex-start', marginTop: 30, marginBottom: 10 }]}>Dernières notes</Text>
           <View style={{
             height: 92,
             marginBottom: 8,

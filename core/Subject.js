@@ -100,15 +100,16 @@ function _getCalculatedClassAverage(subject) {
   let coefficient = 0;
 
   subject.marks.forEach(mark => {
-    if (mark.isEffective) {
+    if (mark.isEffective && mark.classValue) {
       sum += (mark.classValue / mark.valueOn * 20) * mark.coefficient;
       coefficient += mark.coefficient;
     }
   });
 
   subject.subSubjects.forEach((subSubject, _) => {
-    if (subSubject.marks.length != 0) {
-      sum += (subSubject.classAverage ? subSubject.classAverage : _getCalculatedClassAverage(subSubject)) * subSubject.coefficient;
+    let subSubjectsAverage = subSubject.classAverage ? subSubject.classAverage : _getCalculatedClassAverage(subSubject);
+    if (subSubjectsAverage) {
+      sum += subSubjectsAverage * subSubject.coefficient;
       coefficient += subSubject.coefficient;
     }
   });
