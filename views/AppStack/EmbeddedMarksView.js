@@ -130,7 +130,7 @@ function EmbeddedMarksView({
             marginBottom: 20,
           }}>
             <Text style={[theme.fonts.labelMedium, { alignSelf: 'flex-start', height: 30 }]}>{shownPeriodRef.current.title}</Text>
-            {((autoRefreshing && gotMarks) || isConnecting)
+            {(autoRefreshing || isConnecting)
               ? <ActivityIndicator size={30} color={theme.colors.onSurface} />
               : (!isConnected || marksNeedUpdate)
                 ? <AlertTriangleIcon size={30} color='red' />
