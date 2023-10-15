@@ -10,6 +10,7 @@ import { AlertTriangleIcon, CheckCircle2Icon } from "lucide-react-native";
 import * as Haptics from "expo-haptics";
 import SubjectCard from "../../components/appstack/subject_card";
 import { calculateAllAverages } from "../../core/Period";
+import { Preferences } from '../../core/Preferences';
 
 
 function EmbeddedMarksView({
@@ -49,8 +50,33 @@ function EmbeddedMarksView({
   }
 
   // Update screen
-  function updateScreen() {
-    setScreenUpdated(!screenUpdatedRef.current);
+  function updateScreen() { setScreenUpdated(!screenUpdatedRef.current); }
+
+  // Change coefficient
+  function refreshAverages() {
+    for (let [_, period] of shownAccountRef.current.periods) {
+      calculateAllAverages(period);
+    }
+  }
+
+  function changeMarkCoefficient(mark, coefficient) {
+    mark.coefficient = coefficient;
+    Preferences.customCoefficients.set(mark.id, coefficient);
+    Preferences.saveCustomCoefficients();
+    refreshAverages();
+    updateScreen();
+  }
+
+  function changeSubjectCoefficient(subject, coefficient) {
+    for (let [_, period] of shownAccountRef.current.periods) {
+      period.subjects.forEach(subject_ => {
+        if (subject_.id == subject.id) { subject_.coefficient = coefficient; }
+      });
+    }
+    Preferences.customCoefficients.set(`SUBJECT-${subject.id}`, coefficient);
+    Preferences.saveCustomCoefficients();
+    refreshAverages();
+    updateScreen();
   }
 
   return (
@@ -148,12 +174,8 @@ function EmbeddedMarksView({
       }}>
         <SubjectCard
           mainSubject={subject}
-          refreshAverages={() => {
-            for (let [_, period] of shownAccountRef.current.periods) {
-              calculateAllAverages(period);
-            }
-          }}
-          updateScreen={updateScreen}
+          changeMarkCoefficient={changeMarkCoefficient}
+          changeSubjectCoefficient={changeSubjectCoefficient}
           theme={theme}
         />
       </View>)}

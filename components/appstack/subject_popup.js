@@ -1,15 +1,14 @@
 import { View, Text, Dimensions, ScrollView } from 'react-native';
 import { getSubjectColor } from '../../utils/Colors';
-import { formatAverage, formatDate, formatMark } from '../../utils/Utils';
+import { formatAverage, formatDate } from '../../utils/Utils';
 import { ChevronDownIcon, GraduationCapIcon, XIcon } from 'lucide-react-native';
 import Separator from '../global/separator';
 import { PressableScale } from 'react-native-pressable-scale';
-import { Preferences } from '../../core/Preferences';
 
 
-function SubjectPopup({ subject, refreshAverages, updateScreen, theme }) {
+function SubjectPopup({ subject, changeMarkCoefficient, changeSubjectCoefficient, theme }) {
   function teacherCard(teacher, key) {
-    return <View key={key} style={{
+    return <PressableScale key={key} style={{
       backgroundColor: theme.colors.surface,
       borderRadius: 5,
       paddingHorizontal: 10,
@@ -20,7 +19,7 @@ function SubjectPopup({ subject, refreshAverages, updateScreen, theme }) {
     }}>
       <GraduationCapIcon size={30} color={theme.colors.onSurfaceDisabled} style={{ marginRight: 10 }} />
       <Text style={theme.fonts.labelLarge}>{teacher}</Text>
-    </View>;
+    </PressableScale>;
   }
 
   function markCard(mark, key) {
@@ -119,22 +118,6 @@ function SubjectPopup({ subject, refreshAverages, updateScreen, theme }) {
     );
   }
 
-  function changeMarkCoefficient(mark, newCoefficient) {
-    mark.coefficient = newCoefficient;
-    Preferences.customCoefficients.set(mark.id, newCoefficient);
-    Preferences.saveCustomCoefficients();
-    refreshAverages();
-    updateScreen();
-  }
-
-  function changeSubjectCoefficient(newCoefficient) {
-    subject.coefficient = newCoefficient;
-    Preferences.customCoefficients.set(`SUBJECT-${subject.id}`, newCoefficient);
-    Preferences.saveCustomCoefficients();
-    refreshAverages();
-    updateScreen();
-  }
-  
   return (
     <View>
       <View style={{
@@ -162,7 +145,7 @@ function SubjectPopup({ subject, refreshAverages, updateScreen, theme }) {
           <Text style={theme.fonts.bodyLarge}>{subject.name}</Text>
           <Text style={theme.fonts.labelMedium}>Classe : {formatAverage(subject.classAverage)}</Text>
           <PressableScale
-            onPress={() => changeSubjectCoefficient(subject.coefficient + 1)}
+            onPress={() => changeSubjectCoefficient(subject, subject.coefficient + 1)}
             style={{
             backgroundColor: theme.colors.surface,
             borderRadius: 5,
@@ -198,6 +181,7 @@ function SubjectPopup({ subject, refreshAverages, updateScreen, theme }) {
       }} showsVerticalScrollIndicator={false} >
         {subject.marks.map((mark) => markCard(mark, mark.id))}
         <View style={{ height: 50 }} />
+        {subject.marks?.length == 0 && <Text style={[theme.fonts.labelLarge, { alignSelf: 'center' }]}>Aucune note pour l'instant</Text>}
       </ScrollView>
     </View>
   );
