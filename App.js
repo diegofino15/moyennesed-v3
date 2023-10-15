@@ -68,6 +68,7 @@ export default App;
 
 /*
 TODO:
+  -> Fix date bugs !!
   -> Sliders for coefficients
     -> Update coefficients for same subject on different period
   -> Make more components clickable
