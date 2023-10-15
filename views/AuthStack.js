@@ -40,7 +40,7 @@ function AuthStack({ theme }) {
       setLoggedIn(successful);
 
       if (successful) {
-        setScreenIndex(screenIndexRef.current + 1);
+        setScreenIndex(3);
         setTimeout(() => scrollViewRef.current?.scrollTo({x: Dimensions.get('window').width * screenIndexRef.current, animated: true}), 300);
       }
     }

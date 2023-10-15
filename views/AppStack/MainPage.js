@@ -60,6 +60,7 @@ function MainPage({
         if (!marks) {
           gettingMarksRef.current.set(accountToUpdate.id, false);
           console.log(`Couldn't get marks for ${accountToUpdate.id}`);
+          setRefreshing(false);
           setManualRefreshing(false);
           return;
         }
@@ -88,6 +89,7 @@ function MainPage({
           gotMarksRef.current.set(accountToUpdate.id, false); UserData.gotMarksFor.set(accountToUpdate.id, false);
           gettingMarksRef.current.set(accountToUpdate.id, false);
           console.log(`Couldn't get marks for ${accountToUpdate.id}`);
+          setRefreshing(false);
           setManualRefreshing(false);
           return;
         }
@@ -202,7 +204,7 @@ function MainPage({
           </View>
           
           {/* Children account chooser for parents */}
-          {UserData.mainAccount.isParent && <View>
+          {UserData.mainAccount.isParent ? <View>
             <Separator theme={theme} style={{ marginBottom: 10 }}/>
             <ScrollView
               horizontal={true}
@@ -239,7 +241,7 @@ function MainPage({
               })}
             </ScrollView>
             <Separator theme={theme} style={{ marginBottom: 20 }}/>
-          </View>}
+          </View> : null}
 
           {/* Shown account grades */}
           <EmbeddedMarksView

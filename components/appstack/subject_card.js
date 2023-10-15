@@ -56,7 +56,7 @@ function SubjectCard({ mainSubject, changeMarkCoefficient, changeSubjectCoeffici
                 alignItems: 'flex-end',
               }}>
                 <Text style={[theme.fonts.headlineMedium, { fontSize: 20, fontFamily: 'Bitter-Bold' }]}>{formatAverage(subject.average)}</Text>
-                {subject.average && <Text style={[theme.fonts.labelSmall, { color: 'black', fontFamily: 'Bitter-Bold' }]}>/20</Text>}
+                {subject.average ? <Text style={[theme.fonts.labelSmall, { color: 'black', fontFamily: 'Bitter-Bold' }]}>/20</Text> : null}
               </View>
             </View>
             <View style={{

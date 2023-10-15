@@ -73,7 +73,7 @@ function ProfilePage({
           marginTop: UserData.mainAccount.isParent ? 0 : 20,
           height: 60,
         }}>
-          {!UserData.mainAccount.isParent && <View style={{
+          {!UserData.mainAccount.isParent ? <View style={{
             position: 'absolute',
             top: -20,
             left: 10,
@@ -85,7 +85,7 @@ function ProfilePage({
               onPress={() => {}}
               hasShadow={true}
             />
-          </View>}
+          </View> : null}
           <View style={{
             marginLeft: UserData.mainAccount.isParent ? 0 : 80,
             flexDirection: 'column',

@@ -17,7 +17,7 @@ function getFormattedMark(jsonData) {
     "date": new Date(jsonData.date),
     "dateEntered": new Date(jsonData.dateSaisie),
     "isEffective": !(jsonData.nonSignificatif || jsonData.enLettre),
-    "valueStr": jsonData.valeur.toString(),
+    "valueStr": jsonData.valeur.toString().trim(),
     "value": parseFloat(jsonData.valeur.toString().replace(",", ".")),
     "classValue": jsonData.moyenneClasse ? parseFloat(jsonData.moyenneClasse.toString().replace(",", ".")) : undefined,
     "valueOn": parseFloat(jsonData.noteSur.toString().replace(",", ".")),

@@ -50,10 +50,10 @@ function SubjectPopup({ subject, changeMarkCoefficient, changeSubjectCoefficient
             backgroundColor: getSubjectColor(subject.code, true),
             borderRadius: 10,
           }}>
-            <Text style={[theme.fonts.headlineMedium, { fontFamily: 'Bitter-Bold' }]}>{(mark.value ?? "--").toString().replace(".", ",")}</Text>
+            <Text style={[theme.fonts.headlineMedium, { fontFamily: 'Bitter-Bold' }]}>{mark.valueStr}</Text>
           </View>
 
-          {mark.valueOn != 20 && <View
+          {mark.valueOn != 20 ? <View
             style={{
               position: 'absolute',
               bottom: 0,
@@ -65,7 +65,7 @@ function SubjectPopup({ subject, changeMarkCoefficient, changeSubjectCoefficient
             }}
           >
             <Text style={theme.fonts.headlineSmall}>/{mark.valueOn}</Text>
-          </View>}
+          </View> : null}
         </View>
         <View style={{
           marginLeft: 5,
@@ -83,10 +83,10 @@ function SubjectPopup({ subject, changeMarkCoefficient, changeSubjectCoefficient
             justifyContent: 'space-between',
             width: Dimensions.get('window').width - 200,
           }}>
-            {mark.classValue && <View style={{ flexDirection: 'row' }}>
+            {mark.classValue ? <View style={{ flexDirection: 'row' }}>
               <Text style={theme.fonts.labelMedium}>Classe : </Text>
               <Text style={[theme.fonts.labelMedium, { fontFamily: 'Bitter-Regular' }]}>{formatMark(mark, true)}</Text>
-            </View>}
+            </View> : null}
             <Text style={theme.fonts.labelMedium} numberOfLines={1}>{mark.classValue ? formatDate2(mark.dateEntered) : formatDate(mark.dateEntered)}</Text>
           </View>
         </View>
@@ -118,7 +118,7 @@ function SubjectPopup({ subject, changeMarkCoefficient, changeSubjectCoefficient
           }}
         >
           <XIcon size={15} color={theme.colors.onSurface}/>
-          <Text style={[theme.fonts.headlineSmall, { fontSize: 17 }]}>{mark.coefficient}</Text>
+          <Text style={[theme.fonts.headlineSmall, { fontSize: 17 }]}>{mark.coefficient.toString().replace(".", ",")}</Text>
           <ChevronDownIcon size={15} color={theme.colors.onSurfaceDisabled} style={{ marginLeft: 5 }}/>
         </PressableScale>}
       </PressableScale>
@@ -149,7 +149,9 @@ function SubjectPopup({ subject, changeMarkCoefficient, changeSubjectCoefficient
           justifyContent: 'space-evenly',
           height: 100,
         }}>
-          <Text style={theme.fonts.bodyLarge}>{subject.name}</Text>
+          <Text style={[theme.fonts.bodyLarge, {
+            width: Dimensions.get('window').width - 150,
+          }]}>{subject.name}</Text>
           {subject.classAverage ? <View style={{ flexDirection: 'row' }}>
             <Text style={theme.fonts.labelMedium}>Classe : </Text>
             <Text style={[theme.fonts.labelMedium, { fontFamily: 'Bitter-Regular' }]}>{formatAverage(subject.classAverage)}</Text>
@@ -171,7 +173,7 @@ function SubjectPopup({ subject, changeMarkCoefficient, changeSubjectCoefficient
               alignItems: 'center'
             }}>
               <XIcon size={15} color={theme.colors.onSurface}/>
-              <Text style={[theme.fonts.headlineSmall, { fontSize: 17 }]}>{subject.coefficient}</Text>
+              <Text style={[theme.fonts.headlineSmall, { fontSize: 17 }]}>{subject.coefficient.toString().replace(".", ",")}</Text>
               <ChevronDownIcon size={15} color={theme.colors.onSurfaceDisabled} style={{ marginLeft: 5 }}/>
             </View>
           </PressableScale>
@@ -191,7 +193,7 @@ function SubjectPopup({ subject, changeMarkCoefficient, changeSubjectCoefficient
       }} showsVerticalScrollIndicator={false} >
         {subject.marks.map((mark) => markCard(mark, mark.id))}
         <View style={{ height: 50 }} />
-        {subject.marks?.length == 0 && <Text style={[theme.fonts.labelLarge, { alignSelf: 'center' }]}>Aucune note pour l'instant</Text>}
+        {subject.marks?.length == 0 ? <Text style={[theme.fonts.labelLarge, { alignSelf: 'center' }]}>Aucune note pour l'instant</Text> : null}
       </ScrollView>
     </View>
   );

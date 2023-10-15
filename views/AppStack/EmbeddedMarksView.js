@@ -1,4 +1,4 @@
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, Dimensions } from "react-native";
 import { useEffect } from "react";
 import useState from "react-usestateref";
 import { getSubjectColor } from "../../utils/Colors";
@@ -11,6 +11,7 @@ import * as Haptics from "expo-haptics";
 import SubjectCard from "../../components/appstack/subject_card";
 import { calculateAllAverages } from "../../core/Period";
 import { Preferences } from '../../core/Preferences';
+import { UserData } from "../../core/UserData";
 
 
 function EmbeddedMarksView({
@@ -64,6 +65,7 @@ function EmbeddedMarksView({
     Preferences.customCoefficients.set(mark.id, coefficient);
     Preferences.saveCustomCoefficients();
     refreshAverages();
+    UserData.saveCache();
     updateScreen();
   }
 
@@ -76,6 +78,7 @@ function EmbeddedMarksView({
     Preferences.customCoefficients.set(`SUBJECT-${subject.id}`, coefficient);
     Preferences.saveCustomCoefficients();
     refreshAverages();
+    UserData.saveCache();
     updateScreen();
   }
 
@@ -132,21 +135,28 @@ function EmbeddedMarksView({
             <Text style={[theme.fonts.labelMedium, { alignSelf: 'flex-start', height: 30 }]}>{shownPeriodRef.current.title}</Text>
             {(autoRefreshing || isConnecting)
               ? <ActivityIndicator size={30} color={theme.colors.onSurface} />
-              : (!isConnected || marksNeedUpdate)
+              : (!isConnected || marksNeedUpdate || !gotMarks)
                 ? <AlertTriangleIcon size={30} color='red' />
                 : <CheckCircle2Icon size={25} color='green' />}
           </View>
           
           <Text style={theme.fonts.headlineLarge}>{formatAverage(shownPeriodRef.current.average)}</Text>
           <Text style={[theme.fonts.labelMedium, { marginBottom: 5 }]}>MOYENNE GÉNÉRALE</Text>
-          {shownPeriodRef.current.classAverage && <Text style={theme.fonts.labelSmall}>Classe : {formatAverage(shownPeriodRef.current.classAverage)}</Text>}
+          {shownPeriodRef.current.classAverage ? <View style={{ flexDirection: 'row' }}>
+            <Text style={theme.fonts.labelSmall}>Classe : </Text>
+            <Text style={[theme.fonts.headlineSmall, { color: theme.colors.onSurfaceDisabled, fontSize: 13 }]}>{formatAverage(shownPeriodRef.current.classAverage)}</Text>
+          </View> : null}
           
           <Text style={[theme.fonts.bodyLarge, { alignSelf: 'flex-start', marginTop: 30, marginBottom: 10 }]}>Dernières notes</Text>
           <View style={{
             height: 92,
             marginBottom: 8,
+            width: Dimensions.get('window').width - 80,
+            justifyContent: 'center',
           }}>
-            <ScrollView
+            {shownPeriodRef.current.marks?.length == 0 ? <Text style={[
+              theme.fonts.labelLarge, { alignSelf: 'center' }
+            ]}>Aucune note pour l'instant</Text> : <ScrollView
               key={shownAccountRef.current.id + "-" + shownPeriodRef.current.code}
               horizontal
               showsHorizontalScrollIndicator={false}
@@ -162,8 +172,7 @@ function EmbeddedMarksView({
                   </View>;
                 }
               })}
-              {shownPeriodRef.current.marks?.length == 0 && <Text style={[theme.fonts.labelLarge, { alignSelf: 'center' }]}>Aucune note pour l'instant</Text>}
-            </ScrollView>
+            </ScrollView>}
           </View>
         </View>
       </View>

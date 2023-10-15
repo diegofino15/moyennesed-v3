@@ -89,8 +89,10 @@ export class Account {
     // Add marks
     jsonData.notes.forEach(markData => {
       const mark = getFormattedMark(markData);
-      const period = this.periods.get(mark.periodCode);
-      addMark(period, mark);
+      if (mark.valueStr) {
+        const period = this.periods.get(mark.periodCode);
+        addMark(period, mark);
+      }
     });
 
     // Calculate averages

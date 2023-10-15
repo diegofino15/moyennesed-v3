@@ -1,11 +1,11 @@
 function formatMark(mark, isClass) {
     if (!isClass) {
-        if (mark.value == null) { return mark.valueStr; }
-        if (mark.valueOn != 20) { return `${mark.value.toString().replace(".", ",")}/${mark.valueOn}`; }
+        if (!mark.value) { return mark.valueStr; }
+        if (mark.valueOn != 20) { return `${mark.value.toString().replace(".", ",")}/${mark.valueOn.toString().replace(".", ",")}`; }
         return mark.value.toString().replace(".", ",");
     } else {
-        if (mark.classValue == null) { return "--"; }
-        if (mark.valueOn != 20) { return `${mark.classValue.toString().replace(".", ",")}/${mark.valueOn}`; }
+        if (!mark.classValue) { return "--"; }
+        if (mark.valueOn != 20) { return `${mark.classValue.toString().replace(".", ",")}/${mark.valueOn.toString().replace(".", ",")}`; }
         return mark.classValue.toString().replace(".", ","); 
     }
 }

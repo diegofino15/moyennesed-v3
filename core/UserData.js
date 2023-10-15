@@ -22,11 +22,14 @@ export class UserData {
     this.connected = false;
     this.connecting = true;
 
-    const response = await axios.post(
+    var response = await axios.post(
       `${this.API_URL}/v3/login.awp`,
       `data={"identifiant":"${username}", "motdepasse":"${password}"}`,
       { headers: { "Content-Type": "text/plain" } },
-    );
+    ).catch(error => {
+      console.log(`An error occured while logging in : ${error}`);
+    });
+    response ??= { status: 500 };
 
     var success = false;
     switch (response.status) {
@@ -91,11 +94,16 @@ export class UserData {
 
   static async getMarks(accountID) {
     console.log(`Getting marks for account ${accountID}...`);
-    const response = await axios.post(
+    var response = await axios.post(
       `${this.API_URL}/v3/eleves/${accountID}/notes.awp?verbe=get`,
       'data={"anneeScolaire": ""}',
       { headers: { "Content-Type": "text/plain", "X-Token": this.token } },
-    );
+    ).catch(error => {
+      console.log(`An error occured while getting marks : ${error}`);
+    });
+    response ??= {
+      status: 500
+    };
     
     switch (response.status) {
       case 200:

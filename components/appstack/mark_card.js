@@ -38,10 +38,10 @@ function MarkCard({ mark, onPress, theme }) {
             backgroundColor: getSubjectColor(mark.subjectCode, true),
             borderRadius: 10,
           }}>
-            <Text style={[theme.fonts.headlineMedium, { fontFamily: 'Bitter-Bold' }]}>{(mark.value ?? "--").toString().replace(".", ",")}</Text>
+            <Text style={[theme.fonts.headlineMedium, { fontFamily: 'Bitter-Bold' }]}>{mark.valueStr}</Text>
           </View>
 
-          {mark.valueOn != 20 && <View
+          {mark.valueOn != 20 ? <View
             style={{
               position: 'absolute',
               bottom: 0,
@@ -53,7 +53,7 @@ function MarkCard({ mark, onPress, theme }) {
             }}
           >
             <Text style={theme.fonts.headlineSmall}>/{mark.valueOn}</Text>
-          </View>}
+          </View> : null}
         </View>
         <View style={{
           marginLeft: 5,
@@ -68,7 +68,7 @@ function MarkCard({ mark, onPress, theme }) {
           ]} numberOfLines={2}>{mark.title}</Text>
           <Text style={[theme.fonts.labelSmall, { maxWidth: 160 }]} numberOfLines={1}>{mark.subjectTitle}</Text>
         </View>
-        {!mark.isEffective && <View
+        {!mark.isEffective ? <View
           style={{
             position: 'absolute',
             bottom: -7.5,
@@ -83,7 +83,7 @@ function MarkCard({ mark, onPress, theme }) {
           }}
         >
           <Text style={[theme.fonts.labelSmall, { color: 'white' }]}>Non effective</Text>
-        </View>}
+        </View> : null}
       </PressableScale>
 
       <BottomSheet
