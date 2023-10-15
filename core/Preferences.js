@@ -25,6 +25,7 @@ export class Preferences {
       }
       console.log(`Preferences loaded : Marks : ${Preferences.guessMarksCoefficients} | Subjects : ${Preferences.guessSubjectCoefficients}`);
     });
+    await this.loadCustomCoefficients();
   }
 
   static async save() {
@@ -34,5 +35,19 @@ export class Preferences {
       guessMarksCoefficients,
       guessSubjectCoefficients,
     }));
+    await this.saveCustomCoefficients();
   }
+
+   // Custom coefficients
+   static customCoefficients = new Map();
+   static async loadCustomCoefficients() {
+     await AsyncStorage.getItem("coefficients").then(jsonValue => {
+       if (jsonValue != null) {
+         this.customCoefficients = new Map(JSON.parse(jsonValue));
+       }
+     });
+   }
+   static async saveCustomCoefficients() {
+     await AsyncStorage.setItem("coefficients", JSON.stringify(Array.from(this.customCoefficients.entries())));
+   }
 }

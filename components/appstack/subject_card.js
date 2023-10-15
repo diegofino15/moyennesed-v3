@@ -7,7 +7,7 @@ import BottomSheet from './bottom_sheet';
 import { useState } from 'react';
 import SubjectPopup from './subject_popup';
 
-function SubjectCard({ mainSubject, theme }) {
+function SubjectCard({ mainSubject, refreshAverages, updateScreen, theme }) {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [subSubjectOpened, setSubSubjectOpened] = useState("");
 
@@ -77,8 +77,8 @@ function SubjectCard({ mainSubject, theme }) {
           backgroundStyle={{
             // backgroundColor: getSubjectColor(mainSubject.code),
           }}
-          snapPoints={["25%", "75%"]}
-          children={<SubjectPopup subject={subject} theme={theme} />}
+          snapPoints={["30%", "75%"]}
+          children={<SubjectPopup subject={subject} refreshAverages={refreshAverages} updateScreen={updateScreen} theme={theme} />}
         />
       </View>
     );

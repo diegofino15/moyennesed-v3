@@ -9,6 +9,7 @@ import { ActivityIndicator } from 'react-native';
 import { AlertTriangleIcon, CheckCircle2Icon } from "lucide-react-native";
 import * as Haptics from "expo-haptics";
 import SubjectCard from "../../components/appstack/subject_card";
+import { calculateAllAverages } from "../../core/Period";
 
 
 function EmbeddedMarksView({
@@ -18,6 +19,7 @@ function EmbeddedMarksView({
   autoRefreshing,
   theme,
 }) {
+  const [_screenUpdated, setScreenUpdated, screenUpdatedRef] = useState(false);
   const [_shownPeriod, setShownPeriod, shownPeriodRef] = useState({});
   const [_periodSelectorItems, _setPeriodSelectorItems, periodSelectorItemsRef] = useState([]);
   useEffect(() => {
@@ -39,14 +41,17 @@ function EmbeddedMarksView({
         periodSelectorItemsRef.current.push({ label: period.title, value: key });
       });
     }
-  }, [shownAccountRef.current, gettingMarks]);
+  }, [shownAccountRef.current, gettingMarks, screenUpdatedRef.current]);
 
   // Open bottom sheet to display mark data
   const openMarkSheet = (mark) => {
     console.log(`Open mark infos for ${mark.title}`);
   }
 
-  const openSubjectSheet = (subject) => {}
+  // Update screen
+  function updateScreen() {
+    setScreenUpdated(!screenUpdatedRef.current);
+  }
 
   return (
     <View>
@@ -143,7 +148,12 @@ function EmbeddedMarksView({
       }}>
         <SubjectCard
           mainSubject={subject}
-          onPress={openSubjectSheet}
+          refreshAverages={() => {
+            for (let [_, period] of shownAccountRef.current.periods) {
+              calculateAllAverages(period);
+            }
+          }}
+          updateScreen={updateScreen}
           theme={theme}
         />
       </View>)}

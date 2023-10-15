@@ -5,6 +5,11 @@ import { getSubjectCoefficient } from "../utils/CoefficientsManager";
 function getFormattedSubject(jsonData) {
   var coefficient = parseFloat(jsonData.coef.toString().replace(",", "."));
   if (coefficient === 0) { coefficient = 1; }
+  if (Preferences.customCoefficients.has(`SUBJECT-${jsonData.id}`)) {
+    coefficient = Preferences.customCoefficients.get(`SUBJECT-${jsonData.id}`);
+  } else if (Preferences.guessSubjectCoefficients) {
+    coefficient = getSubjectCoefficient(jsonData.discipline ?? "");
+  }
 
   var teachers = new Array();
   jsonData.professeurs.forEach(teacher => {
@@ -22,7 +27,7 @@ function getFormattedSubject(jsonData) {
     "marks": new Array(),
     "average": undefined,
     "classAverage": undefined,
-    "coefficient": Preferences.guessSubjectCoefficients ? getSubjectCoefficient(jsonData.discipline ?? "") : coefficient,
+    "coefficient": coefficient,
   };
 }
 
