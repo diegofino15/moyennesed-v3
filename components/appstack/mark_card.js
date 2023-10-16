@@ -4,6 +4,7 @@ import { getSubjectColor } from '../../utils/Colors';
 import { useState } from 'react';
 import BottomSheet from './bottom_sheet';
 import SubjectPopup from './subject_popup';
+import { ChevronRight } from 'lucide-react-native';
 
 function MarkCard({ mark, subject, mainSubject, changeMarkCoefficient, changeSubjectCoefficient, theme }) {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
@@ -79,7 +80,11 @@ function MarkCard({ mark, subject, mainSubject, changeMarkCoefficient, changeSub
               theme.fonts.bodyMedium,
               { maxWidth: 160, marginBottom: 5 }
           ]} numberOfLines={2}>{mark.title}</Text>
-          <Text style={[theme.fonts.labelSmall, { maxWidth: 160 }]} numberOfLines={1}>{mark.subjectTitle}</Text>
+          <Text style={[theme.fonts.labelSmall, { maxWidth: 160 }]} numberOfLines={1}>
+            {mark.subSubjectCode ? <Text style={theme.fonts.labelSmall}>{mainSubject.name}</Text> : null}
+            {mark.subSubjectCode ? <ChevronRight size={10} color={theme.colors.onSurfaceDisabled} style={{ marginLeft: 5, marginRight: 5 }} /> : null}
+            {mark.subjectTitle}
+          </Text>
         </View>
         {!mark.isEffective ? <View
           style={{
