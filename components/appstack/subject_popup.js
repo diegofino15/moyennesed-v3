@@ -95,7 +95,7 @@ function SubjectPopup({ subject, selectedSubSubject, changeMarkCoefficient, chan
           }}>
             {!selectedSubSubject && mark.subSubjectCode ? <Text style={theme.fonts.labelLarge}>{subject.subSubjects.get(mark.subSubjectCode).name}</Text> : null}
             {!selectedSubSubject && mark.subSubjectCode ? <View style={{ width: 25, alignItems: 'center' }}><ChevronRight size={15} color={theme.colors.onSurfaceDisabled}/></View> : null}
-            <Text style={theme.fonts.bodyLarge}>{mark.title}</Text>
+            <Text style={theme.fonts.bodyLarge} numberOfLines={2}>{mark.title}</Text>
           </View>
           
           <View style={{
@@ -189,7 +189,7 @@ function SubjectPopup({ subject, selectedSubSubject, changeMarkCoefficient, chan
           <Text style={{
             width: Dimensions.get('window').width - 150,
             alignItems: 'center',
-          }}>
+          }} numberOfLines={2}>
             <Text style={selectedSubSubject ? theme.fonts.labelLarge : theme.fonts.bodyLarge}>{subject.name}</Text>
             {selectedSubSubject ? <View style={{ width: 25, alignItems: 'center' }}><ChevronRight size={15} color={theme.colors.onSurfaceDisabled}/></View> : null}
             {selectedSubSubject ? <Text style={theme.fonts.bodyLarge}>{shownSubjectRef.current.name}</Text> : null}
