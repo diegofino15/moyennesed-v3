@@ -5,7 +5,7 @@ import { getSubjectCoefficient } from "../utils/CoefficientsManager";
 function getFormattedSubject(jsonData) {
   var coefficient = parseFloat(jsonData.coef.toString().replace(",", "."));
   if (coefficient === 0) { coefficient = 1; }
-  if (Preferences.customCoefficients.has(`SUBJECT-${jsonData.id}`)) {
+  if (Preferences.customCoefficients.has(`SUBJECT-${jsonData.code}-${jsonData.codeSousMatiere}`)) {
     coefficient = Preferences.customCoefficients.get(`SUBJECT-${jsonData.id}`);
   } else if (Preferences.guessSubjectCoefficients) {
     coefficient = getSubjectCoefficient(jsonData.discipline ?? "");

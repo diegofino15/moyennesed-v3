@@ -3,7 +3,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { BottomSheetModal, BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 
 
-function BottomSheet({ isOpen, onClose, children, backgroundStyle, snapPoints }) {
+function BottomSheet({ isOpen, onClose, children, backgroundStyle, snapPoints, selectedSnapPoint=0 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   useEffect(() => {
     if (isOpen) { handleOpenModal(); }
@@ -33,7 +33,7 @@ function BottomSheet({ isOpen, onClose, children, backgroundStyle, snapPoints })
     <BottomSheetModal
       ref={bottomSheetModalRef}
       snapPoints={snapPoints}
-      index={0}
+      index={selectedSnapPoint}
       onDismiss={handleCloseModal}
       style={{
         width: Dimensions.get('window').width,

@@ -72,10 +72,13 @@ function EmbeddedMarksView({
   function changeSubjectCoefficient(subject, coefficient) {
     for (let [_, period] of shownAccountRef.current.periods) {
       period.subjects.forEach(subject_ => {
-        if (subject_.id == subject.id) { subject_.coefficient = coefficient; }
+        if (subject_.code == subject.code) {
+          if (subject.isSubSubject) { subject_.subSubjects.get(subject.subCode).coefficient = coefficient; }
+          else { subject_.coefficient = coefficient; }
+        }
       });
     }
-    Preferences.customCoefficients.set(`SUBJECT-${subject.id}`, coefficient);
+    Preferences.customCoefficients.set(`SUBJECT-${subject.code}-${subject.subCode}`, coefficient);
     Preferences.saveCustomCoefficients();
     refreshAverages();
     UserData.saveCache();

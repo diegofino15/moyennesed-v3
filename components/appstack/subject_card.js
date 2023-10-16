@@ -18,7 +18,7 @@ function SubjectCard({ mainSubject, changeMarkCoefficient, changeSubjectCoeffici
       isOpen={isBottomSheetOpen && (subject.code + subject.subCode) == subSubjectOpened}
       onClose={() => setIsBottomSheetOpen(false)}
       snapPoints={["30%", "75%"]}
-      children={<SubjectPopup subject={subject} changeMarkCoefficient={changeMarkCoefficient} changeSubjectCoefficient={changeSubjectCoefficient} theme={theme} />}
+      children={<SubjectPopup subject={subject} mainSubject={subject.isSubSubject ? mainSubject : null} changeMarkCoefficient={changeMarkCoefficient} changeSubjectCoefficient={changeSubjectCoefficient} theme={theme} />}
     />;
   }
 

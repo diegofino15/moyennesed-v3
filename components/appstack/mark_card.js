@@ -14,7 +14,8 @@ function MarkCard({ mark, subject, changeMarkCoefficient, changeSubjectCoefficie
       key={mark.id}
       isOpen={isBottomSheetOpen}
       onClose={() => setIsBottomSheetOpen(false)}
-      snapPoints={["40%", "75%"]}
+      snapPoints={["30%", "75%"]}
+      selectedSnapPoint={1}
       children={<SubjectPopup subject={subject} changeMarkCoefficient={changeMarkCoefficient} changeSubjectCoefficient={changeSubjectCoefficient} clickedOnMark={mark.id} theme={theme} />}
     />;
   }

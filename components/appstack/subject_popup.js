@@ -1,12 +1,12 @@
 import { View, Text, Dimensions, ScrollView } from 'react-native';
 import { getSubjectColor } from '../../utils/Colors';
 import { formatAverage, formatDate, formatDate2, formatMark } from '../../utils/Utils';
-import { ChevronDownIcon, GraduationCapIcon, XIcon } from 'lucide-react-native';
+import { ChevronDownIcon, ChevronRight, GraduationCapIcon, XIcon } from 'lucide-react-native';
 import Separator from '../global/separator';
 import { PressableScale } from 'react-native-pressable-scale';
 
 
-function SubjectPopup({ subject, changeMarkCoefficient, changeSubjectCoefficient, clickedOnMark, theme }) {
+function SubjectPopup({ subject, mainSubject, changeMarkCoefficient, changeSubjectCoefficient, clickedOnMark, theme }) {
   function teacherCard(teacher, key) {
     return <PressableScale key={key} style={{
       backgroundColor: theme.colors.surface,
@@ -155,7 +155,8 @@ function SubjectPopup({ subject, changeMarkCoefficient, changeSubjectCoefficient
         }}>
           <Text style={[theme.fonts.bodyLarge, {
             width: Dimensions.get('window').width - 150,
-          }]}>{subject.name}</Text>
+          }]}>{subject.isSubSubject ? (`${mainSubject.name}`) : null}{subject.isSubSubject ? <ChevronRight size={15} color={theme.colors.onSurfaceDisabled} style={{ marginLeft: 10, marginRight: 10 }} /> : null}{subject.name}</Text>
+          
           {subject.classAverage ? <View style={{ flexDirection: 'row' }}>
             <Text style={theme.fonts.labelMedium}>Classe : </Text>
             <Text style={[theme.fonts.labelMedium, { fontFamily: 'Bitter-Regular' }]}>{formatAverage(subject.classAverage)}</Text>
@@ -193,13 +194,13 @@ function SubjectPopup({ subject, changeMarkCoefficient, changeSubjectCoefficient
         <Separator theme={theme} style={{ width: "28%" }}/>
       </View>
       <ScrollView style={{
-        height: Dimensions.get('window').height - 400 - ((subject.teachers.size ?? 0) * 100),
+        height: subject.marks?.length == 0 ? 75 : Dimensions.get('window').height - 400 - ((subject.teachers.size ?? 0) * 100),
       }} showsVerticalScrollIndicator={false} >
         {clickedOnMark ? markCard(subject.marks.find((mark) => mark.id == clickedOnMark), clickedOnMark, true) : null}
         {subject.marks.map((mark) => markCard(mark, mark.id))}
         <View style={{ height: 50 }} />
-        {subject.marks?.length == 0 ? <Text style={[theme.fonts.labelLarge, { alignSelf: 'center' }]}>Aucune note pour l'instant</Text> : null}
       </ScrollView>
+      {subject.marks?.length == 0 ? <Text style={[theme.fonts.labelLarge, { alignSelf: 'center' }]}>Aucune note pour l'instant</Text> : null}
     </View>
   );
 }
