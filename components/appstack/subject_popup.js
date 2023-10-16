@@ -80,14 +80,16 @@ function SubjectPopup({ subject, mainSubject, changeMarkCoefficient, changeSubje
           flexDirection: 'column',
           justifyContent: 'space-evenly',
         }}>
-          <Text style={[theme.fonts.bodyLarge, {
+          <View style={{
+            width: Dimensions.get('window').width - 130,
+            flexDirection: 'row',
+            alignItems: 'center',
             marginBottom: 5,
-            maxWidth: Dimensions.get('window').width - 130,
-          }]} numberOfLines={2}>
+          }}>
             {!subject.isSubSubject && mark.subSubjectCode ? <Text style={theme.fonts.labelLarge}>{subject.subSubjects.get(mark.subSubjectCode).name}</Text> : null}
             {!subject.isSubSubject && mark.subSubjectCode ? <ChevronRight size={15} color={theme.colors.onSurfaceDisabled} style={{ marginLeft: 5, marginRight: 5 }} /> : null}
-            {mark.title}
-          </Text>
+            <Text style={theme.fonts.bodyLarge}>{mark.title}</Text>
+          </View>
           
           <View style={{
             flexDirection: 'row',
@@ -173,13 +175,15 @@ function SubjectPopup({ subject, mainSubject, changeMarkCoefficient, changeSubje
           justifyContent: 'space-evenly',
           height: 100,
         }}>
-          <Text style={[theme.fonts.bodyLarge, {
+          <View style={{
             width: Dimensions.get('window').width - 150,
-          }]}>
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}>
             {subject.isSubSubject ? <Text style={theme.fonts.labelLarge}>{mainSubject.name}</Text> : null}
-            {subject.isSubSubject ? <ChevronRight size={15} color={theme.colors.onSurfaceDisabled} style={{ marginLeft: 10, marginRight: 10 }} /> : null}
-            {subject.name}
-          </Text>
+            {subject.isSubSubject ? <ChevronRight size={15} color={theme.colors.onSurfaceDisabled} style={{ marginLeft: 5, marginRight: 5 }} /> : null}
+            <Text style={theme.fonts.bodyLarge}>{subject.name}</Text>
+          </View>
           
           {subject.classAverage ? <View style={{ flexDirection: 'row' }}>
             <Text style={theme.fonts.labelMedium}>Classe : </Text>

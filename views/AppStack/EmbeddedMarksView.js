@@ -62,7 +62,7 @@ function EmbeddedMarksView({
 
   function changeMarkCoefficient(mark, coefficient) {
     mark.coefficient = coefficient;
-    Preferences.customCoefficients.set(mark.id, coefficient);
+    Preferences.customCoefficients.set(`MARK-${mark.id}`, coefficient);
     Preferences.saveCustomCoefficients();
     refreshAverages();
     UserData.saveCache();

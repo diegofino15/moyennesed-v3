@@ -80,11 +80,15 @@ function MarkCard({ mark, subject, mainSubject, changeMarkCoefficient, changeSub
               theme.fonts.bodyMedium,
               { maxWidth: 160, marginBottom: 5 }
           ]} numberOfLines={2}>{mark.title}</Text>
-          <Text style={[theme.fonts.labelSmall, { maxWidth: 160 }]} numberOfLines={1}>
+          <View style={{
+            width: 160,
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}>
             {mark.subSubjectCode ? <Text style={theme.fonts.labelSmall}>{mainSubject.name}</Text> : null}
-            {mark.subSubjectCode ? <ChevronRight size={10} color={theme.colors.onSurfaceDisabled} style={{ marginLeft: 5, marginRight: 5 }} /> : null}
-            {mark.subjectTitle}
-          </Text>
+            {mark.subSubjectCode ? <ChevronRight size={15} color={theme.colors.onSurfaceDisabled} style={{ marginLeft: 5, marginRight: 5 }} /> : null}
+            <Text style={theme.fonts.labelSmall} numberOfLines={1}>{mark.subjectTitle}</Text>
+          </View>
         </View>
         {!mark.isEffective ? <View
           style={{
