@@ -1,5 +1,6 @@
 import { Preferences } from "./Preferences";
 import { getMarkCoefficient } from "../utils/CoefficientsManager";
+import { capitalizeWords } from "../utils/Utils";
 
 
 function getFormattedMark(jsonData) {
@@ -24,7 +25,7 @@ function getFormattedMark(jsonData) {
     "coefficient": coefficient,
     "periodCode": jsonData.codePeriode,
     "subjectCode": jsonData.codeMatiere,
-    "subjectTitle": jsonData.libelleMatiere,
+    "subjectTitle": capitalizeWords(jsonData.libelleMatiere),
     "subSubjectCode": jsonData.codeSousMatiere,
   };
 }
