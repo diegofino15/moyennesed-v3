@@ -68,7 +68,6 @@ export default App;
 
 /*
 TODO:
-  -> Integrate sub subjects in popups
   -> Sliders for coefficients
   -> Make the preferences customizable
   -> Bug report system
@@ -82,5 +81,6 @@ DONE:
   -> Subject cards
     -> Subject popups
   -> Marks cards
+  -> Integrate sub subjects in popups
 */
 
