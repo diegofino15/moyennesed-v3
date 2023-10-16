@@ -21,7 +21,7 @@ export class Account {
     if (isChild) { this.isParent = false; }
     else { this.isParent = jsonData.typeCompte !== "E"; }
 
-    if (this.isParent) { this.gender = jsonData.civilite === "M." ? "M" : "F"; }
+    if (this.isParent) { this.gender = jsonData.civilite === "Mme." ? "F" : "M"; }
     else {
       this.gender = isChild ? jsonData.sexe : jsonData.profile.sexe;
       this.photoURL = isChild ? jsonData.photo : jsonData.profile.photo;
