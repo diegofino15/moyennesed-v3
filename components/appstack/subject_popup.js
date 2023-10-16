@@ -1,4 +1,4 @@
-import { View, Text, Dimensions, ScrollView } from 'react-native';
+import { View, Text, Dimensions, ScrollView, Modal } from 'react-native';
 import { getSubjectColor } from '../../utils/Colors';
 import { formatAverage, formatDate, formatDate2, formatMark } from '../../utils/Utils';
 import { ChevronDownIcon, ChevronRight, GraduationCapIcon, XIcon } from 'lucide-react-native';
@@ -9,7 +9,14 @@ import { _sortMarks } from '../../core/Subject';
 import useStateRef from 'react-usestateref';
 
 
-function SubjectPopup({ subject, mainSubject, changeMarkCoefficient, changeSubjectCoefficient, clickedOnMark, theme }) {
+function SubjectPopup({ subject, selectedSubSubject, changeMarkCoefficient, changeSubjectCoefficient, clickedOnMark, theme }) {
+  const [_shownSubject, setShownSubject, shownSubjectRef] = useStateRef(subject);
+  useEffect(() => {
+    if (selectedSubSubject) {
+      setShownSubject(subject.subSubjects.get(selectedSubSubject));
+    }
+  }, [subject]);
+  
   function teacherCard(teacher, key) {
     return <PressableScale key={key} style={{
       backgroundColor: theme.colors.surface,
@@ -40,7 +47,7 @@ function SubjectPopup({ subject, mainSubject, changeMarkCoefficient, changeSubje
           marginBottom: 5,
           backgroundColor: theme.colors.surface,
           borderWidth: clickedOnMark == mark.id ? 2 : 0,
-          borderColor: getSubjectColor(mark.subjectCode),
+          borderColor: getSubjectColor(subject.code),
         }}
       >
         <View style={{
@@ -86,8 +93,8 @@ function SubjectPopup({ subject, mainSubject, changeMarkCoefficient, changeSubje
             alignItems: 'center',
             marginBottom: 5,
           }}>
-            {!subject.isSubSubject && mark.subSubjectCode ? <Text style={theme.fonts.labelLarge}>{subject.subSubjects.get(mark.subSubjectCode).name}</Text> : null}
-            {!subject.isSubSubject && mark.subSubjectCode ? <ChevronRight size={15} color={theme.colors.onSurfaceDisabled} style={{ marginLeft: 5, marginRight: 5 }} /> : null}
+            {!selectedSubSubject && mark.subSubjectCode ? <Text style={theme.fonts.labelLarge}>{subject.subSubjects.get(mark.subSubjectCode).name}</Text> : null}
+            {!selectedSubSubject && mark.subSubjectCode ? <View style={{ width: 25, alignItems: 'center' }}><ChevronRight size={15} color={theme.colors.onSurfaceDisabled}/></View> : null}
             <Text style={theme.fonts.bodyLarge}>{mark.title}</Text>
           </View>
           
@@ -139,14 +146,18 @@ function SubjectPopup({ subject, mainSubject, changeMarkCoefficient, changeSubje
   }
 
   const [_shownMarks, _setShownMarks, shownMarksRef] = useStateRef(new Array());
-  const [_loaded, setLoaded] = useStateRef(false);
+  const [loaded, setLoaded] = useStateRef(false);
   useEffect(() => {
     setLoaded(false);
     shownMarksRef.current.length = 0;
-    shownMarksRef.current.push(...(subject.marks.values() ?? []));
-    subject.subSubjects.forEach(subSubject => {
-      shownMarksRef.current.push(...(subSubject.marks.values() ?? []));
-    });
+    if (selectedSubSubject) {
+      shownMarksRef.current.push(...(subject.subSubjects.get(selectedSubSubject).marks.values() ?? []));
+    } else {
+      shownMarksRef.current.push(...(subject.marks.values() ?? []));
+      for (const subSubject of subject.subSubjects.values()) {
+        shownMarksRef.current.push(...(subSubject.marks.values() ?? []));
+      }
+    }
     _sortMarks(shownMarksRef.current);
     setLoaded(true);
   }, []);
@@ -164,33 +175,32 @@ function SubjectPopup({ subject, mainSubject, changeMarkCoefficient, changeSubje
           height: 100,
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: getSubjectColor(subject.code),
+          backgroundColor: getSubjectColor(shownSubjectRef.current.code),
           borderRadius: 20,
           marginRight: 10,
         }}>
-          <Text style={[theme.fonts.headlineLarge, { fontFamily: 'Bitter-Bold', fontSize: 30 }]}>{formatAverage(subject.average)}</Text>
+          <Text style={[theme.fonts.headlineLarge, { fontFamily: 'Bitter-Bold', fontSize: 30 }]}>{formatAverage(shownSubjectRef.current.average)}</Text>
         </View>
         <View style={{
           flexDirection: 'column',
           justifyContent: 'space-evenly',
           height: 100,
         }}>
-          <View style={{
+          <Text style={{
             width: Dimensions.get('window').width - 150,
-            flexDirection: 'row',
             alignItems: 'center',
           }}>
-            {subject.isSubSubject ? <Text style={theme.fonts.labelLarge}>{mainSubject.name}</Text> : null}
-            {subject.isSubSubject ? <ChevronRight size={15} color={theme.colors.onSurfaceDisabled} style={{ marginLeft: 5, marginRight: 5 }} /> : null}
-            <Text style={theme.fonts.bodyLarge}>{subject.name}</Text>
-          </View>
+            <Text style={selectedSubSubject ? theme.fonts.labelLarge : theme.fonts.bodyLarge}>{subject.name}</Text>
+            {selectedSubSubject ? <View style={{ width: 25, alignItems: 'center' }}><ChevronRight size={15} color={theme.colors.onSurfaceDisabled}/></View> : null}
+            {selectedSubSubject ? <Text style={theme.fonts.bodyLarge}>{shownSubjectRef.current.name}</Text> : null}
+          </Text>
           
           {subject.classAverage ? <View style={{ flexDirection: 'row' }}>
             <Text style={theme.fonts.labelMedium}>Classe : </Text>
-            <Text style={[theme.fonts.labelMedium, { fontFamily: 'Bitter-Regular' }]}>{formatAverage(subject.classAverage)}</Text>
+            <Text style={[theme.fonts.labelMedium, { fontFamily: 'Bitter-Regular' }]}>{formatAverage(shownSubjectRef.current.classAverage)}</Text>
           </View> : null}
           <PressableScale
-            onPress={() => changeSubjectCoefficient(subject, subject.coefficient + 1)}
+            onPress={() => changeSubjectCoefficient(shownSubjectRef.current, shownSubjectRef.current.coefficient + 1)}
             style={{
             backgroundColor: theme.colors.surface,
             borderRadius: 5,
@@ -206,13 +216,13 @@ function SubjectPopup({ subject, mainSubject, changeMarkCoefficient, changeSubje
               alignItems: 'center'
             }}>
               <XIcon size={15} color={theme.colors.onSurface}/>
-              <Text style={[theme.fonts.headlineSmall, { fontSize: 17 }]}>{subject.coefficient.toString().replace(".", ",")}</Text>
+              <Text style={[theme.fonts.headlineSmall, { fontSize: 17 }]}>{shownSubjectRef.current.coefficient.toString().replace(".", ",")}</Text>
               <ChevronDownIcon size={15} color={theme.colors.onSurfaceDisabled} style={{ marginLeft: 5 }}/>
             </View>
           </PressableScale>
         </View>
       </View>
-      {[...(subject.teachers.values() ?? [])].map((teacher, key) => teacherCard(teacher, key))}
+      {[...(shownSubjectRef.current.teachers.values() ?? [])].map((teacher, key) => teacherCard(teacher, key))}
       <View style={{
         flexDirection: 'row',
         alignItems: 'center',
@@ -222,9 +232,9 @@ function SubjectPopup({ subject, mainSubject, changeMarkCoefficient, changeSubje
         <Separator theme={theme} style={{ width: "28%" }}/>
       </View>
       <ScrollView style={{
-        height: Dimensions.get('window').height - 400 - ((subject.teachers.size ?? 0) * 100),
+        height: Dimensions.get('window').height - 400 - ((shownSubjectRef.current.teachers.size ?? 0) * 100),
       }} showsVerticalScrollIndicator={false} >
-        {clickedOnMark ? markCard(subject.marks.find((mark) => mark.id == clickedOnMark), clickedOnMark, true) : null}
+        {clickedOnMark && loaded ? markCard(shownMarksRef.current.find((mark) => mark.id == clickedOnMark), clickedOnMark, true) : null}
         {shownMarksRef.current.map((mark) => markCard(mark, mark.id))}
         {shownMarksRef.current.length == 0 ? <Text style={[theme.fonts.labelLarge, { alignSelf: 'center', marginTop: 75 }]}>Aucune note pour l'instant</Text> : null}
         <View style={{ height: 50 }} />

@@ -6,7 +6,7 @@ import BottomSheet from './bottom_sheet';
 import SubjectPopup from './subject_popup';
 import { ChevronRight } from 'lucide-react-native';
 
-function MarkCard({ mark, subject, mainSubject, changeMarkCoefficient, changeSubjectCoefficient, theme }) {
+function MarkCard({ mark, subject, changeMarkCoefficient, changeSubjectCoefficient, theme }) {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
 
   function renderPopup() {
@@ -17,7 +17,7 @@ function MarkCard({ mark, subject, mainSubject, changeMarkCoefficient, changeSub
       onClose={() => setIsBottomSheetOpen(false)}
       snapPoints={["40%", "75%"]}
       selectedSnapPoint={0}
-      children={<SubjectPopup subject={subject} mainSubject={mainSubject} changeMarkCoefficient={changeMarkCoefficient} changeSubjectCoefficient={changeSubjectCoefficient} clickedOnMark={mark.id} theme={theme} />}
+      children={<SubjectPopup subject={subject} selectedSubSubject={mark.subSubjectCode ? mark.subSubjectCode : null} changeMarkCoefficient={changeMarkCoefficient} changeSubjectCoefficient={changeSubjectCoefficient} clickedOnMark={mark.id} theme={theme} />}
     />;
   }
 
@@ -49,7 +49,7 @@ function MarkCard({ mark, subject, mainSubject, changeMarkCoefficient, changeSub
             height: 55,
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: getSubjectColor(mark.subjectCode, true),
+            backgroundColor: getSubjectColor(subject.code, true),
             borderRadius: 10,
           }}>
             <Text style={[theme.fonts.headlineMedium, { fontFamily: 'Bitter-Bold' }]}>{mark.valueStr}</Text>
@@ -60,7 +60,7 @@ function MarkCard({ mark, subject, mainSubject, changeMarkCoefficient, changeSub
               position: 'absolute',
               bottom: 0,
               right: 0,
-              backgroundColor: getSubjectColor(mark.subjectCode),
+              backgroundColor: getSubjectColor(subject.code),
               paddingHorizontal: 5,
               paddingVertical: 3,
               borderRadius: 5,
@@ -85,9 +85,9 @@ function MarkCard({ mark, subject, mainSubject, changeMarkCoefficient, changeSub
             flexDirection: 'row',
             alignItems: 'center',
           }}>
-            {mark.subSubjectCode ? <Text style={theme.fonts.labelSmall}>{mainSubject.name}</Text> : null}
-            {mark.subSubjectCode ? <ChevronRight size={15} color={theme.colors.onSurfaceDisabled} style={{ marginLeft: 5, marginRight: 5 }} /> : null}
-            <Text style={theme.fonts.labelSmall} numberOfLines={1}>{mark.subjectTitle}</Text>
+            <Text style={theme.fonts.labelSmall}>{subject.name}</Text>
+            {mark.subSubjectCode ? <View style={{ width: 25, alignItems: 'center' }}><ChevronRight size={15} color={theme.colors.onSurfaceDisabled}/></View> : null}
+            {mark.subSubjectCode ? <Text style={theme.fonts.labelSmall} numberOfLines={1}>{subject.subSubjects.get(mark.subSubjectCode).name}</Text> : null}
           </View>
         </View>
         {!mark.isEffective ? <View

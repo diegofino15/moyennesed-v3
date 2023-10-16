@@ -167,7 +167,6 @@ function EmbeddedMarksView({
               {shownPeriodRef.current.marks?.map((mark, markKey) => {
                 if (markKey < 10) {
                   const subject = shownPeriodRef.current.subjects.get(mark.subjectCode);
-                  const realSubject = mark.subSubjectCode ? subject.subSubjects.get(mark.subSubjectCode) : subject;
                   return <View
                     key={markKey}
                     style={{
@@ -175,8 +174,7 @@ function EmbeddedMarksView({
                   }}>
                     <MarkCard
                       mark={mark} 
-                      subject={realSubject}
-                      mainSubject={realSubject.isSubSubject ? subject : null}
+                      subject={subject}
                       changeMarkCoefficient={changeMarkCoefficient}
                       changeSubjectCoefficient={changeSubjectCoefficient}
                       theme={theme}
