@@ -5,7 +5,7 @@ import { useState } from 'react';
 import BottomSheet from './bottom_sheet';
 import SubjectPopup from './subject_popup';
 
-function MarkCard({ mark, subject, changeMarkCoefficient, changeSubjectCoefficient, theme }) {
+function MarkCard({ mark, subject, mainSubject, changeMarkCoefficient, changeSubjectCoefficient, theme }) {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
 
   function renderPopup() {
@@ -14,9 +14,9 @@ function MarkCard({ mark, subject, changeMarkCoefficient, changeSubjectCoefficie
       key={mark.id}
       isOpen={isBottomSheetOpen}
       onClose={() => setIsBottomSheetOpen(false)}
-      snapPoints={["30%", "75%"]}
-      selectedSnapPoint={1}
-      children={<SubjectPopup subject={subject} changeMarkCoefficient={changeMarkCoefficient} changeSubjectCoefficient={changeSubjectCoefficient} clickedOnMark={mark.id} theme={theme} />}
+      snapPoints={["40%", "75%"]}
+      selectedSnapPoint={0}
+      children={<SubjectPopup subject={subject} mainSubject={mainSubject} changeMarkCoefficient={changeMarkCoefficient} changeSubjectCoefficient={changeSubjectCoefficient} clickedOnMark={mark.id} theme={theme} />}
     />;
   }
 

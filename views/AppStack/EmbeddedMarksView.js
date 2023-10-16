@@ -176,6 +176,7 @@ function EmbeddedMarksView({
                     <MarkCard
                       mark={mark} 
                       subject={realSubject}
+                      mainSubject={realSubject.isSubSubject ? subject : null}
                       changeMarkCoefficient={changeMarkCoefficient}
                       changeSubjectCoefficient={changeSubjectCoefficient}
                       theme={theme}
