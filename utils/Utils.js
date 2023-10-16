@@ -47,4 +47,10 @@ function formatDate2(givenDate) {
     return `${date.getDate()} ${monthsNames[date.getMonth()].substring(0, 3)}.`;
 }
 
-export { formatMark, formatAverage, formatDate, formatDate2 };
+function capitalizeWords(string) {
+    const words = string.toLowerCase().split(" ");
+    for (let i = 0; i < words.length; i++) { words[i] = words[i][0].toUpperCase() + words[i].substr(1); }
+    return words.join(" ");
+}
+
+export { formatMark, formatAverage, formatDate, formatDate2, capitalizeWords };

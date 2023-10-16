@@ -1,6 +1,7 @@
 import { getFormattedPeriod, addMark, sortAllMarks, calculateAllAverages, getCachePeriod, getPeriodFromCache } from "./Period";
 import { getFormattedMark } from "./Mark";
 import { Preferences } from "./Preferences";
+import { capitalizeWords } from "../utils/Utils";
 
 export class Account {
   id = 0;
@@ -14,9 +15,7 @@ export class Account {
   init(jsonData, isChild) {
     this.id = jsonData.id;
 
-    const words = jsonData.prenom.toLowerCase().split(" ");
-    for (let i = 0; i < words.length; i++) { words[i] = words[i][0].toUpperCase() + words[i].substr(1); }
-    this.firstName = words.join(" ");
+    this.firstName = capitalizeWords(jsonData.prenom);
 
     this.lastName = jsonData.nom.toUpperCase();
     if (isChild) { this.isParent = false; }

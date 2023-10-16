@@ -1,5 +1,6 @@
 import { Preferences } from "./Preferences";
 import { getSubjectCoefficient } from "../utils/CoefficientsManager";
+import { capitalizeWords } from "../utils/Utils";
 
 
 function getFormattedSubject(jsonData) {
@@ -18,7 +19,7 @@ function getFormattedSubject(jsonData) {
   
   return {
     "id": jsonData.id,
-    "name": jsonData.discipline ?? "---",
+    "name": capitalizeWords(jsonData.discipline ?? "---"),
     "code": jsonData.codeMatiere.isEmpty ? "---" : jsonData.codeMatiere,
     "subCode": jsonData.codeSousMatiere,
     "isSubSubject": jsonData.sousMatiere,

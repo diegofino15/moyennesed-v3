@@ -4,6 +4,9 @@ import { formatAverage, formatDate, formatDate2, formatMark } from '../../utils/
 import { ChevronDownIcon, ChevronRight, GraduationCapIcon, XIcon } from 'lucide-react-native';
 import Separator from '../global/separator';
 import { PressableScale } from 'react-native-pressable-scale';
+import { useEffect } from 'react';
+import { _sortMarks } from '../../core/Subject';
+import useStateRef from 'react-usestateref';
 
 
 function SubjectPopup({ subject, mainSubject, changeMarkCoefficient, changeSubjectCoefficient, clickedOnMark, theme }) {
@@ -80,7 +83,11 @@ function SubjectPopup({ subject, mainSubject, changeMarkCoefficient, changeSubje
           <Text style={[theme.fonts.bodyLarge, {
             marginBottom: 5,
             maxWidth: Dimensions.get('window').width - 130,
-          }]} numberOfLines={2}>{mark.title}</Text>
+          }]} numberOfLines={2}>
+            {!subject.isSubSubject && mark.subSubjectCode ? <Text style={theme.fonts.labelLarge}>{subject.subSubjects.get(mark.subSubjectCode).name}</Text> : null}
+            {!subject.isSubSubject && mark.subSubjectCode ? <ChevronRight size={15} color={theme.colors.onSurfaceDisabled} style={{ marginLeft: 5, marginRight: 5 }} /> : null}
+            {mark.title}
+          </Text>
           
           <View style={{
             flexDirection: 'row',
@@ -129,6 +136,19 @@ function SubjectPopup({ subject, mainSubject, changeMarkCoefficient, changeSubje
     );
   }
 
+  const [_shownMarks, _setShownMarks, shownMarksRef] = useStateRef(new Array());
+  const [_loaded, setLoaded] = useStateRef(false);
+  useEffect(() => {
+    setLoaded(false);
+    shownMarksRef.current.length = 0;
+    shownMarksRef.current.push(...(subject.marks.values() ?? []));
+    subject.subSubjects.forEach(subSubject => {
+      shownMarksRef.current.push(...(subSubject.marks.values() ?? []));
+    });
+    _sortMarks(shownMarksRef.current);
+    setLoaded(true);
+  }, []);
+
   return (
     <View>
       <View style={{
@@ -155,7 +175,11 @@ function SubjectPopup({ subject, mainSubject, changeMarkCoefficient, changeSubje
         }}>
           <Text style={[theme.fonts.bodyLarge, {
             width: Dimensions.get('window').width - 150,
-          }]}>{subject.isSubSubject ? (`${mainSubject.name}`) : null}{subject.isSubSubject ? <ChevronRight size={15} color={theme.colors.onSurfaceDisabled} style={{ marginLeft: 10, marginRight: 10 }} /> : null}{subject.name}</Text>
+          }]}>
+            {subject.isSubSubject ? <Text style={theme.fonts.labelLarge}>{mainSubject.name}</Text> : null}
+            {subject.isSubSubject ? <ChevronRight size={15} color={theme.colors.onSurfaceDisabled} style={{ marginLeft: 10, marginRight: 10 }} /> : null}
+            {subject.name}
+          </Text>
           
           {subject.classAverage ? <View style={{ flexDirection: 'row' }}>
             <Text style={theme.fonts.labelMedium}>Classe : </Text>
@@ -194,13 +218,13 @@ function SubjectPopup({ subject, mainSubject, changeMarkCoefficient, changeSubje
         <Separator theme={theme} style={{ width: "28%" }}/>
       </View>
       <ScrollView style={{
-        height: subject.marks?.length == 0 ? 75 : Dimensions.get('window').height - 400 - ((subject.teachers.size ?? 0) * 100),
+        height: Dimensions.get('window').height - 400 - ((subject.teachers.size ?? 0) * 100),
       }} showsVerticalScrollIndicator={false} >
         {clickedOnMark ? markCard(subject.marks.find((mark) => mark.id == clickedOnMark), clickedOnMark, true) : null}
-        {subject.marks.map((mark) => markCard(mark, mark.id))}
+        {shownMarksRef.current.map((mark) => markCard(mark, mark.id))}
+        {shownMarksRef.current.length == 0 ? <Text style={[theme.fonts.labelLarge, { alignSelf: 'center', marginTop: 75 }]}>Aucune note pour l'instant</Text> : null}
         <View style={{ height: 50 }} />
       </ScrollView>
-      {subject.marks?.length == 0 ? <Text style={[theme.fonts.labelLarge, { alignSelf: 'center' }]}>Aucune note pour l'instant</Text> : null}
     </View>
   );
 }
