@@ -203,7 +203,7 @@ function SubjectPopup({ subject, selectedSubSubject, changeMarkCoefficient, chan
         <Separator theme={theme} style={{ width: "28%" }}/>
       </View>
       <ScrollView style={{
-        height: Dimensions.get('window').height - 350 - ((shownSubjectRef.current.teachers.size ?? 0) * 100),
+        height: Dimensions.get('screen').height * 0.75 - 150 - ((shownSubjectRef.current.teachers.length ?? 0) * 50),
       }} showsVerticalScrollIndicator={false} >
         {clickedOnMark ? markCard(shownSubjectRef.current.marks.find((mark) => mark.id == clickedOnMark), true) : null}
         {shownSubjectRef.current.marks.map((mark) => markCard(mark))}
