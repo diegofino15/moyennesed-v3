@@ -66,17 +66,14 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, changeMarkCoeffic
         flexDirection: 'column',
         justifyContent: 'space-evenly',
       }}>
-        <View style={{
+        <Text style={{
           width: Dimensions.get('window').width - 130,
-          flexDirection: 'row',
           alignItems: 'center',
-          marginBottom: 5,
-        }}>
+        }} numberOfLines={2}>
           {!selectedSubSubject && mark.subSubjectCode ? <Text style={theme.fonts.labelLarge}>{subject.subSubjects.get(mark.subSubjectCode).name}</Text> : null}
           {!selectedSubSubject && mark.subSubjectCode ? <View style={{ width: 25, alignItems: 'center' }}><ChevronRight size={15} color={theme.colors.onSurfaceDisabled}/></View> : null}
           <Text style={theme.fonts.bodyLarge} numberOfLines={2}>{mark.title}</Text>
-        </View>
-        
+        </Text>
         <View style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
