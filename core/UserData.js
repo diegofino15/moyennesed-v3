@@ -143,10 +143,7 @@ export class UserData {
     this.marksNeedUpdate.clear();
     this.marksDataCache.clear();
     await AsyncStorage.removeItem("cache");
-    Preferences.haveBeenChanged = false;
-    Preferences.customCoefficients.clear();
-    await AsyncStorage.removeItem("preferences");
-    await AsyncStorage.removeItem("coefficients");
+    Preferences.erase();
     this.temporaryProfilePhoto = "";
     await AsyncStorage.removeItem("photo");
     console.log("Logged out !");

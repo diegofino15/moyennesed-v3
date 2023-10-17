@@ -1,12 +1,16 @@
-import { View, Text, Dimensions, ScrollView, Modal } from 'react-native';
+import { View, Text, Dimensions, ScrollView } from 'react-native';
 import { getSubjectColor } from '../../utils/Colors';
-import { formatAverage, formatDate, formatDate2, formatMark } from '../../utils/Utils';
-import { ChevronDownIcon, ChevronRight, GraduationCapIcon, XIcon } from 'lucide-react-native';
+import { formatAverage } from '../../utils/Utils';
+import { ChevronDownIcon, ChevronRight, ChevronUpIcon, GraduationCapIcon, MinusIcon, PlusIcon, Trash2Icon, XIcon } from 'lucide-react-native';
 import Separator from '../global/separator';
 import { PressableScale } from 'react-native-pressable-scale';
 import { useEffect } from 'react';
 import { _sortMarks } from '../../core/Subject';
 import useStateRef from 'react-usestateref';
+import * as Haptics from "expo-haptics";
+import { Preferences } from '../../core/Preferences';
+import { getSubjectCoefficient } from '../../utils/CoefficientsManager';
+import EmbeddedMarkCard from './embedded_mark_card';
 
 
 function SubjectPopup({ subject, selectedSubSubject, changeMarkCoefficient, changeSubjectCoefficient, clickedOnMark, theme }) {
@@ -32,117 +36,10 @@ function SubjectPopup({ subject, selectedSubSubject, changeMarkCoefficient, chan
     </PressableScale>;
   }
 
-  function markCard(mark, key, special) {
+  function markCard(mark, special) {
     if (mark.id == clickedOnMark && !special) { return null; }
 
-    return (
-      <PressableScale
-        key={key}
-        style={{
-          height: 80 + (clickedOnMark == mark.id ? 2 : 0),
-          flexDirection: 'row',
-          borderRadius: 10,
-          padding: 5,
-          marginTop: 10,
-          marginBottom: 5,
-          backgroundColor: theme.colors.surface,
-          borderWidth: clickedOnMark == mark.id ? 2 : 0,
-          borderColor: getSubjectColor(subject.code),
-        }}
-      >
-        <View style={{
-          width: 70,
-          height: 70,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-          <View style={{
-            width: 55,
-            height: 55,
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: getSubjectColor(subject.code, true),
-            borderRadius: 10,
-          }}>
-            <Text style={[theme.fonts.headlineMedium, { fontFamily: 'Bitter-Bold' }]}>{mark.valueStr}</Text>
-          </View>
-
-          {mark.valueOn != 20 ? <View
-            style={{
-              position: 'absolute',
-              bottom: 0,
-              right: 0,
-              backgroundColor: getSubjectColor(subject.code),
-              paddingHorizontal: 5,
-              paddingVertical: 3,
-              borderRadius: 5,
-            }}
-          >
-            <Text style={theme.fonts.headlineSmall}>/{mark.valueOn}</Text>
-          </View> : null}
-        </View>
-        <View style={{
-          marginLeft: 5,
-          marginVertical: 10,
-          flexDirection: 'column',
-          justifyContent: 'space-evenly',
-        }}>
-          <View style={{
-            width: Dimensions.get('window').width - 130,
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginBottom: 5,
-          }}>
-            {!selectedSubSubject && mark.subSubjectCode ? <Text style={theme.fonts.labelLarge}>{subject.subSubjects.get(mark.subSubjectCode).name}</Text> : null}
-            {!selectedSubSubject && mark.subSubjectCode ? <View style={{ width: 25, alignItems: 'center' }}><ChevronRight size={15} color={theme.colors.onSurfaceDisabled}/></View> : null}
-            <Text style={theme.fonts.bodyLarge} numberOfLines={2}>{mark.title}</Text>
-          </View>
-          
-          <View style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            width: Dimensions.get('window').width - 200,
-          }}>
-            {mark.classValue ? <View style={{ flexDirection: 'row' }}>
-              <Text style={theme.fonts.labelMedium}>Classe : </Text>
-              <Text style={[theme.fonts.labelMedium, { fontFamily: 'Bitter-Regular' }]}>{formatMark(mark, true)}</Text>
-            </View> : null}
-            <Text style={theme.fonts.labelMedium} numberOfLines={1}>{mark.classValue ? formatDate2(mark.dateEntered) : formatDate(mark.dateEntered)}</Text>
-          </View>
-        </View>
-
-        {!mark.isEffective ? <View style={{
-          position: 'absolute',
-          bottom: -7.5,
-          right: 10,
-          backgroundColor: '#DA3633',
-          paddingHorizontal: 5,
-          paddingVertical: 3,
-          borderRadius: 5,
-        }}>
-          <Text style={[theme.fonts.labelSmall, { color: 'white' }]}>Non significative</Text>
-        </View> : <PressableScale
-          onPress={() => changeMarkCoefficient(mark, mark.coefficient + 1)}
-          style={{
-            position: 'absolute',
-            right: 10,
-            bottom: -7.5,
-            paddingHorizontal: 7.5,
-            paddingVertical: 3,
-            backgroundColor: theme.colors.background,
-            borderRadius: 5,
-            borderWidth: 1,
-            borderColor: theme.colors.surface,
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}
-        >
-          <XIcon size={15} color={theme.colors.onSurface}/>
-          <Text style={[theme.fonts.headlineSmall, { fontSize: 17 }]}>{mark.coefficient.toString().replace(".", ",")}</Text>
-          <ChevronDownIcon size={15} color={theme.colors.onSurfaceDisabled} style={{ marginLeft: 5 }}/>
-        </PressableScale>}
-      </PressableScale>
-    );
+    return <EmbeddedMarkCard key={mark.id} mark={mark} subject={subject} selectedSubSubject={selectedSubSubject} changeMarkCoefficient={changeMarkCoefficient} clickedOnMark={clickedOnMark} theme={theme} />
   }
 
   const [_shownMarks, _setShownMarks, shownMarksRef] = useStateRef(new Array());
@@ -161,6 +58,8 @@ function SubjectPopup({ subject, selectedSubSubject, changeMarkCoefficient, chan
     _sortMarks(shownMarksRef.current);
     setLoaded(true);
   }, []);
+
+  const [showChangeCoefficient, setShownChangeCoefficient] = useStateRef(false);
 
   return (
     <View>
@@ -199,27 +98,99 @@ function SubjectPopup({ subject, selectedSubSubject, changeMarkCoefficient, chan
             <Text style={theme.fonts.labelMedium}>Classe : </Text>
             <Text style={[theme.fonts.labelMedium, { fontFamily: 'Bitter-Regular' }]}>{formatAverage(shownSubjectRef.current.classAverage)}</Text>
           </View> : null}
-          <PressableScale
-            onPress={() => changeSubjectCoefficient(shownSubjectRef.current, shownSubjectRef.current.coefficient + 1)}
-            style={{
-            backgroundColor: theme.colors.surface,
-            borderRadius: 5,
-            paddingHorizontal: 10,
-            paddingVertical: 5,
+          
+          <View style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
-            width: Dimensions.get('window').width - 150,
           }}>
-            <Text style={theme.fonts.labelLarge}>Coeff.</Text>
-            <View style={{
+            <PressableScale onPress={() => setShownChangeCoefficient(!showChangeCoefficient)} style={{
+              paddingHorizontal: 7.5,
+              paddingVertical: 3,
+              backgroundColor: theme.colors.background,
+              borderRadius: 5,
+              borderWidth: 1,
+              borderColor: theme.colors.surface,
               flexDirection: 'row',
-              alignItems: 'center'
+              alignItems: 'center',
+              justifyContent: 'center',
+              minWidth: 50,
+              height: 30,
             }}>
               <XIcon size={15} color={theme.colors.onSurface}/>
               <Text style={[theme.fonts.headlineSmall, { fontSize: 17 }]}>{shownSubjectRef.current.coefficient.toString().replace(".", ",")}</Text>
-              <ChevronDownIcon size={15} color={theme.colors.onSurfaceDisabled} style={{ marginLeft: 5 }}/>
-            </View>
-          </PressableScale>
+              {showChangeCoefficient ? <ChevronUpIcon size={15} color={theme.colors.onSurfaceDisabled} style={{ marginLeft: 5 }}/> : <ChevronDownIcon size={15} color={theme.colors.onSurfaceDisabled} style={{ marginLeft: 5 }}/>}
+            </PressableScale>
+
+            {showChangeCoefficient && <View style={{ flexDirection: 'row' }}>
+              <PressableScale
+                style={{
+                  backgroundColor: theme.colors.background,
+                  borderRadius: 5,
+                  borderWidth: 1,
+                  borderColor: theme.colors.surface,
+                  width: 30,
+                  height: 30,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginRight: 5,
+                }}
+                onPress={() => {
+                  var newCoefficient = shownSubjectRef.current.coefficient - 1;
+                  if (shownSubjectRef.current.coefficient == 1) { newCoefficient = 0.75; }
+                  else if (shownSubjectRef.current.coefficient == 0.75) { newCoefficient = 0.5; }
+                  else if (shownSubjectRef.current.coefficient == 0.5) { newCoefficient = 0.25; }
+                  else if (shownSubjectRef.current.coefficient == 0.25 || shownSubjectRef.current.coefficient == 0) { newCoefficient = 0; }
+                  changeSubjectCoefficient(shownSubjectRef.current, newCoefficient);
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                }}
+              >
+                <MinusIcon size={20} color={theme.colors.onSurfaceDisabled}/>
+              </PressableScale>
+              <PressableScale
+                style={{
+                  backgroundColor: theme.colors.background,
+                  borderRadius: 5,
+                  borderWidth: 1,
+                  borderColor: theme.colors.surface,
+                  width: 30,
+                  height: 30,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginRight: 10,
+                }}
+                onPress={() => {
+                  var newCoefficient = shownSubjectRef.current.coefficient + 1;
+                  if (shownSubjectRef.current.coefficient == 0) { newCoefficient = 0.25; }
+                  else if (shownSubjectRef.current.coefficient == 0.25) { newCoefficient = 0.5; }
+                  else if (shownSubjectRef.current.coefficient == 0.5) { newCoefficient = 0.75; }
+                  else if (shownSubjectRef.current.coefficient == 0.75) { newCoefficient = 1; }
+                  newCoefficient = Math.min(newCoefficient, 50);
+                  changeSubjectCoefficient(shownSubjectRef.current, newCoefficient);
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                }}
+              >
+                <PlusIcon size={20} color={theme.colors.onSurfaceDisabled}/>
+              </PressableScale>
+              <PressableScale
+                style={{
+                  backgroundColor: theme.colors.background,
+                  borderRadius: 5,
+                  borderWidth: 1,
+                  borderColor: '#DA3633',
+                  width: 30,
+                  height: 30,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+                onPress={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  changeSubjectCoefficient(shownSubjectRef.current, Preferences.guessSubjectCoefficients ? getSubjectCoefficient(shownSubjectRef.current.name) : Preferences.defaultEDCoefficients.get(`SUBJECT-${shownSubjectRef.current.code}-${shownSubjectRef.current.subCode}`));
+                }}
+              >
+                <Trash2Icon size={20} color={theme.colors.onSurfaceDisabled}/>
+              </PressableScale>
+            </View>}
+          </View>
         </View>
       </View>
       {[...(shownSubjectRef.current.teachers.values() ?? [])].map((teacher, key) => teacherCard(teacher, key))}
@@ -234,8 +205,8 @@ function SubjectPopup({ subject, selectedSubSubject, changeMarkCoefficient, chan
       <ScrollView style={{
         height: Dimensions.get('window').height - 400 - ((shownSubjectRef.current.teachers.size ?? 0) * 100),
       }} showsVerticalScrollIndicator={false} >
-        {clickedOnMark && loaded ? markCard(shownMarksRef.current.find((mark) => mark.id == clickedOnMark), clickedOnMark, true) : null}
-        {shownMarksRef.current.map((mark) => markCard(mark, mark.id))}
+        {clickedOnMark && loaded ? markCard(shownMarksRef.current.find((mark) => mark.id == clickedOnMark), true) : null}
+        {shownMarksRef.current.map((mark) => markCard(mark))}
         {shownMarksRef.current.length == 0 ? <Text style={[theme.fonts.labelLarge, { alignSelf: 'center', marginTop: 75 }]}>Aucune note pour l'instant</Text> : null}
         <View style={{ height: 50 }} />
       </ScrollView>

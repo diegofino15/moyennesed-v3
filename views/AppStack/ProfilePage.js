@@ -1,4 +1,4 @@
-import { ActivityIndicator, SafeAreaView, Text, View, ScrollView, Dimensions, Image } from 'react-native';
+import { ActivityIndicator, SafeAreaView, Text, View, ScrollView, Dimensions, Image, Button } from 'react-native';
 import CustomButton from '../../components/global/custom_button';
 import CustomSquareButton from '../../components/appstack/custom_square_button';
 import { BadgeInfoIcon, Check, ChevronLeft, HelpCircleIcon, RefreshCcw, Settings2Icon, UserIcon, X } from 'lucide-react-native';
@@ -164,8 +164,9 @@ function ProfilePage({
           backgroundColor: theme.colors.surface,
           borderRadius: 20,
           marginBottom: 20,
-          height: 100,
+          padding: 20,
         }}>
+          
         </View>
 
         {/* Informations */}

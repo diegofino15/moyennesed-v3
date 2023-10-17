@@ -6,7 +6,7 @@ import { capitalizeWords } from "../utils/Utils";
 function getFormattedSubject(jsonData) {
   var coefficient = parseFloat(jsonData.coef.toString().replace(",", "."));
   if (coefficient === 0) { coefficient = 1; }
-  
+  Preferences.defaultEDCoefficients.set(`SUBJECT-${jsonData.codeMatiere}-${jsonData.codeSousMatiere}`, coefficient);
   if (Preferences.customCoefficients.has(`SUBJECT-${jsonData.codeMatiere}-${jsonData.codeSousMatiere}`)) {
     coefficient = Preferences.customCoefficients.get(`SUBJECT-${jsonData.codeMatiere}-${jsonData.codeSousMatiere}`);
   } else if (Preferences.guessSubjectCoefficients) {

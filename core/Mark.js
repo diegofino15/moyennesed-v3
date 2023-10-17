@@ -6,6 +6,7 @@ import { capitalizeWords } from "../utils/Utils";
 function getFormattedMark(jsonData) {
   var coefficient = parseFloat(jsonData.coef.toString().replace(",", "."));
   if (coefficient === 0) { coefficient = 1; }
+  Preferences.defaultEDCoefficients.set(`MARK-${jsonData.id}`, coefficient);
   if (Preferences.customCoefficients.has(`MARK-${jsonData.id}`)) {
     coefficient = Preferences.customCoefficients.get(`MARK-${jsonData.id}`);
   } else if (Preferences.guessMarksCoefficients) {
