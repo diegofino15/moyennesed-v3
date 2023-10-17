@@ -1,11 +1,14 @@
-import { ActivityIndicator, SafeAreaView, Text, View, ScrollView, Dimensions, Image, Button } from 'react-native';
+import { ActivityIndicator, SafeAreaView, Text, View, ScrollView, Dimensions, Image, Button, Switch } from 'react-native';
 import CustomButton from '../../components/global/custom_button';
 import CustomSquareButton from '../../components/appstack/custom_square_button';
-import { BadgeInfoIcon, Check, ChevronLeft, HelpCircleIcon, RefreshCcw, Settings2Icon, UserIcon, X } from 'lucide-react-native';
+import { BadgeInfoIcon, BrainCircuitIcon, Check, ChevronLeft, HelpCircleIcon, RefreshCcw, Settings2Icon, UserIcon, WrenchIcon, X } from 'lucide-react-native';
 import { UserData } from '../../core/UserData';
 import { PressableScale } from 'react-native-pressable-scale';
 import * as Haptics from "expo-haptics";
 import Separator from '../../components/global/separator';
+import { Preferences } from '../../core/Preferences';
+import { calculateAllAverages } from '../../core/Period';
+import { useState, useEffect } from 'react';
 
 
 function ProfilePage({
@@ -14,10 +17,26 @@ function ProfilePage({
   scrollViewRef,
   profilePhotoRef,
   logout,
+  updateScreenRef, setUpdateScreen,
   theme
 }) {
   async function closeProfilePage() { scrollViewRef.current?.scrollTo({x: 0, animated: true}); }
   
+  const [guessMarksCoefficients, setGuessMarksCoefficients] = useState(Preferences.guessMarksCoefficients);
+  useEffect(() => {
+    setGuessMarksCoefficients(Preferences.guessMarksCoefficients);
+  }, [Preferences.guessMarksCoefficients]);
+  const [guessSubjectCoefficients, setGuessSubjectCoefficients] = useState(Preferences.guessSubjectCoefficients);
+  useEffect(() => {
+    setGuessSubjectCoefficients(Preferences.guessSubjectCoefficients);
+  }, [Preferences.guessSubjectCoefficients]);
+  
+  // Update screen
+  const [_refresh, _setRefresh] = useState(false);
+  useEffect(() => {
+    _setRefresh(!_refresh);
+  }, [updateScreenRef.current]);
+
   return (
     <ScrollView
       bounces={true}
@@ -158,18 +177,61 @@ function ProfilePage({
 
         <Separator theme={theme} style={{ marginBottom: 20 }}/>
 
-        {/* Settings  */}
-        <Text style={[theme.fonts.titleSmall, { marginBottom: 10 }]}>Paramètres</Text>
+        {/* Advanced settings  */}
+        <Text style={[theme.fonts.titleSmall, { marginBottom: 10 }]}>Fonctions avancées  <Text style={theme.fonts.labelLarge}>(auto)</Text></Text>
         <View style={{
           backgroundColor: theme.colors.surface,
           borderRadius: 20,
           marginBottom: 20,
           padding: 20,
         }}>
+          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify' }]}>Votre établissement ne fournit pas les coefs ? L'IA de MoyennesED est là pour les deviner !</Text>
+          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify' }]}>Une icône <BrainCircuitIcon size={20} color={theme.colors.onSurfaceDisabled} style={{ transform: [{ rotate: '90deg' }] }}/> apparaîtra auprès des coefficients devinés.</Text>
+          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify' }]}>Vous pourrez toujours spécifier un coefficient personnalisé, et une icône <WrenchIcon size={20} color={theme.colors.onSurfaceDisabled}/> apparaîtra.</Text>
           
+          <Separator theme={theme} style={{ marginTop: 10, marginBottom: 10, backgroundColor: theme.colors.background }}/>
+          
+          <View style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
+            <Text style={theme.fonts.labelLarge}>Devine coefficient notes</Text>
+            <Switch
+              value={guessMarksCoefficients}
+              onValueChange={async (value) => {
+                Preferences.setGuessMarksCoefficients(value);
+                Preferences.saveGuessCoefficients();
+                UserData.recalculateCoefficients();
+                UserData.saveCache();
+                setGuessMarksCoefficients(value);
+                setUpdateScreen(!updateScreenRef.current);
+              }}
+            />
+          </View>
+          
+          <View style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginTop: 10,
+          }}>
+            <Text style={theme.fonts.labelLarge}>Devine coefficient matières</Text>
+            <Switch
+              value={guessSubjectCoefficients}
+              onValueChange={async (value) => {
+                Preferences.setGuessSubjectCoefficients(value);
+                Preferences.saveGuessCoefficients();
+                UserData.recalculateCoefficients();
+                UserData.saveCache();
+                setGuessSubjectCoefficients(value);
+                setUpdateScreen(!updateScreenRef.current);
+              }}
+            />
+          </View>
         </View>
 
-        {/* Informations */}
+        {/* Paramètres */}
         <Text style={[theme.fonts.titleSmall, { marginBottom: 10 }]}>Informations</Text>
         <View style={{
           backgroundColor: theme.colors.surface,
@@ -186,7 +248,7 @@ function ProfilePage({
           confirmTitle={`Êtes vous sûr${UserData.mainAccount.getSuffix()} ?`}
           onPress={logout}
           willLoad={true}
-          loadIcon={<ActivityIndicator size={20} color='#DA3633' />}
+          loadIcon={<ActivityIndicator size={20} color='#DA3633'/>}
           style={{
             backgroundColor: theme.colors.background,
             borderWidth: 2,
@@ -196,6 +258,9 @@ function ProfilePage({
             color: '#DA3633',
           }}
         />
+
+        {/* Extra space */}
+        <View style={{ height: 20 }}></View>
       </SafeAreaView>
     </ScrollView>
   );

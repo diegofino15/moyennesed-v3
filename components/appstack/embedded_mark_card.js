@@ -1,20 +1,31 @@
-import { View, Text, Dimensions, ScrollView, Modal, Button, TouchableOpacity } from 'react-native';
-import { getSubjectColor } from '../../utils/Colors';
-import { formatAverage, formatDate, formatDate2, formatMark } from '../../utils/Utils';
-import { ChevronDownIcon, ChevronRight, ChevronUpIcon, EraserIcon, GraduationCapIcon, MinusIcon, PlusIcon, Trash2Icon, TrashIcon, XIcon } from 'lucide-react-native';
-import Separator from '../global/separator';
-import { PressableScale } from 'react-native-pressable-scale';
 import { useEffect } from 'react';
-import { _sortMarks } from '../../core/Subject';
+import { View, Text, Dimensions } from 'react-native';
+import { ChevronDownIcon, ChevronRight, ChevronUpIcon, MinusIcon, PlusIcon, Trash2Icon, XIcon, WrenchIcon, BrainCircuitIcon } from 'lucide-react-native';
+import { PressableScale } from 'react-native-pressable-scale';
 import useStateRef from 'react-usestateref';
 import * as Haptics from "expo-haptics";
+
 import { Preferences } from '../../core/Preferences';
-import { getMarkCoefficient, getSubjectCoefficient } from '../../utils/CoefficientsManager';
+import { getSubjectColor } from '../../utils/Colors';
+import { getMarkCoefficient } from '../../utils/CoefficientsManager';
+import { formatDate, formatDate2, formatMark } from '../../utils/Utils';
+import { _sortMarks } from '../../core/Subject';
 
 
 function EmbeddedMarkCard({ mark, subject, selectedSubSubject, changeMarkCoefficient, clickedOnMark, theme }) {
   const [showChangeCoefficient, setShownChangeCoefficient] = useStateRef(false);
-  
+  // 0 = default | 1 = guess | 2 = custom
+  const [markCoefficientStatus, setMarkCoefficientStatus] = useStateRef(0);
+  useEffect(() => {
+    if (Preferences.customCoefficients.has(`MARK-${mark.id}`)) { setMarkCoefficientStatus(2); }
+    else if (Preferences.guessMarksCoefficients && mark.coefficient == getMarkCoefficient(mark.title)) { setMarkCoefficientStatus(1); }
+    else { setMarkCoefficientStatus(0); }
+  }, [mark.coefficient]);
+
+  const [_subjectColor, _setSubjectColor] = useStateRef(getSubjectColor(subject.code));
+  const [_lightSubjectColor, _setLightSubjectColor] = useStateRef(getSubjectColor(subject.code, true));
+  const [_subSubjectName, _setSubSubjectName] = useStateRef(!selectedSubSubject && mark.subSubjectCode ? subject.subSubjects.get(mark.subSubjectCode).name : null);
+
   return (
     <PressableScale
       style={{
@@ -26,7 +37,7 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, changeMarkCoeffic
         marginBottom: showChangeCoefficient ? 17.5 : 5,
         backgroundColor: theme.colors.surface,
         borderWidth: clickedOnMark == mark.id ? 2 : 0,
-        borderColor: getSubjectColor(subject.code),
+        borderColor: _subjectColor,
       }}
     >
       <View style={{
@@ -40,38 +51,35 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, changeMarkCoeffic
           height: 55,
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: getSubjectColor(subject.code, true),
+          backgroundColor: _lightSubjectColor,
           borderRadius: 10,
         }}>
           <Text style={[theme.fonts.headlineMedium, { fontFamily: 'Bitter-Bold' }]}>{mark.valueStr}</Text>
         </View>
 
-        {mark.valueOn != 20 ? <View
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            right: 0,
-            backgroundColor: getSubjectColor(subject.code),
-            paddingHorizontal: 5,
-            paddingVertical: 3,
-            borderRadius: 5,
-          }}
-        >
+        {mark.valueOn != 20 ? <View style={{
+          position: 'absolute',
+          bottom: 0,
+          right: 0,
+          backgroundColor: _subjectColor,
+          paddingHorizontal: 5,
+          paddingVertical: 3,
+          borderRadius: 5,
+        }}>
           <Text style={theme.fonts.headlineSmall}>/{mark.valueOn}</Text>
         </View> : null}
       </View>
       <View style={{
         marginLeft: 5,
         marginVertical: 10,
-        flexDirection: 'column',
         justifyContent: 'space-evenly',
       }}>
         <Text style={{
           width: Dimensions.get('window').width - 130,
           alignItems: 'center',
         }} numberOfLines={2}>
-          {!selectedSubSubject && mark.subSubjectCode ? <Text style={theme.fonts.labelLarge}>{subject.subSubjects.get(mark.subSubjectCode).name}</Text> : null}
-          {!selectedSubSubject && mark.subSubjectCode ? <View style={{ width: 25, alignItems: 'center' }}><ChevronRight size={15} color={theme.colors.onSurfaceDisabled}/></View> : null}
+          {_subSubjectName ? <Text style={theme.fonts.labelLarge}>{_subSubjectName}</Text> : null}
+          {_subSubjectName ? <View style={{ width: 25, alignItems: 'center' }}><ChevronRight size={15} color={theme.colors.onSurfaceDisabled}/></View> : null}
           <Text style={theme.fonts.bodyLarge} numberOfLines={2}>{mark.title}</Text>
         </Text>
         <View style={{
@@ -118,7 +126,7 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, changeMarkCoeffic
               justifyContent: 'center',
               marginRight: 10,
             }}
-            onPress={() => {
+            onPress={async () => {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
               changeMarkCoefficient(mark, Preferences.guessMarksCoefficients ? getMarkCoefficient(mark.title) : Preferences.defaultEDCoefficients.get(`MARK-${mark.id}`));
             }}
@@ -137,7 +145,7 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, changeMarkCoeffic
               justifyContent: 'center',
               marginRight: 5,
             }}
-            onPress={() => {
+            onPress={async () => {
               var newCoefficient = mark.coefficient + 1;
               if (mark.coefficient == 0) { newCoefficient = 0.25; }
               else if (mark.coefficient == 0.25) { newCoefficient = 0.5; }
@@ -162,7 +170,7 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, changeMarkCoeffic
               justifyContent: 'center',
               marginRight: 10,
             }}
-            onPress={() => {
+            onPress={async () => {
               var newCoefficient = mark.coefficient - 1;
               if (mark.coefficient == 1) { newCoefficient = 0.75; }
               else if (mark.coefficient == 0.75) { newCoefficient = 0.5; }
@@ -191,6 +199,18 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, changeMarkCoeffic
           <XIcon size={15} color={theme.colors.onSurface}/>
           <Text style={[theme.fonts.headlineSmall, { fontSize: 17 }]}>{mark.coefficient.toString().replace(".", ",")}</Text>
           {showChangeCoefficient ? <ChevronUpIcon size={15} color={theme.colors.onSurfaceDisabled} style={{ marginLeft: 5 }}/> : <ChevronDownIcon size={15} color={theme.colors.onSurfaceDisabled} style={{ marginLeft: 5 }}/>}
+
+          <View style={{
+            position: 'absolute',
+            bottom: -7.5,
+            right: -7.5,
+          }}>
+            {markCoefficientStatus == 2
+              ? <WrenchIcon size={20} color={theme.colors.onSurfaceDisabled}/>
+              : markCoefficientStatus == 1
+                ? <BrainCircuitIcon size={20} color={theme.colors.onSurfaceDisabled} style={{ transform: [{ rotate: '90deg' }] }} />
+                : null}
+          </View>
         </PressableScale>
       </View>}
     </PressableScale>

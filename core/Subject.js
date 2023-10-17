@@ -41,7 +41,6 @@ function addMarkToSubject(subject, mark) {
   if (mark.subSubjectCode) {
     if (subject.subSubjects.has(mark.subSubjectCode)) {
       addMarkToSubject(subject.subSubjects.get(mark.subSubjectCode), mark);
-      return;
     }
   }
   subject.marks.push(mark);
@@ -79,16 +78,18 @@ function _getCalculatedAverage(subject) {
   let sum = 0;
   let coefficient = 0;
 
-  subject.marks.forEach(mark => {
-    if (mark.isEffective) {
-      sum += (mark.value / mark.valueOn * 20) * mark.coefficient;
-      coefficient += mark.coefficient;
-    }
-  });
+  if (subject.subSubjects.size == 0) {
+    subject.marks.forEach(mark => {
+      if (mark.isEffective) {
+        sum += (mark.value / mark.valueOn * 20) * mark.coefficient;
+        coefficient += mark.coefficient;
+      }
+    });
+  }
 
   subject.subSubjects.forEach((subSubject, _) => {
     if (subSubject.marks.length != 0) {
-      sum += (subSubject.average ? subSubject.average : _getCalculatedAverage(subSubject)) * subSubject.coefficient;
+      sum += _getCalculatedAverage(subSubject) * subSubject.coefficient;
       coefficient += subSubject.coefficient;
     }
   });
@@ -101,15 +102,17 @@ function _getCalculatedClassAverage(subject) {
   let sum = 0;
   let coefficient = 0;
 
-  subject.marks.forEach(mark => {
-    if (mark.isEffective && mark.classValue) {
-      sum += (mark.classValue / mark.valueOn * 20) * mark.coefficient;
-      coefficient += mark.coefficient;
-    }
-  });
+  if (subject.subSubjects.size == 0) {
+    subject.marks.forEach(mark => {
+      if (mark.isEffective && mark.classValue) {
+        sum += (mark.classValue / mark.valueOn * 20) * mark.coefficient;
+        coefficient += mark.coefficient;
+      }
+    });
+  }
 
   subject.subSubjects.forEach((subSubject, _) => {
-    let subSubjectsAverage = subSubject.classAverage ? subSubject.classAverage : _getCalculatedClassAverage(subSubject);
+    let subSubjectsAverage = _getCalculatedClassAverage(subSubject);
     if (subSubjectsAverage) {
       sum += subSubjectsAverage * subSubject.coefficient;
       coefficient += subSubject.coefficient;

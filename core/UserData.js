@@ -2,6 +2,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from 'axios';
 import { Account } from "./Account";
 import { Preferences } from "./Preferences";
+import { getMarkCoefficient, getSubjectCoefficient } from "../utils/CoefficientsManager";
+import { calculateAllAverages } from "./Period";
 
 export class UserData {
   static connected = false;
@@ -127,6 +129,45 @@ export class UserData {
       default:
         console.log("API request failed");
         return null;
+    }
+  }
+
+  static recalculateCoefficients() {
+    function recalculatePeriodCoefficients(period) {
+      period.marks.forEach(mark => {
+        if (Preferences.customCoefficients.has(`MARK-${mark.id}`)) {
+          mark.coefficient = Preferences.customCoefficients.get(`MARK-${mark.id}`);
+        } else {
+          mark.coefficient = Preferences.guessMarksCoefficients ? getMarkCoefficient(mark.title) : Preferences.defaultEDCoefficients.get(`MARK-${mark.id}`);
+        }
+      });
+      period.subjects.forEach(subject => {
+        if (Preferences.customCoefficients.has(`SUBJECT-${subject.code}-${subject.subCode}`)) {
+          subject.coefficient = Preferences.customCoefficients.get(`SUBJECT-${subject.code}-${subject.subCode}`);
+        } else {
+          subject.coefficient = Preferences.guessSubjectCoefficients ? getSubjectCoefficient(subject.name) : Preferences.defaultEDCoefficients.get(`SUBJECT-${subject.code}-${subject.subCode}`);
+        }
+        subject.subSubjects.forEach(subSubject => {
+          if (Preferences.customCoefficients.has(`SUBJECT-${subject.code}-${subSubject.subCode}`)) {
+            subSubject.coefficient = Preferences.customCoefficients.get(`SUBJECT-${subject.code}-${subSubject.subCode}`);
+          } else {
+            subSubject.coefficient = Preferences.guessSubjectCoefficients ? getSubjectCoefficient(subSubject.name) : Preferences.defaultEDCoefficients.get(`SUBJECT-${subject.code}-${subSubject.subCode}`);
+          }
+        });
+      });
+      calculateAllAverages(period);
+    }
+    
+    if (UserData.mainAccount.isParent) {
+      UserData.childrenAccounts.forEach(childAccount => {
+        for (let [_, period] of childAccount.periods) {
+          recalculatePeriodCoefficients(period);
+        }
+      });
+    } else {
+      UserData.mainAccount.periods.forEach(period =>  {
+        recalculatePeriodCoefficients(period);
+      });
     }
   }
 

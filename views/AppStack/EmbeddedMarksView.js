@@ -12,6 +12,7 @@ import SubjectCard from "../../components/appstack/subject_card";
 import { calculateAllAverages } from "../../core/Period";
 import { Preferences } from '../../core/Preferences';
 import { UserData } from "../../core/UserData";
+import { getMarkCoefficient, getSubjectCoefficient } from "../../utils/CoefficientsManager";
 
 
 function EmbeddedMarksView({
@@ -63,6 +64,9 @@ function EmbeddedMarksView({
   function changeMarkCoefficient(mark, coefficient) {
     mark.coefficient = coefficient;
     Preferences.customCoefficients.set(`MARK-${mark.id}`, coefficient);
+    if (coefficient == Preferences.defaultEDCoefficients.get(`MARK-${mark.id}`) || (Preferences.guessMarksCoefficients && coefficient == getMarkCoefficient(mark.title))) {
+      Preferences.customCoefficients.delete(`MARK-${mark.id}`);
+    }
     Preferences.saveCustomCoefficients();
     refreshAverages();
     UserData.saveCache();
@@ -79,6 +83,9 @@ function EmbeddedMarksView({
       });
     }
     Preferences.customCoefficients.set(`SUBJECT-${subject.code}-${subject.subCode}`, coefficient);
+    if (coefficient == Preferences.defaultEDCoefficients.get(`SUBJECT-${subject.code}-${subject.subCode}`) || (Preferences.guessSubjectCoefficients && coefficient == getSubjectCoefficient(subject.name))) {
+      Preferences.customCoefficients.delete(`SUBJECT-${subject.code}-${subject.subCode}`);
+    }
     Preferences.saveCustomCoefficients();
     refreshAverages();
     UserData.saveCache();

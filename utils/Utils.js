@@ -15,6 +15,12 @@ function formatAverage(average) {
     return average.toFixed(2).replace(".", ",");
 }
 
+function formatCoefficient(coefficient) {
+    if (coefficient == null) { return "--"; }
+    return coefficient.toString().replace(".", ",");
+}
+
+
 const daysNames = [
     "Dimanche",
     "Lundi",
@@ -53,4 +59,4 @@ function capitalizeWords(string) {
     return words.join(" ");
 }
 
-export { formatMark, formatAverage, formatDate, formatDate2, capitalizeWords };
+export { formatMark, formatAverage, formatCoefficient, formatDate, formatDate2, capitalizeWords };

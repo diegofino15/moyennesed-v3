@@ -56,6 +56,9 @@ function AppStack({ theme }) {
     }
   }, []);
 
+  // Update screen from anywhere
+  const [updateScreen, setUpdateScreen, updateScreenRef] = useState(false);
+
   return (
     <ScrollView
       horizontal={true}
@@ -74,6 +77,8 @@ function AppStack({ theme }) {
         connectingRef={connectingRef}
         scrollViewRef={scrollViewRef}
         profilePhotoRef={profilePhotoRef}
+        updateScreenRef={updateScreenRef}
+        setUpdateScreen={setUpdateScreen}
         theme={theme}
       />
 
@@ -85,6 +90,8 @@ function AppStack({ theme }) {
         scrollViewRef={scrollViewRef}
         profilePhotoRef={profilePhotoRef}
         logout={logout}
+        updateScreenRef={updateScreenRef}
+        setUpdateScreen={setUpdateScreen}
         theme={theme}
       />
     </ScrollView>

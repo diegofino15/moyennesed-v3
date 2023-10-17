@@ -16,6 +16,7 @@ function MainPage({
   connectedRef, connectingRef,
   scrollViewRef,
   profilePhotoRef, 
+  updateScreenRef, setUpdateScreen,
   theme
 }) {
   // Account shown on screen
@@ -73,6 +74,7 @@ function MainPage({
         await UserData.saveCache();
         console.log(`Got marks for ${accountToUpdate.id} !`);
 
+        setUpdateScreen(!updateScreenRef.current);
         setRefreshing(false);
         if (manualRefreshingRef.current) {
           Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -101,6 +103,7 @@ function MainPage({
         await UserData.saveCache();
         console.log(`Refreshed marks for ${accountToUpdate.id} !`);
 
+        setUpdateScreen(!updateScreenRef.current);
         setRefreshing(false);
         if (manualRefreshingRef.current) {
           Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -151,6 +154,12 @@ function MainPage({
     marksNeedUpdateRef.current.set(shownAccountRef.current.id, true); UserData.marksNeedUpdate.set(shownAccountRef.current.id, true);
     setManualRefreshing(true);
   }
+
+  // Update screen
+  const [_refresh, _setRefresh] = useState(false);
+  useEffect(() => {
+    _setRefresh(!_refresh);
+  }, [updateScreenRef.current]);
 
   return (
     <BottomSheetModalProvider>
@@ -254,6 +263,9 @@ function MainPage({
             autoRefreshing={!manualRefreshingRef.current && refreshingRef.current}
             theme={theme}
           />
+
+          {/* Extra space */}
+          <View style={{ height: 20 }}></View>
         </SafeAreaView>
       </ScrollView>
     </BottomSheetModalProvider>

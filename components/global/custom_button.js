@@ -4,7 +4,7 @@ import { PressableScale } from 'react-native-pressable-scale';
 import * as Haptics from 'expo-haptics';
 
 
-function CustomButton({ title, confirmTitle, onPress, theme, leftIcon, rightIcon, loadIcon, willLoad, style, textStyle }) {
+function CustomButton({ title, confirmTitle, confirmLabel, onPress, theme, leftIcon, rightIcon, loadIcon, willLoad, style, textStyle }) {
   const [isLoading, setIsLoading] = useState(false);
   const [waitingForConfirmation, setWaitingForConfirmation] = useState(false);
   
@@ -42,7 +42,8 @@ function CustomButton({ title, confirmTitle, onPress, theme, leftIcon, rightIcon
           backgroundColor: theme.colors.primary,
           borderWidth: 1,
           borderColor: theme.colors.onPrimary,
-          padding: 20,
+          paddingHorizontal: 20,
+          paddingVertical: waitingForConfirmation && confirmLabel ? 12 : 20,
           borderRadius: 20,
           alignItems: isLoading && loadIcon ? 'center' : 'stretch'
         },
@@ -55,13 +56,18 @@ function CustomButton({ title, confirmTitle, onPress, theme, leftIcon, rightIcon
             alignItems: 'center',
           }}>
             {leftIcon ? leftIcon : null}
-            <Text style={{
-              ...theme.fonts.bodyLarge,
-              color: theme.colors.onPrimary,
-              ...textStyle,
+            <View style={{
+              alignItems: 'center'
             }}>
-              {waitingForConfirmation ? confirmTitle : title}
-            </Text>
+              <Text style={{
+                ...theme.fonts.bodyLarge,
+                color: theme.colors.onPrimary,
+                ...textStyle,
+              }}>
+                {waitingForConfirmation ? confirmTitle : title}
+              </Text>
+              {waitingForConfirmation && confirmLabel ? <Text style={[theme.fonts.labelSmall, { color: theme.colors.onPrimary }]}>{confirmLabel}</Text> : null}
+            </View>
             {rightIcon ? rightIcon : null}
           </View>
         }

@@ -1,16 +1,17 @@
-import { View, Text, Dimensions, ScrollView } from 'react-native';
-import { getSubjectColor } from '../../utils/Colors';
-import { formatAverage } from '../../utils/Utils';
-import { ChevronDownIcon, ChevronRight, ChevronUpIcon, GraduationCapIcon, MinusIcon, PlusIcon, Trash2Icon, XIcon } from 'lucide-react-native';
-import Separator from '../global/separator';
-import { PressableScale } from 'react-native-pressable-scale';
 import { useEffect } from 'react';
-import { _sortMarks } from '../../core/Subject';
+import { View, Text, Dimensions, ScrollView } from 'react-native';
+import { BrainCircuitIcon, ChevronDownIcon, ChevronRight, ChevronUpIcon, GraduationCapIcon, MinusIcon, PlusIcon, Trash2Icon, WrenchIcon, XIcon } from 'lucide-react-native';
+import { PressableScale } from 'react-native-pressable-scale';
 import useStateRef from 'react-usestateref';
 import * as Haptics from "expo-haptics";
-import { Preferences } from '../../core/Preferences';
-import { getSubjectCoefficient } from '../../utils/CoefficientsManager';
+
+import Separator from '../global/separator';
 import EmbeddedMarkCard from './embedded_mark_card';
+import { getSubjectColor } from '../../utils/Colors';
+import { Preferences } from '../../core/Preferences';
+import { formatAverage, formatCoefficient } from '../../utils/Utils';
+import { _sortMarks } from '../../core/Subject';
+import { getSubjectCoefficient } from '../../utils/CoefficientsManager';
 
 
 function SubjectPopup({ subject, selectedSubSubject, changeMarkCoefficient, changeSubjectCoefficient, clickedOnMark, theme }) {
@@ -19,7 +20,7 @@ function SubjectPopup({ subject, selectedSubSubject, changeMarkCoefficient, chan
     if (selectedSubSubject) {
       setShownSubject(subject.subSubjects.get(selectedSubSubject));
     }
-  }, [subject]);
+  }, []);
   
   function teacherCard(teacher, key) {
     return <PressableScale key={key} style={{
@@ -38,33 +39,21 @@ function SubjectPopup({ subject, selectedSubSubject, changeMarkCoefficient, chan
 
   function markCard(mark, special) {
     if (mark.id == clickedOnMark && !special) { return null; }
-
     return <EmbeddedMarkCard key={mark.id} mark={mark} subject={subject} selectedSubSubject={selectedSubSubject} changeMarkCoefficient={changeMarkCoefficient} clickedOnMark={clickedOnMark} theme={theme} />
   }
 
-  const [_shownMarks, _setShownMarks, shownMarksRef] = useStateRef(new Array());
-  const [loaded, setLoaded] = useStateRef(false);
-  useEffect(() => {
-    setLoaded(false);
-    shownMarksRef.current.length = 0;
-    if (selectedSubSubject) {
-      shownMarksRef.current.push(...(subject.subSubjects.get(selectedSubSubject).marks.values() ?? []));
-    } else {
-      shownMarksRef.current.push(...(subject.marks.values() ?? []));
-      for (const subSubject of subject.subSubjects.values()) {
-        shownMarksRef.current.push(...(subSubject.marks.values() ?? []));
-      }
-    }
-    _sortMarks(shownMarksRef.current);
-    setLoaded(true);
-  }, []);
-
   const [showChangeCoefficient, setShownChangeCoefficient] = useStateRef(false);
+  // 0 = default | 1 = guess | 2 = custom
+  const [subjectCoefficientStatus, setSubjectCoefficientStatus] = useStateRef(0);
+  useEffect(() => {
+    if (Preferences.customCoefficients.has(`SUBJECT-${shownSubjectRef.current.code}-${shownSubjectRef.current.subCode}`)) { setSubjectCoefficientStatus(2); }
+    else if (Preferences.guessSubjectCoefficients && shownSubjectRef.current.coefficient == getSubjectCoefficient(shownSubjectRef.current.name)) { setSubjectCoefficientStatus(1); }
+    else { setSubjectCoefficientStatus(0); }
+  }, [shownSubjectRef.current.coefficient]);
 
   return (
     <View>
       <View style={{
-        width: '100%',
         height: 100,
         flexDirection: 'row',
         marginBottom: 10,
@@ -81,7 +70,6 @@ function SubjectPopup({ subject, selectedSubSubject, changeMarkCoefficient, chan
           <Text style={[theme.fonts.headlineLarge, { fontFamily: 'Bitter-Bold', fontSize: 30 }]}>{formatAverage(shownSubjectRef.current.average)}</Text>
         </View>
         <View style={{
-          flexDirection: 'column',
           justifyContent: 'space-evenly',
           height: 100,
         }}>
@@ -89,9 +77,9 @@ function SubjectPopup({ subject, selectedSubSubject, changeMarkCoefficient, chan
             width: Dimensions.get('window').width - 150,
             alignItems: 'center',
           }} numberOfLines={2}>
-            <Text style={selectedSubSubject ? theme.fonts.labelLarge : theme.fonts.bodyLarge}>{subject.name}</Text>
+            {selectedSubSubject ? <Text style={theme.fonts.labelLarge}>{subject.name}</Text> : null}
             {selectedSubSubject ? <View style={{ width: 25, alignItems: 'center' }}><ChevronRight size={15} color={theme.colors.onSurfaceDisabled}/></View> : null}
-            {selectedSubSubject ? <Text style={theme.fonts.bodyLarge}>{shownSubjectRef.current.name}</Text> : null}
+            <Text style={theme.fonts.bodyLarge}>{shownSubjectRef.current.name}</Text>
           </Text>
           
           {subject.classAverage ? <View style={{ flexDirection: 'row' }}>
@@ -117,8 +105,20 @@ function SubjectPopup({ subject, selectedSubSubject, changeMarkCoefficient, chan
               height: 30,
             }}>
               <XIcon size={15} color={theme.colors.onSurface}/>
-              <Text style={[theme.fonts.headlineSmall, { fontSize: 17 }]}>{shownSubjectRef.current.coefficient.toString().replace(".", ",")}</Text>
+              <Text style={[theme.fonts.headlineSmall, { fontSize: 17 }]}>{formatCoefficient(shownSubjectRef.current.coefficient)}</Text>
               {showChangeCoefficient ? <ChevronUpIcon size={15} color={theme.colors.onSurfaceDisabled} style={{ marginLeft: 5 }}/> : <ChevronDownIcon size={15} color={theme.colors.onSurfaceDisabled} style={{ marginLeft: 5 }}/>}
+
+              <View style={{
+                position: 'absolute',
+                bottom: -7.5,
+                right: -7.5,
+              }}>
+                {subjectCoefficientStatus == 2
+                  ? <WrenchIcon size={20} color={theme.colors.onSurfaceDisabled}/>
+                  : subjectCoefficientStatus == 1
+                    ? <BrainCircuitIcon size={20} color={theme.colors.onSurfaceDisabled} style={{ transform: [{ rotate: '90deg' }] }} />
+                    : null}
+              </View>
             </PressableScale>
 
             {showChangeCoefficient && <View style={{ flexDirection: 'row' }}>
@@ -134,7 +134,7 @@ function SubjectPopup({ subject, selectedSubSubject, changeMarkCoefficient, chan
                   justifyContent: 'center',
                   marginRight: 5,
                 }}
-                onPress={() => {
+                onPress={async () => {
                   var newCoefficient = shownSubjectRef.current.coefficient - 1;
                   if (shownSubjectRef.current.coefficient == 1) { newCoefficient = 0.75; }
                   else if (shownSubjectRef.current.coefficient == 0.75) { newCoefficient = 0.5; }
@@ -158,7 +158,7 @@ function SubjectPopup({ subject, selectedSubSubject, changeMarkCoefficient, chan
                   justifyContent: 'center',
                   marginRight: 10,
                 }}
-                onPress={() => {
+                onPress={async () => {
                   var newCoefficient = shownSubjectRef.current.coefficient + 1;
                   if (shownSubjectRef.current.coefficient == 0) { newCoefficient = 0.25; }
                   else if (shownSubjectRef.current.coefficient == 0.25) { newCoefficient = 0.5; }
@@ -182,7 +182,7 @@ function SubjectPopup({ subject, selectedSubSubject, changeMarkCoefficient, chan
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}
-                onPress={() => {
+                onPress={async () => {
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   changeSubjectCoefficient(shownSubjectRef.current, Preferences.guessSubjectCoefficients ? getSubjectCoefficient(shownSubjectRef.current.name) : Preferences.defaultEDCoefficients.get(`SUBJECT-${shownSubjectRef.current.code}-${shownSubjectRef.current.subCode}`));
                 }}
@@ -203,11 +203,11 @@ function SubjectPopup({ subject, selectedSubSubject, changeMarkCoefficient, chan
         <Separator theme={theme} style={{ width: "28%" }}/>
       </View>
       <ScrollView style={{
-        height: Dimensions.get('window').height - 400 - ((shownSubjectRef.current.teachers.size ?? 0) * 100),
+        height: Dimensions.get('window').height - 350 - ((shownSubjectRef.current.teachers.size ?? 0) * 100),
       }} showsVerticalScrollIndicator={false} >
-        {clickedOnMark && loaded ? markCard(shownMarksRef.current.find((mark) => mark.id == clickedOnMark), true) : null}
-        {shownMarksRef.current.map((mark) => markCard(mark))}
-        {shownMarksRef.current.length == 0 ? <Text style={[theme.fonts.labelLarge, { alignSelf: 'center', marginTop: 75 }]}>Aucune note pour l'instant</Text> : null}
+        {clickedOnMark ? markCard(shownSubjectRef.current.marks.find((mark) => mark.id == clickedOnMark), true) : null}
+        {shownSubjectRef.current.marks.map((mark) => markCard(mark))}
+        {shownSubjectRef.current.marks.length == 0 ? <Text style={[theme.fonts.labelLarge, { alignSelf: 'center', marginTop: 75 }]}>Aucune note pour l'instant</Text> : null}
         <View style={{ height: 50 }} />
       </ScrollView>
     </View>
