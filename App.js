@@ -10,6 +10,7 @@ import { AppContextProvider } from './utils/AppContext';
 import { UserData } from './core/UserData';
 import { Preferences } from './core/Preferences';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { CoefficientManager } from './utils/CoefficientsManager';
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
     if (jsonValue !== null) {
       console.log("Detected already logged-in account (loading cache...)");
       await Preferences.load();
+      await CoefficientManager.load();
       await UserData.loadCache();
       setLoggedIn(true);
     } else {

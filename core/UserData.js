@@ -137,15 +137,16 @@ export class UserData {
       period.marks.forEach(mark => {
         mark.coefficient = CoefficientManager.getDefaultEDMarkCoefficient(mark.id);
         mark.coefficientType = 0;
+        var newCoefficient;
         if (Preferences.allowGuessMarkCoefficients) {
-          const newCoefficient = CoefficientManager.getGuessedMarkCoefficient(mark.title);
+          newCoefficient = CoefficientManager.getGuessedMarkCoefficient(mark.id, mark.title);
           if (newCoefficient) {
             mark.coefficient = newCoefficient;
             mark.coefficientType = 1;
           }
         }
         if (Preferences.allowCustomCoefficients) {
-          const newCoefficient = CoefficientManager.getCustomMarkCoefficient(mark.id);
+          newCoefficient = CoefficientManager.getCustomMarkCoefficient(mark.id);
           if (newCoefficient) {
             mark.coefficient = newCoefficient;
             mark.coefficientType = 2;
@@ -155,15 +156,16 @@ export class UserData {
       period.subjects.forEach(subject => {
         subject.coefficient = CoefficientManager.getDefaultEDSubjectCoefficient(subject.id);
         subject.coefficientType = 0;
+        var newCoefficient;
         if (Preferences.allowGuessSubjectCoefficients) {
-          const newCoefficient = CoefficientManager.getGuessedSubjectCoefficient(subject.name);
+          newCoefficient = CoefficientManager.getGuessedSubjectCoefficient(subject.id, subject.name);
           if (newCoefficient) {
             subject.coefficient = newCoefficient;
             subject.coefficientType = 1;
           }
         }
         if (Preferences.allowCustomCoefficients) {
-          const newCoefficient = CoefficientManager.getCustomSubjectCoefficient(subject.id);
+          newCoefficient = CoefficientManager.getCustomSubjectCoefficient(subject.id);
           if (newCoefficient) {
             subject.coefficient = newCoefficient;
             subject.coefficientType = 2;
@@ -174,14 +176,14 @@ export class UserData {
           subSubject.coefficient = CoefficientManager.getDefaultEDSubjectCoefficient(subSubject.id);
           subSubject.coefficientType = 0;
           if (Preferences.allowGuessSubjectCoefficients) {
-            const newCoefficient = CoefficientManager.getGuessedSubjectCoefficient(subSubject.name);
+            newCoefficient = CoefficientManager.getGuessedSubjectCoefficient(subSubject.id, subSubject.name);
             if (newCoefficient) {
               subSubject.coefficient = newCoefficient;
               subSubject.coefficientType = 1;
             }
           }
           if (Preferences.allowCustomCoefficients) {
-            const newCoefficient = CoefficientManager.getCustomSubjectCoefficient(subSubject.id);
+            newCoefficient = CoefficientManager.getCustomSubjectCoefficient(subSubject.id);
             if (newCoefficient) {
               subSubject.coefficient = newCoefficient;
               subSubject.coefficientType = 2;
@@ -203,6 +205,8 @@ export class UserData {
         recalculatePeriodCoefficients(period);
       });
     }
+
+    CoefficientManager.save();
     this.saveCache();
   }
 
@@ -219,7 +223,8 @@ export class UserData {
     this.marksNeedUpdate.clear();
     this.marksDataCache.clear();
     await AsyncStorage.removeItem("cache");
-    Preferences.erase();
+    await Preferences.erase();
+    await CoefficientManager.erase();
     this.temporaryProfilePhoto = "";
     await AsyncStorage.removeItem("photo");
     console.log("Logged out !");

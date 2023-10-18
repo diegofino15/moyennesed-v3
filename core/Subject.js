@@ -8,15 +8,16 @@ function getFormattedSubject(jsonData) {
   
   var coefficient = CoefficientManager.setDefaultEDSubjectCoefficient(subjectID, parseFloat(jsonData.coef.toString().replace(",", ".")));
   var coefficientType = 0;
+  var newCoefficient;
   if (Preferences.allowGuessSubjectCoefficients) {
-    const newCoefficient = CoefficientManager.getGuessedSubjectCoefficient(jsonData.discipline);
+    newCoefficient = CoefficientManager.getGuessedSubjectCoefficient(jsonData.id, jsonData.discipline);
     if (newCoefficient) {
       coefficient = newCoefficient;
       coefficientType = 1;
     }
   }
   if (Preferences.allowCustomCoefficients) {
-    const newCoefficient = CoefficientManager.getCustomSubjectCoefficient(subjectID);
+    newCoefficient = CoefficientManager.getCustomSubjectCoefficient(subjectID);
     if (newCoefficient) {
       coefficient = newCoefficient;
       coefficientType = 2;

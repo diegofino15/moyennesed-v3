@@ -10,6 +10,7 @@ import { Preferences } from '../../core/Preferences';
 import { calculateAllAverages } from '../../core/Period';
 import { useState, useEffect } from 'react';
 import { Linking } from 'react-native';
+import { CoefficientManager } from '../../utils/CoefficientsManager';
 
 
 function ProfilePage({
@@ -31,6 +32,10 @@ function ProfilePage({
   useEffect(() => {
     setAllowGuessSubjectCoefficients(Preferences.allowGuessSubjectCoefficients);
   }, [Preferences.allowGuessSubjectCoefficients]);
+  const [allowCustomCoefficients, setAllowCustomCoefficients] = useState(Preferences.allowCustomCoefficients);
+  useEffect(() => {
+    setAllowCustomCoefficients(Preferences.allowCustomCoefficients);
+  }, [Preferences.allowCustomCoefficients]);
   
   // Update screen
   const [_refresh, _setRefresh] = useState(false);
@@ -188,8 +193,7 @@ function ProfilePage({
         }}>
           <Text style={[theme.fonts.labelLarge, { textAlign: 'justify' }]}>Votre établissement ne fournit pas les coefs ? L'IA de MoyennesED est là pour les deviner !</Text>
           <Text style={[theme.fonts.labelLarge, { textAlign: 'justify' }]}>Une icône <BrainCircuitIcon size={20} color={theme.colors.onSurfaceDisabled} style={{ transform: [{ rotate: '90deg' }] }}/> apparaîtra auprès des coefficients devinés.</Text>
-          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify' }]}>Vous pourrez toujours spécifier un coefficient personnalisé, et une icône <WrenchIcon size={20} color={theme.colors.onSurfaceDisabled}/> apparaîtra.</Text>
-          
+
           <Separator theme={theme} style={{ marginTop: 10, marginBottom: 10, backgroundColor: theme.colors.background }}/>
           
           <View style={{
@@ -199,17 +203,17 @@ function ProfilePage({
           }}>
             <Text style={theme.fonts.labelLarge}>Devine coefficient notes</Text>
             <Switch
-              value={allowGuessSubjectCoefficients}
+              value={allowGuessMarkCoefficients}
               onValueChange={async (value) => {
                 Preferences.setAllowGuessMarkCoefficients(value);
                 Preferences.save();
                 UserData.recalculateCoefficients();
+                CoefficientManager.save();
                 setAllowGuessMarkCoefficients(value);
                 setUpdateScreen(!updateScreenRef.current);
               }}
             />
           </View>
-          
           <View style={{
             flexDirection: 'row',
             alignItems: 'center',
@@ -223,7 +227,34 @@ function ProfilePage({
                 Preferences.setAllowGuessSubjectCoefficients(value);
                 Preferences.save();
                 UserData.recalculateCoefficients();
+                CoefficientManager.save();
                 setAllowGuessSubjectCoefficients(value);
+                setUpdateScreen(!updateScreenRef.current);
+              }}
+            />
+          </View>
+
+          <Separator theme={theme} style={{ marginTop: 10, marginBottom: 10, backgroundColor: theme.colors.background }}/>
+
+          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify' }]}>Vous pourrez toujours spécifier un coefficient personnalisé, et une icône <WrenchIcon size={20} color={theme.colors.onSurfaceDisabled}/> apparaîtra.</Text>
+          
+          <Separator theme={theme} style={{ marginTop: 10, marginBottom: 10, backgroundColor: theme.colors.background }}/>
+
+          <View style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginTop: 10,
+          }}>
+            <Text style={theme.fonts.labelLarge}>Activer coefficients personn.</Text>
+            <Switch
+              value={allowCustomCoefficients}
+              onValueChange={async (value) => {
+                Preferences.setAllowCustomCoefficients(value);
+                Preferences.save();
+                UserData.recalculateCoefficients();
+                CoefficientManager.save();
+                setAllowCustomCoefficients(value);
                 setUpdateScreen(!updateScreenRef.current);
               }}
             />

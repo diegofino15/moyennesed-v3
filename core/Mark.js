@@ -7,15 +7,16 @@ function getFormattedMark(jsonData) {
   
   var coefficient = CoefficientManager.setDefaultEDMarkCoefficient(markID, parseFloat(jsonData.coef.toString().replace(",", ".")));
   var coefficientType = 0;
+  var newCoefficient;
   if (Preferences.allowGuessMarkCoefficients) {
-    const newCoefficient = CoefficientManager.getGuessedMarkCoefficient(jsonData.devoir);
+    newCoefficient = CoefficientManager.getGuessedMarkCoefficient(jsonData.id, jsonData.devoir);
     if (newCoefficient) {
       coefficient = newCoefficient;
       coefficientType = 1;
     }
   }
   if (Preferences.allowCustomCoefficients) {
-    const newCoefficient = CoefficientManager.getCustomMarkCoefficient(markID);
+    newCoefficient = CoefficientManager.getCustomMarkCoefficient(markID);
     if (newCoefficient) {
       coefficient = newCoefficient;
       coefficientType = 2;

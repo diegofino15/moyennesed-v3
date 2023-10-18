@@ -122,7 +122,7 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, refreshAverages, 
             onPress={async () => {
               CoefficientManager.deleteCustomMarkCoefficient(mark.id);
               if (Preferences.allowGuessMarkCoefficients) {
-                mark.coefficient = CoefficientManager.getGuessedMarkCoefficient(mark);
+                mark.coefficient = CoefficientManager.getGuessedMarkCoefficient(mark.id, mark.title);
                 mark.coefficientType = 1;
               } else {
                 mark.coefficient = CoefficientManager.getDefaultEDMarkCoefficient(mark.id);

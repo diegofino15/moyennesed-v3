@@ -25,12 +25,11 @@ export class Preferences {
 
   // Save
   static async save() {
-    if (!this.haveBeenChanged) { return; }
-    await AsyncStorage.setItem("coefficients-preferences", JSON.stringify(Array.from({
+    await AsyncStorage.setItem("coefficients-preferences", JSON.stringify({
       allowGuessMarkCoefficients: this.allowGuessMarkCoefficients,
       allowGuessSubjectCoefficients: this.allowGuessSubjectCoefficients,
       allowCustomCoefficients: this.allowCustomCoefficients,
-    })));
+    }));
   }
   // Load
   static async load() {
@@ -41,12 +40,17 @@ export class Preferences {
         this.allowGuessSubjectCoefficients = preferences.allowGuessSubjectCoefficients;
         this.allowCustomCoefficients = preferences.allowCustomCoefficients;
         this.haveBeenChanged = true;
+        console.log("Preferences loaded !");
+        console.log(`-> AllowGuessMarkCoefficients : ${this.allowGuessMarkCoefficients}`)
+        console.log(`-> AllowGuessSubjectCoefficients : ${this.allowGuessSubjectCoefficients}`)
+        console.log(`-> AllowCustomCoefficients : ${this.allowCustomCoefficients}`)
       }
     });
   }
 
   // Erase
   static async erase() {
+    this.haveBeenChanged = false;
     this.allowGuessMarkCoefficients = false;
     this.allowGuessSubjectCoefficients = false;
     this.allowCustomCoefficients = true;
