@@ -92,7 +92,6 @@ export class CoefficientManager {
   static setCustomMarkCoefficient(markID, coefficient) {
     coefficient = Math.min(Math.max(coefficient, 0), 50);
     this.customMarkCoefficients.set(markID, coefficient);
-    console.log(this.customMarkCoefficients);
   }
   static getCustomMarkCoefficient(markID) {
     return this.customMarkCoefficients.get(markID);
