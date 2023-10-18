@@ -11,10 +11,10 @@ import { getSubjectColor } from '../../utils/Colors';
 import { Preferences } from '../../core/Preferences';
 import { formatAverage, formatCoefficient } from '../../utils/Utils';
 import { _sortMarks } from '../../core/Subject';
-import { getSubjectCoefficient } from '../../utils/CoefficientsManager';
+import { CoefficientManager, getSubjectCoefficient } from '../../utils/CoefficientsManager';
 
 
-function SubjectPopup({ subject, selectedSubSubject, changeMarkCoefficient, changeSubjectCoefficient, clickedOnMark, theme }) {
+function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnMark, theme }) {
   const [_shownSubject, setShownSubject, shownSubjectRef] = useStateRef(subject);
   useEffect(() => {
     if (selectedSubSubject) {
@@ -39,17 +39,10 @@ function SubjectPopup({ subject, selectedSubSubject, changeMarkCoefficient, chan
 
   function markCard(mark, special) {
     if (mark.id == clickedOnMark && !special) { return null; }
-    return <EmbeddedMarkCard key={mark.id} mark={mark} subject={subject} selectedSubSubject={selectedSubSubject} changeMarkCoefficient={changeMarkCoefficient} clickedOnMark={clickedOnMark} theme={theme} />
+    return <EmbeddedMarkCard key={mark.id} mark={mark} subject={subject} selectedSubSubject={selectedSubSubject} refreshAverages={refreshAverages} clickedOnMark={clickedOnMark} theme={theme} />
   }
 
-  const [showChangeCoefficient, setShownChangeCoefficient] = useStateRef(false);
-  // 0 = default | 1 = guess | 2 = custom
-  const [subjectCoefficientStatus, setSubjectCoefficientStatus] = useStateRef(0);
-  useEffect(() => {
-    if (Preferences.customCoefficients.has(`SUBJECT-${shownSubjectRef.current.code}-${shownSubjectRef.current.subCode}`)) { setSubjectCoefficientStatus(2); }
-    else if (Preferences.guessSubjectCoefficients && shownSubjectRef.current.coefficient == getSubjectCoefficient(shownSubjectRef.current.name)) { setSubjectCoefficientStatus(1); }
-    else { setSubjectCoefficientStatus(0); }
-  }, [shownSubjectRef.current.coefficient]);
+  const [showChangeCoefficient, setShowChangeCoefficient] = useStateRef(false);
 
   return (
     <View>
@@ -91,7 +84,7 @@ function SubjectPopup({ subject, selectedSubSubject, changeMarkCoefficient, chan
             flexDirection: 'row',
             justifyContent: 'space-between',
           }}>
-            <PressableScale onPress={() => setShownChangeCoefficient(!showChangeCoefficient)} style={{
+            <PressableScale onPress={() => setShowChangeCoefficient(!showChangeCoefficient)} style={{
               paddingHorizontal: 7.5,
               paddingVertical: 3,
               backgroundColor: theme.colors.background,
@@ -113,9 +106,9 @@ function SubjectPopup({ subject, selectedSubSubject, changeMarkCoefficient, chan
                 bottom: -7.5,
                 right: -7.5,
               }}>
-                {subjectCoefficientStatus == 2
+                {shownSubjectRef.current.coefficientType == 2
                   ? <WrenchIcon size={20} color={theme.colors.onSurfaceDisabled}/>
-                  : subjectCoefficientStatus == 1
+                  : shownSubjectRef.current.coefficientType == 1
                     ? <BrainCircuitIcon size={20} color={theme.colors.onSurfaceDisabled} style={{ transform: [{ rotate: '90deg' }] }} />
                     : null}
               </View>
@@ -140,7 +133,10 @@ function SubjectPopup({ subject, selectedSubSubject, changeMarkCoefficient, chan
                   else if (shownSubjectRef.current.coefficient == 0.75) { newCoefficient = 0.5; }
                   else if (shownSubjectRef.current.coefficient == 0.5) { newCoefficient = 0.25; }
                   else if (shownSubjectRef.current.coefficient == 0.25 || shownSubjectRef.current.coefficient == 0) { newCoefficient = 0; }
-                  changeSubjectCoefficient(shownSubjectRef.current, newCoefficient);
+                  CoefficientManager.setCustomSubjectCoefficient(shownSubjectRef.current.id, newCoefficient)
+                  shownSubjectRef.current.coefficient = newCoefficient;
+                  shownSubjectRef.current.coefficientType = 2;
+                  refreshAverages();
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 }}
               >
@@ -165,13 +161,17 @@ function SubjectPopup({ subject, selectedSubSubject, changeMarkCoefficient, chan
                   else if (shownSubjectRef.current.coefficient == 0.5) { newCoefficient = 0.75; }
                   else if (shownSubjectRef.current.coefficient == 0.75) { newCoefficient = 1; }
                   newCoefficient = Math.min(newCoefficient, 50);
-                  changeSubjectCoefficient(shownSubjectRef.current, newCoefficient);
+                  CoefficientManager.setCustomSubjectCoefficient(shownSubjectRef.current.id, newCoefficient)
+                  shownSubjectRef.current.coefficient = newCoefficient;
+                  shownSubjectRef.current.coefficientType = 2;
+                  refreshAverages();
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 }}
               >
                 <PlusIcon size={20} color={theme.colors.onSurfaceDisabled}/>
               </PressableScale>
-              <PressableScale
+              
+              {shownSubjectRef.current.coefficientType == 2 && <PressableScale
                 style={{
                   backgroundColor: theme.colors.background,
                   borderRadius: 5,
@@ -183,12 +183,20 @@ function SubjectPopup({ subject, selectedSubSubject, changeMarkCoefficient, chan
                   justifyContent: 'center',
                 }}
                 onPress={async () => {
+                  CoefficientManager.deleteCustomSubjectCoefficient(shownSubjectRef.current.id);
+                  if (Preferences.allowGuessSubjectCoefficients) {
+                    shownSubjectRef.current.coefficient = CoefficientManager.getGuessedSubjectCoefficient(shownSubjectRef.current);
+                    shownSubjectRef.current.coefficientType = 1;
+                  } else {
+                    shownSubjectRef.current.coefficient = CoefficientManager.getDefaultEDSubjectCoefficient(shownSubjectRef.current.id);
+                    shownSubjectRef.current.coefficientType = 0;
+                  }
+                  refreshAverages();
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                  changeSubjectCoefficient(shownSubjectRef.current, Preferences.guessSubjectCoefficients ? getSubjectCoefficient(shownSubjectRef.current.name) : Preferences.defaultEDCoefficients.get(`SUBJECT-${shownSubjectRef.current.code}-${shownSubjectRef.current.subCode}`));
                 }}
               >
                 <Trash2Icon size={20} color={theme.colors.onSurfaceDisabled}/>
-              </PressableScale>
+              </PressableScale>}
             </View>}
           </View>
         </View>

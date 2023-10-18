@@ -1,16 +1,26 @@
 import { Preferences } from "./Preferences";
-import { getSubjectCoefficient } from "../utils/CoefficientsManager";
+import { CoefficientManager } from "../utils/CoefficientsManager";
 import { capitalizeWords } from "../utils/Utils";
 
 
 function getFormattedSubject(jsonData) {
-  var coefficient = parseFloat(jsonData.coef.toString().replace(",", "."));
-  if (coefficient === 0) { coefficient = 1; }
-  Preferences.defaultEDCoefficients.set(`SUBJECT-${jsonData.codeMatiere}-${jsonData.codeSousMatiere}`, coefficient);
-  if (Preferences.customCoefficients.has(`SUBJECT-${jsonData.codeMatiere}-${jsonData.codeSousMatiere}`)) {
-    coefficient = Preferences.customCoefficients.get(`SUBJECT-${jsonData.codeMatiere}-${jsonData.codeSousMatiere}`);
-  } else if (Preferences.guessSubjectCoefficients) {
-    coefficient = getSubjectCoefficient(jsonData.discipline ?? "");
+  const subjectID = jsonData.id;
+  
+  var coefficient = CoefficientManager.setDefaultEDSubjectCoefficient(subjectID, parseFloat(jsonData.coef.toString().replace(",", ".")));
+  var coefficientType = 0;
+  if (Preferences.allowGuessSubjectCoefficients) {
+    const newCoefficient = CoefficientManager.getGuessedSubjectCoefficient(jsonData.discipline);
+    if (newCoefficient) {
+      coefficient = newCoefficient;
+      coefficientType = 1;
+    }
+  }
+  if (Preferences.allowCustomCoefficients) {
+    const newCoefficient = CoefficientManager.getCustomSubjectCoefficient(subjectID);
+    if (newCoefficient) {
+      coefficient = newCoefficient;
+      coefficientType = 2;
+    }
   }
 
   var teachers = new Array();
@@ -21,15 +31,20 @@ function getFormattedSubject(jsonData) {
   return {
     "id": jsonData.id,
     "name": capitalizeWords(jsonData.discipline ?? "---"),
-    "code": jsonData.codeMatiere.isEmpty ? "---" : jsonData.codeMatiere,
-    "subCode": jsonData.codeSousMatiere,
+    "teachers": teachers,
+    
     "isSubSubject": jsonData.sousMatiere,
     "subSubjects": new Map(),
-    "teachers": teachers,
+
     "marks": new Array(),
     "average": undefined,
     "classAverage": undefined,
+    
     "coefficient": coefficient,
+    "coefficientType": coefficientType,
+
+    "code": jsonData.codeMatiere.isEmpty ? "---" : jsonData.codeMatiere,
+    "subCode": jsonData.codeSousMatiere,
   };
 }
 
@@ -127,15 +142,20 @@ function getCacheSubject(subject) {
   return {
     "id": subject.id,
     "name": subject.name,
-    "code": subject.code,
-    "subCode": subject.subCode,
+    "teachers": subject.teachers,
+
     "isSubSubject": subject.isSubSubject,
     "subSubjects": Array.from(subject.subSubjects.entries()),
-    "teachers": subject.teachers,
+
     "marks": subject.marks,
     "average": subject.average,
     "classAverage": subject.classAverage,
+
     "coefficient": subject.coefficient,
+    "coefficientType": subject.coefficientType,
+
+    "code": subject.code,
+    "subCode": subject.subCode,
   };
 }
 
@@ -143,16 +163,22 @@ function getSubjectFromCache(cacheSubject) {
   return {
     "id": cacheSubject.id,
     "name": cacheSubject.name,
-    "code": cacheSubject.code,
-    "subCode": cacheSubject.subCode,
+    "teachers": cacheSubject.teachers,
+
     "isSubSubject": cacheSubject.isSubSubject,
     "subSubjects": new Map(cacheSubject.subSubjects),
-    "teachers": cacheSubject.teachers,
+
     "marks": cacheSubject.marks,
     "average": cacheSubject.average,
     "classAverage": cacheSubject.classAverage,
+
     "coefficient": cacheSubject.coefficient,
-  };
+    "coefficientType": cacheSubject.coefficientType,
+
+    "code": cacheSubject.code,
+    "subCode": cacheSubject.subCode,
+  };  
 }
+
 
 export { getFormattedSubject, addSubSubject, addMarkToSubject, sortMarks, _sortMarks, calculateAverages, getCacheSubject, getSubjectFromCache };

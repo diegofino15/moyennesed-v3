@@ -9,7 +9,7 @@ import { getSubjectColor } from '../../utils/Colors';
 import { formatAverage, formatMark } from '../../utils/Utils';
 
 
-function SubjectCard({ mainSubject, changeMarkCoefficient, changeSubjectCoefficient, theme }) {
+function SubjectCard({ mainSubject, refreshAverages, theme }) {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [subSubjectOpened, setSubSubjectOpened] = useState("");
 
@@ -20,7 +20,7 @@ function SubjectCard({ mainSubject, changeMarkCoefficient, changeSubjectCoeffici
       isOpen={isBottomSheetOpen}
       onClose={() => setIsBottomSheetOpen(false)}
       snapPoints={["30%", "75%"]}
-      children={<SubjectPopup subject={mainSubject} selectedSubSubject={subject.subCode} changeMarkCoefficient={changeMarkCoefficient} changeSubjectCoefficient={changeSubjectCoefficient} theme={theme}/>}
+      children={<SubjectPopup subject={mainSubject} selectedSubSubject={subject.subCode} refreshAverages={refreshAverages} theme={theme}/>}
     />;
   }
 

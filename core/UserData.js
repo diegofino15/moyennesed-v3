@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from 'axios';
 import { Account } from "./Account";
 import { Preferences } from "./Preferences";
-import { getMarkCoefficient, getSubjectCoefficient } from "../utils/CoefficientsManager";
+import { CoefficientManager, getMarkCoefficient, getSubjectCoefficient } from "../utils/CoefficientsManager";
 import { calculateAllAverages } from "./Period";
 
 export class UserData {
@@ -135,40 +135,75 @@ export class UserData {
   static recalculateCoefficients() {
     function recalculatePeriodCoefficients(period) {
       period.marks.forEach(mark => {
-        if (Preferences.customCoefficients.has(`MARK-${mark.id}`)) {
-          mark.coefficient = Preferences.customCoefficients.get(`MARK-${mark.id}`);
-        } else {
-          mark.coefficient = Preferences.guessMarksCoefficients ? getMarkCoefficient(mark.title) : Preferences.defaultEDCoefficients.get(`MARK-${mark.id}`);
+        mark.coefficient = CoefficientManager.getDefaultEDMarkCoefficient(mark.id);
+        mark.coefficientType = 0;
+        if (Preferences.allowGuessMarkCoefficients) {
+          const newCoefficient = CoefficientManager.getGuessedMarkCoefficient(mark.title);
+          if (newCoefficient) {
+            mark.coefficient = newCoefficient;
+            mark.coefficientType = 1;
+          }
+        }
+        if (Preferences.allowCustomCoefficients) {
+          const newCoefficient = CoefficientManager.getCustomMarkCoefficient(mark.id);
+          if (newCoefficient) {
+            mark.coefficient = newCoefficient;
+            mark.coefficientType = 2;
+          }
         }
       });
       period.subjects.forEach(subject => {
-        if (Preferences.customCoefficients.has(`SUBJECT-${subject.code}-${subject.subCode}`)) {
-          subject.coefficient = Preferences.customCoefficients.get(`SUBJECT-${subject.code}-${subject.subCode}`);
-        } else {
-          subject.coefficient = Preferences.guessSubjectCoefficients ? getSubjectCoefficient(subject.name) : Preferences.defaultEDCoefficients.get(`SUBJECT-${subject.code}-${subject.subCode}`);
+        subject.coefficient = CoefficientManager.getDefaultEDSubjectCoefficient(subject.id);
+        subject.coefficientType = 0;
+        if (Preferences.allowGuessSubjectCoefficients) {
+          const newCoefficient = CoefficientManager.getGuessedSubjectCoefficient(subject.name);
+          if (newCoefficient) {
+            subject.coefficient = newCoefficient;
+            subject.coefficientType = 1;
+          }
         }
+        if (Preferences.allowCustomCoefficients) {
+          const newCoefficient = CoefficientManager.getCustomSubjectCoefficient(subject.id);
+          if (newCoefficient) {
+            subject.coefficient = newCoefficient;
+            subject.coefficientType = 2;
+          }
+        }
+
         subject.subSubjects.forEach(subSubject => {
-          if (Preferences.customCoefficients.has(`SUBJECT-${subject.code}-${subSubject.subCode}`)) {
-            subSubject.coefficient = Preferences.customCoefficients.get(`SUBJECT-${subject.code}-${subSubject.subCode}`);
-          } else {
-            subSubject.coefficient = Preferences.guessSubjectCoefficients ? getSubjectCoefficient(subSubject.name) : Preferences.defaultEDCoefficients.get(`SUBJECT-${subject.code}-${subSubject.subCode}`);
+          subSubject.coefficient = CoefficientManager.getDefaultEDSubjectCoefficient(subSubject.id);
+          subSubject.coefficientType = 0;
+          if (Preferences.allowGuessSubjectCoefficients) {
+            const newCoefficient = CoefficientManager.getGuessedSubjectCoefficient(subSubject.name);
+            if (newCoefficient) {
+              subSubject.coefficient = newCoefficient;
+              subSubject.coefficientType = 1;
+            }
+          }
+          if (Preferences.allowCustomCoefficients) {
+            const newCoefficient = CoefficientManager.getCustomSubjectCoefficient(subSubject.id);
+            if (newCoefficient) {
+              subSubject.coefficient = newCoefficient;
+              subSubject.coefficientType = 2;
+            }
           }
         });
       });
       calculateAllAverages(period);
     }
     
-    if (UserData.mainAccount.isParent) {
-      UserData.childrenAccounts.forEach(childAccount => {
+    if (this.mainAccount.isParent) {
+      this.childrenAccounts.forEach(childAccount => {
         for (let [_, period] of childAccount.periods) {
           recalculatePeriodCoefficients(period);
         }
       });
     } else {
-      UserData.mainAccount.periods.forEach(period =>  {
+      this.mainAccount.periods.forEach(period =>  {
         recalculatePeriodCoefficients(period);
       });
     }
+    this.saveCache();
   }
 
   static async logout() {

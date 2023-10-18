@@ -70,10 +70,10 @@ export class Account {
   formatReceivedMarks(jsonData, saveCalculatedMarks) {
     // Set preferences
     if (!Preferences.haveBeenChanged) {
-      Preferences.setGuessMarksCoefficients(!(jsonData.parametrage.coefficientNote ?? false));
-      Preferences.setGuessSubjectCoefficients(!(jsonData.parametrage.moyenneCoefMatiere ?? false));
-      Preferences.saveGuessCoefficients();
-      console.log(`Preferences have been changed : Marks : ${Preferences.guessMarksCoefficients} | Subjects : ${Preferences.guessSubjectCoefficients}`);
+      Preferences.setAllowGuessMarkCoefficients(!(jsonData.parametrage.coefficientNote ?? false));
+      Preferences.setAllowGuessSubjectCoefficients(!(jsonData.parametrage.moyenneCoefMatiere ?? false));
+      Preferences.save();
+      console.log(`Preferences have been changed : Marks : ${Preferences.allowGuessMarkCoefficients} | Subjects : ${Preferences.allowGuessSubjectCoefficients}`);
     }
     
     // Save periods

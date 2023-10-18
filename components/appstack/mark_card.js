@@ -6,7 +6,7 @@ import BottomSheet from './bottom_sheet';
 import SubjectPopup from './subject_popup';
 import { ChevronRight } from 'lucide-react-native';
 
-function MarkCard({ mark, subject, changeMarkCoefficient, changeSubjectCoefficient, theme }) {
+function MarkCard({ mark, subject, refreshAverages, theme }) {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
 
   function renderPopup() {
@@ -17,7 +17,7 @@ function MarkCard({ mark, subject, changeMarkCoefficient, changeSubjectCoefficie
       onClose={() => setIsBottomSheetOpen(false)}
       snapPoints={["40%", "75%"]}
       selectedSnapPoint={0}
-      children={<SubjectPopup subject={subject} selectedSubSubject={mark.subSubjectCode} changeMarkCoefficient={changeMarkCoefficient} changeSubjectCoefficient={changeSubjectCoefficient} clickedOnMark={mark.id} theme={theme} />}
+      children={<SubjectPopup subject={subject} selectedSubSubject={mark.subSubjectCode} refreshAverages={refreshAverages} clickedOnMark={mark.id} theme={theme} />}
     />;
   }
 

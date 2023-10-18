@@ -1,8 +1,7 @@
 import { View, Text, ScrollView, Dimensions } from "react-native";
 import { useEffect } from "react";
 import useState from "react-usestateref";
-import { getSubjectColor } from "../../utils/Colors";
-import { formatAverage, formatMark } from "../../utils/Utils";
+import { formatAverage } from "../../utils/Utils";
 import { PressableScale } from "react-native-pressable-scale";
 import MarkCard from "../../components/appstack/mark_card";
 import { ActivityIndicator } from 'react-native';
@@ -10,9 +9,8 @@ import { AlertTriangleIcon, CheckCircle2Icon } from "lucide-react-native";
 import * as Haptics from "expo-haptics";
 import SubjectCard from "../../components/appstack/subject_card";
 import { calculateAllAverages } from "../../core/Period";
-import { Preferences } from '../../core/Preferences';
 import { UserData } from "../../core/UserData";
-import { getMarkCoefficient, getSubjectCoefficient } from "../../utils/CoefficientsManager";
+import { CoefficientManager } from "../../utils/CoefficientsManager";
 
 
 function EmbeddedMarksView({
@@ -46,48 +44,15 @@ function EmbeddedMarksView({
     }
   }, [shownAccountRef.current, gettingMarks, screenUpdatedRef.current]);
 
-  // Open bottom sheet to display mark data
-  const openMarkSheet = (mark) => {
-    console.log(`Open mark infos for ${mark.title}`);
-  }
-
   // Update screen
   function updateScreen() { setScreenUpdated(!screenUpdatedRef.current); }
 
-  // Change coefficient
+  // Recalculate averages on coefficient changes
   function refreshAverages() {
+    CoefficientManager.save();
     for (let [_, period] of shownAccountRef.current.periods) {
       calculateAllAverages(period);
     }
-  }
-
-  function changeMarkCoefficient(mark, coefficient) {
-    mark.coefficient = coefficient;
-    Preferences.customCoefficients.set(`MARK-${mark.id}`, coefficient);
-    if (coefficient == Preferences.defaultEDCoefficients.get(`MARK-${mark.id}`) || (Preferences.guessMarksCoefficients && coefficient == getMarkCoefficient(mark.title))) {
-      Preferences.customCoefficients.delete(`MARK-${mark.id}`);
-    }
-    Preferences.saveCustomCoefficients();
-    refreshAverages();
-    UserData.saveCache();
-    updateScreen();
-  }
-
-  function changeSubjectCoefficient(subject, coefficient) {
-    for (let [_, period] of shownAccountRef.current.periods) {
-      period.subjects.forEach(subject_ => {
-        if (subject_.code == subject.code) {
-          if (subject.isSubSubject) { subject_.subSubjects.get(subject.subCode).coefficient = coefficient; }
-          else { subject_.coefficient = coefficient; }
-        }
-      });
-    }
-    Preferences.customCoefficients.set(`SUBJECT-${subject.code}-${subject.subCode}`, coefficient);
-    if (coefficient == Preferences.defaultEDCoefficients.get(`SUBJECT-${subject.code}-${subject.subCode}`) || (Preferences.guessSubjectCoefficients && coefficient == getSubjectCoefficient(subject.name))) {
-      Preferences.customCoefficients.delete(`SUBJECT-${subject.code}-${subject.subCode}`);
-    }
-    Preferences.saveCustomCoefficients();
-    refreshAverages();
     UserData.saveCache();
     updateScreen();
   }
@@ -182,8 +147,7 @@ function EmbeddedMarksView({
                     <MarkCard
                       mark={mark} 
                       subject={subject}
-                      changeMarkCoefficient={changeMarkCoefficient}
-                      changeSubjectCoefficient={changeSubjectCoefficient}
+                      refreshAverages={refreshAverages}
                       theme={theme}
                     />
                   </View>;
@@ -200,8 +164,7 @@ function EmbeddedMarksView({
       }}>
         <SubjectCard
           mainSubject={subject}
-          changeMarkCoefficient={changeMarkCoefficient}
-          changeSubjectCoefficient={changeSubjectCoefficient}
+          refreshAverages={refreshAverages}
           theme={theme}
         />
       </View>)}

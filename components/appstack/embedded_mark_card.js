@@ -7,20 +7,13 @@ import * as Haptics from "expo-haptics";
 
 import { Preferences } from '../../core/Preferences';
 import { getSubjectColor } from '../../utils/Colors';
-import { getMarkCoefficient } from '../../utils/CoefficientsManager';
-import { formatDate, formatDate2, formatMark } from '../../utils/Utils';
+import { CoefficientManager, getMarkCoefficient } from '../../utils/CoefficientsManager';
+import { formatCoefficient, formatDate, formatDate2, formatMark } from '../../utils/Utils';
 import { _sortMarks } from '../../core/Subject';
 
 
-function EmbeddedMarkCard({ mark, subject, selectedSubSubject, changeMarkCoefficient, clickedOnMark, theme }) {
-  const [showChangeCoefficient, setShownChangeCoefficient] = useStateRef(false);
-  // 0 = default | 1 = guess | 2 = custom
-  const [markCoefficientStatus, setMarkCoefficientStatus] = useStateRef(0);
-  useEffect(() => {
-    if (Preferences.customCoefficients.has(`MARK-${mark.id}`)) { setMarkCoefficientStatus(2); }
-    else if (Preferences.guessMarksCoefficients && mark.coefficient == getMarkCoefficient(mark.title)) { setMarkCoefficientStatus(1); }
-    else { setMarkCoefficientStatus(0); }
-  }, [mark.coefficient]);
+function EmbeddedMarkCard({ mark, subject, selectedSubSubject, refreshAverages, clickedOnMark, theme }) {
+  const [showChangeCoefficient, setShowChangeCoefficient] = useStateRef(false);
 
   const [_subjectColor, _setSubjectColor] = useStateRef(getSubjectColor(subject.code));
   const [_lightSubjectColor, _setLightSubjectColor] = useStateRef(getSubjectColor(subject.code, true));
@@ -114,7 +107,7 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, changeMarkCoeffic
         width: 200,
       }}>
         {showChangeCoefficient ? <View style={{ flexDirection: 'row' }}>
-          <PressableScale
+          {mark.coefficientType == 2 && <PressableScale
             style={{
               backgroundColor: theme.colors.background,
               borderRadius: 5,
@@ -127,12 +120,21 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, changeMarkCoeffic
               marginRight: 10,
             }}
             onPress={async () => {
+              CoefficientManager.deleteCustomMarkCoefficient(mark.id);
+              if (Preferences.allowGuessMarkCoefficients) {
+                mark.coefficient = CoefficientManager.getGuessedMarkCoefficient(mark);
+                mark.coefficientType = 1;
+              } else {
+                mark.coefficient = CoefficientManager.getDefaultEDMarkCoefficient(mark.id);
+                mark.coefficientType = 0;
+              }
+              refreshAverages();
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              changeMarkCoefficient(mark, Preferences.guessMarksCoefficients ? getMarkCoefficient(mark.title) : Preferences.defaultEDCoefficients.get(`MARK-${mark.id}`));
             }}
           >
             <Trash2Icon size={20} color={theme.colors.onSurfaceDisabled}/>
-          </PressableScale>
+          </PressableScale>}
+          
           <PressableScale
             style={{
               backgroundColor: theme.colors.background,
@@ -152,7 +154,10 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, changeMarkCoeffic
               else if (mark.coefficient == 0.5) { newCoefficient = 0.75; }
               else if (mark.coefficient == 0.75) { newCoefficient = 1; }
               newCoefficient = Math.min(newCoefficient, 50);
-              changeMarkCoefficient(mark, newCoefficient);
+              CoefficientManager.setCustomMarkCoefficient(mark.id, newCoefficient)
+              mark.coefficient = newCoefficient;
+              mark.coefficientType = 2;
+              refreshAverages();
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             }}
           >
@@ -176,14 +181,17 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, changeMarkCoeffic
               else if (mark.coefficient == 0.75) { newCoefficient = 0.5; }
               else if (mark.coefficient == 0.5) { newCoefficient = 0.25; }
               else if (mark.coefficient == 0.25 || mark.coefficient == 0) { newCoefficient = 0; }
-              changeMarkCoefficient(mark, newCoefficient);
+              CoefficientManager.setCustomMarkCoefficient(mark.id, newCoefficient)
+              mark.coefficient = newCoefficient;
+              mark.coefficientType = 2;
+              refreshAverages();
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             }}
           >
             <MinusIcon size={20} color={theme.colors.onSurfaceDisabled}/>
           </PressableScale>
         </View> : <View />}
-        <PressableScale onPress={() => setShownChangeCoefficient(!showChangeCoefficient)} style={{
+        <PressableScale onPress={() => setShowChangeCoefficient(!showChangeCoefficient)} style={{
           paddingHorizontal: 7.5,
           paddingVertical: 3,
           backgroundColor: theme.colors.background,
@@ -197,7 +205,7 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, changeMarkCoeffic
           height: 30,
         }}>
           <XIcon size={15} color={theme.colors.onSurface}/>
-          <Text style={[theme.fonts.headlineSmall, { fontSize: 17 }]}>{mark.coefficient.toString().replace(".", ",")}</Text>
+          <Text style={[theme.fonts.headlineSmall, { fontSize: 17 }]}>{formatCoefficient(mark.coefficient)}</Text>
           {showChangeCoefficient ? <ChevronUpIcon size={15} color={theme.colors.onSurfaceDisabled} style={{ marginLeft: 5 }}/> : <ChevronDownIcon size={15} color={theme.colors.onSurfaceDisabled} style={{ marginLeft: 5 }}/>}
 
           <View style={{
@@ -205,9 +213,9 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, changeMarkCoeffic
             bottom: -7.5,
             right: -7.5,
           }}>
-            {markCoefficientStatus == 2
+            {mark.coefficientType == 2
               ? <WrenchIcon size={20} color={theme.colors.onSurfaceDisabled}/>
-              : markCoefficientStatus == 1
+              : mark.coefficientType == 1
                 ? <BrainCircuitIcon size={20} color={theme.colors.onSurfaceDisabled} style={{ transform: [{ rotate: '90deg' }] }} />
                 : null}
           </View>

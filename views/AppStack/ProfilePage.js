@@ -23,14 +23,14 @@ function ProfilePage({
 }) {
   async function closeProfilePage() { scrollViewRef.current?.scrollTo({x: 0, animated: true}); }
   
-  const [guessMarksCoefficients, setGuessMarksCoefficients] = useState(Preferences.guessMarksCoefficients);
+  const [allowGuessMarkCoefficients, setAllowGuessMarkCoefficients] = useState(Preferences.allowGuessMarkCoefficients);
   useEffect(() => {
-    setGuessMarksCoefficients(Preferences.guessMarksCoefficients);
-  }, [Preferences.guessMarksCoefficients]);
-  const [guessSubjectCoefficients, setGuessSubjectCoefficients] = useState(Preferences.guessSubjectCoefficients);
+    setAllowGuessMarkCoefficients(Preferences.allowGuessMarkCoefficients);
+  }, [Preferences.allowGuessMarkCoefficients]);
+  const [allowGuessSubjectCoefficients, setAllowGuessSubjectCoefficients] = useState(Preferences.allowGuessSubjectCoefficients);
   useEffect(() => {
-    setGuessSubjectCoefficients(Preferences.guessSubjectCoefficients);
-  }, [Preferences.guessSubjectCoefficients]);
+    setAllowGuessSubjectCoefficients(Preferences.allowGuessSubjectCoefficients);
+  }, [Preferences.allowGuessSubjectCoefficients]);
   
   // Update screen
   const [_refresh, _setRefresh] = useState(false);
@@ -199,13 +199,12 @@ function ProfilePage({
           }}>
             <Text style={theme.fonts.labelLarge}>Devine coefficient notes</Text>
             <Switch
-              value={guessMarksCoefficients}
+              value={allowGuessSubjectCoefficients}
               onValueChange={async (value) => {
-                Preferences.setGuessMarksCoefficients(value);
-                Preferences.saveGuessCoefficients();
+                Preferences.setAllowGuessMarkCoefficients(value);
+                Preferences.save();
                 UserData.recalculateCoefficients();
-                UserData.saveCache();
-                setGuessMarksCoefficients(value);
+                setAllowGuessMarkCoefficients(value);
                 setUpdateScreen(!updateScreenRef.current);
               }}
             />
@@ -219,13 +218,12 @@ function ProfilePage({
           }}>
             <Text style={theme.fonts.labelLarge}>Devine coefficient matières</Text>
             <Switch
-              value={guessSubjectCoefficients}
+              value={allowGuessSubjectCoefficients}
               onValueChange={async (value) => {
-                Preferences.setGuessSubjectCoefficients(value);
-                Preferences.saveGuessCoefficients();
+                Preferences.setAllowGuessSubjectCoefficients(value);
+                Preferences.save();
                 UserData.recalculateCoefficients();
-                UserData.saveCache();
-                setGuessSubjectCoefficients(value);
+                setAllowGuessSubjectCoefficients(value);
                 setUpdateScreen(!updateScreenRef.current);
               }}
             />
