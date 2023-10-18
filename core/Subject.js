@@ -10,7 +10,7 @@ function getFormattedSubject(jsonData) {
   var coefficientType = 0;
   var newCoefficient;
   if (Preferences.allowGuessSubjectCoefficients) {
-    newCoefficient = CoefficientManager.getGuessedSubjectCoefficient(jsonData.id, jsonData.discipline);
+    newCoefficient = CoefficientManager.getGuessedSubjectCoefficient(jsonData.id, jsonData.codeMatiere, jsonData.codeSousMatiere, jsonData.discipline);
     if (newCoefficient) {
       coefficient = newCoefficient;
       coefficientType = 1;

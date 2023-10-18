@@ -47,11 +47,11 @@ export class CoefficientManager {
   }
   // Guessed subject coefficients
   static guessedSubjectCoefficients = new Map();
-  static getGuessedSubjectCoefficient(subjectID, subjectName) {
-    var coefficient = this.guessedSubjectCoefficients.get(subjectID);
+  static getGuessedSubjectCoefficient(subjectID, subjectCode, subjectSubCode, subjectName) {
+    var coefficient = this.guessedSubjectCoefficients.get(`${subjectID}-${subjectCode}-${subjectSubCode}`);
     if (coefficient == undefined) {
       coefficient = this.guessSubjectCoefficient(subjectName);
-      this.guessedSubjectCoefficients.set(subjectID, coefficient);
+      this.guessedSubjectCoefficients.set(`${subjectID}-${subjectCode}-${subjectSubCode}`, coefficient);
     }
     return coefficient;
   }

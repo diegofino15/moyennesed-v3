@@ -207,7 +207,7 @@ function ProfilePage({
               onValueChange={async (value) => {
                 Preferences.setAllowGuessMarkCoefficients(value);
                 Preferences.save();
-                UserData.recalculateCoefficients();
+                UserData.recalculateAllCoefficients();
                 CoefficientManager.save();
                 setAllowGuessMarkCoefficients(value);
                 setUpdateScreen(!updateScreenRef.current);
@@ -226,7 +226,7 @@ function ProfilePage({
               onValueChange={async (value) => {
                 Preferences.setAllowGuessSubjectCoefficients(value);
                 Preferences.save();
-                UserData.recalculateCoefficients();
+                UserData.recalculateAllCoefficients();
                 CoefficientManager.save();
                 setAllowGuessSubjectCoefficients(value);
                 setUpdateScreen(!updateScreenRef.current);
@@ -252,13 +252,24 @@ function ProfilePage({
               onValueChange={async (value) => {
                 Preferences.setAllowCustomCoefficients(value);
                 Preferences.save();
-                UserData.recalculateCoefficients();
+                UserData.recalculateAllCoefficients();
                 CoefficientManager.save();
                 setAllowCustomCoefficients(value);
                 setUpdateScreen(!updateScreenRef.current);
               }}
             />
           </View>
+          <PressableScale onPress={() => {
+            CoefficientManager.customMarkCoefficients.clear();
+            CoefficientManager.customSubjectCoefficients.clear();
+            CoefficientManager.save();
+            UserData.recalculateAllCoefficients();
+            setUpdateScreen(!updateScreenRef.current)
+          }} style={{
+            marginTop: 5,
+          }}>
+            <Text style={[theme.fonts.labelLarge, { color: 'red' }]}>Effacer coefficients personn.</Text>
+          </PressableScale>
         </View>
 
         {/* Informations */}
@@ -296,14 +307,14 @@ function ProfilePage({
           marginBottom: 20,
           padding: 20,
         }}>
-          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify' }]}>Si vous rencontrez des problèmes / bugs, vous pouvez envoyer un mail avec des explications pour aider à le résoudre !</Text>
+          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify' }]}>[pas encore codé]</Text>
           <Separator theme={theme} style={{ marginTop: 10, marginBottom: 10, backgroundColor: theme.colors.background }}/>
           <PressableScale style={{
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
           }} onPress={() => {}}>
-            <Text style={theme.fonts.bodyLarge}>Envoyer un mail</Text>
+            <Text style={theme.fonts.bodyLarge}>[pas encore codé]</Text>
             <ArrowRightIcon size={30} color={theme.colors.onSurface} />
           </PressableScale>
         </View>

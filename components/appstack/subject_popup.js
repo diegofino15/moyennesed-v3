@@ -185,7 +185,7 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
                 onPress={async () => {
                   CoefficientManager.deleteCustomSubjectCoefficient(shownSubjectRef.current.id);
                   if (Preferences.allowGuessSubjectCoefficients) {
-                    shownSubjectRef.current.coefficient = CoefficientManager.getGuessedSubjectCoefficient(shownSubjectRef.current.id, shownSubjectRef.current.name);
+                    shownSubjectRef.current.coefficient = CoefficientManager.getGuessedSubjectCoefficient(shownSubjectRef.current.id, shownSubjectRef.current.code, shownSubjectRef.current.subCode, shownSubjectRef.current.name);
                     shownSubjectRef.current.coefficientType = 1;
                   } else {
                     shownSubjectRef.current.coefficient = CoefficientManager.getDefaultEDSubjectCoefficient(shownSubjectRef.current.id);

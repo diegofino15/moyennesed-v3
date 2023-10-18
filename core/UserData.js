@@ -132,7 +132,7 @@ export class UserData {
     }
   }
 
-  static recalculateCoefficients() {
+  static recalculateAllCoefficients() {
     function recalculatePeriodCoefficients(period) {
       period.marks.forEach(mark => {
         mark.coefficient = CoefficientManager.getDefaultEDMarkCoefficient(mark.id);
@@ -158,7 +158,7 @@ export class UserData {
         subject.coefficientType = 0;
         var newCoefficient;
         if (Preferences.allowGuessSubjectCoefficients) {
-          newCoefficient = CoefficientManager.getGuessedSubjectCoefficient(subject.id, subject.name);
+          newCoefficient = CoefficientManager.getGuessedSubjectCoefficient(subject.id, subject.code, subject.subCode, subject.name);
           if (newCoefficient) {
             subject.coefficient = newCoefficient;
             subject.coefficientType = 1;
@@ -176,7 +176,7 @@ export class UserData {
           subSubject.coefficient = CoefficientManager.getDefaultEDSubjectCoefficient(subSubject.id);
           subSubject.coefficientType = 0;
           if (Preferences.allowGuessSubjectCoefficients) {
-            newCoefficient = CoefficientManager.getGuessedSubjectCoefficient(subSubject.id, subSubject.name);
+            newCoefficient = CoefficientManager.getGuessedSubjectCoefficient(subSubject.id, subSubject.code, subSubject.subCode, subSubject.name);
             if (newCoefficient) {
               subSubject.coefficient = newCoefficient;
               subSubject.coefficientType = 1;
