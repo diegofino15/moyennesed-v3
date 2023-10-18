@@ -1,7 +1,7 @@
 import { ActivityIndicator, SafeAreaView, Text, View, ScrollView, Dimensions, Image, Button, Switch } from 'react-native';
 import CustomButton from '../../components/global/custom_button';
 import CustomSquareButton from '../../components/appstack/custom_square_button';
-import { BadgeInfoIcon, BrainCircuitIcon, Check, ChevronLeft, HelpCircleIcon, RefreshCcw, Settings2Icon, UserIcon, WrenchIcon, X } from 'lucide-react-native';
+import { ArrowRightIcon, BadgeInfoIcon, BrainCircuitIcon, Check, ChevronLeft, HelpCircleIcon, RefreshCcw, Settings2Icon, UserIcon, WrenchIcon, X } from 'lucide-react-native';
 import { UserData } from '../../core/UserData';
 import { PressableScale } from 'react-native-pressable-scale';
 import * as Haptics from "expo-haptics";
@@ -9,6 +9,7 @@ import Separator from '../../components/global/separator';
 import { Preferences } from '../../core/Preferences';
 import { calculateAllAverages } from '../../core/Period';
 import { useState, useEffect } from 'react';
+import { Linking } from 'react-native';
 
 
 function ProfilePage({
@@ -231,17 +232,54 @@ function ProfilePage({
           </View>
         </View>
 
-        {/* Paramètres */}
+        {/* Informations */}
         <Text style={[theme.fonts.titleSmall, { marginBottom: 10 }]}>Informations</Text>
         <View style={{
           backgroundColor: theme.colors.surface,
           borderRadius: 20,
           marginBottom: 20,
-          height: 100,
+          padding: 20,
         }}>
+          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify' }]}>MoyennesED est une application non-officielle, elle ne peut être tenue responsable de tout type de problème potentiel lié à son utilisation.</Text>
+          <Separator theme={theme} style={{ marginTop: 10, marginBottom: 10, backgroundColor: theme.colors.background }}/>
+          <PressableScale style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }} onPress={async () => {
+            const supported = await Linking.canOpenURL('https://www.ecoledirecte.com');
+            if (supported) {
+              await Linking.openURL('https://www.ecoledirecte.com');
+            } else {
+              Alert.alert("Une erreur est survenue lors du lancement de l'URL");
+            }
+          }}>
+            <Text style={theme.fonts.bodyLarge}>Site ÉcoleDirecte officiel</Text>
+            <ArrowRightIcon size={30} color={theme.colors.onSurface} />
+          </PressableScale>
+        </View>
+
+        {/* Bug report */}
+        <Text style={[theme.fonts.titleSmall, { marginBottom: 10 }]}>Un problème ?</Text>
+        <View style={{
+          backgroundColor: theme.colors.surface,
+          borderRadius: 20,
+          marginBottom: 20,
+          padding: 20,
+        }}>
+          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify' }]}>Si vous rencontrez des problèmes / bugs, vous pouvez envoyer un mail avec des explications pour aider à le résoudre !</Text>
+          <Separator theme={theme} style={{ marginTop: 10, marginBottom: 10, backgroundColor: theme.colors.background }}/>
+          <PressableScale style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }} onPress={() => {}}>
+            <Text style={theme.fonts.bodyLarge}>Envoyer un mail</Text>
+            <ArrowRightIcon size={30} color={theme.colors.onSurface} />
+          </PressableScale>
         </View>
         
-        {/* Debug buttons */}
+        {/* Disconnect buttons */}
         <CustomButton
           theme={theme}
           title="Déconnexion"

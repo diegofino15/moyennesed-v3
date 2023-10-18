@@ -172,8 +172,8 @@ function MainPage({
         }
         style={{
           paddingHorizontal: 20,
-          width: Dimensions.get('window').width,
-          height: Dimensions.get('window').height,
+          width: Dimensions.get('screen').width,
+          height: Dimensions.get('screen').height,
           backgroundColor: theme.colors.background,
         }}
       >
