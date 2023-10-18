@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native';
+import { View, Text, Dimensions } from 'react-native';
 import { PressableScale } from 'react-native-pressable-scale';
 import { getSubjectColor } from '../../utils/Colors';
 import { useState } from 'react';
@@ -15,7 +15,10 @@ function MarkCard({ mark, subject, refreshAverages, theme }) {
       key={mark.id}
       isOpen={isBottomSheetOpen}
       onClose={() => setIsBottomSheetOpen(false)}
-      snapPoints={["40%", "75%"]}
+      snapPoints={[
+        ((300 + 50 * (subject.teachers.length ?? 0)) / Dimensions.get('screen').height * 100).toString() + "%",
+        "75%"
+      ]}
       selectedSnapPoint={0}
       children={<SubjectPopup subject={subject} selectedSubSubject={mark.subSubjectCode} refreshAverages={refreshAverages} clickedOnMark={mark.id} theme={theme} />}
     />;

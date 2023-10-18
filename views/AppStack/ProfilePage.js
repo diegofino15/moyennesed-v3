@@ -56,6 +56,7 @@ function ProfilePage({
     >
       <SafeAreaView style={{
         backgroundColor: theme.colors.background,
+        marginTop: 10,
         width: '100%',
         height: '100%',
       }}>
@@ -246,7 +247,7 @@ function ProfilePage({
             justifyContent: 'space-between',
             marginTop: 10,
           }}>
-            <Text style={theme.fonts.labelLarge}>Activer coefficients personn.</Text>
+            <Text style={theme.fonts.labelLarge}>Coefficient personnalisés</Text>
             <Switch
               value={allowCustomCoefficients}
               onValueChange={async (value) => {
@@ -268,7 +269,7 @@ function ProfilePage({
           }} style={{
             marginTop: 5,
           }}>
-            <Text style={[theme.fonts.labelLarge, { color: 'red' }]}>Effacer coefficients personn.</Text>
+            <Text style={[theme.fonts.labelLarge, { color: 'red' }]}>Effacer coefficients personnalisés</Text>
           </PressableScale>
         </View>
 

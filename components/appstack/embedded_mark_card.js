@@ -80,11 +80,11 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, refreshAverages, 
           justifyContent: 'space-between',
           width: Dimensions.get('window').width - 200,
         }}>
-          {mark.classValue ? <View style={{ flexDirection: 'row' }}>
+          {mark.classValue ? <View style={{ flexDirection: 'row', marginTop: 5 }}>
             <Text style={theme.fonts.labelMedium}>Classe : </Text>
             <Text style={[theme.fonts.labelMedium, { fontFamily: 'Bitter-Regular' }]}>{formatMark(mark, true)}</Text>
           </View> : null}
-          <Text style={theme.fonts.labelMedium} numberOfLines={1}>{mark.classValue ? formatDate2(mark.dateEntered) : formatDate(mark.dateEntered)}</Text>
+          <Text style={[theme.fonts.labelMedium, { marginTop: 5 }]} numberOfLines={1}>{mark.classValue ? formatDate2(mark.dateEntered) : formatDate(mark.dateEntered)}</Text>
         </View>
       </View>
 

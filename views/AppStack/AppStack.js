@@ -57,7 +57,7 @@ function AppStack({ theme }) {
   }, []);
 
   // Update screen from anywhere
-  const [updateScreen, setUpdateScreen, updateScreenRef] = useState(false);
+  const [_updateScreen, setUpdateScreen, updateScreenRef] = useState(false);
 
   return (
     <ScrollView
