@@ -114,6 +114,8 @@ function MainPage({
     
     if (connectedRef.current) {
       handleGetMarks(shownAccountRef.current);
+    } else {
+      setManualRefreshing(false);
     }
   }, [shownAccountRef.current, connectingRef.current, manualRefreshingRef.current]);
 

@@ -25,7 +25,7 @@ export class UserData {
     this.connecting = true;
 
     var response = await axios.post(
-      `${this.API_URL}/v3/login.awp`,
+      `${this.API_URL}/v3/login.awp?v=4`,
       `data={"identifiant":"${username}", "motdepasse":"${password}"}`,
       { headers: { "Content-Type": "text/plain" } },
     ).catch(error => {
@@ -97,7 +97,7 @@ export class UserData {
   static async getMarks(accountID) {
     console.log(`Getting marks for account ${accountID}...`);
     var response = await axios.post(
-      `${this.API_URL}/v3/eleves/${accountID}/notes.awp?verbe=get`,
+      `${this.API_URL}/v3/eleves/${accountID}/notes.awp?verbe=get&v=4`,
       'data={"anneeScolaire": ""}',
       { headers: { "Content-Type": "text/plain", "X-Token": this.token } },
     ).catch(error => {
@@ -147,7 +147,7 @@ export class UserData {
         }
         if (Preferences.allowCustomCoefficients) {
           newCoefficient = CoefficientManager.getCustomMarkCoefficient(mark.id);
-          if (newCoefficient) {
+          if (newCoefficient != undefined) {
             mark.coefficient = newCoefficient;
             mark.coefficientType = 2;
           }
@@ -166,7 +166,7 @@ export class UserData {
         }
         if (Preferences.allowCustomCoefficients) {
           newCoefficient = CoefficientManager.getCustomSubjectCoefficient(subject.id);
-          if (newCoefficient) {
+          if (newCoefficient != undefined) {
             subject.coefficient = newCoefficient;
             subject.coefficientType = 2;
           }
@@ -184,7 +184,7 @@ export class UserData {
           }
           if (Preferences.allowCustomCoefficients) {
             newCoefficient = CoefficientManager.getCustomSubjectCoefficient(subSubject.id);
-            if (newCoefficient) {
+            if (newCoefficient != undefined) {
               subSubject.coefficient = newCoefficient;
               subSubject.coefficientType = 2;
             }

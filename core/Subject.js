@@ -18,7 +18,7 @@ function getFormattedSubject(jsonData) {
   }
   if (Preferences.allowCustomCoefficients) {
     newCoefficient = CoefficientManager.getCustomSubjectCoefficient(subjectID);
-    if (newCoefficient) {
+    if (newCoefficient != undefined) {
       coefficient = newCoefficient;
       coefficientType = 2;
     }

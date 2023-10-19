@@ -17,7 +17,7 @@ function getFormattedMark(jsonData) {
   }
   if (Preferences.allowCustomCoefficients) {
     newCoefficient = CoefficientManager.getCustomMarkCoefficient(markID);
-    if (newCoefficient) {
+    if (newCoefficient != undefined) {
       coefficient = newCoefficient;
       coefficientType = 2;
     }
