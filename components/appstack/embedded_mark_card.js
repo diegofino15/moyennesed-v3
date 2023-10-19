@@ -107,7 +107,7 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, refreshAverages, 
         width: 200,
       }}>
         {showChangeCoefficient ? <View style={{ flexDirection: 'row' }}>
-          {mark.coefficientType == 2 && <PressableScale
+          {mark.coefficientType == 2 ? <PressableScale
             style={{
               backgroundColor: theme.colors.background,
               borderRadius: 5,
@@ -133,7 +133,7 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, refreshAverages, 
             }}
           >
             <Trash2Icon size={20} color={theme.colors.onSurfaceDisabled}/>
-          </PressableScale>}
+          </PressableScale> : <View style={{ width: 30, marginRight: 10 }} />}
           
           <PressableScale
             style={{
@@ -146,6 +146,33 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, refreshAverages, 
               alignItems: 'center',
               justifyContent: 'center',
               marginRight: 5,
+            }}
+            onPress={async () => {
+              var newCoefficient = mark.coefficient - 1;
+              if (mark.coefficient == 1) { newCoefficient = 0.75; }
+              else if (mark.coefficient == 0.75) { newCoefficient = 0.5; }
+              else if (mark.coefficient == 0.5) { newCoefficient = 0.25; }
+              else if (mark.coefficient == 0.25 || mark.coefficient == 0) { newCoefficient = 0; }
+              CoefficientManager.setCustomMarkCoefficient(mark.id, newCoefficient)
+              mark.coefficient = newCoefficient;
+              mark.coefficientType = 2;
+              refreshAverages();
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            }}
+          >
+            <MinusIcon size={20} color={theme.colors.onSurfaceDisabled}/>
+          </PressableScale>
+          <PressableScale
+            style={{
+              backgroundColor: theme.colors.background,
+              borderRadius: 5,
+              borderWidth: 1,
+              borderColor: theme.colors.surface,
+              width: 30,
+              height: 30,
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginRight: 10,
             }}
             onPress={async () => {
               var newCoefficient = mark.coefficient + 1;
@@ -162,33 +189,6 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, refreshAverages, 
             }}
           >
             <PlusIcon size={20} color={theme.colors.onSurfaceDisabled}/>
-          </PressableScale>
-          <PressableScale
-            style={{
-              backgroundColor: theme.colors.background,
-              borderRadius: 5,
-              borderWidth: 1,
-              borderColor: theme.colors.surface,
-              width: 30,
-              height: 30,
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginRight: 10,
-            }}
-            onPress={async () => {
-              var newCoefficient = mark.coefficient - 1;
-              if (mark.coefficient == 1) { newCoefficient = 0.75; }
-              else if (mark.coefficient == 0.75) { newCoefficient = 0.5; }
-              else if (mark.coefficient == 0.5) { newCoefficient = 0.25; }
-              else if (mark.coefficient == 0.25 || mark.coefficient == 0) { newCoefficient = 0; }
-              CoefficientManager.setCustomMarkCoefficient(mark.id, newCoefficient)
-              mark.coefficient = newCoefficient;
-              mark.coefficientType = 2;
-              refreshAverages();
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            }}
-          >
-            <MinusIcon size={20} color={theme.colors.onSurfaceDisabled}/>
           </PressableScale>
         </View> : <View />}
         <PressableScale onPress={() => setShowChangeCoefficient(!showChangeCoefficient)} style={{

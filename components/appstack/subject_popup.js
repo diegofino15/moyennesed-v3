@@ -115,6 +115,34 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
             </PressableScale>
 
             {showChangeCoefficient && <View style={{ flexDirection: 'row' }}>
+              {shownSubjectRef.current.coefficientType == 2 && <PressableScale
+                style={{
+                  backgroundColor: theme.colors.background,
+                  borderRadius: 5,
+                  borderWidth: 1,
+                  borderColor: '#DA3633',
+                  width: 30,
+                  height: 30,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginRight: 10,
+                }}
+                onPress={async () => {
+                  CoefficientManager.deleteCustomSubjectCoefficient(shownSubjectRef.current.id);
+                  if (Preferences.allowGuessSubjectCoefficients) {
+                    shownSubjectRef.current.coefficient = CoefficientManager.getGuessedSubjectCoefficient(shownSubjectRef.current.id, shownSubjectRef.current.code, shownSubjectRef.current.subCode, shownSubjectRef.current.name);
+                    shownSubjectRef.current.coefficientType = 1;
+                  } else {
+                    shownSubjectRef.current.coefficient = CoefficientManager.getDefaultEDSubjectCoefficient(shownSubjectRef.current.id);
+                    shownSubjectRef.current.coefficientType = 0;
+                  }
+                  refreshAverages();
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                }}
+              >
+                <Trash2Icon size={20} color={theme.colors.onSurfaceDisabled}/>
+              </PressableScale>}
+
               <PressableScale
                 style={{
                   backgroundColor: theme.colors.background,
@@ -169,34 +197,6 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
               >
                 <PlusIcon size={20} color={theme.colors.onSurfaceDisabled}/>
               </PressableScale>
-              
-              {shownSubjectRef.current.coefficientType == 2 && <PressableScale
-                style={{
-                  backgroundColor: theme.colors.background,
-                  borderRadius: 5,
-                  borderWidth: 1,
-                  borderColor: '#DA3633',
-                  width: 30,
-                  height: 30,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginLeft: 10,
-                }}
-                onPress={async () => {
-                  CoefficientManager.deleteCustomSubjectCoefficient(shownSubjectRef.current.id);
-                  if (Preferences.allowGuessSubjectCoefficients) {
-                    shownSubjectRef.current.coefficient = CoefficientManager.getGuessedSubjectCoefficient(shownSubjectRef.current.id, shownSubjectRef.current.code, shownSubjectRef.current.subCode, shownSubjectRef.current.name);
-                    shownSubjectRef.current.coefficientType = 1;
-                  } else {
-                    shownSubjectRef.current.coefficient = CoefficientManager.getDefaultEDSubjectCoefficient(shownSubjectRef.current.id);
-                    shownSubjectRef.current.coefficientType = 0;
-                  }
-                  refreshAverages();
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                }}
-              >
-                <Trash2Icon size={20} color={theme.colors.onSurfaceDisabled}/>
-              </PressableScale>}
             </View>}
           </View>
         </View>
