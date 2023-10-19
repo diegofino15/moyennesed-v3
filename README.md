@@ -3,13 +3,16 @@
 ## 📖 Présentation
 MoyennesED est une application mobile conçue pour permettre aux élèves de consulter leurs **moyennes scolaires** et aux parents celles de leurs enfants, si leur école utilise le service EcoleDirecte.
 
-## 🚀 Fonctionnalités (en cours de dev)
+## 🚀 Fonctionnalités
 - [x] Authentification (élève + parent)
 - [x] Récupération des notes + calcul des moyennes
 - [x] Devine coefficients (notes + matières)
-  - [x] Coefficients personnalisables
+  - [x] + Coefficients personnalisables
+  - [x] -> Paramètres configurables sur l'onglet profil
+
+## En cours de dev
+- [ ] Groupements de matières (ex: Spécialités / Tronc commun)
 - [ ] Système de signalement de bugs
-- [ ] Statistiques sur les lieux de téléchargement (établissements)
 
 ## ⚛️ Fonctionnement
 Structure : **JavaScript** avec **React Native** et **Expo**  

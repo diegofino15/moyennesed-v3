@@ -67,22 +67,3 @@ function App() {
 }
 
 export default App;
-
-/*
-TODO:
-  -> Sliders for coefficients
-  -> Make the preferences customizable
-  -> Bug report system
-
-DONE:
-  -> AuthStack + Log-in/out
-  -> Profile photo (+ cache)
-  -> Auto-connect + auto-get marks (+ cache)
-  -> UI structure
-  -> Account switcher + period switcher
-  -> Subject cards
-    -> Subject popups
-  -> Marks cards
-  -> Integrate sub subjects in popups
-*/
-
