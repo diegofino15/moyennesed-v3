@@ -192,8 +192,8 @@ function ProfilePage({
           marginBottom: 20,
           padding: 20,
         }}>
-          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify' }]}>Votre établissement ne fournit pas les coefs ? L'IA de MoyennesED est là pour les deviner !</Text>
-          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify' }]}>Une icône <BrainCircuitIcon size={20} color={theme.colors.onSurfaceDisabled} style={{ transform: [{ rotate: '90deg' }] }}/> apparaîtra auprès des coefficients devinés.</Text>
+          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify' }]}>Votre établissement ne fournit pas les coefs ? L'IA de MoyennesED est là pour les estimer !</Text>
+          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify' }]}>Une icône <BrainCircuitIcon size={20} color={theme.colors.onSurfaceDisabled} style={{ transform: [{ rotate: '90deg' }] }}/> apparaîtra auprès des coefficients estimés.</Text>
 
           <Separator theme={theme} style={{ marginTop: 10, marginBottom: 10, backgroundColor: theme.colors.background }}/>
           
