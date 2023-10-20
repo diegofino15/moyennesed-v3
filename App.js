@@ -14,22 +14,31 @@ import { CoefficientManager } from './utils/CoefficientsManager';
 
 
 function App() {
+  // Initialize firebase
+  const [initializedFirebase, setInitializedFirebase] = useState(false);
+  if (!initializedFirebase) {
+    
+    setInitializedFirebase(true);
+  }
+
   // Decide to show AppStack or AuthStack
   const [loggedIn, setLoggedIn, loggedInRef] = useState(false);
   const [_loggedInLoaded, setLoggedInLoaded, loggedInLoadedRef] = useState(false);
-  AsyncStorage.getItem('credentials').then(async (jsonValue) => {
-    if (loggedInLoadedRef.current) { return; }
-    if (jsonValue !== null) {
-      console.log("Detected already logged-in account (loading cache...)");
-      await Preferences.load();
-      await CoefficientManager.load();
-      await UserData.loadCache();
-      setLoggedIn(true);
-    } else {
-      console.log("No account detected, showing auth stack");
-    }
-    setLoggedInLoaded(true);
-  });
+  if (!initializedFirebase) {
+    AsyncStorage.getItem('credentials').then(async (jsonValue) => {
+      if (loggedInLoadedRef.current) { return; }
+      if (jsonValue !== null) {
+        console.log("Detected already logged-in account (loading cache...)");
+        await Preferences.load();
+        await CoefficientManager.load();
+        await UserData.loadCache();
+        setLoggedIn(true);
+      } else {
+        console.log("No account detected, showing auth stack");
+      }
+      setLoggedInLoaded(true);
+    });
+  }
 
   // App theme
   const theme = useTheme();
