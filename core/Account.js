@@ -9,6 +9,7 @@ export class Account {
   firstName = "";
   lastName = "";
   isParent = false;
+  classLabel = "";
   gender = "M";
   photoURL = "";
   periods = new Map();
@@ -24,6 +25,7 @@ export class Account {
 
     if (this.isParent) { this.gender = jsonData.civilite === "Mme." ? "F" : "M"; }
     else {
+      this.classLabel = isChild ? jsonData.classe.libelle : jsonData.profile.classe.libelle;
       this.gender = isChild ? jsonData.sexe : jsonData.profile.sexe;
       this.photoURL = isChild ? jsonData.photo : jsonData.profile.photo;
       this.periods = new Map();
@@ -34,6 +36,7 @@ export class Account {
     this.id = cacheData.id;
     this.firstName = cacheData.firstName;
     this.lastName = cacheData.lastName;
+    this.classLabel = cacheData.classLabel;
     this.gender = cacheData.gender;
     this.isParent = cacheData.isParent;
     this.photoURL = cacheData.photoURL;
@@ -56,6 +59,7 @@ export class Account {
       firstName: this.firstName,
       lastName: this.lastName,
       isParent: this.isParent,
+      classLabel: this.classLabel,
       gender: this.gender,
       photoURL: this.photoURL,
       periods: this.isParent ? {} : Array.from(savablePeriods.entries()),
@@ -112,6 +116,7 @@ export class Account {
     this.lastName = "";
     if (!this.isParent && this.periods) { this.periods.clear(); }
     this.isParent = false;
+    this.classLabel = "";
     this.gender = "M";
     this.photoURL = "";
   }

@@ -7,10 +7,10 @@ import { PressableScale } from 'react-native-pressable-scale';
 import * as Haptics from "expo-haptics";
 import Separator from '../../components/global/separator';
 import { Preferences } from '../../core/Preferences';
-import { calculateAllAverages } from '../../core/Period';
 import { useState, useEffect } from 'react';
 import { Linking } from 'react-native';
 import { CoefficientManager } from '../../utils/CoefficientsManager';
+import CustomLink from '../../components/appstack/custom_link';
 
 
 function ProfilePage({
@@ -27,15 +27,15 @@ function ProfilePage({
   const [allowGuessMarkCoefficients, setAllowGuessMarkCoefficients] = useState(Preferences.allowGuessMarkCoefficients);
   useEffect(() => {
     setAllowGuessMarkCoefficients(Preferences.allowGuessMarkCoefficients);
-  }, [Preferences.allowGuessMarkCoefficients]);
+  }, [Preferences.allowGuessMarkCoefficients, updateScreenRef.current]);
   const [allowGuessSubjectCoefficients, setAllowGuessSubjectCoefficients] = useState(Preferences.allowGuessSubjectCoefficients);
   useEffect(() => {
     setAllowGuessSubjectCoefficients(Preferences.allowGuessSubjectCoefficients);
-  }, [Preferences.allowGuessSubjectCoefficients]);
+  }, [Preferences.allowGuessSubjectCoefficients, updateScreenRef.current]);
   const [allowCustomCoefficients, setAllowCustomCoefficients] = useState(Preferences.allowCustomCoefficients);
   useEffect(() => {
     setAllowCustomCoefficients(Preferences.allowCustomCoefficients);
-  }, [Preferences.allowCustomCoefficients]);
+  }, [Preferences.allowCustomCoefficients, updateScreenRef.current]);
   
   // Update screen
   const [_refresh, _setRefresh] = useState(false);
@@ -128,7 +128,7 @@ function ProfilePage({
                 </Text>
               </ScrollView>
             </View>
-            <Text style={theme.fonts.labelMedium}>Compte {UserData.mainAccount.isParent ? "parent" : "élève"}</Text>
+            <Text style={theme.fonts.labelMedium}>{UserData.mainAccount.isParent ? "Compte parent" : UserData.mainAccount.classLabel ? UserData.mainAccount.classLabel : "Compte élève"}</Text>
           </View>          
         </View>
 
@@ -190,19 +190,18 @@ function ProfilePage({
           backgroundColor: theme.colors.surface,
           borderRadius: 20,
           marginBottom: 20,
-          padding: 20,
+          paddingHorizontal: 20,
+          paddingVertical: 15,
         }}>
-          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify' }]}>Votre établissement ne fournit pas les coefs ? L'IA de MoyennesED est là pour les estimer !</Text>
-          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify' }]}>Une icône <BrainCircuitIcon size={20} color={theme.colors.onSurfaceDisabled} style={{ transform: [{ rotate: '90deg' }] }}/> apparaîtra auprès des coefficients estimés.</Text>
+          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify' }]}>{UserData.mainAccount.isParent ? "Votre" : "Ton"} établissement ne fournit pas les coefs ? L'IA de MoyennesED est là pour les deviner !</Text>
+          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify', marginBottom: 10 }]}>Une icône <BrainCircuitIcon size={20} color={theme.colors.onSurfaceDisabled} style={{ transform: [{ rotate: '90deg' }] }}/> apparaîtra auprès des coefficients estimés.</Text>
 
-          <Separator theme={theme} style={{ marginTop: 10, marginBottom: 10, backgroundColor: theme.colors.background }}/>
-          
           <View style={{
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-            <Text style={theme.fonts.labelLarge}>Devine coefficient notes</Text>
+            <Text style={theme.fonts.bodyLarge}>Devine coefficient notes</Text>
             <Switch
               value={allowGuessMarkCoefficients}
               onValueChange={async (value) => {
@@ -221,7 +220,7 @@ function ProfilePage({
             justifyContent: 'space-between',
             marginTop: 10,
           }}>
-            <Text style={theme.fonts.labelLarge}>Devine coefficient matières</Text>
+            <Text style={theme.fonts.bodyLarge}>Devine coefficient matières</Text>
             <Switch
               value={allowGuessSubjectCoefficients}
               onValueChange={async (value) => {
@@ -237,17 +236,14 @@ function ProfilePage({
 
           <Separator theme={theme} style={{ marginTop: 10, marginBottom: 10, backgroundColor: theme.colors.background }}/>
 
-          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify' }]}>Vous pourrez toujours spécifier un coefficient personnalisé, et une icône <WrenchIcon size={20} color={theme.colors.onSurfaceDisabled}/> apparaîtra.</Text>
-          
-          <Separator theme={theme} style={{ marginTop: 10, marginBottom: 10, backgroundColor: theme.colors.background }}/>
+          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify', marginBottom: 10 }]}>{UserData.mainAccount.isParent ? "Vous pourrez" : "Tu pourras"} toujours spécifier un coefficient personnalisé, et une icône <WrenchIcon size={20} color={theme.colors.onSurfaceDisabled}/> apparaîtra.</Text>
 
           <View style={{
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
-            marginTop: 10,
           }}>
-            <Text style={theme.fonts.labelLarge}>Coefficient personnalisés</Text>
+            <Text style={theme.fonts.bodyLarge}>Coefficients personnalisés</Text>
             <Switch
               value={allowCustomCoefficients}
               onValueChange={async (value) => {
@@ -279,25 +275,16 @@ function ProfilePage({
           backgroundColor: theme.colors.surface,
           borderRadius: 20,
           marginBottom: 20,
-          padding: 20,
+          paddingHorizontal: 20,
+          paddingVertical: 15,
         }}>
-          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify' }]}>MoyennesED est une application non-officielle, elle ne peut être tenue responsable de tout type de problème potentiel lié à son utilisation.</Text>
+          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify', marginBottom: 10 }]}>MoyennesED est une application non-officielle, elle ne peut être tenue responsable de problèmes potentiels liés à son utilisation.</Text>
+          <CustomLink title="Site officiel ÉcoleDirecte" link='https://www.ecoledirecte.com' theme={theme}/>
+
           <Separator theme={theme} style={{ marginTop: 10, marginBottom: 10, backgroundColor: theme.colors.background }}/>
-          <PressableScale style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }} onPress={async () => {
-            const supported = await Linking.canOpenURL('https://www.ecoledirecte.com');
-            if (supported) {
-              await Linking.openURL('https://www.ecoledirecte.com');
-            } else {
-              Alert.alert("Une erreur est survenue lors du lancement de l'URL");
-            }
-          }}>
-            <Text style={theme.fonts.bodyLarge}>Site ÉcoleDirecte officiel</Text>
-            <ArrowRightIcon size={30} color={theme.colors.onSurface} />
-          </PressableScale>
+
+          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify', marginBottom: 10 }]}>Vos données sont uniquement stockées sur votre appareil, vos identifiants de connexion restent entre vous et ÉcoleDirecte.</Text>
+          <CustomLink title="Confidentialité" link='https://moyennesed.my.to/privacy-policy.html' theme={theme}/>
         </View>
 
         {/* Bug report */}

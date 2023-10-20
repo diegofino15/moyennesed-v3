@@ -87,8 +87,9 @@ function MarkCard({ mark, subject, refreshAverages, theme }) {
             width: 160,
             flexDirection: 'row',
             alignItems: 'center',
+            overflow: 'hidden'
           }}>
-            <Text style={theme.fonts.labelSmall}>{subject.name}</Text>
+            <Text style={theme.fonts.labelSmall} numberOfLines={1}>{subject.name}</Text>
             {mark.subSubjectCode ? <View style={{ width: 25, alignItems: 'center' }}><ChevronRight size={15} color={theme.colors.onSurfaceDisabled}/></View> : null}
             {_subSubjectName ? <Text style={theme.fonts.labelSmall} numberOfLines={1}>{_subSubjectName}</Text> : null}
           </View>

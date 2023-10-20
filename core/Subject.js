@@ -30,7 +30,7 @@ function getFormattedSubject(jsonData) {
   });
   
   return {
-    "id": jsonData.id,
+    "id": subjectID,
     "name": capitalizeWords(jsonData.discipline ?? "---"),
     "teachers": teachers,
     
@@ -46,6 +46,7 @@ function getFormattedSubject(jsonData) {
 
     "code": jsonData.codeMatiere.isEmpty ? "---" : jsonData.codeMatiere,
     "subCode": jsonData.codeSousMatiere,
+    "subjectGroupID": jsonData.idGroupeMatiere,
   };
 }
 
@@ -157,6 +158,7 @@ function getCacheSubject(subject) {
 
     "code": subject.code,
     "subCode": subject.subCode,
+    "subjectGroupID": subject.subjectGroupID,
   };
 }
 
@@ -178,6 +180,7 @@ function getSubjectFromCache(cacheSubject) {
 
     "code": cacheSubject.code,
     "subCode": cacheSubject.subCode,
+    "subjectGroupID": cacheSubject.subjectGroupID,
   };  
 }
 

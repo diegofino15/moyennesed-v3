@@ -152,7 +152,7 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, refreshAverages, 
               if (mark.coefficient == 1) { newCoefficient = 0.75; }
               else if (mark.coefficient == 0.75) { newCoefficient = 0.5; }
               else if (mark.coefficient == 0.5) { newCoefficient = 0.25; }
-              else if (mark.coefficient == 0.25 || mark.coefficient == 0) { newCoefficient = 0; }
+              else if (mark.coefficient == 0.25 || newCoefficient <= 0) { newCoefficient = 0; }
               CoefficientManager.setCustomMarkCoefficient(mark.id, newCoefficient)
               mark.coefficient = newCoefficient;
               mark.coefficientType = 2;

@@ -160,7 +160,7 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
                   if (shownSubjectRef.current.coefficient == 1) { newCoefficient = 0.75; }
                   else if (shownSubjectRef.current.coefficient == 0.75) { newCoefficient = 0.5; }
                   else if (shownSubjectRef.current.coefficient == 0.5) { newCoefficient = 0.25; }
-                  else if (shownSubjectRef.current.coefficient == 0.25 || shownSubjectRef.current.coefficient == 0) { newCoefficient = 0; }
+                  else if (shownSubjectRef.current.coefficient == 0.25 || newCoefficient <= 0) { newCoefficient = 0; }
                   CoefficientManager.setCustomSubjectCoefficient(shownSubjectRef.current.id, newCoefficient)
                   shownSubjectRef.current.coefficient = newCoefficient;
                   shownSubjectRef.current.coefficientType = 2;

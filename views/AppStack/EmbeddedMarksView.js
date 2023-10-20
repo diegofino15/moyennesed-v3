@@ -57,6 +57,9 @@ function EmbeddedMarksView({
     updateScreen();
   }
 
+  // Work with subject groups
+  const [_drawnSubjects, _setDrawnSubjects, drawnSubjectsRef] = useState(new Array());
+
   return (
     <View>
       {/* Period chooser */}
@@ -158,16 +161,80 @@ function EmbeddedMarksView({
         </View>
       </View>
 
-      {/* Loop trough all subjects in selected period, and show their name */}
-      {[...(shownPeriodRef.current.subjects?.values() ?? [])].map((subject, subjectKey) => <View key={subjectKey} style={{
-        paddingBottom: 10,
+      {/* Loop trough all subjects groups and show affiliated subjects */}
+      {[...(shownPeriodRef.current.subjectGroups?.values() ?? [])].map((subjectGroup, subjectGroupKey) => <View key={subjectGroupKey} style={{
+        marginBottom: 20,
       }}>
-        <SubjectCard
-          mainSubject={subject}
-          refreshAverages={refreshAverages}
-          theme={theme}
-        />
+        <View style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginRight: 9.5, // Accurate ?
+        }}>
+          <Text style={[theme.fonts.labelLarge, {
+            width: '75%',
+          }]}>{subjectGroup.name}</Text>
+          <View style={{
+            flexDirection: 'row',
+            alignItems: 'flex-end',
+            justifyContent: 'flex-end',
+            width: '25%',
+          }}>
+            <Text style={[theme.fonts.headlineMedium, { fontSize: 20, fontFamily: 'Bitter-Bold', color: theme.colors.onSurfaceDisabled }]}>{formatAverage(subjectGroup.average)}</Text>
+            {subjectGroup.average ? <Text style={[theme.fonts.labelSmall, { fontFamily: 'Bitter-Bold' }]}>/20</Text> : null}
+          </View>
+        </View>
+        <View style={{
+          padding: 2,
+          borderRadius: 1,
+          backgroundColor: theme.colors.surface,
+          position: 'absolute',
+          zIndex: -1,
+          height: '100%',
+          left: -10,
+        }}/>
+
+        {subjectGroup.subjectCodes.map((subjectCode, subjectCodeKey) => {
+          if (!drawnSubjectsRef.current.includes(subjectCode)) { drawnSubjectsRef.current.push(subjectCode); }
+          const subject = shownPeriodRef.current.subjects.get(subjectCode);
+          return <View key={subjectCodeKey} style={{
+            marginTop: 5,
+            marginBottom: 5,
+          }}>
+            <SubjectCard
+              mainSubject={subject}
+              refreshAverages={refreshAverages}
+              theme={theme}
+            />
+          </View>;
+        })}
       </View>)}
+      
+      <View>
+        {drawnSubjectsRef.current.length != 0 ? <Text style={theme.fonts.labelLarge}>AUTRES MATIERES</Text> : null}
+        {drawnSubjectsRef.current.length != 0 ? <View style={{
+          padding: 2,
+          backgroundColor: theme.colors.surface,
+          position: 'absolute',
+          zIndex: -1,
+          height: '100%',
+          left: -10,
+        }}/> : null}
+        
+        {[...(shownPeriodRef.current.subjects?.values() ?? [])].map((subject, subjectKey) => {
+          if (drawnSubjectsRef.current.includes(subject.code)) { return null; }
+          return <View key={subjectKey} style={{
+            marginTop: 5,
+            marginBottom: 5,
+          }}>
+            <SubjectCard
+              mainSubject={subject}
+              refreshAverages={refreshAverages}
+              theme={theme}
+            />
+          </View>;
+        })}
+      </View>
     </View>
   );
 }
