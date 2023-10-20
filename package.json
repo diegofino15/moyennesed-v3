@@ -24,14 +24,12 @@
     "pretty-format": "^29.7.0",
     "react": "18.2.0",
     "react-native": "0.72.5",
-    "react-native-dropdown-picker": "^5.4.6",
     "react-native-gesture-handler": "^2.13.1",
     "react-native-paper": "^5.10.4",
     "react-native-pressable-scale": "^2.1.0",
     "react-native-reanimated": "3.3.0",
     "react-native-safe-area-context": "4.6.3",
     "react-native-svg": "^13.13.0",
-    "react-native-virtualized-view": "^1.0.0",
     "react-usestateref": "^1.0.8"
   },
   "devDependencies": {

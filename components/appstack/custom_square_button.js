@@ -4,8 +4,6 @@ import * as Haptics from 'expo-haptics';
 
 
 function CustomSquareButton({ icon, onPress, hasShadow, theme }) {
-  let pressScale = 0.95;
-  if (!onPress) { pressScale = 1; }
   function onPressActive() {
     if (onPress) {
       onPress();
@@ -15,9 +13,7 @@ function CustomSquareButton({ icon, onPress, hasShadow, theme }) {
 
   return (
     <PressableScale
-      onPress={() => onPressActive()}
-      weight="light"
-      activeScale={pressScale}
+      onPress={onPressActive}
       style={{
         backgroundColor: hasShadow ? 'black' : theme.colors.background,
         borderRadius: 10,
@@ -45,5 +41,4 @@ function CustomSquareButton({ icon, onPress, hasShadow, theme }) {
   );
 }
 
-export default CustomSquareButton;
-
+export { CustomSquareButton };

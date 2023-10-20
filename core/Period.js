@@ -1,6 +1,7 @@
 import { getFormattedSubject, addSubSubject, sortMarks, _sortMarks, calculateAverages, getCacheSubject, getSubjectFromCache, addMarkToSubject } from "./Subject";
-import { registerSubject } from "../utils/Colors";
 import { addSubject, getFormattedSubjectGroup } from "./SubjectGroup";
+import { registerSubject } from "../utils/Colors";
+
 
 function getFormattedPeriod(jsonData) {
   var subjects = new Map();
@@ -142,6 +143,5 @@ function getPeriodFromCache(cachePeriod) {
     "classAverage": cachePeriod.classAverage,
   };
 }
-
 
 export { getFormattedPeriod, addMark, sortAllMarks, calculateAllAverages, getCachePeriod, getPeriodFromCache };

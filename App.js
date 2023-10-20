@@ -2,19 +2,19 @@ import { StatusBar } from 'react-native';
 import { PaperProvider, useTheme } from 'react-native-paper';
 import useState from 'react-usestateref'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { useFonts, setThemeData } from './hooks/useStyles';
 import { AuthStack } from './views/AuthStack';
 import { AppStack } from './views/AppStack/AppStack';
-import { AppContextProvider } from './utils/AppContext';
 import { UserData } from './core/UserData';
 import { Preferences } from './core/Preferences';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { AppContextProvider } from './utils/AppContext';
 import { CoefficientManager } from './utils/CoefficientsManager';
 
 
 function App() {
-  // Decide to show app or auth stack
+  // Decide to show AppStack or AuthStack
   const [loggedIn, setLoggedIn, loggedInRef] = useState(false);
   const [_loggedInLoaded, setLoggedInLoaded, loggedInLoadedRef] = useState(false);
   AsyncStorage.getItem('credentials').then(async (jsonValue) => {

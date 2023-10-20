@@ -14,4 +14,4 @@ function Separator({ style, theme }) {
   );
 }
 
-export default Separator;
+export { Separator };

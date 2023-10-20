@@ -1,15 +1,15 @@
-import { View, Text, ScrollView, Dimensions } from "react-native";
 import { useEffect } from "react";
-import useState from "react-usestateref";
-import { formatAverage } from "../../utils/Utils";
-import { PressableScale } from "react-native-pressable-scale";
-import MarkCard from "../../components/appstack/mark_card";
-import { ActivityIndicator } from 'react-native';
+import { View, ScrollView, Text, ActivityIndicator, Dimensions } from "react-native";
 import { AlertTriangleIcon, CheckCircle2Icon } from "lucide-react-native";
+import { PressableScale } from "react-native-pressable-scale";
+import useState from "react-usestateref";
 import * as Haptics from "expo-haptics";
-import SubjectCard from "../../components/appstack/subject_card";
-import { calculateAllAverages } from "../../core/Period";
+
+import { MarkCard } from "../../components/appstack/mark_card";
+import { SubjectCard } from "../../components/appstack/subject_card";
 import { UserData } from "../../core/UserData";
+import { calculateAllAverages } from "../../core/Period";
+import { formatAverage } from "../../utils/Utils";
 import { CoefficientManager } from "../../utils/CoefficientsManager";
 
 

@@ -1,6 +1,6 @@
-import { View, Text, Dimensions } from 'react-native';
-import { PressableScale } from 'react-native-pressable-scale';
+import { View, Text } from 'react-native';
 import { ChevronRight } from 'lucide-react-native';
+import { PressableScale } from 'react-native-pressable-scale';
 
 
 function InfoCard({
@@ -10,17 +10,8 @@ function InfoCard({
   onPress,
   style,
 }) {
-  let pressScale = 0.975;
-  function onPressActive() {
-    if (onPress) { onPress(); }
-  }
-  
   return (
-    <PressableScale
-      onPress={() => onPressActive()}
-      weight="light"
-      activeScale={pressScale}
-    >
+    <PressableScale onPress={onPress}>
       <View style={[{
         backgroundColor: theme.colors.surface,
         borderRadius: 20,
@@ -52,5 +43,4 @@ function InfoCard({
   );
 }
 
-export default InfoCard;
-
+export { InfoCard };

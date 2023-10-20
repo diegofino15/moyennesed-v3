@@ -1,15 +1,15 @@
-import { View, ScrollView, SafeAreaView, Text, Image, Dimensions, RefreshControl } from "react-native";
-import { PressableScale } from "react-native-pressable-scale";
-import { UserIcon } from "lucide-react-native";
 import { useEffect } from "react";
+import { View, ScrollView, SafeAreaView, Text, Image, RefreshControl, Dimensions } from "react-native";
+import { UserIcon } from "lucide-react-native";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { PressableScale } from "react-native-pressable-scale";
 import useState from "react-usestateref";
 import * as Haptics from "expo-haptics";
 
 import { EmbeddedMarksView } from './EmbeddedMarksView';
-import CustomSquareButton from "../../components/appstack/custom_square_button";
-import Separator from "../../components/global/separator";
+import { CustomSquareButton } from "../../components/appstack/custom_square_button";
+import { Separator } from "../../components/global/separator";
 import { UserData } from "../../core/UserData";
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 
 function MainPage({

@@ -10,16 +10,14 @@ function CustomInput({
   style
 }) {
   return (
-    <View
-      style={[{
-        borderColor: theme.colors.surface,
-        borderWidth: 1,
-        borderRadius: 10,
-        padding: 10,
-        borderBottomWidth: 1,
-        flexDirection: 'row',
-      }, style]}
-    >
+    <View style={[{
+      borderColor: theme.colors.surface,
+      borderWidth: 1,
+      borderRadius: 10,
+      padding: 10,
+      borderBottomWidth: 1,
+      flexDirection: 'row',
+    }, style]}>
       {icon}
       <TextInput
         style={{
@@ -38,5 +36,4 @@ function CustomInput({
   );
 }
 
-export default CustomInput;
-
+export { CustomInput };

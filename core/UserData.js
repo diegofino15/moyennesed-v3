@@ -2,8 +2,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from 'axios';
 import { Account } from "./Account";
 import { Preferences } from "./Preferences";
-import { CoefficientManager, getMarkCoefficient, getSubjectCoefficient } from "../utils/CoefficientsManager";
+import { CoefficientManager } from "../utils/CoefficientsManager";
 import { calculateAllAverages } from "./Period";
+
 
 export class UserData {
   static connected = false;

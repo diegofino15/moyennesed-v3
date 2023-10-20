@@ -1,16 +1,16 @@
-import { ActivityIndicator, SafeAreaView, Text, View, ScrollView, Dimensions, Image, Button, Switch } from 'react-native';
-import CustomButton from '../../components/global/custom_button';
-import CustomSquareButton from '../../components/appstack/custom_square_button';
-import { ArrowRightIcon, BadgeInfoIcon, BrainCircuitIcon, Check, ChevronLeft, HelpCircleIcon, RefreshCcw, Settings2Icon, UserIcon, WrenchIcon, X } from 'lucide-react-native';
-import { UserData } from '../../core/UserData';
+import { useState, useEffect } from 'react';
+import { View, SafeAreaView, ScrollView, Text, Image, Switch, ActivityIndicator, Dimensions } from 'react-native';
+import { ArrowRightIcon, BrainCircuitIcon, Check, ChevronLeft, RefreshCcw, UserIcon, WrenchIcon, X } from 'lucide-react-native';
 import { PressableScale } from 'react-native-pressable-scale';
 import * as Haptics from "expo-haptics";
-import Separator from '../../components/global/separator';
+
+import { CustomButton } from '../../components/global/custom_button';
+import { CustomSquareButton } from '../../components/appstack/custom_square_button';
+import { Separator } from '../../components/global/separator';
+import { CustomLink } from '../../components/appstack/custom_link';
+import { UserData } from '../../core/UserData';
 import { Preferences } from '../../core/Preferences';
-import { useState, useEffect } from 'react';
-import { Linking } from 'react-native';
 import { CoefficientManager } from '../../utils/CoefficientsManager';
-import CustomLink from '../../components/appstack/custom_link';
 
 
 function ProfilePage({

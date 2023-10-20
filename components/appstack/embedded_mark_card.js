@@ -1,23 +1,22 @@
-import { useEffect } from 'react';
 import { View, Text, Dimensions } from 'react-native';
 import { ChevronDownIcon, ChevronRight, ChevronUpIcon, MinusIcon, PlusIcon, Trash2Icon, XIcon, WrenchIcon, BrainCircuitIcon } from 'lucide-react-native';
 import { PressableScale } from 'react-native-pressable-scale';
-import useStateRef from 'react-usestateref';
+import useState from 'react-usestateref';
 import * as Haptics from "expo-haptics";
 
 import { Preferences } from '../../core/Preferences';
-import { getSubjectColor } from '../../utils/Colors';
-import { CoefficientManager, getMarkCoefficient } from '../../utils/CoefficientsManager';
-import { formatCoefficient, formatDate, formatDate2, formatMark } from '../../utils/Utils';
 import { _sortMarks } from '../../core/Subject';
+import { formatCoefficient, formatDate, formatDate2, formatMark } from '../../utils/Utils';
+import { CoefficientManager } from '../../utils/CoefficientsManager';
+import { getSubjectColor } from '../../utils/Colors';
 
 
 function EmbeddedMarkCard({ mark, subject, selectedSubSubject, refreshAverages, clickedOnMark, theme }) {
-  const [showChangeCoefficient, setShowChangeCoefficient] = useStateRef(false);
+  const [showChangeCoefficient, setShowChangeCoefficient] = useState(false);
 
-  const [_subjectColor, _setSubjectColor] = useStateRef(getSubjectColor(subject.code));
-  const [_lightSubjectColor, _setLightSubjectColor] = useStateRef(getSubjectColor(subject.code, true));
-  const [_subSubjectName, _setSubSubjectName] = useStateRef(!selectedSubSubject && mark.subSubjectCode ? subject.subSubjects.get(mark.subSubjectCode).name : null);
+  const [_subjectColor, _setSubjectColor] = useState(getSubjectColor(subject.code));
+  const [_lightSubjectColor, _setLightSubjectColor] = useState(getSubjectColor(subject.code, true));
+  const [_subSubjectName, _setSubSubjectName] = useState(!selectedSubSubject && mark.subSubjectCode ? subject.subSubjects.get(mark.subSubjectCode).name : null);
 
   return (
     <PressableScale
@@ -225,5 +224,4 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, refreshAverages, 
   );
 }
 
-export default EmbeddedMarkCard;
-
+export { EmbeddedMarkCard };

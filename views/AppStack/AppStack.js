@@ -1,12 +1,11 @@
-import { ScrollView, Dimensions } from 'react-native';
 import { useRef, useEffect } from 'react';
+import { ScrollView, Dimensions } from 'react-native';
 import useState from 'react-usestateref'
-
-import { useAppContext } from '../../utils/AppContext';
-import { UserData } from '../../core/UserData';
 
 import { MainPage } from './MainPage';
 import { ProfilePage } from './ProfilePage';
+import { UserData } from '../../core/UserData';
+import { useAppContext } from '../../utils/AppContext';
 
 
 function AppStack({ theme }) {
@@ -22,6 +21,7 @@ function AppStack({ theme }) {
     refreshLogin();
   }
 
+  // Refresh login
   async function refreshLogin() {
     setConnecting(true);
     setConnected(false);

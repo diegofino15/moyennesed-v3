@@ -8,8 +8,6 @@ function CustomButton({ title, confirmTitle, confirmLabel, onPress, theme, leftI
   const [isLoading, setIsLoading] = useState(false);
   const [waitingForConfirmation, setWaitingForConfirmation] = useState(false);
   
-  let pressScale = 0.95;
-  if (!onPress) { pressScale = 1; }
   function onPressActive() {
     if (onPress && !isLoading) {
       if (confirmTitle && !waitingForConfirmation) {
@@ -32,23 +30,16 @@ function CustomButton({ title, confirmTitle, confirmLabel, onPress, theme, leftI
   }
 
   return (
-    <PressableScale
-      onPress={() => onPressActive()}
-      weight="light"
-      activeScale={pressScale}
-    >
-      <View style={[
-        {
-          backgroundColor: theme.colors.primary,
-          borderWidth: 1,
-          borderColor: theme.colors.onPrimary,
-          paddingHorizontal: 20,
-          paddingVertical: waitingForConfirmation && confirmLabel ? 12 : 20,
-          borderRadius: 20,
-          alignItems: isLoading && loadIcon ? 'center' : 'stretch'
-        },
-        style,
-      ]}>
+    <PressableScale onPress={onPressActive}>
+      <View style={[{
+        backgroundColor: theme.colors.primary,
+        borderWidth: 1,
+        borderColor: theme.colors.onPrimary,
+        paddingHorizontal: 20,
+        paddingVertical: waitingForConfirmation && confirmLabel ? 12 : 20,
+        borderRadius: 20,
+        alignItems: isLoading && loadIcon ? 'center' : 'stretch'
+      }, style]}>
         {isLoading && loadIcon ? loadIcon : 
           <View style={{
             flexDirection: 'row',
@@ -76,5 +67,4 @@ function CustomButton({ title, confirmTitle, confirmLabel, onPress, theme, leftI
   );
 }
 
-export default CustomButton;
-
+export { CustomButton };

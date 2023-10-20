@@ -32,5 +32,4 @@ function getSubjectColor(subjectCode, isLight = false) {
   return attribuatedSubjectColors[subjectCode][0];
 }
 
-
 export { registerSubject, getSubjectColor };

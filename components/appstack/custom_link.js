@@ -1,4 +1,4 @@
-import { Linking, Text } from 'react-native';
+import { Text, Linking } from 'react-native';
 import { PressableScale } from 'react-native-pressable-scale';
 import { LinkIcon, ArrowRightIcon } from 'lucide-react-native';
 
@@ -22,5 +22,4 @@ function CustomLink({ title, link, theme }) {
   </PressableScale>;
 }
 
-export default CustomLink;
-
+export { CustomLink };

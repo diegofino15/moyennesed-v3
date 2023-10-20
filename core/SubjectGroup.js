@@ -11,5 +11,4 @@ function addSubject(subjectGroup, subjectCode) {
   subjectGroup.subjectCodes.push(subjectCode);
 }
 
-
 export { getFormattedSubjectGroup, addSubject };

@@ -1,5 +1,5 @@
-import { View, Dimensions } from 'react-native';
 import { useState, useRef, useEffect, useCallback } from 'react';
+import { View, Dimensions } from 'react-native';
 import { BottomSheetModal, BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 
 
@@ -51,5 +51,5 @@ function BottomSheet({ isOpen, onClose, children, backgroundStyle, snapPoints, s
   );
 }
 
-export default BottomSheet;
+export { BottomSheet };
 

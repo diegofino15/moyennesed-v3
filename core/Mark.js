@@ -44,5 +44,4 @@ function getFormattedMark(jsonData) {
   };
 }
 
-
 export { getFormattedMark };

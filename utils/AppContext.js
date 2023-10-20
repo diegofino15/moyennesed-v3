@@ -1,5 +1,6 @@
 import { createContext, useContext } from 'react';
 
+
 const AppContext = createContext({
   loggedIn: false,
   setLoggedIn: () => {},
@@ -14,5 +15,3 @@ export function AppContextProvider({ children, state }) {
     </AppContext.Provider>
   );
 }
-
-

@@ -184,5 +184,4 @@ function getSubjectFromCache(cacheSubject) {
   };  
 }
 
-
 export { getFormattedSubject, addSubSubject, addMarkToSubject, sortMarks, _sortMarks, calculateAverages, getCacheSubject, getSubjectFromCache };

@@ -1,10 +1,12 @@
-import { View, Text, Dimensions } from 'react-native';
-import { PressableScale } from 'react-native-pressable-scale';
-import { getSubjectColor } from '../../utils/Colors';
 import { useState } from 'react';
-import BottomSheet from './bottom_sheet';
-import SubjectPopup from './subject_popup';
+import { View, Text, Dimensions } from 'react-native';
 import { ChevronRight } from 'lucide-react-native';
+import { PressableScale } from 'react-native-pressable-scale';
+
+import { BottomSheet } from './bottom_sheet';
+import { SubjectPopup } from './subject_popup';
+import { getSubjectColor } from '../../utils/Colors';
+
 
 function MarkCard({ mark, subject, refreshAverages, theme }) {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
@@ -114,5 +116,4 @@ function MarkCard({ mark, subject, refreshAverages, theme }) {
   );
 }
 
-export default MarkCard;
-
+export { MarkCard };

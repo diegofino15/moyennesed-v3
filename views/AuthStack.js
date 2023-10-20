@@ -1,14 +1,14 @@
 import { useRef, useEffect, useCallback, } from 'react';
-import { View, SafeAreaView, ScrollView, Text, ActivityIndicator, Dimensions, Linking, StyleSheet, Alert } from 'react-native';
+import { View, SafeAreaView, ScrollView, Text, ActivityIndicator, Alert, Linking, Dimensions, StyleSheet } from 'react-native';
 import LottieView from 'lottie-react-native';
 import { User, KeyRound, ChevronRight } from 'lucide-react-native';
 import useState from 'react-usestateref'
 
+import { InfoCard } from '../components/authstack/info_card';
+import { CustomInput } from '../components/authstack/custom_input';
+import { CustomButton } from '../components/global/custom_button';
 import { UserData } from '../core/UserData';
 import { useAppContext } from '../utils/AppContext';
-import InfoCard from '../components/authstack/info_card';
-import CustomInput from '../components/authstack/custom_input';
-import CustomButton from '../components/global/custom_button';
 
 
 function AuthStack({ theme }) {
@@ -259,6 +259,5 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width - 40,
   },
 });
-
 
 export { AuthStack };

@@ -1,5 +1,6 @@
 import { loadAsync } from 'expo-font';
 
+
 const useFonts = async () => await loadAsync({
   'Montserrat-Regular': require('../assets/fonts/Montserrat-Regular.ttf'),
   'Montserrat-Medium': require('../assets/fonts/Montserrat-Medium.ttf'),
@@ -9,7 +10,6 @@ const useFonts = async () => await loadAsync({
   'Bitter-Medium': require('../assets/fonts/Bitter-Medium.ttf'),
   'Bitter-Bold': require('../assets/fonts/Bitter-Bold.ttf'),
 });
-
 
 function setThemeData(theme) {
   theme.colors = {
@@ -108,7 +108,5 @@ function setThemeData(theme) {
     },
   };
 }
-
-
 
 export { useFonts, setThemeData };

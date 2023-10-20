@@ -1,21 +1,21 @@
 import { useEffect } from 'react';
-import { View, Text, Dimensions, ScrollView } from 'react-native';
+import { View, ScrollView, Text, Dimensions } from 'react-native';
 import { BrainCircuitIcon, ChevronDownIcon, ChevronRight, ChevronUpIcon, GraduationCapIcon, MinusIcon, PlusIcon, Trash2Icon, WrenchIcon, XIcon } from 'lucide-react-native';
 import { PressableScale } from 'react-native-pressable-scale';
-import useStateRef from 'react-usestateref';
+import useState from 'react-usestateref';
 import * as Haptics from "expo-haptics";
 
-import Separator from '../global/separator';
-import EmbeddedMarkCard from './embedded_mark_card';
-import { getSubjectColor } from '../../utils/Colors';
+import { EmbeddedMarkCard } from './embedded_mark_card';
+import { Separator } from '../global/separator';
 import { Preferences } from '../../core/Preferences';
-import { formatAverage, formatCoefficient } from '../../utils/Utils';
 import { _sortMarks } from '../../core/Subject';
-import { CoefficientManager, getSubjectCoefficient } from '../../utils/CoefficientsManager';
+import { formatAverage, formatCoefficient } from '../../utils/Utils';
+import { CoefficientManager } from '../../utils/CoefficientsManager';
+import { getSubjectColor } from '../../utils/Colors';
 
 
 function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnMark, theme }) {
-  const [_shownSubject, setShownSubject, shownSubjectRef] = useStateRef(subject);
+  const [_shownSubject, setShownSubject, shownSubjectRef] = useState(subject);
   useEffect(() => {
     if (selectedSubSubject) {
       setShownSubject(subject.subSubjects.get(selectedSubSubject));
@@ -42,7 +42,7 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
     return <EmbeddedMarkCard key={mark.id} mark={mark} subject={subject} selectedSubSubject={selectedSubSubject} refreshAverages={refreshAverages} clickedOnMark={clickedOnMark} theme={theme} />
   }
 
-  const [showChangeCoefficient, setShowChangeCoefficient] = useStateRef(false);
+  const [showChangeCoefficient, setShowChangeCoefficient] = useState(false);
 
   return (
     <View>
@@ -222,5 +222,4 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
   );
 }
 
-export default SubjectPopup;
-
+export { SubjectPopup };

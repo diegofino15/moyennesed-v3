@@ -4,6 +4,7 @@ import { Preferences } from "./Preferences";
 import { capitalizeWords } from "../utils/Utils";
 import { CoefficientManager } from "../utils/CoefficientsManager";
 
+
 export class Account {
   id = 0;
   firstName = "";
