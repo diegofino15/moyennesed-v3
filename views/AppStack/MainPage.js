@@ -77,7 +77,7 @@ function MainPage({
         setUpdateScreen(!updateScreenRef.current);
         setRefreshing(false);
         if (manualRefreshingRef.current) {
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
           setManualRefreshing(false);
         }
       } else if (marksNeedUpdateRef.current.has(accountToUpdate.id) && marksNeedUpdateRef.current.get(accountToUpdate.id)) {
@@ -106,7 +106,7 @@ function MainPage({
         setUpdateScreen(!updateScreenRef.current);
         setRefreshing(false);
         if (manualRefreshingRef.current) {
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
           setManualRefreshing(false);
         }
       }
@@ -153,6 +153,7 @@ function MainPage({
 
   // Refresh marks
   function refresh() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     marksNeedUpdateRef.current.set(shownAccountRef.current.id, true); UserData.marksNeedUpdate.set(shownAccountRef.current.id, true);
     setManualRefreshing(true);
   }
