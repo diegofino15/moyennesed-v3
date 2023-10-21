@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { View, ScrollView, Text, Dimensions } from 'react-native';
+import { View, Text, Dimensions } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { BrainCircuitIcon, ChevronDownIcon, ChevronRight, ChevronUpIcon, GraduationCapIcon, MinusIcon, PlusIcon, Trash2Icon, WrenchIcon, XIcon } from 'lucide-react-native';
 import { PressableScale } from 'react-native-pressable-scale';
 import useState from 'react-usestateref';
@@ -216,7 +217,7 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
         {clickedOnMark ? markCard(shownSubjectRef.current.marks.find((mark) => mark.id == clickedOnMark), true) : null}
         {shownSubjectRef.current.marks.map((mark) => markCard(mark))}
         {shownSubjectRef.current.marks.length == 0 ? <Text style={[theme.fonts.labelLarge, { alignSelf: 'center', marginTop: 75 }]}>Aucune note pour l'instant</Text> : null}
-        <View style={{ height: 50 }} />
+        <View style={{ height: 70 }} />
       </ScrollView>
     </View>
   );

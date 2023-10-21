@@ -33,38 +33,32 @@ function setThemeData(theme) {
   
     titleLarge: {
       fontSize: 35.0,
-      fontWeight: 'bold',
       fontFamily: 'Montserrat-Medium',
       color: theme.colors.onBackground,
     },
     titleMedium: {
       fontSize: 25.0,
-      fontWeight: 'bold',
       fontFamily: 'Montserrat-Medium',
       color: theme.colors.onBackground,
     },
     titleSmall: {
       fontSize: 20.0,
-      fontWeight: 'bold',
       fontFamily: 'Montserrat-Medium',
       color: theme.colors.onBackground,
     },
   
     headlineLarge: {
       fontSize: 35.0,
-      fontWeight: 'bold',
       fontFamily: 'Bitter-Bold',
       color: theme.colors.onBackground,
     },
     headlineMedium: {
       fontSize: 20.0,
-      fontWeight: 'bold',
       fontFamily: 'Bitter-Medium',
       color: theme.colors.onBackground,
     },
     headlineSmall: {
       fontSize: 12.0,
-      fontWeight: 'bold',
       fontFamily: 'Bitter-Medium',
       color: theme.colors.onBackground,
     },

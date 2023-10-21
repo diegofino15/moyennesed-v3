@@ -2,16 +2,19 @@ import { useState, useEffect } from 'react';
 import { View, SafeAreaView, ScrollView, Text, Image, Switch, ActivityIndicator, Dimensions } from 'react-native';
 import { BrainCircuitIcon, BugIcon, Check, ChevronLeft, MailIcon, RefreshCcw, UserIcon, WrenchIcon, XIcon } from 'lucide-react-native';
 import { PressableScale } from 'react-native-pressable-scale';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import * as Haptics from "expo-haptics";
 
 import { CustomButton } from '../../components/global/custom_button';
 import { CustomSquareButton } from '../../components/appstack/custom_square_button';
 import { Separator } from '../../components/global/separator';
 import { CustomLink } from '../../components/global/custom_link';
+import { BottomSheet } from '../../components/appstack/bottom_sheet';
 import { UserData } from '../../core/UserData';
 import { Preferences } from '../../core/Preferences';
 import { CoefficientManager } from '../../utils/CoefficientsManager';
 import { UnavailableServers } from '../../components/global/unavailable_servers';
+import { BugReportPopup } from '../../components/global/bug_report_popup';
 
 
 function ProfilePage({
@@ -42,6 +45,19 @@ function ProfilePage({
   useEffect(() => {
     setUnavailableServers(UserData.unavailableServers);
   }, [UserData.unavailableServers, updateScreenRef.current]);
+
+  // Bug report popup
+  const [bugReportPopupOpen, setBugReportPopupOpen] = useState(false);
+  function renderBugReportPopup() {
+    if (!bugReportPopupOpen) { return null; }
+    return <BottomSheet
+      key={"mamamao"}
+      isOpen={bugReportPopupOpen}
+      onClose={() => setBugReportPopupOpen(false)}
+      snapPoints={["80%"]}
+      children={<BugReportPopup theme={theme}/>}
+    />;
+  }
   
   // Update screen
   const [_refresh, _setRefresh] = useState(false);
@@ -271,7 +287,8 @@ function ProfilePage({
             CoefficientManager.customSubjectCoefficients.clear();
             CoefficientManager.save();
             UserData.recalculateAllCoefficients();
-            setUpdateScreen(!updateScreenRef.current)
+            setUpdateScreen(!updateScreenRef.current);
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
           }} style={{
             marginTop: 5,
           }}>
@@ -308,7 +325,7 @@ function ProfilePage({
         }}>
           <Text style={[theme.fonts.labelLarge, { textAlign: 'justify' }]}>L'appli ne fonctionne pas bien ?</Text>
           <Text style={[theme.fonts.labelLarge, { textAlign: 'justify', marginBottom: 10 }]}>Envo{UserData.mainAccount.isParent ? "yez" : "ie"} un signalement de bug tout en restant complêtement anonyme.</Text>
-          <CustomLink title="Signaler un bug" link='https://www.ecoledirecte.com' icon={<BugIcon size={20} color={theme.colors.onSurfaceDisabled}/>} theme={theme}/>
+          <CustomLink title="Signaler un bug" onPress={() => setBugReportPopupOpen(true)} icon={<BugIcon size={20} color={theme.colors.onSurfaceDisabled}/>} theme={theme}/>
 
           <Separator theme={theme} style={{ marginTop: 10, marginBottom: 10, backgroundColor: theme.colors.background }}/>
 
@@ -336,6 +353,9 @@ function ProfilePage({
 
         {/* Extra space */}
         <View style={{ height: 20 }}></View>
+
+        {/* Bug report popup */}
+        {renderBugReportPopup()}
       </SafeAreaView>
     </ScrollView>
   );

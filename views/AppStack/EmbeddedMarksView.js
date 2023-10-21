@@ -63,7 +63,9 @@ function EmbeddedMarksView({
   const [_drawnSubjects, _setDrawnSubjects, drawnSubjectsRef] = useState(new Array());
 
   return (
-    <View>
+    <View style={{
+      marginHorizontal: 20,
+    }}>
       {/* Period chooser */}
       <View
         style={{
@@ -191,8 +193,8 @@ function EmbeddedMarksView({
           borderRadius: 1,
           backgroundColor: theme.colors.surface,
           position: 'absolute',
-          zIndex: -1,
-          height: '100%',
+          zIndex: -10,
+          height: "100%",
           left: -10,
         }}/>
 

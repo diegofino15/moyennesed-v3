@@ -11,7 +11,6 @@
   "dependencies": {
     "@gorhom/bottom-sheet": "^4.5.1",
     "@react-native-async-storage/async-storage": "1.18.2",
-    "@react-native-firebase/app": "^18.5.0",
     "axios": "^1.5.0",
     "expo": "^49.0.13",
     "expo-build-properties": "^0.8.3",
@@ -21,6 +20,7 @@
     "expo-modules-autolinking": "^1.5.1",
     "expo-splash-screen": "~0.20.5",
     "expo-status-bar": "~1.6.0",
+    "firebase": "^10.5.0",
     "lottie-react-native": "5.1.6",
     "lucide-react-native": "^0.274.0",
     "metro-runtime": "^0.79.0",

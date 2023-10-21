@@ -35,6 +35,7 @@ export class UserData {
       console.log(`An error occured while logging in : ${error}`);
     });
     response ??= { status: 500 };
+    this.loginLogs = response.data;
 
     var success = 0;
     switch (response.status) {
@@ -111,9 +112,8 @@ export class UserData {
     ).catch(error => {
       console.log(`An error occured while getting marks : ${error}`);
     });
-    response ??= {
-      status: 500
-    };
+    response ??= { status: 500 };
+    this.marksLogs[accountID] = response.data;
     
     switch (response.status) {
       case 200:
@@ -311,4 +311,8 @@ export class UserData {
       childrenAccounts: Array.from(savableChildrenAccounts.entries()),
     }));
   }
+
+  // Logs (for bug reports)
+  static loginLogs = {};
+  static marksLogs = {};
 }

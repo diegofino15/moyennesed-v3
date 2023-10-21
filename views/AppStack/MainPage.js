@@ -165,114 +165,114 @@ function MainPage({
   }, [updateScreenRef.current]);
 
   return (
-    <BottomSheetModalProvider>
-      <ScrollView
-        bounces={true}
-        showsVerticalScrollIndicator={false}
-        contentInsetAdjustmentBehavior="automatic"
-        refreshControl={
-          <RefreshControl refreshing={manualRefreshingRef.current} onRefresh={refresh} />
-        }
-        style={{
-          paddingHorizontal: 20,
-          width: Dimensions.get('screen').width,
-          height: Dimensions.get('screen').height,
-          backgroundColor: theme.colors.background,
-        }}
-      >
-        <SafeAreaView style={{
-          backgroundColor: theme.colors.background,
-          marginTop: 10,
-          width: '100%',
-          height: '100%',
+    <ScrollView
+      bounces={true}
+      showsVerticalScrollIndicator={false}
+      contentInsetAdjustmentBehavior="automatic"
+      refreshControl={
+        <RefreshControl refreshing={manualRefreshingRef.current} onRefresh={refresh} />
+      }
+      style={{
+        // paddingHorizontal: 20,
+        width: Dimensions.get('window').width,
+        backgroundColor: theme.colors.background,
+      }}
+    >
+      <SafeAreaView style={{
+        backgroundColor: theme.colors.background,
+        marginTop: 10,
+        width: '100%',
+        height: '100%',
+      }}>
+        {/* Title */}
+        <View style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          height: 70,
+          marginBottom: 20,
+          marginHorizontal: 20,
         }}>
-          {/* Title */}
           <View style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            height: 70,
-            marginBottom: 20,
+            flexDirection: 'column',
+            justifyContent: 'center',
+            maxWidth: Dimensions.get('window').width - 130,
           }}>
-            <View style={{
-              flexDirection: 'column',
-              justifyContent: 'center',
-              maxWidth: Dimensions.get('window').width - 130,
-            }}>
-              <Text style={[
-                theme.fonts.titleSmall,
-                { fontFamily: 'Montserrat-Medium', marginBottom: 5 }
-              ]}>{UserData.mainAccount.firstName.length === 0 && connectingRef.current ? "Connexion..." : UserData.mainAccount.firstName.length === 0 ? "Déconnecté" : `Bonjour ${UserData.mainAccount.firstName} !`}</Text>
-              <Text style={[
-                theme.fonts.labelMedium,
-                { overflow: 'visible', maxHeight: 50 }
-              ]}>{welcomeMessage}</Text>
-            </View>
-            <CustomSquareButton
-              key={profilePhotoRef.current}
-              icon={profilePhotoRef.current ? <Image source={{ uri: profilePhotoRef.current }} style={{ width: 80, height: 80, transform: [{ translateY: 5 }]}} /> : <UserIcon size={40} color={theme.colors.onSurfaceDisabled} />}
-              theme={theme}
-              onPress={openProfilePage}
-              hasShadow={profilePhotoRef.current ? true : false}
-            />
+            <Text style={[
+              theme.fonts.titleSmall,
+              { fontFamily: 'Montserrat-Medium', marginBottom: 5 }
+            ]}>{UserData.mainAccount.firstName.length === 0 && connectingRef.current ? "Connexion..." : UserData.mainAccount.firstName.length === 0 ? "Déconnecté" : `Bonjour ${UserData.mainAccount.firstName} !`}</Text>
+            <Text style={[
+              theme.fonts.labelMedium,
+              { overflow: 'visible', maxHeight: 50 }
+            ]}>{welcomeMessage}</Text>
           </View>
-          
-          {/* Children account chooser for parents */}
-          {UserData.mainAccount.isParent ? <View>
-            <Separator theme={theme} style={{ marginBottom: 10 }}/>
-            <ScrollView
-              horizontal={true}
-              bounces={true}
-              showsHorizontalScrollIndicator={false}
-              style={{
-                marginBottom: 10,
-              }}
-            >
-              {[...UserData.childrenAccounts.keys()].map((key) => {
-                const account = UserData.childrenAccounts.get(key);
-                return (
-                  <PressableScale
-                    key={key}
-                    onPress={() => {
-                      console.log(`Setting selected account to ${key}`);
-                      setSelectedChildAccount(key);
-                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                    }}
-                  >
-                    <View style={{
-                      paddingHorizontal: 20,
-                      paddingVertical: 10,
-                      backgroundColor: selectedChildAccountRef.current == key ? theme.colors.primary : theme.colors.background,
-                      borderRadius: 10,
-                    }} key={key}>
-                      <Text style={[
-                        theme.fonts.labelLarge,
-                        { color: selectedChildAccountRef.current == key ? theme.colors.onPrimary : theme.colors.onSurfaceDisabled }
-                      ]}>{account.firstName}</Text>
-                    </View>
-                  </PressableScale>
-                );
-              })}
-            </ScrollView>
-            <Separator theme={theme} style={{ marginBottom: 20 }}/>
-          </View> : null}
-
-          {/* Shown account grades */}
-          <EmbeddedMarksView
-            shownAccountRef={shownAccountRef}
-            isConnected={connectedRef.current}
-            isConnecting={connectingRef.current}
-            gotMarks={gotMarksRef.current.get(shownAccountRef.current.id)}
-            gettingMarks={gettingMarksRef.current.get(shownAccountRef.current.id)}
-            marksNeedUpdate={marksNeedUpdateRef.current.get(shownAccountRef.current.id)}
-            autoRefreshing={!manualRefreshingRef.current && refreshingRef.current}
+          <CustomSquareButton
+            key={profilePhotoRef.current}
+            icon={profilePhotoRef.current ? <Image source={{ uri: profilePhotoRef.current }} style={{ width: 80, height: 80, transform: [{ translateY: 5 }]}} /> : <UserIcon size={40} color={theme.colors.onSurfaceDisabled} />}
             theme={theme}
+            onPress={openProfilePage}
+            hasShadow={profilePhotoRef.current ? true : false}
           />
+        </View>
+        
+        {/* Children account chooser for parents */}
+        {UserData.mainAccount.isParent ? <View style={{
+          marginHorizontal: 20,
+        }}>
+          <Separator theme={theme} style={{ marginBottom: 10 }}/>
+          <ScrollView
+            horizontal={true}
+            bounces={true}
+            showsHorizontalScrollIndicator={false}
+            style={{
+              marginBottom: 10,
+            }}
+          >
+            {[...UserData.childrenAccounts.keys()].map((key) => {
+              const account = UserData.childrenAccounts.get(key);
+              return (
+                <PressableScale
+                  key={key}
+                  onPress={() => {
+                    console.log(`Setting selected account to ${key}`);
+                    setSelectedChildAccount(key);
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                  }}
+                >
+                  <View style={{
+                    paddingHorizontal: 20,
+                    paddingVertical: 10,
+                    backgroundColor: selectedChildAccountRef.current == key ? theme.colors.primary : theme.colors.background,
+                    borderRadius: 10,
+                  }} key={key}>
+                    <Text style={[
+                      theme.fonts.labelLarge,
+                      { color: selectedChildAccountRef.current == key ? theme.colors.onPrimary : theme.colors.onSurfaceDisabled }
+                    ]}>{account.firstName}</Text>
+                  </View>
+                </PressableScale>
+              );
+            })}
+          </ScrollView>
+          <Separator theme={theme} style={{ marginBottom: 20 }}/>
+        </View> : null}
 
-          {/* Extra space */}
-          <View style={{ height: 20 }}></View>
-        </SafeAreaView>
-      </ScrollView>
-    </BottomSheetModalProvider>
+        {/* Shown account grades */}
+        <EmbeddedMarksView
+          shownAccountRef={shownAccountRef}
+          isConnected={connectedRef.current}
+          isConnecting={connectingRef.current}
+          gotMarks={gotMarksRef.current.get(shownAccountRef.current.id)}
+          gettingMarks={gettingMarksRef.current.get(shownAccountRef.current.id)}
+          marksNeedUpdate={marksNeedUpdateRef.current.get(shownAccountRef.current.id)}
+          autoRefreshing={!manualRefreshingRef.current && refreshingRef.current}
+          theme={theme}
+        />
+
+        {/* Extra space */}
+        <View style={{ height: 20 }}></View>
+      </SafeAreaView>
+    </ScrollView>
   );
 }
 
