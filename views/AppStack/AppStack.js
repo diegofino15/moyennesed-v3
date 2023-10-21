@@ -11,6 +11,9 @@ import { useAppContext } from '../../utils/AppContext';
 function AppStack({ theme }) {
   // Main connection states
   const [_connected, setConnected, connectedRef] = useState(UserData.connected);
+  useEffect(() => {
+    if (connectedRef.current && !UserData.connected) { setConnected(UserData.connected); }
+  }, [UserData.connected]);
   const [_connecting, setConnecting, connectingRef] = useState(UserData.connecting);
   const [_triedToConnect, setTriedToConnect, triedToConnectRef] = useState(false);
 
@@ -26,7 +29,7 @@ function AppStack({ theme }) {
     setConnecting(true);
     setConnected(false);
     const successful = await UserData.refreshLogin();
-    setConnected(successful);
+    setConnected(successful == 1);
     setConnecting(false);
   }
 

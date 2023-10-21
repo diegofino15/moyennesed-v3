@@ -9,6 +9,7 @@ import { calculateAllAverages } from "./Period";
 export class UserData {
   static connected = false;
   static connecting = false;
+  static unavailableServers = false;
 
   static mainAccount = new Account();
   static childrenAccounts = new Map();
@@ -24,6 +25,7 @@ export class UserData {
     console.log(`Logging-in ${username}...`);
     this.connected = false;
     this.connecting = true;
+    this.unavailableServers = false;
 
     var response = await axios.post(
       `${this.API_URL}/v3/login.awp?v=4`,
@@ -34,7 +36,7 @@ export class UserData {
     });
     response ??= { status: 500 };
 
-    var success = false;
+    var success = 0;
     switch (response.status) {
       case 200:
         console.log("API request successful");
@@ -44,23 +46,26 @@ export class UserData {
             this.token = response.data.token;
             this.formatReceivedLoginData(response.data.data.accounts.at(0));
             await AsyncStorage.setItem("credentials", JSON.stringify({ username, password }));
-            success = true;
+            success = 1;
             break;
           case 505: // Wrong password
             console.log(`Couldn't connect, wrong password for ${username}`);
             break;
           default:
             console.log(`API responded with unknown code ${response.data.code}`);
+            success = -1;
             break;
         }
         break;
       default:
         console.log("API request failed");
+        success = -1;
         break;
     }
 
     this.connecting = false;
-    this.connected = success;
+    this.connected = success == 1;
+    this.unavailableServers = success == -1;
     return success;
   }
   static formatReceivedLoginData(jsonData) {
@@ -92,10 +97,12 @@ export class UserData {
     if (credentials) {
       return await this.login(credentials.username, credentials.password);
     }
-    return false;
+    return -1;
   }
 
   static async getMarks(accountID) {
+    this.unavailableServers = false;
+
     console.log(`Getting marks for account ${accountID}...`);
     var response = await axios.post(
       `${this.API_URL}/v3/eleves/${accountID}/notes.awp?verbe=get&v=4`,
@@ -122,14 +129,16 @@ export class UserData {
             if (reloginSuccessful) {
               return await this.getMarks(accountID);
             }
-            return null;
+            return 0;
           default:
             console.log(`API responded with unknown code ${response.data.code}`);
-            return null;
+            this.unavailableServers = true;
+            return -1;
         }
       default:
         console.log("API request failed");
-        return null;
+        this.unavailableServers = true;
+        return -1;
     }
   }
 
@@ -241,6 +250,7 @@ export class UserData {
         callback(cachePhoto);
       } else {
         console.log("Loading profile photo...");
+        if (!account.photoURL) { return null; }
         return await fetch(`https:${account.photoURL}`, { headers: { 'Referer': `http:${account.photoURL}`, 'Host': 'doc1.ecoledirecte.com' } })
         .then(async (response) => {
           const blob = await response.blob();

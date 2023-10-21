@@ -9,6 +9,8 @@ import { CustomInput } from '../components/authstack/custom_input';
 import { CustomButton } from '../components/global/custom_button';
 import { UserData } from '../core/UserData';
 import { useAppContext } from '../utils/AppContext';
+import { Separator } from '../components/global/separator';
+import { UnavailableServers } from '../components/global/unavailable_servers';
 
 
 function AuthStack({ theme }) {
@@ -16,6 +18,7 @@ function AuthStack({ theme }) {
   const [_username, setUsername, usernameRef] = useState('');
   const [_password, setPassword, passwordRef] = useState('');
   const [_connectionFailed, setConnectionFailed, connectionFailedRef] = useState(false);
+  const [_unavailableServers, setUnavailableServers, unavailableServersRef] = useState(false);
   const [_loggedIn, setLoggedIn, loggedInRef] = useState(false);
 
   // To change to AppStack once logged-in
@@ -34,12 +37,14 @@ function AuthStack({ theme }) {
       scrollViewRef.current?.scrollTo({x: Dimensions.get('window').width * (screenIndexRef.current + 1), animated: true});    
     } else {
       setConnectionFailed(false);
+      setUnavailableServers(false);
       const successful = await UserData.login(usernameRef.current, passwordRef.current);
       
-      setConnectionFailed(!successful);
-      setLoggedIn(successful);
+      setConnectionFailed(successful != 1);
+      setUnavailableServers(successful == -1);
+      setLoggedIn(successful == 1);
 
-      if (successful) {
+      if (successful == 1) {
         setScreenIndex(3);
         setTimeout(() => scrollViewRef.current?.scrollTo({x: Dimensions.get('window').width * screenIndexRef.current, animated: true}), 300);
       }
@@ -168,15 +173,20 @@ function AuthStack({ theme }) {
             secureTextEntry={true}
             theme={theme}
             style={{
-              marginBottom: 20,
-              borderColor: connectionFailedRef.current ? 'red' : theme.colors.surface,
+              borderColor: connectionFailedRef.current ? '#DA3633' : theme.colors.surface,
             }}
           />
+          {unavailableServersRef.current && <View style={{ marginTop: 20 }}>
+            <Separator theme={theme} style={{ marginBottom: 10 }}/>
+            <UnavailableServers theme={theme}/>
+            <Separator theme={theme} style={{ marginTop: 10 }}/>
+          </View>}
           <InfoCard
             title="🤔 Mot de passe oublié ?"
             description={`Pas de panique, ça arrive à tout le monde ! Cliquez ici pour réinitialiser votre mot de passe.`}
             onPress={openForgotPasswordURL}
             theme={theme}
+            style={{ marginTop: 20 }}
           />
         </View>
 

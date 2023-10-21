@@ -11,6 +11,7 @@ import { CustomLink } from '../../components/appstack/custom_link';
 import { UserData } from '../../core/UserData';
 import { Preferences } from '../../core/Preferences';
 import { CoefficientManager } from '../../utils/CoefficientsManager';
+import { UnavailableServers } from '../../components/global/unavailable_servers';
 
 
 function ProfilePage({
@@ -36,6 +37,11 @@ function ProfilePage({
   useEffect(() => {
     setAllowCustomCoefficients(Preferences.allowCustomCoefficients);
   }, [Preferences.allowCustomCoefficients, updateScreenRef.current]);
+
+  const [unavailableServers, setUnavailableServers] = useState(UserData.unavailableServers);
+  useEffect(() => {
+    setUnavailableServers(UserData.unavailableServers);
+  }, [UserData.unavailableServers, updateScreenRef.current]);
   
   // Update screen
   const [_refresh, _setRefresh] = useState(false);
@@ -181,6 +187,10 @@ function ProfilePage({
             </PressableScale>
           </View>
         </PressableScale>
+        {unavailableServers && <View>
+          <Separator theme={theme} style={{ marginBottom: 10 }}/>
+          <UnavailableServers style={{ marginBottom: 10 }} theme={theme}/>
+        </View>}
 
         <Separator theme={theme} style={{ marginBottom: 20 }}/>
 

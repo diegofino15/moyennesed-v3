@@ -58,7 +58,7 @@ function MainPage({
         gotMarksRef.current.set(accountToUpdate.id, false); UserData.gotMarksFor.set(accountToUpdate.id, false);
         
         const marks = await UserData.getMarks(accountToUpdate.id);
-        if (!marks) {
+        if (marks == -1) {
           gettingMarksRef.current.set(accountToUpdate.id, false);
           console.log(`Couldn't get marks for ${accountToUpdate.id}`);
           setRefreshing(false);
@@ -87,7 +87,7 @@ function MainPage({
         marksNeedUpdateRef.current.set(accountToUpdate.id, false); UserData.marksNeedUpdate.set(accountToUpdate.id, false);
         
         const marks = await UserData.getMarks(accountToUpdate.id);
-        if (!marks) {
+        if (marks == -1) {
           gotMarksRef.current.set(accountToUpdate.id, false); UserData.gotMarksFor.set(accountToUpdate.id, false);
           gettingMarksRef.current.set(accountToUpdate.id, false);
           console.log(`Couldn't get marks for ${accountToUpdate.id}`);
