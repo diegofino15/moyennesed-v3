@@ -24,24 +24,26 @@ function EmbeddedMarksView({
   const [_shownPeriod, setShownPeriod, shownPeriodRef] = useState({});
   const [_periodSelectorItems, _setPeriodSelectorItems, periodSelectorItemsRef] = useState([]);
   useEffect(() => {
-    if (gotMarks) {
-      var preferredSelectedPeriod = "";
-      if (shownPeriodRef.current.code) { preferredSelectedPeriod = shownPeriodRef.current.code; }
+    var preferredSelectedPeriod = "";
+    if (shownPeriodRef.current.code) { preferredSelectedPeriod = shownPeriodRef.current.code; }
 
-      shownPeriodRef.current = {};
-      shownAccountRef.current.periods.forEach((period, _key) => {
-        if (!period.isFinished && !shownPeriodRef.current.code) { setShownPeriod(period); }
-        if (period.code == preferredSelectedPeriod) {
-          setShownPeriod(period);
-        }
-      });
-      if (!shownPeriodRef.current.code) { setShownPeriod(shownAccountRef.periods.get(shownAccountRef.current.periods.keys().next().value)); }
-    
-      periodSelectorItemsRef.current.length = 0;
-      shownAccountRef.current.periods?.forEach((period, key) => {
-        periodSelectorItemsRef.current.push({ label: period.title, value: key });
-      });
+    shownPeriodRef.current = {};
+    shownAccountRef.current.periods.forEach((period, _key) => {
+      if (!period.isFinished && !shownPeriodRef.current.code) { setShownPeriod(period); }
+      if (period.code == preferredSelectedPeriod) {
+        setShownPeriod(period);
+      }
+    });
+    if (!shownPeriodRef.current.code) {
+      if ((shownAccountRef.periods?.size ?? 0) != 0) {
+        setShownPeriod(shownAccountRef.periods.get(shownAccountRef.current.periods.keys().next().value));
+      }
     }
+  
+    periodSelectorItemsRef.current.length = 0;
+    shownAccountRef.current.periods?.forEach((period, key) => {
+      periodSelectorItemsRef.current.push({ label: period.title, value: key });
+    });
   }, [shownAccountRef.current, gettingMarks, screenUpdatedRef.current]);
 
   // Update screen
