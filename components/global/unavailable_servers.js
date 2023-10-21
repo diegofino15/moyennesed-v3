@@ -1,7 +1,6 @@
 import { View, Text } from "react-native";
 
-import { Separator } from "./separator";
-import { CustomLink } from "../appstack/custom_link";
+import { CustomLink } from "./custom_link";
 
 
 function UnavailableServers({ style, theme }) {

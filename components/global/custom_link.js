@@ -3,7 +3,7 @@ import { PressableScale } from 'react-native-pressable-scale';
 import { LinkIcon, ArrowRightIcon } from 'lucide-react-native';
 
 
-function CustomLink({ title, link, theme }) {
+function CustomLink({ title, link, icon, theme }) {
   return <PressableScale style={{
     flexDirection: 'row',
     alignItems: 'center',
@@ -16,7 +16,7 @@ function CustomLink({ title, link, theme }) {
       Alert.alert("Une erreur est survenue lors du lancement de l'URL");
     }
   }}>
-    <LinkIcon size={20} color={theme.colors.onSurfaceDisabled}/>
+    {icon ? icon : <LinkIcon size={20} color={theme.colors.onSurfaceDisabled}/>}
     <Text style={theme.fonts.bodyLarge}>{title}</Text>
     <ArrowRightIcon size={30} color={theme.colors.onSurface}/>
   </PressableScale>;

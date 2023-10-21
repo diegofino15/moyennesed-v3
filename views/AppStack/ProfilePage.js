@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { View, SafeAreaView, ScrollView, Text, Image, Switch, ActivityIndicator, Dimensions } from 'react-native';
-import { ArrowRightIcon, BrainCircuitIcon, Check, ChevronLeft, RefreshCcw, UserIcon, WrenchIcon, X } from 'lucide-react-native';
+import { BrainCircuitIcon, BugIcon, Check, ChevronLeft, MailIcon, RefreshCcw, UserIcon, WrenchIcon, XIcon } from 'lucide-react-native';
 import { PressableScale } from 'react-native-pressable-scale';
 import * as Haptics from "expo-haptics";
 
 import { CustomButton } from '../../components/global/custom_button';
 import { CustomSquareButton } from '../../components/appstack/custom_square_button';
 import { Separator } from '../../components/global/separator';
-import { CustomLink } from '../../components/appstack/custom_link';
+import { CustomLink } from '../../components/global/custom_link';
 import { UserData } from '../../core/UserData';
 import { Preferences } from '../../core/Preferences';
 import { CoefficientManager } from '../../utils/CoefficientsManager';
@@ -158,7 +158,7 @@ function ProfilePage({
               ? null
               : connectedRef.current
                 ? <Check size={20} color='white' />
-                : <X size={20} color='white' />}
+                : <XIcon size={20} color='white' />}
               <Text style={[
                 theme.fonts.labelLarge,
                 { color: 'white', marginLeft: 10 }
@@ -303,21 +303,20 @@ function ProfilePage({
           backgroundColor: theme.colors.surface,
           borderRadius: 20,
           marginBottom: 20,
-          padding: 20,
+          paddingHorizontal: 20,
+          paddingVertical: 15,
         }}>
-          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify' }]}>[pas encore codé]</Text>
+          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify' }]}>L'appli ne fonctionne pas bien ?</Text>
+          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify', marginBottom: 10 }]}>Envo{UserData.mainAccount.isParent ? "yez" : "ie"} un signalement de bug tout en restant complêtement anonyme.</Text>
+          <CustomLink title="Signaler un bug" link='https://www.ecoledirecte.com' icon={<BugIcon size={20} color={theme.colors.onSurfaceDisabled}/>} theme={theme}/>
+
           <Separator theme={theme} style={{ marginTop: 10, marginBottom: 10, backgroundColor: theme.colors.background }}/>
-          <PressableScale style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }} onPress={() => {}}>
-            <Text style={theme.fonts.bodyLarge}>[pas encore codé]</Text>
-            <ArrowRightIcon size={30} color={theme.colors.onSurface} />
-          </PressableScale>
+
+          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify', marginBottom: 10 }]}>{UserData.mainAccount.isParent ? "Vous pouvez" : "Tu peux"} également contacter notre mail de support, pour expliquer plus en détail {UserData.mainAccount.isParent ? "votre" : "ton"} bug.</Text>
+          <CustomLink title="Envoyer un mail" link='mailto:moyennesed@gmail.com' icon={<MailIcon size={20} color={theme.colors.onSurfaceDisabled}/>} theme={theme}/>
         </View>
         
-        {/* Disconnect buttons */}
+        {/* Disconnect button */}
         <CustomButton
           theme={theme}
           title="Déconnexion"
