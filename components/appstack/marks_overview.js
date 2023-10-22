@@ -2,8 +2,8 @@ import useStateRef from "react-usestateref";
 import { View, ScrollView, Text, ActivityIndicator, Dimensions } from "react-native";
 import { AlertTriangleIcon, CheckCircle2Icon } from "lucide-react-native";
 
-import { MarkCard } from "../../components/appstack/mark_card";
-import { SubjectCard } from "../../components/appstack/subject_card";
+import { MarkCard } from "./mark_card";
+import { SubjectCard } from "./subject_card";
 import { formatAverage } from "../../utils/Utils";
 
 
