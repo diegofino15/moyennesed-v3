@@ -315,4 +315,6 @@ export class UserData {
   // Logs (for bug reports)
   static loginLogs = {};
   static marksLogs = {};
+  static lastBugReport = null;
+  static bugReportCooldown = 1000 * 60 * 60 * 24; // 1 day
 }

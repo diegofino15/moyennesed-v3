@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { View, Text, Dimensions } from 'react-native';
 import { CheckCircle2Icon, CircleIcon } from 'lucide-react-native';
 import { PressableScale } from 'react-native-pressable-scale';
@@ -15,22 +15,22 @@ function BugReportPopup({ theme }) {
     {
       'title': 'Problème de connexion',
       'subtitle': "L'application ne se connecte plus à mon compte",
-      'firebaseCode': 'New-Connection',
+      'firebaseCode': 'Connection',
     },
     {
       'title': 'Notes non récupérées',
       'subtitle': "Mon compte se connecte mais mes notes n'apparaissent pas",
-      'firebaseCode': 'Grades',
+      'firebaseCode': 'Marks',
     },
     {
       'title': 'Fausses moyennes / faux coefs',
       'subtitle': "Les 'devine coefficients' ne sont pas au top",
-      'firebaseCode': 'Averages',
+      'firebaseCode': 'Coefficients & Averages',
     },
     {
       'title': 'Problème graphique',
       'subtitle': "J'ai des problèmes d'affichages sur mon écran",
-      'firebaseCode': 'Graphical',
+      'firebaseCode': 'Graphics',
     },
     {
       'title': 'Autre',
@@ -38,6 +38,15 @@ function BugReportPopup({ theme }) {
       'firebaseCode': 'Other',
     }
   ];
+
+  const [canSendBugReport, setCanSendBugReport] = useState(true);
+  useEffect(() => {
+    if (Date.now() - (UserData.lastBugReport ?? 0) > UserData.bugReportCooldown) {
+      setCanSendBugReport(true);
+    } else {
+      setCanSendBugReport(false);
+    }
+  }, []);
 
   function anonymiseLoginLogs(loginLogs) {
     loginLogs.data.accounts[0].identifiant = "jacksparrow";
@@ -68,14 +77,17 @@ function BugReportPopup({ theme }) {
   }
 
   async function sendBugReport() {
-    const dataToSend = {
-      'date': new Date().toISOString(),
-      'bugType': possibleBugs[selectedPossibleBug].firebaseCode,
-      'loginLogs': anonymiseLoginLogs(UserData.loginLogs),
-      'marksLogs': UserData.marksLogs,
-    };
-    const collectionRef = firebase.firestore().collection(possibleBugs[selectedPossibleBug].firebaseCode);
-    await collectionRef.add(dataToSend);
+    if (canSendBugReport) {
+      const dataToSend = {
+        'date': new Date().toISOString(),
+        'bugType': possibleBugs[selectedPossibleBug].firebaseCode,
+        'loginLogs': anonymiseLoginLogs(UserData.loginLogs),
+        'marksLogs': UserData.marksLogs,
+      };
+      const collectionRef = firebase.firestore().collection(possibleBugs[selectedPossibleBug].firebaseCode);
+      await collectionRef.add(dataToSend);
+      UserData.lastBugReport = Date.now();
+    }
   }
   
   return (
@@ -109,11 +121,14 @@ function BugReportPopup({ theme }) {
       </PressableScale>)}
 
       <CustomButton
-        title="Envoyer"
-        confirmTitle={`Êtes-vous sûr${UserData.mainAccount.getSuffix()} ?`}
+        title={canSendBugReport ? "Envoyer" : "Bug déjà signalé"}
+        confirmTitle={canSendBugReport ? `Êtes-vous sûr${UserData.mainAccount.getSuffix()} ?` : null}
         confirmLabel={`Envo${UserData.mainAccount.isParent ? "yes" : "ies"}-en qu'un seul !`}
         onPress={sendBugReport}
-        style={{ marginTop: 20 }}
+        style={{
+          marginTop: 20,
+          backgroundColor: canSendBugReport ? theme.colors.primary : '#DA3633',
+        }}
         theme={theme}
       />
     </View>
