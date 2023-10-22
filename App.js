@@ -16,6 +16,9 @@ import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
 
 function App() {
+  // Keep splash screen visible while loading
+  SplashScreen.preventAutoHideAsync();
+
   // Decide to show AppStack or AuthStack
   const [loggedIn, setLoggedIn, loggedInRef] = useState(false);
   const [_loggedInLoaded, setLoggedInLoaded, loggedInLoadedRef] = useState(false);
@@ -42,26 +45,32 @@ function App() {
   const [_fontsLoaded, setFontsLoaded, fontsLoadedRef] = useState(false);
   const loadFonts = async () => { await useFonts(); };
   if (!fontsLoadedRef.current) {
-    loadFonts().then(() => { setFontsLoaded(true); });
+    loadFonts().then(async () => { setFontsLoaded(true); });
     return null;
   }
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      {/* Provider needed to update UI when logging-in/out */}
-      <AppContextProvider state={{ loggedIn, setLoggedIn }}>
+      {/* Top status bar */}
+      <StatusBar
+        translucent={true}
+        barStyle='dark-content'
+        backgroundColor='transparent'
+      />
+      <BottomSheetModalProvider>
         {/* Theme provider */}
         <PaperProvider theme={theme}>
-          <BottomSheetModalProvider>
-            {/* AuthStack / AppStack */}
-            {loggedInLoadedRef.current
-              ? loggedInRef.current
-                ? <AppStack theme={theme}/>
-                : <AuthStack theme={theme} />
-              : null}
-          </BottomSheetModalProvider>
+          {/* Provider needed to update UI when logging-in/out */}
+          <AppContextProvider state={{ loggedIn, setLoggedIn }}>
+          {/* AuthStack / AppStack */}
+          {loggedInLoadedRef.current
+            ? loggedInRef.current
+              ? <AppStack theme={theme}/>
+              : <AuthStack theme={theme} />
+            : null}
+          </AppContextProvider>
         </PaperProvider>
-      </AppContextProvider>
+      </BottomSheetModalProvider>
     </GestureHandlerRootView>
   );
 }

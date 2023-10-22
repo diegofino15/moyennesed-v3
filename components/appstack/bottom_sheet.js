@@ -31,6 +31,7 @@ function BottomSheet({ isOpen, onClose, children, backgroundStyle, snapPoints, s
   
   return (
     <BottomSheetModal
+      name='bottom_sheet'
       ref={bottomSheetModalRef}
       snapPoints={snapPoints}
       index={selectedSnapPoint}
