@@ -4,8 +4,8 @@ import { View } from "react-native";
 import { UserData } from "../../core/UserData";
 import { calculateAllAverages } from "../../core/Period";
 import { CoefficientManager } from "../../utils/CoefficientsManager";
-import { MarksOverview } from "../../components/appstack/marks_overview";
-import { PeriodSwitcher } from "../../components/appstack/period_switcher";
+import { MarksOverview } from "./MarksOverview";
+import { PeriodSwitcher } from "./PeriodSwitcher";
 
 
 function EmbeddedMarksView({

@@ -3,16 +3,16 @@ import { PaperProvider, useTheme } from 'react-native-paper';
 import useState from 'react-usestateref'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import * as SplashScreen from "expo-splash-screen";
 
-import { useFonts, setThemeData } from './hooks/useStyles';
-import { AuthStack } from './views/AuthStack';
-import { AppStack } from './views/AppStack/AppStack';
+import { useFonts, setThemeData } from './ui/hooks/useStyles';
+import { AuthStack } from './ui/views/AuthStack/AuthStack';
+import { AppStack } from './ui/views/AppStack/AppStack';
 import { UserData } from './core/UserData';
 import { Preferences } from './core/Preferences';
 import { AppContextProvider } from './utils/AppContext';
 import { CoefficientManager } from './utils/CoefficientsManager';
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
 
 function App() {

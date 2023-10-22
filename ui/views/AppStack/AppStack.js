@@ -4,8 +4,8 @@ import useState from 'react-usestateref'
 
 import { MainPage } from './MainPage';
 import { ProfilePage } from './ProfilePage';
-import { UserData } from '../../core/UserData';
-import { useAppContext } from '../../utils/AppContext';
+import { UserData } from '../../../core/UserData';
+import { useAppContext } from '../../../utils/AppContext';
 
 
 function AppStack({ theme }) {

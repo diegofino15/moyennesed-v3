@@ -3,8 +3,8 @@ import { View, Text, Dimensions } from 'react-native';
 import { ArrowRightIcon } from 'lucide-react-native';
 import { PressableScale } from 'react-native-pressable-scale';
 
-import { BottomSheet } from './bottom_sheet';
-import { SubjectPopup } from './subject_popup';
+import { BottomSheet } from './BottomSheet';
+import { SubjectPopup } from './SubjectPopup';
 import { getSubjectColor } from '../../utils/Colors';
 import { formatAverage, formatMark } from '../../utils/Utils';
 

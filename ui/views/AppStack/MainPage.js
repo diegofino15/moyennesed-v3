@@ -4,10 +4,10 @@ import { UserIcon } from "lucide-react-native";
 import useState from "react-usestateref";
 import * as Haptics from "expo-haptics";
 
-import { EmbeddedMarksView } from './EmbeddedMarksView';
-import { CustomSquareButton } from "../../components/appstack/custom_square_button";
-import { UserData } from "../../core/UserData";
-import { ChildSwitcher } from "../../components/appstack/child_switcher";
+import { EmbeddedMarksView } from '../../../components/appstack/EmbeddedMarksView';
+import { CustomSquareButton } from "../../../components/appstack/CustomSquareButton";
+import { ChildSwitcher } from "../../../components/appstack/ChildSwitcher";
+import { UserData } from "../../../core/UserData";
 
 
 function MainPage({

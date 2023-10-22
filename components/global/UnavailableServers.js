@@ -1,6 +1,6 @@
 import { View, Text, Platform } from "react-native";
 
-import { CustomLink } from "./custom_link";
+import { CustomLink } from "./CustomLink";
 
 
 function UnavailableServers({ style, theme }) {

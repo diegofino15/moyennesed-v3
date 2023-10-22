@@ -2,7 +2,7 @@ import { View, Text, FlatList } from 'react-native';
 import { PressableScale } from 'react-native-pressable-scale';
 import * as Haptics from "expo-haptics";
 
-import { Separator } from '../global/separator';
+import { Separator } from '../global/Separator';
 import { UserData } from '../../core/UserData';
 
 

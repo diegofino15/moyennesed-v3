@@ -6,8 +6,8 @@ import { PressableScale } from 'react-native-pressable-scale';
 import useState from 'react-usestateref';
 import * as Haptics from "expo-haptics";
 
-import { EmbeddedMarkCard } from './embedded_mark_card';
-import { Separator } from '../global/separator';
+import { EmbeddedMarkCard } from './EmbeddedMarkCard';
+import { Separator } from '../global/Separator';
 import { Preferences } from '../../core/Preferences';
 import { _sortMarks } from '../../core/Subject';
 import { formatAverage, formatCoefficient } from '../../utils/Utils';

@@ -2,19 +2,18 @@ import { useState, useEffect } from 'react';
 import { View, SafeAreaView, ScrollView, Text, Image, Switch, ActivityIndicator, Dimensions } from 'react-native';
 import { BrainCircuitIcon, BugIcon, Check, ChevronLeft, MailIcon, RefreshCcw, UserIcon, WrenchIcon, XIcon } from 'lucide-react-native';
 import { PressableScale } from 'react-native-pressable-scale';
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import * as Haptics from "expo-haptics";
 
-import { CustomButton } from '../../components/global/custom_button';
-import { CustomSquareButton } from '../../components/appstack/custom_square_button';
-import { Separator } from '../../components/global/separator';
-import { CustomLink } from '../../components/global/custom_link';
-import { BottomSheet } from '../../components/appstack/bottom_sheet';
-import { UserData } from '../../core/UserData';
-import { Preferences } from '../../core/Preferences';
-import { CoefficientManager } from '../../utils/CoefficientsManager';
-import { UnavailableServers } from '../../components/global/unavailable_servers';
-import { BugReportPopup } from '../../components/global/bug_report_popup';
+import { CustomButton } from '../../../components/global/CustomButton';
+import { CustomSquareButton } from '../../../components/appstack/CustomSquareButton';
+import { Separator } from '../../../components/global/Separator';
+import { CustomLink } from '../../../components/global/CustomLink';
+import { BottomSheet } from '../../../components/appstack/BottomSheet';
+import { UserData } from '../../../core/UserData';
+import { Preferences } from '../../../core/Preferences';
+import { CoefficientManager } from '../../../utils/CoefficientsManager';
+import { UnavailableServers } from '../../../components/global/UnavailableServers';
+import { BugReportPopup } from '../../../components/global/BugReportPopup';
 
 
 function ProfilePage({

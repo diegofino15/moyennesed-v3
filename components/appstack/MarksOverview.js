@@ -2,8 +2,8 @@ import useStateRef from "react-usestateref";
 import { View, ScrollView, Text, ActivityIndicator, Dimensions } from "react-native";
 import { AlertTriangleIcon, CheckCircle2Icon } from "lucide-react-native";
 
-import { MarkCard } from "./mark_card";
-import { SubjectCard } from "./subject_card";
+import { RecentMarkCard } from "./RecentMarkCard";
+import { SubjectCard } from "./SubjectCard";
 import { formatAverage } from "../../utils/Utils";
 
 
@@ -76,7 +76,7 @@ function MarksOverview({
                     style={{
                       paddingRight: (markKey == 9 || markKey == period.marks.length - 1) ? 0 : 20,
                   }}>
-                    <MarkCard
+                    <RecentMarkCard
                       mark={mark} 
                       subject={subject}
                       refreshAverages={refreshAverages}

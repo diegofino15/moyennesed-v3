@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { View, Text, Dimensions } from 'react-native';
 import { PressableScale } from 'react-native-pressable-scale';
 import * as Haptics from 'expo-haptics';
-import { CheckCircle2Icon, CheckCircleIcon, CheckIcon, CircleIcon } from 'lucide-react-native';
-import { CustomButton } from './custom_button';
+import { CheckCircle2Icon, CircleIcon } from 'lucide-react-native';
+import { CustomButton } from './CustomButton';
 import { UserData } from '../../core/UserData';
 import { firebase } from '../../utils/firebaseUtils';
 
