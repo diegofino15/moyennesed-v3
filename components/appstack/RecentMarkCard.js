@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { View, Text, Dimensions } from 'react-native';
-import { ChevronRight } from 'lucide-react-native';
+import { ChevronRightIcon } from 'lucide-react-native';
 import { PressableScale } from 'react-native-pressable-scale';
 
 import { BottomSheet } from './BottomSheet';
@@ -92,7 +92,7 @@ function RecentMarkCard({ mark, subject, refreshAverages, theme }) {
             overflow: 'hidden'
           }}>
             <Text style={theme.fonts.labelSmall} numberOfLines={1}>{subject.name}</Text>
-            {mark.subSubjectCode ? <View style={{ width: 25, alignItems: 'center' }}><ChevronRight size={15} color={theme.colors.onSurfaceDisabled}/></View> : null}
+            {mark.subSubjectCode ? <View style={{ width: 25, alignItems: 'center' }}><ChevronRightIcon size={15} color={theme.colors.onSurfaceDisabled}/></View> : null}
             {_subSubjectName ? <Text style={theme.fonts.labelSmall} numberOfLines={1}>{_subSubjectName}</Text> : null}
           </View>
         </View>

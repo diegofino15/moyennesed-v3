@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { View, Text, Dimensions } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { BrainCircuitIcon, ChevronDownIcon, ChevronRight, ChevronUpIcon, GraduationCapIcon, MinusIcon, PlusIcon, Trash2Icon, WrenchIcon, XIcon } from 'lucide-react-native';
+import { BrainCircuitIcon, ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, GraduationCapIcon, MinusIcon, PlusIcon, Trash2Icon, WrenchIcon, XIcon } from 'lucide-react-native';
 import { PressableScale } from 'react-native-pressable-scale';
 import useState from 'react-usestateref';
 import * as Haptics from "expo-haptics";
@@ -72,7 +72,7 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
             alignItems: 'center',
           }} numberOfLines={2}>
             {selectedSubSubject ? <Text style={theme.fonts.labelLarge}>{subject.name}</Text> : null}
-            {selectedSubSubject ? <View style={{ width: 25, alignItems: 'center' }}><ChevronRight size={15} color={theme.colors.onSurfaceDisabled}/></View> : null}
+            {selectedSubSubject ? <View style={{ width: 25, alignItems: 'center' }}><ChevronRightIcon size={15} color={theme.colors.onSurfaceDisabled}/></View> : null}
             <Text style={theme.fonts.bodyLarge}>{shownSubjectRef.current.name}</Text>
           </Text>
           

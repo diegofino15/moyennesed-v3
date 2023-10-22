@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native';
-import { ChevronRight } from 'lucide-react-native';
+import { ChevronRightIcon } from 'lucide-react-native';
 import { PressableScale } from 'react-native-pressable-scale';
 
 
@@ -31,7 +31,7 @@ function InfoCard({
           }}>
             {title}
           </Text>
-          {onPress ? <ChevronRight size={20} color={theme.colors.onSurface} /> : null}
+          {onPress ? <ChevronRightIcon size={20} color={theme.colors.onSurface} /> : null}
         </View>
         <Text style={{
           ...theme.fonts.labelMedium,

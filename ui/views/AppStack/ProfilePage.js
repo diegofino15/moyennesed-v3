@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { View, SafeAreaView, ScrollView, Text, Image, Switch, ActivityIndicator, Dimensions } from 'react-native';
-import { BrainCircuitIcon, BugIcon, Check, ChevronLeft, MailIcon, RefreshCcw, UserIcon, WrenchIcon, XIcon } from 'lucide-react-native';
+import { BrainCircuitIcon, BugIcon, CheckIcon, ChevronLeftIcon, MailIcon, RefreshCcwIcon, UserIcon, WrenchIcon, XIcon } from 'lucide-react-native';
 import { PressableScale } from 'react-native-pressable-scale';
 import * as Haptics from "expo-haptics";
 
@@ -89,7 +89,7 @@ function ProfilePage({
           marginBottom: 20,
         }}>
           <CustomSquareButton
-            icon={<ChevronLeft size={40} color={theme.colors.onSurfaceDisabled} />}
+            icon={<ChevronLeftIcon size={40} color={theme.colors.onSurfaceDisabled} />}
             theme={theme}
             onPress={closeProfilePage}
           />
@@ -172,7 +172,7 @@ function ProfilePage({
               {connectingRef.current
               ? null
               : connectedRef.current
-                ? <Check size={20} color='white' />
+                ? <CheckIcon size={20} color='white' />
                 : <XIcon size={20} color='white' />}
               <Text style={[
                 theme.fonts.labelLarge,
@@ -198,7 +198,7 @@ function ProfilePage({
             >
               {connectingRef.current
               ? <ActivityIndicator size={25} color='white' />
-              : <RefreshCcw size={25} color='white' />}
+              : <RefreshCcwIcon size={25} color='white' />}
             </PressableScale>
           </View>
         </PressableScale>

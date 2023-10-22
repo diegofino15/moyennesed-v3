@@ -1,6 +1,6 @@
 import { useRef, useEffect, } from 'react';
 import { View, SafeAreaView, ScrollView, ActivityIndicator, Dimensions, StyleSheet } from 'react-native';
-import { ChevronRight } from 'lucide-react-native';
+import { ChevronRightIcon } from 'lucide-react-native';
 import useState from 'react-usestateref'
 
 import { WelcomePage } from './WelcomePage';
@@ -93,7 +93,7 @@ function AuthStack({ theme }) {
           <CustomButton
             title={screenIndexRef.current < 2 ? "Continuer" : loggedIn ? "C'est parti !" : "Connexion"}
             onPress={buttonClick}
-            rightIcon={screenIndexRef.current < 2 ? <ChevronRight size={20} color={theme.colors.onPrimary} /> : null}
+            rightIcon={screenIndexRef.current < 2 ? <ChevronRightIcon size={20} color={theme.colors.onPrimary} /> : null}
             loadIcon={<ActivityIndicator size={20} color={theme.colors.onPrimary} />}
             overrideIsLoading={isConnectingRef.current}
             willLoad={screenIndexRef.current === 2}

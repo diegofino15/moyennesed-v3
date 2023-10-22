@@ -1,5 +1,5 @@
 import { View, Text, Dimensions } from 'react-native';
-import { ChevronDownIcon, ChevronRight, ChevronUpIcon, MinusIcon, PlusIcon, Trash2Icon, XIcon, WrenchIcon, BrainCircuitIcon } from 'lucide-react-native';
+import { ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, MinusIcon, PlusIcon, Trash2Icon, XIcon, WrenchIcon, BrainCircuitIcon } from 'lucide-react-native';
 import { PressableScale } from 'react-native-pressable-scale';
 import useState from 'react-usestateref';
 import * as Haptics from "expo-haptics";
@@ -71,7 +71,7 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, refreshAverages, 
           alignItems: 'center',
         }} numberOfLines={2}>
           {_subSubjectName ? <Text style={theme.fonts.labelLarge}>{_subSubjectName}</Text> : null}
-          {_subSubjectName ? <View style={{ width: 25, alignItems: 'center' }}><ChevronRight size={15} color={theme.colors.onSurfaceDisabled}/></View> : null}
+          {_subSubjectName ? <View style={{ width: 25, alignItems: 'center' }}><ChevronRightIcon size={15} color={theme.colors.onSurfaceDisabled}/></View> : null}
           <Text style={theme.fonts.bodyLarge} numberOfLines={2}>{mark.title}</Text>
         </Text>
         <View style={{
