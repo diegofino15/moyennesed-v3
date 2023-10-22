@@ -52,4 +52,3 @@ function BottomSheet({ isOpen, onClose, children, backgroundStyle, snapPoints, s
 }
 
 export { BottomSheet };
-

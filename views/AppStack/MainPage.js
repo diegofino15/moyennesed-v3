@@ -1,15 +1,13 @@
 import { useEffect } from "react";
 import { View, ScrollView, SafeAreaView, Text, Image, RefreshControl, Dimensions } from "react-native";
 import { UserIcon } from "lucide-react-native";
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { PressableScale } from "react-native-pressable-scale";
 import useState from "react-usestateref";
 import * as Haptics from "expo-haptics";
 
 import { EmbeddedMarksView } from './EmbeddedMarksView';
 import { CustomSquareButton } from "../../components/appstack/custom_square_button";
-import { Separator } from "../../components/global/separator";
 import { UserData } from "../../core/UserData";
+import { ChildSwitcher } from "../../components/appstack/child_switcher";
 
 
 function MainPage({
@@ -119,6 +117,13 @@ function MainPage({
     }
   }, [shownAccountRef.current, connectingRef.current, manualRefreshingRef.current]);
 
+  // Refresh marks
+  function refresh() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    marksNeedUpdateRef.current.set(shownAccountRef.current.id, true); UserData.marksNeedUpdate.set(shownAccountRef.current.id, true);
+    setManualRefreshing(true);
+  }
+
   // Open profile page
   async function openProfilePage() { scrollViewRef.current?.scrollTo({ x: Dimensions.get('window').width, animated: true }); }
 
@@ -150,13 +155,6 @@ function MainPage({
     }
     setWelcomeMessage(welcomeMessages[Math.floor(Math.random() * welcomeMessages.length)]);
   }, []);
-
-  // Refresh marks
-  function refresh() {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    marksNeedUpdateRef.current.set(shownAccountRef.current.id, true); UserData.marksNeedUpdate.set(shownAccountRef.current.id, true);
-    setManualRefreshing(true);
-  }
 
   // Update screen
   const [_refresh, _setRefresh] = useState(false);
@@ -216,46 +214,11 @@ function MainPage({
         </View>
         
         {/* Children account chooser for parents */}
-        {UserData.mainAccount.isParent ? <View style={{
-          marginHorizontal: 20,
-        }}>
-          <Separator theme={theme} style={{ marginBottom: 10 }}/>
-          <ScrollView
-            horizontal={true}
-            bounces={true}
-            showsHorizontalScrollIndicator={false}
-            style={{
-              marginBottom: 10,
-            }}
-          >
-            {[...UserData.childrenAccounts.keys()].map((key) => {
-              const account = UserData.childrenAccounts.get(key);
-              return (
-                <PressableScale
-                  key={key}
-                  onPress={() => {
-                    console.log(`Setting selected account to ${key}`);
-                    setSelectedChildAccount(key);
-                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                  }}
-                >
-                  <View style={{
-                    paddingHorizontal: 20,
-                    paddingVertical: 10,
-                    backgroundColor: selectedChildAccountRef.current == key ? theme.colors.primary : theme.colors.background,
-                    borderRadius: 10,
-                  }} key={key}>
-                    <Text style={[
-                      theme.fonts.labelLarge,
-                      { color: selectedChildAccountRef.current == key ? theme.colors.onPrimary : theme.colors.onSurfaceDisabled }
-                    ]}>{account.firstName}</Text>
-                  </View>
-                </PressableScale>
-              );
-            })}
-          </ScrollView>
-          <Separator theme={theme} style={{ marginBottom: 20 }}/>
-        </View> : null}
+        {UserData.mainAccount.isParent ? <ChildSwitcher
+          selectedChildAccount={selectedChildAccountRef.current}
+          setSelectedChildAccount={setSelectedChildAccount}
+          theme={theme}
+        /> : null}
 
         {/* Shown account grades */}
         <EmbeddedMarksView
@@ -263,7 +226,6 @@ function MainPage({
           isConnected={connectedRef.current}
           isConnecting={connectingRef.current}
           gotMarks={gotMarksRef.current.get(shownAccountRef.current.id)}
-          gettingMarks={gettingMarksRef.current.get(shownAccountRef.current.id)}
           marksNeedUpdate={marksNeedUpdateRef.current.get(shownAccountRef.current.id)}
           autoRefreshing={!manualRefreshingRef.current && refreshingRef.current}
           theme={theme}

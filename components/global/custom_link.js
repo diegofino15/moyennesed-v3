@@ -3,12 +3,12 @@ import { PressableScale } from 'react-native-pressable-scale';
 import { LinkIcon, ArrowRightIcon } from 'lucide-react-native';
 
 
-function CustomLink({ title, link, onPress, icon, theme }) {
-  return <PressableScale style={{
+function CustomLink({ title, link, onPress, icon, style, theme }) {
+  return <PressableScale style={[{
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-  }} onPress={async () => {
+  }, style]} onPress={async () => {
     if (link) {
       const supported = await Linking.canOpenURL(link);
       if (supported) {

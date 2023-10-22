@@ -296,24 +296,6 @@ function ProfilePage({
           </PressableScale>
         </View>
 
-        {/* Informations */}
-        <Text style={[theme.fonts.titleSmall, { marginBottom: 10 }]}>Informations</Text>
-        <View style={{
-          backgroundColor: theme.colors.surface,
-          borderRadius: 20,
-          marginBottom: 20,
-          paddingHorizontal: 20,
-          paddingVertical: 15,
-        }}>
-          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify', marginBottom: 10 }]}>MoyennesED est une application non-officielle, elle ne peut être tenue responsable de problèmes potentiels liés à son utilisation.</Text>
-          <CustomLink title="Site officiel ÉcoleDirecte" link='https://www.ecoledirecte.com' theme={theme}/>
-
-          <Separator theme={theme} style={{ marginTop: 10, marginBottom: 10, backgroundColor: theme.colors.background }}/>
-
-          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify', marginBottom: 10 }]}>Vos données sont uniquement stockées sur votre appareil, vos identifiants de connexion restent entre vous et ÉcoleDirecte.</Text>
-          <CustomLink title="Confidentialité" link='https://moyennesed.my.to/privacy-policy.html' theme={theme}/>
-        </View>
-
         {/* Bug report */}
         <Text style={[theme.fonts.titleSmall, { marginBottom: 10 }]}>Un problème ?</Text>
         <View style={{
@@ -326,11 +308,22 @@ function ProfilePage({
           <Text style={[theme.fonts.labelLarge, { textAlign: 'justify' }]}>L'appli ne fonctionne pas bien ?</Text>
           <Text style={[theme.fonts.labelLarge, { textAlign: 'justify', marginBottom: 10 }]}>Envo{UserData.mainAccount.isParent ? "yez" : "ie"} un signalement de bug tout en restant complêtement anonyme.</Text>
           <CustomLink title="Signaler un bug" onPress={() => setBugReportPopupOpen(true)} icon={<BugIcon size={20} color={theme.colors.onSurfaceDisabled}/>} theme={theme}/>
-
-          <Separator theme={theme} style={{ marginTop: 10, marginBottom: 10, backgroundColor: theme.colors.background }}/>
-
-          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify', marginBottom: 10 }]}>{UserData.mainAccount.isParent ? "Vous pouvez" : "Tu peux"} également contacter notre mail de support, pour expliquer plus en détail {UserData.mainAccount.isParent ? "votre" : "ton"} bug.</Text>
+          <Text style={[theme.fonts.labelLarge, { alignSelf: 'center' }]}>ou</Text>
           <CustomLink title="Envoyer un mail" link='mailto:moyennesed@gmail.com' icon={<MailIcon size={20} color={theme.colors.onSurfaceDisabled}/>} theme={theme}/>
+        </View>
+
+        {/* Informations */}
+        <Text style={[theme.fonts.titleSmall, { marginBottom: 10 }]}>Informations</Text>
+        <View style={{
+          backgroundColor: theme.colors.surface,
+          borderRadius: 20,
+          marginBottom: 20,
+          paddingHorizontal: 20,
+          paddingVertical: 15,
+        }}>
+          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify', marginBottom: 10 }]}>MoyennesED est une application non-officielle, elle ne peut être tenue responsable de problèmes potentiels liés à son utilisation.</Text>
+          <CustomLink title="Site officiel ÉcoleDirecte" link='https://www.ecoledirecte.com' style={{ marginBottom: 10 }} theme={theme}/>
+          <CustomLink title="Confidentialité" link='https://moyennesed.my.to/privacy-policy.html' theme={theme}/>
         </View>
         
         {/* Disconnect button */}
