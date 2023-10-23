@@ -16,16 +16,13 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "me.diegof.moyennesed",
-      "googleServicesFile": "./GoogleService-Info.plist"
+      "bundleIdentifier": "me.diegof.moyennesed"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      },
-      "package": "me.diegof.moyennesed",
-      "googleServicesFile": "google-services.json"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"

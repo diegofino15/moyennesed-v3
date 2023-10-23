@@ -36,7 +36,6 @@ yarn-error.*
 
 # firebase
 utils/firebaseUtils.js
-android/
-google-services.json
-ios/
-GoogleService-Info.plist
+
+# builds
+*.ipa

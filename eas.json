@@ -1,16 +1,12 @@
 {
   "cli": {
-    "version": ">= 5.4.0"
+    "version": ">= 5.4.0",
+    "promptToConfigurePushNotifications": false
   },
   "build": {
     "development": {
-      "distribution": "internal",
-      "android": {
-        "gradleCommand": ":app:assembleDebug"
-      },
-      "ios": {
-        "buildConfiguration": "Debug"
-      }
+      "developmentClient": true,
+      "distribution": "internal"
     },
     "preview": {
       "distribution": "internal"
