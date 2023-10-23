@@ -6,12 +6,16 @@
   "build": {
     "development": {
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "node": "18.18.2"
     },
     "preview": {
-      "distribution": "internal"
+      "distribution": "internal",
+      "node": "18.18.2"
     },
-    "production": {}
+    "production": {
+      "node": "18.18.2"
+    }
   },
   "submit": {
     "production": {}
