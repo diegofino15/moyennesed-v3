@@ -38,7 +38,7 @@ function getFormattedMark(jsonData) {
     "coefficient": coefficient,
     "coefficientType": coefficientType,
 
-    "periodCode": jsonData.codePeriode,
+    "periodCode": jsonData.codePeriode.substring(0, 4),
     "subjectCode": jsonData.codeMatiere,
     "subSubjectCode": jsonData.codeSousMatiere,
   };

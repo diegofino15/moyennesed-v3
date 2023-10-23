@@ -1,13 +1,11 @@
 import { View, Text, Platform } from "react-native";
 
-import { CustomLink } from "./CustomLink";
-
 
 function UnavailableServers({ style, theme }) {
   return (
     <View style={style}>
-      <Text style={[theme.fonts.labelLarge, { color: '#DA3633', textAlign: 'justify', marginBottom: 10 }]}>Les serveurs sont temporairement indisponibles, veuillez réessayer plus tard ou télécharger la prochaine mise à jour.</Text>
-      <CustomLink title={Platform.OS == "ios" ? "AppStore" : "PlayStore"} link={Platform.OS == "ios" ? 'https://apps.apple.com/fr/app/moyennesed/id6446418445' : ''} theme={theme}/>
+      <Text style={[theme.fonts.labelLarge, { color: '#DA3633', textAlign: 'justify', marginBottom: 10 }]}>Vérifiez votre connexion internet.</Text>
+      <Text style={[theme.fonts.labelLarge, { color: '#DA3633', textAlign: 'justify', marginBottom: 10 }]}>Les serveurs sont temporairement indisponibles, veuillez rééssayer plus tard ou télécharger la dernière mise à jour sur {Platform.OS == "ios" ? "l'AppStore" : "le PlayStore"}.</Text>
     </View>
   );
 }

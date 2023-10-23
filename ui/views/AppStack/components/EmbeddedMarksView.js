@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View } from "react-native";
+import { Dimensions, View } from "react-native";
 
 import { PeriodSwitcher } from "./PeriodSwitcher";
 import { MarksOverview } from "./MarksOverview";
@@ -40,7 +40,9 @@ function EmbeddedMarksView({
     return <BottomSheet
       isOpen={infoPopupOpen}
       onClose={() => setInfoPopupOpen(false)}
-      snapPoints={["40%"]}
+      snapPoints={[
+        325 / Dimensions.get('screen').height * 100 + "%",
+      ]}
       theme={theme}
       children={<InformationsPopup theme={theme}/>}
     />;
@@ -62,7 +64,7 @@ function EmbeddedMarksView({
         period={[...shownAccountRef.current.periods.values()].at(shownPeriod) ?? {}}
         accoundID={shownAccountRef.current.id}
         loading={autoRefreshing || isConnecting}
-        redCheck={!isConnected || marksNeedUpdate || !gotMarks}
+        redCheck={!isConnected || !gotMarks || marksNeedUpdate}
         refreshAverages={refreshAverages}
         setInfoPopupOpen={setInfoPopupOpen}
         theme={theme}

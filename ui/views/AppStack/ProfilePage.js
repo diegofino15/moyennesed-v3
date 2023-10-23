@@ -52,7 +52,9 @@ function ProfilePage({
     return <BottomSheet
       isOpen={bugReportPopupOpen}
       onClose={() => setBugReportPopupOpen(false)}
-      snapPoints={["90%"]}
+      snapPoints={[
+        650 / Dimensions.get('screen').height * 100 + "%",
+      ]}
       children={<BugReportPopup theme={theme}/>}
     />;
   }

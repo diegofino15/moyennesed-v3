@@ -15,9 +15,10 @@ import { AppContextProvider } from './utils/AppContext';
 import { CoefficientManager } from './core/CoefficientsManager';
 
 
+// Keep splash screen visible while loading
+SplashScreen.preventAutoHideAsync();
+
 function App() {
-  // Keep splash screen visible while loading
-  SplashScreen.preventAutoHideAsync();
 
   // Decide to show AppStack or AuthStack
   const [loggedIn, setLoggedIn, loggedInRef] = useState(false);
