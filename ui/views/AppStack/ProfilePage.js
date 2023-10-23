@@ -11,7 +11,7 @@ import { CustomLink } from '../global_components/CustomLink';
 import { BottomSheet } from '../global_components/BottomSheet';
 import { UserData } from '../../../core/UserData';
 import { Preferences } from '../../../core/Preferences';
-import { CoefficientManager } from '../../../utils/CoefficientsManager';
+import { CoefficientManager } from '../../../core/CoefficientsManager';
 import { UnavailableServers } from '../global_components/UnavailableServers';
 import { BugReportPopup } from './components/BugReportPopup';
 

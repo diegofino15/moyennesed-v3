@@ -10,8 +10,8 @@ import { EmbeddedMarkCard } from './EmbeddedMarkCard';
 import { Separator } from '../../global_components/Separator';
 import { Preferences } from '../../../../core/Preferences';
 import { _sortMarks } from '../../../../core/Subject';
+import { CoefficientManager } from '../../../../core/CoefficientsManager';
 import { formatAverage, formatCoefficient } from '../../../../utils/Utils';
-import { CoefficientManager } from '../../../../utils/CoefficientsManager';
 import { getSubjectColor } from '../../../../utils/Colors';
 
 

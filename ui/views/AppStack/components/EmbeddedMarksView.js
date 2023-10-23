@@ -7,7 +7,7 @@ import { BottomSheet } from "../../global_components/BottomSheet";
 import { InformationsPopup } from "./InformationsPopup";
 import { UserData } from "../../../../core/UserData";
 import { calculateAllAverages } from "../../../../core/Period";
-import { CoefficientManager } from "../../../../utils/CoefficientsManager";
+import { CoefficientManager } from "../../../../core/CoefficientsManager";
 
 
 function EmbeddedMarksView({

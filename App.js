@@ -12,7 +12,7 @@ import { AppStack } from './ui/views/appstack/AppStack';
 import { UserData } from './core/UserData';
 import { Preferences } from './core/Preferences';
 import { AppContextProvider } from './utils/AppContext';
-import { CoefficientManager } from './utils/CoefficientsManager';
+import { CoefficientManager } from './core/CoefficientsManager';
 
 
 function App() {

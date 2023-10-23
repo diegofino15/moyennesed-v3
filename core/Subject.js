@@ -1,5 +1,5 @@
 import { Preferences } from "./Preferences";
-import { CoefficientManager } from "../utils/CoefficientsManager";
+import { CoefficientManager } from "./CoefficientsManager";
 import { capitalizeWords } from "../utils/Utils";
 
 

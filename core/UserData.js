@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from 'axios';
 import { Account } from "./Account";
 import { Preferences } from "./Preferences";
-import { CoefficientManager } from "../utils/CoefficientsManager";
+import { CoefficientManager } from "./CoefficientsManager";
 import { calculateAllAverages } from "./Period";
 
 

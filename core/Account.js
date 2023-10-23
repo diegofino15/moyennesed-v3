@@ -2,7 +2,7 @@ import { getFormattedPeriod, addMark, sortAllMarks, calculateAllAverages, getCac
 import { getFormattedMark } from "./Mark";
 import { Preferences } from "./Preferences";
 import { capitalizeWords } from "../utils/Utils";
-import { CoefficientManager } from "../utils/CoefficientsManager";
+import { CoefficientManager } from "./CoefficientsManager";
 
 
 export class Account {

@@ -6,8 +6,8 @@ import * as Haptics from "expo-haptics";
 
 import { Preferences } from '../../../../core/Preferences';
 import { _sortMarks } from '../../../../core/Subject';
+import { CoefficientManager } from '../../../../core/CoefficientsManager';
 import { formatCoefficient, formatDate, formatDate2, formatMark } from '../../../../utils/Utils';
-import { CoefficientManager } from '../../../../utils/CoefficientsManager';
 import { getSubjectColor } from '../../../../utils/Colors';
 
 
