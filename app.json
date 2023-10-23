@@ -16,7 +16,8 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "me.diegof.moyennesed"
+      "bundleIdentifier": "me.diegof.moyennesed",
+      "buildNumber": "2"
     },
     "android": {
       "adaptiveIcon": {
