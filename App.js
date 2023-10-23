@@ -19,7 +19,6 @@ import { CoefficientManager } from './core/CoefficientsManager';
 SplashScreen.preventAutoHideAsync();
 
 function App() {
-
   // Decide to show AppStack or AuthStack
   const [loggedIn, setLoggedIn, loggedInRef] = useState(false);
   const [_loggedInLoaded, setLoggedInLoaded, loggedInLoadedRef] = useState(false);
