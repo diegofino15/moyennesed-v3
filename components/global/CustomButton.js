@@ -50,14 +50,14 @@ function CustomButton({ title, confirmTitle, confirmLabel, onPress, theme, leftI
             <View style={{
               alignItems: 'center'
             }}>
-              <Text style={{
-                ...theme.fonts.bodyLarge,
-                color: theme.colors.onPrimary,
-                ...textStyle,
-              }}>
+              <Text style={[
+                theme.fonts.bodyLarge,
+                { color: theme.colors.onPrimary },
+                textStyle,
+              ]}>
                 {waitingForConfirmation ? confirmTitle : title}
               </Text>
-              {waitingForConfirmation && confirmLabel ? <Text style={[theme.fonts.labelSmall, { color: theme.colors.onPrimary }]}>{confirmLabel}</Text> : null}
+              {waitingForConfirmation && confirmLabel ? <Text style={[theme.fonts.labelSmall, { color: theme.colors.onPrimary }, textStyle]}>{confirmLabel}</Text> : null}
             </View>
             {rightIcon ? rightIcon : null}
           </View>

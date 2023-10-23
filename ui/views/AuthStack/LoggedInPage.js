@@ -31,7 +31,7 @@ function LoggedInPage({ pageStyle, theme }) {
       <Text style={[
         theme.fonts.labelLarge,
         { marginBottom: 30 }
-      ]}>Vous êtes connecté{UserData.mainAccount.getSuffix()} en tant que <Text style={[theme.fonts.labelLarge, { fontFamily: 'Montserrat-Bold' }]}>compte {UserData.mainAccount.isParent ? "parent" : "éléve"}</Text>.</Text>
+      ]}>Vous êtes connecté{UserData.mainAccount.getSuffix()} en tant que <Text style={[theme.fonts.labelLarge, { fontFamily: 'Montserrat-Bold' }]}>compte {UserData.mainAccount.isParent ? "parent" : "élève"}</Text>.</Text>
     
       {/* Animation */}
       <View style={{

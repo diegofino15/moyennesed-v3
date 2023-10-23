@@ -78,7 +78,7 @@ function LoginPage({ isConnecting, setIsConnecting, setLoggedIn, pageStyle, them
       </View>}
       <InfoCard
         title="🤔 Mot de passe oublié ?"
-        description={`Pas de panique, ça arrive à tout le monde ! Cliquez ici pour réinitialiser votre mot de passe.`}
+        description={`Ça arrive à tout le monde ! Cliquez ici pour réinitialiser votre mot de passe.`}
         onPress={openForgotPasswordURL}
         theme={theme}
         style={{ marginTop: 20 }}

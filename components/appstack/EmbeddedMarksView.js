@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { View } from "react-native";
 
+import { PeriodSwitcher } from "./PeriodSwitcher";
+import { MarksOverview } from "./MarksOverview";
+import { BottomSheet } from "./BottomSheet";
+import { InformationsPopup } from "./InformationsPopup";
 import { UserData } from "../../core/UserData";
 import { calculateAllAverages } from "../../core/Period";
 import { CoefficientManager } from "../../utils/CoefficientsManager";
-import { MarksOverview } from "./MarksOverview";
-import { PeriodSwitcher } from "./PeriodSwitcher";
 
 
 function EmbeddedMarksView({
@@ -28,7 +30,21 @@ function EmbeddedMarksView({
     updateScreen();
   }
 
+  // Which period is currently shown
   const [shownPeriod, setShownPeriod] = useState(0);
+
+  // Informations popup
+  const [infoPopupOpen, setInfoPopupOpen] = useState(false);
+  function renderInfosPopup() {
+    if (!infoPopupOpen) { return null; }
+    return <BottomSheet
+      isOpen={infoPopupOpen}
+      onClose={() => setInfoPopupOpen(false)}
+      snapPoints={["40%"]}
+      theme={theme}
+      children={<InformationsPopup theme={theme}/>}
+    />;
+  }
 
   return (
     <View style={{
@@ -48,8 +64,11 @@ function EmbeddedMarksView({
         loading={autoRefreshing || isConnecting}
         redCheck={!isConnected || marksNeedUpdate || !gotMarks}
         refreshAverages={refreshAverages}
+        setInfoPopupOpen={setInfoPopupOpen}
         theme={theme}
       />
+
+      {renderInfosPopup()}
     </View>
   );
 }

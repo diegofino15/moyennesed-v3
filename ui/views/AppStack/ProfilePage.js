@@ -50,10 +50,9 @@ function ProfilePage({
   function renderBugReportPopup() {
     if (!bugReportPopupOpen) { return null; }
     return <BottomSheet
-      key={"mamamao"}
       isOpen={bugReportPopupOpen}
       onClose={() => setBugReportPopupOpen(false)}
-      snapPoints={["80%"]}
+      snapPoints={["90%"]}
       children={<BugReportPopup theme={theme}/>}
     />;
   }
@@ -330,6 +329,7 @@ function ProfilePage({
           theme={theme}
           title="Déconnexion"
           confirmTitle={`Êtes vous sûr${UserData.mainAccount.getSuffix()} ?`}
+          confirmLabel="Cela effacera toutes vos préférences"
           onPress={logout}
           willLoad={true}
           loadIcon={<ActivityIndicator size={20} color='#DA3633'/>}

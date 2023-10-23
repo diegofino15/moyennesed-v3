@@ -1,10 +1,11 @@
 import useStateRef from "react-usestateref";
 import { View, ScrollView, Text, ActivityIndicator, Dimensions } from "react-native";
-import { AlertTriangleIcon, CheckCircle2Icon } from "lucide-react-native";
+import { AlertTriangleIcon, CheckCircle2Icon, HelpCircleIcon, InfoIcon } from "lucide-react-native";
 
 import { RecentMarkCard } from "./RecentMarkCard";
 import { SubjectCard } from "./SubjectCard";
 import { formatAverage } from "../../utils/Utils";
+import { PressableScale } from "react-native-pressable-scale";
 
 
 function MarksOverview({
@@ -13,6 +14,7 @@ function MarksOverview({
   loading,
   redCheck,
   refreshAverages,
+  setInfoPopupOpen,
   theme
 }) {
   // Work with subject groups
@@ -48,13 +50,23 @@ function MarksOverview({
           </View>
           
           <Text style={theme.fonts.headlineLarge}>{formatAverage(period.average)}</Text>
-          <Text style={[theme.fonts.labelMedium, { marginBottom: 5 }]}>MOYENNE GÉNÉRALE</Text>
+          <Text style={[theme.fonts.labelMedium, { marginBottom: 5, marginRight: 5 }]}>MOYENNE GÉNÉRALE</Text>
+          
           {period.classAverage ? <View style={{ flexDirection: 'row' }}>
             <Text style={theme.fonts.labelSmall}>Classe : </Text>
             <Text style={[theme.fonts.headlineSmall, { color: theme.colors.onSurfaceDisabled, fontSize: 13 }]}>{formatAverage(period.classAverage)}</Text>
           </View> : null}
           
-          <Text style={[theme.fonts.bodyLarge, { alignSelf: 'flex-start', marginTop: 30, marginBottom: 10 }]}>Dernières notes</Text>
+          <View style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            width: '100%',
+            marginTop: 30,
+            marginBottom: 10,
+          }}>
+            <Text style={theme.fonts.bodyLarge}>Dernières notes</Text>
+            <PressableScale onPress={() => setInfoPopupOpen(true)}><HelpCircleIcon size={20} color={theme.colors.onSurfaceDisabled}/></PressableScale>
+          </View>
           <View style={{
             height: 92,
             marginBottom: 8,

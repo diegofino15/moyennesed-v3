@@ -40,6 +40,7 @@ function BugReportPopup({ theme }) {
   ];
 
   const [canSendBugReport, setCanSendBugReport] = useState(true);
+  const [sendingBugReport, setSendingBugReport] = useState(false);
   useEffect(() => {
     if (Date.now() - (UserData.lastBugReport ?? 0) > UserData.bugReportCooldown) {
       setCanSendBugReport(true);
@@ -77,7 +78,9 @@ function BugReportPopup({ theme }) {
   }
 
   async function sendBugReport() {
-    if (canSendBugReport) {
+    if (Date.now() - (UserData.lastBugReport ?? 0) > UserData.bugReportCooldown) {
+      console.log("Sending bug report...");
+      setSendingBugReport(true);
       const dataToSend = {
         'date': new Date().toISOString(),
         'bugType': possibleBugs[selectedPossibleBug].firebaseCode,
@@ -87,27 +90,33 @@ function BugReportPopup({ theme }) {
       const collectionRef = firebase.firestore().collection(possibleBugs[selectedPossibleBug].firebaseCode);
       await collectionRef.add(dataToSend);
       UserData.lastBugReport = Date.now();
+      setSendingBugReport(false);
+      console.log("Sent bug report !");
+    } else {
+      setCanSendBugReport(false);
     }
   }
   
   return (
     <View style={{
       backgroundColor: theme.colors.background,
-      height: Dimensions.get('screen').height * 0.8,
     }}>
       <Text style={[theme.fonts.titleSmall, { marginBottom: 10 }]}>Signaler un bug</Text>
       <Text style={[theme.fonts.labelLarge, { marginBottom: 20, textAlign: 'justify' }]}>Aidez le développement de l'application en signalant un bug, aucune info personnelle n'est envoyée.</Text>
 
       <Text style={theme.fonts.bodyLarge}>Quel type de bug est-ce ?</Text>
       {possibleBugs.map((bug, key) => <PressableScale onPress={() => {
-        setSelectedPossibleBug(key);
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        if (selectedPossibleBug != key) {
+          setSelectedPossibleBug(key);
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        }
       }} key={key} style={{
         paddingHorizontal: 10,
         paddingVertical: 5,
         backgroundColor: theme.colors.surface,
         marginTop: 10,
         borderRadius: 10,
+        maxHeight: 70,
       }}>
         <Text style={theme.fonts.bodyLarge}>{bug.title}</Text>
         <Text style={theme.fonts.labelMedium}>{bug.subtitle}</Text>
@@ -121,13 +130,13 @@ function BugReportPopup({ theme }) {
       </PressableScale>)}
 
       <CustomButton
-        title={canSendBugReport ? "Envoyer" : "Bug déjà signalé"}
+        title={sendingBugReport ? "Envoi..." : canSendBugReport ? "Envoyer" : "Bug déjà signalé"}
         confirmTitle={canSendBugReport ? `Êtes-vous sûr${UserData.mainAccount.getSuffix()} ?` : null}
         confirmLabel={`Envo${UserData.mainAccount.isParent ? "yes" : "ies"}-en qu'un seul !`}
         onPress={sendBugReport}
         style={{
-          marginTop: 20,
           backgroundColor: canSendBugReport ? theme.colors.primary : '#DA3633',
+          marginTop: 20,
         }}
         theme={theme}
       />
