@@ -1,6 +1,6 @@
-import { View, Text, ScrollView } from "react-native";
+import { View, Text } from "react-native";
 
-import { InfoCard } from "../../../components/authstack/InfoCard";
+import { InfoCard } from './components/InfoCard';
 
 
 function FeaturesPage({ pageStyle, theme }) {

@@ -2,8 +2,8 @@ import { View, Text, FlatList } from 'react-native';
 import { PressableScale } from 'react-native-pressable-scale';
 import * as Haptics from "expo-haptics";
 
-import { Separator } from '../global/Separator';
-import { UserData } from '../../core/UserData';
+import { Separator } from '../../global_components/Separator';
+import { UserData } from '../../../../core/UserData';
 
 
 function ChildSwitcher({ selectedChildAccount, setSelectedChildAccount, theme }) {

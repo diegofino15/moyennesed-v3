@@ -2,10 +2,10 @@ import { useEffect, useState, useCallback } from 'react';
 import { View, Text, Linking, Alert } from "react-native";
 import { UserIcon, KeyRoundIcon } from 'lucide-react-native';
 
-import { CustomInput } from '../../../components/authstack/CustomInput';
-import { InfoCard } from "../../../components/authstack/InfoCard";
-import { Separator } from '../../../components/global/Separator';
-import { UnavailableServers } from '../../../components/global/UnavailableServers';
+import { CustomInput } from './components/CustomInput';
+import { InfoCard } from './components/InfoCard';
+import { Separator } from '../global_components/Separator';
+import { UnavailableServers } from '../global_components/UnavailableServers';
 import { UserData } from '../../../core/UserData';
 
 

@@ -7,7 +7,7 @@ import { WelcomePage } from './WelcomePage';
 import { FeaturesPage } from './FeaturesPage';
 import { LoginPage } from './LoginPage';
 import { LoggedInPage } from './LoggedInPage';
-import { CustomButton } from '../../../components/global/CustomButton';
+import { CustomButton } from '../global_components/CustomButton';
 import { useAppContext } from '../../../utils/AppContext';
 
 

@@ -4,16 +4,16 @@ import { BrainCircuitIcon, BugIcon, CheckIcon, ChevronLeftIcon, MailIcon, Refres
 import { PressableScale } from 'react-native-pressable-scale';
 import * as Haptics from "expo-haptics";
 
-import { CustomButton } from '../../../components/global/CustomButton';
-import { CustomSquareButton } from '../../../components/appstack/CustomSquareButton';
-import { Separator } from '../../../components/global/Separator';
-import { CustomLink } from '../../../components/global/CustomLink';
-import { BottomSheet } from '../../../components/appstack/BottomSheet';
+import { CustomButton } from '../global_components/CustomButton';
+import { CustomSquareButton } from '../global_components/CustomSquareButton';
+import { Separator } from '../global_components/Separator';
+import { CustomLink } from '../global_components/CustomLink';
+import { BottomSheet } from '../global_components/BottomSheet';
 import { UserData } from '../../../core/UserData';
 import { Preferences } from '../../../core/Preferences';
 import { CoefficientManager } from '../../../utils/CoefficientsManager';
-import { UnavailableServers } from '../../../components/global/UnavailableServers';
-import { BugReportPopup } from '../../../components/global/BugReportPopup';
+import { UnavailableServers } from '../global_components/UnavailableServers';
+import { BugReportPopup } from './components/BugReportPopup';
 
 
 function ProfilePage({

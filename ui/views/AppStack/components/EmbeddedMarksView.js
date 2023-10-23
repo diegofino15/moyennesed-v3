@@ -3,11 +3,11 @@ import { View } from "react-native";
 
 import { PeriodSwitcher } from "./PeriodSwitcher";
 import { MarksOverview } from "./MarksOverview";
-import { BottomSheet } from "./BottomSheet";
+import { BottomSheet } from "../../global_components/BottomSheet";
 import { InformationsPopup } from "./InformationsPopup";
-import { UserData } from "../../core/UserData";
-import { calculateAllAverages } from "../../core/Period";
-import { CoefficientManager } from "../../utils/CoefficientsManager";
+import { UserData } from "../../../../core/UserData";
+import { calculateAllAverages } from "../../../../core/Period";
+import { CoefficientManager } from "../../../../utils/CoefficientsManager";
 
 
 function EmbeddedMarksView({

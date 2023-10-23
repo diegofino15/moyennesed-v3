@@ -4,11 +4,11 @@ import { PressableScale } from 'react-native-pressable-scale';
 import useState from 'react-usestateref';
 import * as Haptics from "expo-haptics";
 
-import { Preferences } from '../../core/Preferences';
-import { _sortMarks } from '../../core/Subject';
-import { formatCoefficient, formatDate, formatDate2, formatMark } from '../../utils/Utils';
-import { CoefficientManager } from '../../utils/CoefficientsManager';
-import { getSubjectColor } from '../../utils/Colors';
+import { Preferences } from '../../../../core/Preferences';
+import { _sortMarks } from '../../../../core/Subject';
+import { formatCoefficient, formatDate, formatDate2, formatMark } from '../../../../utils/Utils';
+import { CoefficientManager } from '../../../../utils/CoefficientsManager';
+import { getSubjectColor } from '../../../../utils/Colors';
 
 
 function EmbeddedMarkCard({ mark, subject, selectedSubSubject, refreshAverages, clickedOnMark, theme }) {

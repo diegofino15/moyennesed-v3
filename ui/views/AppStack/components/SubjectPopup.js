@@ -7,12 +7,12 @@ import useState from 'react-usestateref';
 import * as Haptics from "expo-haptics";
 
 import { EmbeddedMarkCard } from './EmbeddedMarkCard';
-import { Separator } from '../global/Separator';
-import { Preferences } from '../../core/Preferences';
-import { _sortMarks } from '../../core/Subject';
-import { formatAverage, formatCoefficient } from '../../utils/Utils';
-import { CoefficientManager } from '../../utils/CoefficientsManager';
-import { getSubjectColor } from '../../utils/Colors';
+import { Separator } from '../../global_components/Separator';
+import { Preferences } from '../../../../core/Preferences';
+import { _sortMarks } from '../../../../core/Subject';
+import { formatAverage, formatCoefficient } from '../../../../utils/Utils';
+import { CoefficientManager } from '../../../../utils/CoefficientsManager';
+import { getSubjectColor } from '../../../../utils/Colors';
 
 
 function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnMark, theme }) {

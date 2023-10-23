@@ -7,8 +7,8 @@ import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import * as SplashScreen from "expo-splash-screen";
 
 import { useFonts, setThemeData } from './ui/hooks/useStyles';
-import { AuthStack } from './ui/views/AuthStack/AuthStack';
-import { AppStack } from './ui/views/AppStack/AppStack';
+import { AuthStack } from './ui/views/authstack/AuthStack';
+import { AppStack } from './ui/views/appstack/AppStack';
 import { UserData } from './core/UserData';
 import { Preferences } from './core/Preferences';
 import { AppContextProvider } from './utils/AppContext';

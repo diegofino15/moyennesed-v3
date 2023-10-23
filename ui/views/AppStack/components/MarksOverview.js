@@ -4,7 +4,7 @@ import { AlertTriangleIcon, CheckCircle2Icon, HelpCircleIcon, InfoIcon } from "l
 
 import { RecentMarkCard } from "./RecentMarkCard";
 import { SubjectCard } from "./SubjectCard";
-import { formatAverage } from "../../utils/Utils";
+import { formatAverage } from "../../../../utils/Utils";
 import { PressableScale } from "react-native-pressable-scale";
 
 

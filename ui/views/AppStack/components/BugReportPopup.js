@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { View, Text, Dimensions } from 'react-native';
+import { View, Text } from 'react-native';
 import { CheckCircle2Icon, CircleIcon } from 'lucide-react-native';
 import { PressableScale } from 'react-native-pressable-scale';
 import * as Haptics from 'expo-haptics';
 
-import { CustomButton } from './CustomButton';
-import { UserData } from '../../core/UserData';
-import { firebase } from '../../utils/firebaseUtils';
+import { CustomButton } from '../../global_components/CustomButton';
+import { UserData } from '../../../../core/UserData';
+import { firebase } from '../../../../utils/firebaseUtils';
 
 
 function BugReportPopup({ theme }) {
