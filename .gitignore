@@ -36,6 +36,7 @@ yarn-error.*
 
 # firebase
 utils/firebaseUtils.js
+private
 
 # builds
 *.ipa

@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { StatusBar } from 'react-native';
 import { PaperProvider, useTheme } from 'react-native-paper';
 import useState from 'react-usestateref'
@@ -11,8 +12,8 @@ import { AuthStack } from './ui/views/authstack/AuthStack';
 import { AppStack } from './ui/views/appstack/AppStack';
 import { UserData } from './core/UserData';
 import { Preferences } from './core/Preferences';
-import { AppContextProvider } from './utils/AppContext';
 import { CoefficientManager } from './core/CoefficientsManager';
+import { AppContextProvider } from './utils/AppContext';
 
 
 // Keep splash screen visible while loading
@@ -22,30 +23,45 @@ function App() {
   // Decide to show AppStack or AuthStack
   const [loggedIn, setLoggedIn, loggedInRef] = useState(false);
   const [_loggedInLoaded, setLoggedInLoaded, loggedInLoadedRef] = useState(false);
-  AsyncStorage.getItem('credentials').then(async (jsonValue) => {
-    if (loggedInLoadedRef.current) { return; }
-    if (jsonValue !== null) {
-      console.log("Detected already logged-in account (loading cache...)");
-      await Preferences.load();
-      await CoefficientManager.load();
-      await UserData.loadCache();
-      setLoggedIn(true);
-    } else {
-      console.log("No account detected, showing auth stack");
-    }
-    setLoggedInLoaded(true);
-    await SplashScreen.hideAsync();
-  });
 
-  // App theme
+  // Initialize UI data
+  const [_fontsLoaded, setFontsLoaded, fontsLoadedRef] = useState(false);
   const theme = useTheme();
   setThemeData(theme);
 
-  // Fonts
-  const [_fontsLoaded, setFontsLoaded, fontsLoadedRef] = useState(false);
-  const loadFonts = async () => { await useFonts(); };
-  if (!fontsLoadedRef.current) {
-    loadFonts().then(async () => { setFontsLoaded(true); });
+  // Prepare function
+  useEffect(() => {
+    async function prepare() {
+      try {
+        if (!fontsLoadedRef.current) {
+          await useFonts();
+          setFontsLoaded(true);
+        }
+        
+        if (!loggedInLoadedRef.current) {
+          const jsonCredentials = await AsyncStorage.getItem('credentials');
+          if (jsonCredentials !== null) {
+            console.log("Detected already logged-in account (loading cache...)");
+            await Preferences.load();
+            await CoefficientManager.load();
+            await UserData.loadCache();
+            setLoggedIn(true);
+          } else {
+            console.log("No account detected, showing auth stack");
+          }
+        }
+      } catch (e) {
+        console.log(`An error occured on startup, ${e}`);
+      } finally {
+        setLoggedInLoaded(true);
+        await SplashScreen.hideAsync();
+      }
+    }
+    prepare();
+  }, []);
+
+  // Return null if UI is not loaded
+  if (!fontsLoadedRef.current || !loggedInLoadedRef.current) {
     return null;
   }
 
@@ -63,11 +79,9 @@ function App() {
           {/* Provider needed to update UI when logging-in/out */}
           <AppContextProvider state={{ loggedIn, setLoggedIn }}>
           {/* AuthStack / AppStack */}
-          {loggedInLoadedRef.current
-            ? loggedInRef.current
-              ? <AppStack theme={theme}/>
-              : <AuthStack theme={theme} />
-            : null}
+          {loggedInRef.current
+            ? <AppStack theme={theme}/>
+            : <AuthStack theme={theme} />}
           </AppContextProvider>
         </PaperProvider>
       </BottomSheetModalProvider>
