@@ -41,6 +41,7 @@ function BugReportPopup({ theme }) {
 
   const [canSendBugReport, setCanSendBugReport] = useState(true);
   const [sendingBugReport, setSendingBugReport] = useState(false);
+  const [sentBugReport, setSentBugReport] = useState(false);
   useEffect(() => {
     if (Date.now() - (UserData.lastBugReport ?? 0) > UserData.bugReportCooldown) {
       setCanSendBugReport(true);
@@ -90,7 +91,9 @@ function BugReportPopup({ theme }) {
       const collectionRef = firebase.firestore().collection(possibleBugs[selectedPossibleBug].firebaseCode);
       await collectionRef.add(dataToSend);
       UserData.lastBugReport = Date.now();
+      setSentBugReport(true);
       setSendingBugReport(false);
+      setCanSendBugReport(false);
       console.log("Sent bug report !");
     } else {
       setCanSendBugReport(false);
@@ -130,12 +133,12 @@ function BugReportPopup({ theme }) {
       </PressableScale>)}
 
       <CustomButton
-        title={sendingBugReport ? "Envoi..." : canSendBugReport ? "Envoyer" : "Bug déjà signalé"}
+        title={sendingBugReport ? "Envoi..." : canSendBugReport ? "Envoyer" : sentBugReport ? "Envoyé !" : "Bug déjà signalé"}
         confirmTitle={canSendBugReport ? `Êtes-vous sûr${UserData.mainAccount.getSuffix()} ?` : null}
-        confirmLabel={`Envo${UserData.mainAccount.isParent ? "yes" : "ies"}-en qu'un seul !`}
+        confirmLabel={`Envo${UserData.mainAccount.isParent ? "yez" : "ies"}-en qu'un seul !`}
         onPress={sendBugReport}
         style={{
-          backgroundColor: canSendBugReport ? theme.colors.primary : '#DA3633',
+          backgroundColor: (canSendBugReport || sentBugReport) ? theme.colors.primary : '#DA3633',
           marginTop: 20,
         }}
         theme={theme}

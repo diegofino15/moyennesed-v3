@@ -18,7 +18,7 @@ function RecentMarkCard({ mark, subject, refreshAverages, theme }) {
       isOpen={isBottomSheetOpen}
       onClose={() => setIsBottomSheetOpen(false)}
       snapPoints={[
-        (Math.min(300 + 50 * (subject.teachers.length ?? 0), 1) / Dimensions.get('screen').height * 100).toString() + "%",
+        (Math.min((300 + 50 * (subject.teachers.length ?? 0)) / Dimensions.get('screen').height, 1) * 100).toString() + "%",
         "75%"
       ]}
       selectedSnapPoint={0}
