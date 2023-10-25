@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { StatusBar } from 'react-native';
 import { PaperProvider, useTheme } from 'react-native-paper';
 import useState from 'react-usestateref'
@@ -54,11 +54,17 @@ function App() {
         console.log(`An error occured on startup, ${e}`);
       } finally {
         setLoggedInLoaded(true);
-        await SplashScreen.hideAsync();
       }
     }
     prepare();
   }, []);
+
+  // Hide splash screen
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoadedRef.current && loggedInLoadedRef.current) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoadedRef.current, loggedInLoadedRef.current]);
 
   // Return null if UI is not loaded
   if (!fontsLoadedRef.current || !loggedInLoadedRef.current) {
@@ -66,7 +72,7 @@ function App() {
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
       {/* Top status bar */}
       <StatusBar
         translucent={true}
