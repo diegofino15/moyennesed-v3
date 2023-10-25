@@ -41,7 +41,7 @@ function EmbeddedMarksView({
       isOpen={infoPopupOpen}
       onClose={() => setInfoPopupOpen(false)}
       snapPoints={[
-        325 / Dimensions.get('screen').height * 100 + "%",
+        Math.min(325 / Dimensions.get('screen').height, 1) * 100 + "%",
       ]}
       theme={theme}
       children={<InformationsPopup theme={theme}/>}
