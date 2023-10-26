@@ -35,7 +35,7 @@ yarn-error.*
 *.tsbuildinfo
 
 # firebase
-# utils/firebaseUtils.js
+utils/firebaseUtils.js
 private
 
 # builds
