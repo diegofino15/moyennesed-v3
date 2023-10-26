@@ -16,9 +16,11 @@ function PeriodSwitcher({ periods, shownPeriod, setShownPeriod, theme }) {
     }}>
       {[...periods.values()].map((period, periodKey) => <PressableScale
         onPress={() => {
-          setSelectedPeriod(periodKey);
-          setShownPeriod(periodKey);
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          if (selectedPeriod != periodKey) {
+            setSelectedPeriod(periodKey);
+            setShownPeriod(periodKey);
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          }
         }}
         key={periodKey}
         style={{

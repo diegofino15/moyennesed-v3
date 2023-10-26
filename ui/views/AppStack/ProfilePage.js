@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { View, SafeAreaView, ScrollView, Text, Image, Switch, ActivityIndicator, Dimensions } from 'react-native';
-import { BrainCircuitIcon, BugIcon, CheckIcon, ChevronLeftIcon, MailIcon, RefreshCcwIcon, UserIcon, WrenchIcon, XIcon } from 'lucide-react-native';
+import { View, SafeAreaView, ScrollView, Text, Image, Switch, ActivityIndicator, Dimensions, Platform } from 'react-native';
+import { BrainCircuitIcon, BugIcon, CheckIcon, ChevronLeftIcon, MailIcon, MessageSquareDashedIcon, RefreshCcwIcon, UserIcon, WrenchIcon, XIcon } from 'lucide-react-native';
 import { PressableScale } from 'react-native-pressable-scale';
 import * as Haptics from "expo-haptics";
 
@@ -9,11 +9,11 @@ import { CustomSquareButton } from '../global_components/CustomSquareButton';
 import { Separator } from '../global_components/Separator';
 import { CustomLink } from '../global_components/CustomLink';
 import { BottomSheet } from '../global_components/BottomSheet';
+import { UnavailableServers } from '../global_components/UnavailableServers';
+import { BugReportPopup } from './components/BugReportPopup';
 import { UserData } from '../../../core/UserData';
 import { Preferences } from '../../../core/Preferences';
 import { CoefficientManager } from '../../../core/CoefficientsManager';
-import { UnavailableServers } from '../global_components/UnavailableServers';
-import { BugReportPopup } from './components/BugReportPopup';
 
 
 function ProfilePage({
@@ -130,7 +130,6 @@ function ProfilePage({
               key={profilePhotoRef.current}
               icon={profilePhotoRef.current ? <Image source={{ uri: profilePhotoRef.current }} style={{ width: 80, height: 80, transform: [{ translateY: 5 }] }} /> : <UserIcon size={40} color={theme.colors.onSurfaceDisabled} />}
               theme={theme}
-              onPress={() => {}}
               hasShadow={true}
             />
           </View> : null}
@@ -324,6 +323,11 @@ function ProfilePage({
           <Text style={[theme.fonts.labelLarge, { textAlign: 'justify', marginBottom: 10 }]}>MoyennesED est une application non-officielle, elle ne peut être tenue responsable de problèmes potentiels liés à son utilisation.</Text>
           <CustomLink title="Site officiel ÉcoleDirecte" link='https://www.ecoledirecte.com' style={{ marginBottom: 10 }} theme={theme}/>
           <CustomLink title="Confidentialité" link='https://moyennesed.my.to/privacy-policy.html' theme={theme}/>
+
+          <Separator theme={theme} style={{ marginTop: 10, marginBottom: 10, backgroundColor: theme.colors.background }}/>
+
+          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify', marginBottom: 10 }]}>L'application {UserData.mainAccount.isParent ? "vous est" : "t'es"} utile ? Écri{UserData.mainAccount.isParent ? "vez" : "s"} un commentaire pour partager {UserData.mainAccount.isParent ? "vos" : "tes"} impressions !</Text>
+          <CustomLink title="Écrire un commentaire" link={Platform.OS == 'ios' ? 'https://apps.apple.com/app/apple-store/id6446418445?action=write-review' : 'https://play.google.com/store/apps/details?id=me.diegof.moyennesed&showAllReviews=true'} style={{ marginBottom: 10 }} icon={<MessageSquareDashedIcon size={20} color={theme.colors.onSurfaceDisabled}/>} theme={theme}/>
         </View>
         
         {/* Disconnect button */}

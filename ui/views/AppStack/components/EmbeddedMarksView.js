@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Dimensions, View } from "react-native";
 
 import { PeriodSwitcher } from "./PeriodSwitcher";
@@ -32,6 +32,9 @@ function EmbeddedMarksView({
 
   // Which period is currently shown
   const [shownPeriod, setShownPeriod] = useState(0);
+  useEffect(() => {
+    // TODO : Detect current period
+  }, []);
 
   // Informations popup
   const [infoPopupOpen, setInfoPopupOpen] = useState(false);

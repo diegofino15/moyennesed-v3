@@ -168,7 +168,7 @@ function MainPage({
       showsVerticalScrollIndicator={false}
       contentInsetAdjustmentBehavior="automatic"
       refreshControl={
-        <RefreshControl refreshing={manualRefreshingRef.current} onRefresh={refresh} />
+        <RefreshControl refreshing={manualRefreshingRef.current} onRefresh={refresh} tintColor={theme.colors.surface}/>
       }
       style={{
         // paddingHorizontal: 20,

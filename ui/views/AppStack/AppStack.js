@@ -57,7 +57,7 @@ function AppStack({ theme }) {
     if (!UserData.mainAccount.isParent && !profilePhotoRef.current && !gettingProfilePhotoRef.current) {
       refreshProfilePhoto(false);
     }
-  }, []);
+  }, [UserData.mainAccount.photoURL]);
 
   // Update screen from anywhere
   const [_updateScreen, setUpdateScreen, updateScreenRef] = useState(false);

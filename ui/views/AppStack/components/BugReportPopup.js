@@ -105,7 +105,7 @@ function BugReportPopup({ theme }) {
       backgroundColor: theme.colors.background,
     }}>
       <Text style={[theme.fonts.titleSmall, { marginBottom: 10 }]}>Signaler un bug</Text>
-      <Text style={[theme.fonts.labelLarge, { marginBottom: 20, textAlign: 'justify' }]}>Aidez le développement de l'application en signalant un bug, aucune info personnelle n'est envoyée.</Text>
+      <Text style={[theme.fonts.labelLarge, { marginBottom: 20, textAlign: 'justify' }]}>Aide{UserData.mainAccount.isParent ? "z" : ""} le développement de l'application en signalant un bug, aucune info personnelle n'est envoyée.</Text>
 
       <Text style={theme.fonts.bodyLarge}>Quel type de bug est-ce ?</Text>
       {possibleBugs.map((bug, key) => <PressableScale onPress={() => {

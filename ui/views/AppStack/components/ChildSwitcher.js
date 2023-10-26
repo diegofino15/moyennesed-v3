@@ -24,9 +24,11 @@ function ChildSwitcher({ selectedChildAccount, setSelectedChildAccount, theme })
             <PressableScale
               key={item}
               onPress={() => {
-                console.log(`Setting selected account to ${item}`);
-                setSelectedChildAccount(item);
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                if (selectedChildAccount != item) {
+                  console.log(`Setting selected account to ${item}`);
+                  setSelectedChildAccount(item);
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                }
               }}
             >
               <View style={{
