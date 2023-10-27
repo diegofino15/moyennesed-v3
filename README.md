@@ -20,7 +20,7 @@ L'application imite le fonctionnement du site web [ÉcoleDirecte](https://www.ec
 Et oui, c'est la troisième version de l'application. Les deux premières étaient codées en **Flutter**, mais pour cette v3, **React Native** semblait plus approprié. Grâce à ce changement, l'amélioration de l'application dans le futur sera plus simple, et des animations et nouvelles interfaces plus stilisées.
 
 ## Installation
-L'application est disponible sur l'AppStore (seulement la v2 pour l'instant), et la v3 sera disponible sur le GooglePlay !
+L'application est disponible sur l'AppStore (seulement la v2 pour l'instant), et la v3 sera aussi disponible sur le GooglePlay !
 
 ## Comment participer ?
 N'hésitez pas à faire des pulls requests pour ajouter des fonctionnalités ou régler des bugs !  
@@ -29,10 +29,10 @@ Pour se faire, clonez le projet :
 git clone https://github.com/diegofino15/moyennesed-v3.git
 cd moyennesed-v3
 ```
-Ensuite, installez les dependencies et lancez le projet avec expo :
+Ensuite, installez les dependencies et lancez le projet avec expo et yarn :
 ```bash
-npm install
-npx expo start
+yarn install
+yarn start
 ```
 
 ## Contact
