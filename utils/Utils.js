@@ -55,7 +55,7 @@ function formatDate2(givenDate) {
 
 function capitalizeWords(string) {
     const words = string.toLowerCase().split(" ");
-    for (let i = 0; i < words.length; i++) { words[i] = words[i][0].toUpperCase() + words[i].substr(1); }
+    for (let i = 0; i < words.length; i++) { words[i] = (words[i][0] ?? "").toUpperCase() + words[i].substr(1); }
     return words.join(" ");
 }
 

@@ -20,7 +20,7 @@ export class UserData {
 
   static async login(username, password) {
     this.API_URL = "https://api.ecoledirecte.com";
-    if (username == "demo" || username == "demo-parent") { this.API_URL = "http://api.moyennesed.my.to:777/test-api"; }
+    if (username.substring(0, 4) == "demo") { this.API_URL = "http://api.moyennesed.my.to:777/test-api"; }
     
     console.log(`Logging-in ${username}...`);
     this.connected = false;
@@ -237,6 +237,7 @@ export class UserData {
     await CoefficientManager.erase();
     this.temporaryProfilePhoto = "";
     await AsyncStorage.removeItem("photo");
+    this.lastBugReport = null;
     console.log("Logged out !");
   }
 

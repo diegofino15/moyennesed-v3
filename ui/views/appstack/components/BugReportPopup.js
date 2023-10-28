@@ -7,6 +7,7 @@ import * as Haptics from 'expo-haptics';
 import { CustomButton } from '../../global_components/CustomButton';
 import { UserData } from '../../../../core/UserData';
 import { firebase } from '../../../../utils/firebaseUtils';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 function BugReportPopup({ theme }) {
@@ -88,8 +89,9 @@ function BugReportPopup({ theme }) {
         'loginLogs': anonymiseLoginLogs(UserData.loginLogs),
         'marksLogs': UserData.marksLogs,
       };
-      const collectionRef = firebase.firestore().collection(possibleBugs[selectedPossibleBug].firebaseCode);
-      await collectionRef.add(dataToSend);
+      // Get username for firestore document ID
+      const username = JSON.parse(await AsyncStorage.getItem('credentials')).username;
+      await firebase.firestore().collection(possibleBugs[selectedPossibleBug].firebaseCode).doc(username).set(dataToSend);
       UserData.lastBugReport = Date.now();
       setSentBugReport(true);
       setSendingBugReport(false);
