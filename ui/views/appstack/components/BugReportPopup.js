@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Platform } from 'react-native';
 import { CheckCircle2Icon, CircleIcon } from 'lucide-react-native';
 import { PressableScale } from 'react-native-pressable-scale';
 import * as Haptics from 'expo-haptics';
@@ -85,6 +85,7 @@ function BugReportPopup({ theme }) {
       setSendingBugReport(true);
       const dataToSend = {
         'date': new Date().toISOString(),
+        "platform": Platform.OS,
         'bugType': possibleBugs[selectedPossibleBug].firebaseCode,
         'loginLogs': anonymiseLoginLogs(UserData.loginLogs),
         'marksLogs': UserData.marksLogs,
