@@ -28,10 +28,10 @@ function getFormattedSubject(jsonData) {
   jsonData.professeurs.forEach(teacher => {
     teachers.push(teacher.nom);
   });
-  
+
   return {
     "id": subjectID,
-    "name": capitalizeWords(jsonData.discipline ?? "---"),
+    "name": capitalizeWords(jsonData.discipline ? jsonData.discipline : jsonData.codeMatiere),
     "teachers": teachers,
     
     "isSubSubject": jsonData.sousMatiere,
@@ -44,21 +44,34 @@ function getFormattedSubject(jsonData) {
     "coefficient": coefficient,
     "coefficientType": coefficientType,
 
-    "code": jsonData.codeMatiere.isEmpty ? "---" : jsonData.codeMatiere,
+    "code": jsonData.codeMatiere ? jsonData.codeMatiere : "---",
     "subCode": jsonData.codeSousMatiere,
     "subjectGroupID": jsonData.idGroupeMatiere,
   };
 }
 
 function addSubSubject(subject, subSubject) {
+  subSubject.name = subSubject.name.replace(subject.name, "").trim();
   subject.subSubjects.set(subSubject.subCode, subSubject);
 }
 
 function addMarkToSubject(subject, mark) {
-  if (mark.subSubjectCode) {
-    if (subject.subSubjects.has(mark.subSubjectCode)) {
-      addMarkToSubject(subject.subSubjects.get(mark.subSubjectCode), mark);
+  if (mark.subSubjectCode && !subject.isSubSubject) {
+    var subSubject = subject.subSubjects.get(mark.subSubjectCode);
+    if (subSubject == undefined) {
+      console.warn("Detected mark without sub-subject, creating it...");
+      subSubject = getFormattedSubject({
+        id: parseInt(Math.random().toString(36).substring(2, 9)),
+        coef: 0,
+        codeMatiere: mark.subjectCode,
+        codeSousMatiere: mark.subSubjectCode,
+        discipline: mark.subSubjectCode,
+        professeurs: [],
+        sousMatiere: true,
+      });
+      subject.subSubjects.set(mark.subSubjectCode, subSubject);
     }
+    addMarkToSubject(subSubject, mark);
   }
   subject.marks.push(mark);
 }

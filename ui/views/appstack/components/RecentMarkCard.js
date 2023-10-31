@@ -19,16 +19,16 @@ function RecentMarkCard({ mark, subject, refreshAverages, theme }) {
       onClose={() => setIsBottomSheetOpen(false)}
       snapPoints={[
         (Math.min((300 + 50 * (subject.teachers.length ?? 0)) / Dimensions.get('screen').height, 1) * 100).toString() + "%",
-        "75%"
+        "80%"
       ]}
       selectedSnapPoint={0}
       children={<SubjectPopup subject={subject} selectedSubSubject={mark.subSubjectCode} refreshAverages={refreshAverages} clickedOnMark={mark.id} theme={theme} />}
     />;
   }
 
-  const [_subjectColor, _setSubjectColor] = useState(getSubjectColor(subject.code));
-  const [_lightSubjectColor, _setLightSubjectColor] = useState(getSubjectColor(subject.code, true));
-  const [_subSubjectName, _setSubSubjectName] = useState(mark.subSubjectCode ? subject.subSubjects.get(mark.subSubjectCode).name : null);
+  const [_subjectColor, _setSubjectColor] = useState(getSubjectColor(subject?.code));
+  const [_lightSubjectColor, _setLightSubjectColor] = useState(getSubjectColor(subject?.code, true));
+  const [_subSubjectName, _setSubSubjectName] = useState(mark.subSubjectCode ? subject?.subSubjects.get(mark.subSubjectCode).name : null);
 
   return (
     <View>
@@ -91,7 +91,7 @@ function RecentMarkCard({ mark, subject, refreshAverages, theme }) {
             alignItems: 'center',
             overflow: 'hidden'
           }}>
-            <Text style={theme.fonts.labelSmall} numberOfLines={1}>{subject.name}</Text>
+            <Text style={theme.fonts.labelSmall} numberOfLines={1}>{subject?.name ?? "Pas de matière"}</Text>
             {mark.subSubjectCode ? <View style={{ width: 25, alignItems: 'center' }}><ChevronRightIcon size={15} color={theme.colors.onSurfaceDisabled}/></View> : null}
             {_subSubjectName ? <Text style={theme.fonts.labelSmall} numberOfLines={1}>{_subSubjectName}</Text> : null}
           </View>

@@ -58,7 +58,7 @@ function MainPage({
         const marks = await UserData.getMarks(accountToUpdate.id);
         if (marks == -1) {
           gettingMarksRef.current.set(accountToUpdate.id, false);
-          console.log(`Couldn't get marks for ${accountToUpdate.id}`);
+          console.warn(`Couldn't get marks for ${accountToUpdate.id}`);
           setRefreshing(false);
           setManualRefreshing(false);
           return;
@@ -88,7 +88,7 @@ function MainPage({
         if (marks == -1) {
           gotMarksRef.current.set(accountToUpdate.id, false); UserData.gotMarksFor.set(accountToUpdate.id, false);
           gettingMarksRef.current.set(accountToUpdate.id, false);
-          console.log(`Couldn't get marks for ${accountToUpdate.id}`);
+          console.warn(`Couldn't get marks for ${accountToUpdate.id}`);
           setRefreshing(false);
           setManualRefreshing(false);
           return;

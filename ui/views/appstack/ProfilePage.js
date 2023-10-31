@@ -149,8 +149,8 @@ function ProfilePage({
                 </Text>
               </ScrollView>
             </View>
-            <Text style={theme.fonts.labelMedium}>{UserData.mainAccount.isParent ? "Compte parent" : UserData.mainAccount.classLabel ? UserData.mainAccount.classLabel : "Compte élève"}</Text>
-          </View>          
+            <Text style={theme.fonts.labelMedium} numberOfLines={1}>{UserData.mainAccount.isParent ? "Compte parent" : UserData.mainAccount.classLabel ? UserData.mainAccount.classLabel : "Compte élève"}</Text>
+          </View>
         </View>
 
         {/* Connection status */}

@@ -32,7 +32,7 @@ export class UserData {
       `data={"identifiant":"${username}", "motdepasse":"${password}"}`,
       { headers: { "Content-Type": "text/plain" } },
     ).catch(error => {
-      console.log(`An error occured while logging in : ${error}`);
+      console.warn(`An error occured while logging in : ${error}`);
     });
     response ??= { status: 500 };
     this.loginLogs = response.data;
@@ -53,13 +53,13 @@ export class UserData {
             console.log(`Couldn't connect, wrong password for ${username}`);
             break;
           default:
-            console.log(`API responded with unknown code ${response.data.code}`);
+            console.warn(`API responded with unknown code ${response.data.code}`);
             success = -1;
             break;
         }
         break;
       default:
-        console.log("API request failed");
+        console.warn("API request failed");
         success = -1;
         break;
     }
@@ -110,7 +110,7 @@ export class UserData {
       'data={"anneeScolaire": ""}',
       { headers: { "Content-Type": "text/plain", "X-Token": this.token } },
     ).catch(error => {
-      console.log(`An error occured while getting marks : ${error}`);
+      console.warn(`An error occured while getting marks : ${error}`);
     });
     response ??= { status: 500 };
     this.marksLogs[accountID] = response.data;
@@ -131,12 +131,12 @@ export class UserData {
             }
             return 0;
           default:
-            console.log(`API responded with unknown code ${response.data.code}`);
+            console.warn(`API responded with unknown code ${response.data.code}`);
             this.unavailableServers = true;
             return -1;
         }
       default:
-        console.log("API request failed");
+        console.warn("API request failed");
         this.unavailableServers = true;
         return -1;
     }
@@ -266,7 +266,7 @@ export class UserData {
           }
         })
         .catch(error => {
-          console.log("Error getting profile photo: " + error);
+          console.warn("Error getting profile photo: " + error);
           this.temporaryProfilePhoto = "";
           AsyncStorage.removeItem("photo");
           callback("");

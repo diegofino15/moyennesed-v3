@@ -51,7 +51,7 @@ function App() {
           }
         }
       } catch (e) {
-        console.log(`An error occured on startup, ${e}`);
+        console.warn(`An error occured on startup, ${e}`);
       } finally {
         setLoggedInLoaded(true);
       }

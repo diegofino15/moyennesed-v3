@@ -31,10 +31,10 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
       paddingVertical: 5,
       marginBottom: 5,
       flexDirection: 'row',
-      alignItems: 'center'
+      alignItems: 'center',
     }}>
       <GraduationCapIcon size={30} color={theme.colors.onSurfaceDisabled} style={{ marginRight: 10 }} />
-      <Text style={theme.fonts.labelLarge}>{teacher}</Text>
+      <Text style={[theme.fonts.labelLarge, { width: Dimensions.get('window').width - 100 }]} numberOfLines={1}>{teacher}</Text>
     </PressableScale>;
   }
 
@@ -212,7 +212,7 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
         <Separator theme={theme} style={{ width: "28%" }}/>
       </View>
       <ScrollView style={{
-        height: Dimensions.get('screen').height * 0.75 - 150 - ((shownSubjectRef.current.teachers.length ?? 0) * 50),
+        height: Dimensions.get('screen').height * 0.75 - 110 - ((shownSubjectRef.current.teachers.length ?? 0) * 50),
       }} showsVerticalScrollIndicator={false} >
         {clickedOnMark ? markCard(shownSubjectRef.current.marks.find((mark) => mark.id == clickedOnMark), true) : null}
         {shownSubjectRef.current.marks.map((mark) => markCard(mark))}

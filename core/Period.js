@@ -15,14 +15,23 @@ function getFormattedPeriod(jsonData) {
       }
     } else {
       var subject = getFormattedSubject(subjectData);
-      const subjectCode = subject.code.length === 0 ? "---" : subject.code;
       if (!subject.isSubSubject) {
-        subjects.set(subjectCode, subject);
+        subjects.set(subject.code, subject);
         if (subject.subjectGroupID) {
           addSubject(subjectGroups.get(subject.subjectGroupID), subject.code);
         }
       }
-      else { addSubSubject(subjects.get(subjectCode), subject); }
+      else {
+        var mainSubject = subjects.get(subject.code);
+        if (mainSubject == undefined) {
+          mainSubject = getSubjectFromCache(getCacheSubject(subject));
+          mainSubject.name = subject.code;
+          mainSubject.isSubSubject = false;
+          mainSubject.subCode = "";
+          subjects.set(subject.code, mainSubject);
+        }
+        addSubSubject(mainSubject, subject);
+      }
       registerSubject(subject.code);
     }
   })
@@ -41,7 +50,20 @@ function getFormattedPeriod(jsonData) {
 
 function addMark(period, mark) {
   period.marks.push(mark);
-  addMarkToSubject(period.subjects.get(mark.subjectCode), mark);
+  var subject = period.subjects.get(mark.subjectCode);
+  if (subject == undefined) {
+    console.warn("Detected mark without subject, creating it...");
+    subject = getFormattedSubject({
+      id: parseInt(Math.random().toString(36).substring(2, 9)),
+      coef: 0,
+      codeMatiere: mark.subjectCode,
+      discipline: mark.subjectCode,
+      professeurs: [],
+      sousMatiere: false,
+    });
+    period.subjects.set(mark.subjectCode, subject);
+  }
+  addMarkToSubject(subject, mark);
 }
 
 function sortAllMarks(period) {
