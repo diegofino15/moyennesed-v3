@@ -43,6 +43,18 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
     return <EmbeddedMarkCard key={mark.id} mark={mark} subject={subject} selectedSubSubject={selectedSubSubject} refreshAverages={refreshAverages} clickedOnMark={clickedOnMark} theme={theme} />
   }
 
+  function section(text, style) {
+    return <View style={{
+      flexDirection: 'row',
+      alignItems: 'center',
+      ...style
+    }}>
+      <Separator theme={theme} style={{ width: "28%" }}/>
+      <View style={{ width: '44%', alignItems: 'center' }}><Text style={[theme.fonts.labelLarge, { color: 'black' }]}>{text}</Text></View>
+      <Separator theme={theme} style={{ width: "28%" }}/>
+    </View>;
+  }
+
   const [showChangeCoefficient, setShowChangeCoefficient] = useState(false);
 
   return (
@@ -214,29 +226,13 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
         height: "80%",
         paddingTop: 10,
       }} showsVerticalScrollIndicator={false}>
-        <View style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginBottom: 10,
-        }}>
-          <Separator theme={theme} style={{ width: "33%" }}/>
-          <View style={{ width: '34%', alignItems: 'center' }}><Text style={[theme.fonts.labelLarge, { color: 'black' }]}>Professeurs</Text></View>
-          <Separator theme={theme} style={{ width: "33%" }}/>
-        </View>
+        {shownSubjectRef.current.teachers.length != 0 && section("Professeurs", { marginBottom: 10 })}
         {[...(shownSubjectRef.current.teachers.values() ?? [])].map((teacher, key) => teacherCard(teacher, key))}
-        <View style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginTop: 5,
-        }}>
-          <Separator theme={theme} style={{ width: "28%" }}/>
-          <View style={{ width: '44%', alignItems: 'center' }}><Text style={[theme.fonts.labelLarge, { color: 'black' }]}>Dernières notes</Text></View>
-          <Separator theme={theme} style={{ width: "28%" }}/>
-        </View>
+        {section("Dernières notes", { marginTop: shownSubjectRef.current.teachers.length != 0 ? 5 : 0 })}
         {clickedOnMark ? markCard(shownSubjectRef.current.marks.find((mark) => mark.id == clickedOnMark), true) : null}
         {shownSubjectRef.current.marks.map((mark) => markCard(mark))}
         {shownSubjectRef.current.marks.length == 0 ? <Text style={[theme.fonts.labelLarge, { alignSelf: 'center', marginTop: 75 }]}>Aucune note pour l'instant</Text> : null}
-        <View style={{ height: 70 }} />
+        <View style={{ height: 70 }}/>
       </ScrollView>
     </View>
   );
