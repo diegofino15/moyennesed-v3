@@ -202,18 +202,37 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
           </View>
         </View>
       </View>
-      {[...(shownSubjectRef.current.teachers.values() ?? [])].map((teacher, key) => teacherCard(teacher, key))}
       <View style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-      }}>
-        <Separator theme={theme} style={{ width: "28%" }}/>
-        <View style={{ width: '44%', alignItems: 'center'}}><Text style={theme.fonts.labelLarge}>Dernières notes</Text></View>
-        <Separator theme={theme} style={{ width: "28%" }}/>
-      </View>
+        position: 'absolute',
+        top: 110,
+        left: -20,
+        width: Dimensions.get('screen').width,
+        height: 1,
+        backgroundColor: theme.colors.surface,
+      }}/>
       <ScrollView style={{
-        height: Dimensions.get('screen').height * 0.75 - 110 - ((shownSubjectRef.current.teachers.length ?? 0) * 50),
-      }} showsVerticalScrollIndicator={false} >
+        height: "80%",
+        paddingTop: 10,
+      }} showsVerticalScrollIndicator={false}>
+        <View style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginBottom: 10,
+        }}>
+          <Separator theme={theme} style={{ width: "33%" }}/>
+          <View style={{ width: '34%', alignItems: 'center' }}><Text style={[theme.fonts.labelLarge, { color: 'black' }]}>Professeurs</Text></View>
+          <Separator theme={theme} style={{ width: "33%" }}/>
+        </View>
+        {[...(shownSubjectRef.current.teachers.values() ?? [])].map((teacher, key) => teacherCard(teacher, key))}
+        <View style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginTop: 5,
+        }}>
+          <Separator theme={theme} style={{ width: "28%" }}/>
+          <View style={{ width: '44%', alignItems: 'center' }}><Text style={[theme.fonts.labelLarge, { color: 'black' }]}>Dernières notes</Text></View>
+          <Separator theme={theme} style={{ width: "28%" }}/>
+        </View>
         {clickedOnMark ? markCard(shownSubjectRef.current.marks.find((mark) => mark.id == clickedOnMark), true) : null}
         {shownSubjectRef.current.marks.map((mark) => markCard(mark))}
         {shownSubjectRef.current.marks.length == 0 ? <Text style={[theme.fonts.labelLarge, { alignSelf: 'center', marginTop: 75 }]}>Aucune note pour l'instant</Text> : null}

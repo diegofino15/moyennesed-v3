@@ -20,7 +20,7 @@ function SubjectCard({ mainSubject, refreshAverages, theme }) {
       isOpen={isBottomSheetOpen}
       onClose={() => setIsBottomSheetOpen(false)}
       snapPoints={[
-        (Math.min((180 + 50 * (subject.teachers.length ?? 0)) / Dimensions.get('screen').height, 1) * 100).toString() + "%",
+        (255 / Dimensions.get('screen').height * 100) + "%",
         "80%",
       ]}
       children={<SubjectPopup subject={mainSubject} selectedSubSubject={subject.subCode} refreshAverages={refreshAverages} theme={theme}/>}
