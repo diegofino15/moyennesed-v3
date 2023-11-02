@@ -7,8 +7,8 @@ function getFormattedSubjectGroup(jsonData) {
   };
 }
 
-function addSubject(subjectGroup, subjectCode) {
+function addSubjectToSubjectGroup(subjectGroup, subjectCode) {
   subjectGroup.subjectCodes.push(subjectCode);
 }
 
-export { getFormattedSubjectGroup, addSubject };
+export { getFormattedSubjectGroup, addSubjectToSubjectGroup };

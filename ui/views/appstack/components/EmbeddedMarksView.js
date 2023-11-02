@@ -6,7 +6,7 @@ import { MarksOverview } from "./MarksOverview";
 import { BottomSheet } from "../../global_components/BottomSheet";
 import { InformationsPopup } from "./InformationsPopup";
 import { UserData } from "../../../../core/UserData";
-import { calculateAllAverages } from "../../../../core/Period";
+import { calculateAllPeriodAverages } from "../../../../core/Period";
 import { CoefficientManager } from "../../../../core/CoefficientsManager";
 
 
@@ -24,7 +24,7 @@ function EmbeddedMarksView({
   function refreshAverages() {
     CoefficientManager.save();
     for (let [_, period] of shownAccountRef.current.periods) {
-      calculateAllAverages(period);
+      calculateAllPeriodAverages(period);
     }
     UserData.saveCache();
     updateScreen();

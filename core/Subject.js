@@ -50,7 +50,7 @@ function getFormattedSubject(jsonData) {
   };
 }
 
-function addSubSubject(subject, subSubject) {
+function addSubSubjectToSubject(subject, subSubject) {
   subSubject.name = subSubject.name.replace(subject.name, "").trim();
   subject.subSubjects.set(subSubject.subCode, subSubject);
 }
@@ -76,7 +76,7 @@ function addMarkToSubject(subject, mark) {
   subject.marks.push(mark);
 }
 
-function sortMarks(subject) {
+function sortSubjectMarks(subject) {
   _sortMarks(subject.marks);
   for (let [_, subSubject] of subject.subSubjects) {
     _sortMarks(subSubject.marks);
@@ -95,16 +95,16 @@ function _sortMarks(marks) {
   });
 }
 
-function calculateAverages(subject) {
+function calculateSubjectAverages(subject) {
   for (let [_, subSubject] of subject.subSubjects) {
-    calculateAverages(subSubject);
+    calculateSubjectAverages(subSubject);
   }
 
-  subject.average = _getCalculatedAverage(subject);
-  subject.classAverage = _getCalculatedClassAverage(subject);
+  subject.average = _getCalculatedSubjectAverage(subject);
+  subject.classAverage = _getCalculatedSubjectClassAverage(subject);
 }
 
-function _getCalculatedAverage(subject) {
+function _getCalculatedSubjectAverage(subject) {
   let sum = 0;
   let coefficient = 0;
 
@@ -119,7 +119,7 @@ function _getCalculatedAverage(subject) {
 
   subject.subSubjects.forEach((subSubject, _) => {
     if (subSubject.marks.length != 0) {
-      sum += _getCalculatedAverage(subSubject) * subSubject.coefficient;
+      sum += _getCalculatedSubjectAverage(subSubject) * subSubject.coefficient;
       coefficient += subSubject.coefficient;
     }
   });
@@ -128,7 +128,7 @@ function _getCalculatedAverage(subject) {
   return sum / coefficient;
 }
 
-function _getCalculatedClassAverage(subject) {
+function _getCalculatedSubjectClassAverage(subject) {
   let sum = 0;
   let coefficient = 0;
 
@@ -142,7 +142,7 @@ function _getCalculatedClassAverage(subject) {
   }
 
   subject.subSubjects.forEach((subSubject, _) => {
-    let subSubjectsAverage = _getCalculatedClassAverage(subSubject);
+    let subSubjectsAverage = _getCalculatedSubjectClassAverage(subSubject);
     if (subSubjectsAverage) {
       sum += subSubjectsAverage * subSubject.coefficient;
       coefficient += subSubject.coefficient;
@@ -197,4 +197,4 @@ function getSubjectFromCache(cacheSubject) {
   };  
 }
 
-export { getFormattedSubject, addSubSubject, addMarkToSubject, sortMarks, _sortMarks, calculateAverages, getCacheSubject, getSubjectFromCache };
+export { getFormattedSubject, addSubSubjectToSubject, addMarkToSubject, sortSubjectMarks, _sortMarks, calculateSubjectAverages, getCacheSubject, getSubjectFromCache };

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Account } from "./Account";
 import { Preferences } from "./Preferences";
 import { CoefficientManager } from "./CoefficientsManager";
-import { calculateAllAverages } from "./Period";
+import { calculateAllPeriodAverages } from "./Period";
 
 
 export class UserData {
@@ -201,7 +201,7 @@ export class UserData {
           }
         });
       });
-      calculateAllAverages(period);
+      calculateAllPeriodAverages(period);
     }
     
     if (this.mainAccount.isParent) {

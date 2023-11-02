@@ -1,4 +1,4 @@
-import { getFormattedPeriod, addMark, sortAllMarks, calculateAllAverages, getCachePeriod, getPeriodFromCache } from "./Period";
+import { getFormattedPeriod, addMarkToPeriod, sortAllPeriodMarks, calculateAllPeriodAverages, getCachePeriod, getPeriodFromCache } from "./Period";
 import { getFormattedMark } from "./Mark";
 import { Preferences } from "./Preferences";
 import { capitalizeWords } from "../utils/Utils";
@@ -96,14 +96,14 @@ export class Account {
       const mark = getFormattedMark(markData);
       if (mark.valueStr) {
         const period = this.periods.get(mark.periodCode);
-        addMark(period, mark);
+        addMarkToPeriod(period, mark);
       }
     });
 
     // Calculate averages
     for (let [_, period] of this.periods) {
-      sortAllMarks(period);
-      calculateAllAverages(period);
+      sortAllPeriodMarks(period);
+      calculateAllPeriodAverages(period);
     }
 
     CoefficientManager.save();
