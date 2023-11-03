@@ -119,7 +119,6 @@ function BugReportPopup({ theme }) {
         backgroundColor: theme.colors.surface,
         marginTop: 10,
         borderRadius: 10,
-        maxHeight: 70,
       }}>
         <Text style={theme.fonts.bodyLarge}>{bug.title}</Text>
         <Text style={theme.fonts.labelMedium}>{bug.subtitle}</Text>

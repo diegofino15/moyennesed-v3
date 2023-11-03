@@ -41,7 +41,7 @@ function MarksOverview({
             width: '100%',
             marginBottom: 20,
           }}>
-            <Text style={[theme.fonts.labelMedium, { alignSelf: 'flex-start', height: 30 }]}>{period.title}</Text>
+            <Text style={[theme.fonts.labelMedium, { alignSelf: 'flex-start', width: Dimensions.get('window').width - 115, height: 30 }]}>{period.title}</Text>
             {loading
               ? <ActivityIndicator size={30} color={theme.colors.onSurface}/>
               : redCheck

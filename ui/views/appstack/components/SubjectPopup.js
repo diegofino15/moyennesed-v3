@@ -34,7 +34,7 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
       alignItems: 'center',
     }}>
       <GraduationCapIcon size={30} color={theme.colors.onSurfaceDisabled} style={{ marginRight: 10 }}/>
-      <Text style={[theme.fonts.labelLarge, { width: Dimensions.get('window').width - 100 }]} numberOfLines={1}>{teacher}</Text>
+      <Text style={[theme.fonts.labelLarge, { width: Dimensions.get('window').width - 100 }]} numberOfLines={2}>{teacher}</Text>
     </PressableScale>;
   }
 

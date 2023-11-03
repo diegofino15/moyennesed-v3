@@ -139,7 +139,8 @@ function MainPage({
         `La clé du succès de ${UserData.childrenAccounts.size > 1 ? "vos" : "votre"} enfant${UserData.childrenAccounts.size > 1 ? "s" : ""} ? Votre soutien !`,
         `Il${UserData.childrenAccounts.size > 1 ? "s" : ""} en donne${UserData.childrenAccounts.size > 1 ? "nt" : ""} du ${UserData.childrenAccounts.size > 1 ? "leur" : "sien"} ! Chacun son niveau.`,
         "Si vous aimez bien l'appli hésitez pas à aller la noter !",
-        );
+        "Restez à l'affut des mises à jour !",
+      );
     } else {
       welcomeMessages.push(
         "Allez, les cours sont bientôt finis !",
@@ -151,6 +152,7 @@ function MainPage({
         "Allez, pense aux grandes vacances c'est pas si loin...",
         "Déjà des contrôles toutes les semaines...",
         "Si t'aimes bien l'appli hésite pas à aller la noter !",
+        "Reste à l'affut des mises à jour !",
       );
     }
     setWelcomeMessage(welcomeMessages[Math.floor(Math.random() * welcomeMessages.length)]);

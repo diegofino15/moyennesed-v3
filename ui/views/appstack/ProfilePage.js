@@ -97,17 +97,14 @@ function ProfilePage({
           <View style={{
             flexDirection: 'column',
             justifyContent: 'center',
-            maxWidth: Dimensions.get('window').width - 130,
+            width: Dimensions.get('window').width - 130,
             marginLeft: 20,
           }}>
             <Text style={[
               theme.fonts.titleSmall,
               { fontFamily: 'Montserrat-Medium' }
             ]}>Profil</Text>
-            <Text style={[
-              theme.fonts.labelMedium,
-              { overflow: 'visible', maxHeight: 40 }
-            ]}>{UserData.mainAccount.isParent ? "Gérez vos" : "Gère tes"} paramètres et préférences de l'appli</Text>
+            <Text style={theme.fonts.labelMedium} numberOfLines={2}>{UserData.mainAccount.isParent ? "Gérez vos" : "Gère tes"} paramètres et préférences de l'appli</Text>
           </View>
         </View>
 
@@ -226,7 +223,7 @@ function ProfilePage({
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-            <Text style={theme.fonts.bodyLarge}>Devine coefficient notes</Text>
+            <Text style={[theme.fonts.bodyLarge, { width: Dimensions.get('window').width - 140 }]}>Devine coefficient notes</Text>
             <Switch
               value={allowGuessMarkCoefficients}
               onValueChange={async (value) => {
@@ -245,7 +242,7 @@ function ProfilePage({
             justifyContent: 'space-between',
             marginTop: 10,
           }}>
-            <Text style={theme.fonts.bodyLarge}>Devine coefficient matières</Text>
+            <Text style={[theme.fonts.bodyLarge, { width: Dimensions.get('window').width - 140 }]}>Devine coefficient matières</Text>
             <Switch
               value={allowGuessSubjectCoefficients}
               onValueChange={async (value) => {
@@ -268,7 +265,7 @@ function ProfilePage({
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-            <Text style={theme.fonts.bodyLarge}>Coefficients personnalisés</Text>
+            <Text style={[theme.fonts.bodyLarge, { width: Dimensions.get('window').width - 140 }]}>Coefficients personnalisés</Text>
             <Switch
               value={allowCustomCoefficients}
               onValueChange={async (value) => {
