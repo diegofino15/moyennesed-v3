@@ -41,7 +41,7 @@ function EmbeddedMarksView({
     if (shownPeriodRef.current == shownAccountRef.current.periods.size) { shownPeriodRef.current -= 1; }
     setShownPeriod(shownPeriodRef.current);
     console.log(`Set shown period to ${shownPeriodRef.current}`);
-  }, []);
+  }, [gotMarks]);
 
   // Window dimensions
   const windowDimensions = useWindowDimensions();
