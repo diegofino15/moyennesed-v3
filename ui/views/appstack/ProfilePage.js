@@ -53,7 +53,7 @@ function ProfilePage({
       isOpen={bugReportPopupOpen}
       onClose={() => setBugReportPopupOpen(false)}
       snapPoints={[
-        Math.min(650 / Dimensions.get('screen').height, 1) * 100 + "%",
+        Math.min(550 / Dimensions.get('screen').height, 1) * 100 + "%",
       ]}
       children={<BugReportPopup theme={theme}/>}
     />;
@@ -90,7 +90,7 @@ function ProfilePage({
           marginBottom: 20,
         }}>
           <CustomSquareButton
-            icon={<ChevronLeftIcon size={40} color={theme.colors.onSurfaceDisabled} />}
+            icon={<ChevronLeftIcon size={40} color={theme.colors.onSurfaceDisabled}/>}
             theme={theme}
             onPress={closeProfilePage}
           />
@@ -128,7 +128,7 @@ function ProfilePage({
           }}>
             <CustomSquareButton
               key={profilePhotoRef.current}
-              icon={profilePhotoRef.current ? <Image source={{ uri: profilePhotoRef.current }} style={{ width: 80, height: 80, transform: [{ translateY: 5 }] }} /> : <UserIcon size={40} color={theme.colors.onSurfaceDisabled} />}
+              icon={profilePhotoRef.current ? <Image source={{ uri: profilePhotoRef.current }} style={{ width: 80, height: 80, transform: [{ translateY: 5 }] }}/> : <UserIcon size={40} color={theme.colors.onSurfaceDisabled}/>}
               theme={theme}
               hasShadow={true}
             />
@@ -172,8 +172,8 @@ function ProfilePage({
               {connectingRef.current
               ? null
               : connectedRef.current
-                ? <CheckIcon size={20} color='white' />
-                : <XIcon size={20} color='white' />}
+                ? <CheckIcon size={20} color='white'/>
+                : <XIcon size={20} color='white'/>}
               <Text style={[
                 theme.fonts.labelLarge,
                 { color: 'white', marginLeft: 10 }
@@ -197,8 +197,8 @@ function ProfilePage({
               }}
             >
               {connectingRef.current
-              ? <ActivityIndicator size={25} color='white' />
-              : <RefreshCcwIcon size={25} color='white' />}
+              ? <ActivityIndicator size={25} color='white'/>
+              : <RefreshCcwIcon size={25} color='white'/>}
             </PressableScale>
           </View>
         </PressableScale>
@@ -326,7 +326,7 @@ function ProfilePage({
 
           <Separator theme={theme} style={{ marginTop: 10, marginBottom: 10, backgroundColor: theme.colors.background }}/>
 
-          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify', marginBottom: 10 }]}>L'application {UserData.mainAccount.isParent ? "vous est" : "t'es"} utile ? Écri{UserData.mainAccount.isParent ? "vez" : "s"} un commentaire pour partager {UserData.mainAccount.isParent ? "vos" : "tes"} impressions !</Text>
+          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify', marginBottom: 10 }]}>L'application {UserData.mainAccount.isParent ? "vous est" : "t'es"} utile ? Écri{UserData.mainAccount.isParent ? "vez" : "s"} un commentaire pour soutenir le développeur !</Text>
           <CustomLink title="Écrire un commentaire" link={Platform.OS == 'ios' ? 'https://apps.apple.com/app/apple-store/id6446418445?action=write-review' : 'https://play.google.com/store/apps/details?id=me.diegof.moyennesed&showAllReviews=true'} style={{ marginBottom: 10 }} icon={<MessageSquareDashedIcon size={20} color={theme.colors.onSurfaceDisabled}/>} theme={theme}/>
         </View>
         

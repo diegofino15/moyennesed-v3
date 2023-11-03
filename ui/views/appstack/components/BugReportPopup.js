@@ -107,10 +107,7 @@ function BugReportPopup({ theme }) {
     <View style={{
       backgroundColor: theme.colors.background,
     }}>
-      <Text style={[theme.fonts.titleSmall, { marginBottom: 10 }]}>Signaler un bug</Text>
-      <Text style={[theme.fonts.labelLarge, { marginBottom: 20, textAlign: 'justify' }]}>Aide{UserData.mainAccount.isParent ? "z" : ""} le développement de l'application en signalant un bug, aucune info personnelle n'est envoyée.</Text>
-
-      <Text style={theme.fonts.bodyLarge}>Quel type de bug est-ce ?</Text>
+      <Text style={[theme.fonts.titleSmall, { marginBottom: 10 }]}>Quel type de bug est-ce ?</Text>
       {possibleBugs.map((bug, key) => <PressableScale onPress={() => {
         if (selectedPossibleBug != key) {
           setSelectedPossibleBug(key);

@@ -132,7 +132,7 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, refreshAverages, 
             }}
           >
             <Trash2Icon size={20} color={theme.colors.onSurfaceDisabled}/>
-          </PressableScale> : <View style={{ width: 30, marginRight: 10 }} />}
+          </PressableScale> : <View style={{ width: 30, marginRight: 10 }}/>}
           
           <PressableScale
             style={{
@@ -189,7 +189,7 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, refreshAverages, 
           >
             <PlusIcon size={20} color={theme.colors.onSurfaceDisabled}/>
           </PressableScale>
-        </View> : <View />}
+        </View> : <View/>}
         <PressableScale onPress={() => setShowChangeCoefficient(!showChangeCoefficient)} style={{
           paddingHorizontal: 7.5,
           paddingVertical: 3,
@@ -215,7 +215,7 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, refreshAverages, 
             {mark.coefficientType == 2
               ? <WrenchIcon size={20} color={theme.colors.onSurfaceDisabled}/>
               : mark.coefficientType == 1
-                ? <BrainCircuitIcon size={20} color={theme.colors.onSurfaceDisabled} style={{ transform: [{ rotate: '90deg' }] }} />
+                ? <BrainCircuitIcon size={20} color={theme.colors.onSurfaceDisabled} style={{ transform: [{ rotate: '90deg' }] }}/>
                 : null}
           </View>
         </PressableScale>

@@ -93,7 +93,7 @@ function SubjectCard({ mainSubject, refreshAverages, theme }) {
         marginTop: 10,
         alignItems: 'center'
       }}>
-        <ArrowRightIcon size={30} color={theme.colors.onSurface} style={{ marginRight: 10 }} />
+        <ArrowRightIcon size={30} color={theme.colors.onSurface} style={{ marginRight: 10 }}/>
         {subjectCard(subSubject)}
       </View>)}
     </View>

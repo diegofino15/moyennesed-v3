@@ -31,7 +31,7 @@ function InfoCard({
           }}>
             {title}
           </Text>
-          {onPress ? <ChevronRightIcon size={20} color={theme.colors.onSurface} /> : null}
+          {onPress ? <ChevronRightIcon size={20} color={theme.colors.onSurface}/> : null}
         </View>
         <Text style={{
           ...theme.fonts.labelMedium,

@@ -33,14 +33,14 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
       flexDirection: 'row',
       alignItems: 'center',
     }}>
-      <GraduationCapIcon size={30} color={theme.colors.onSurfaceDisabled} style={{ marginRight: 10 }} />
+      <GraduationCapIcon size={30} color={theme.colors.onSurfaceDisabled} style={{ marginRight: 10 }}/>
       <Text style={[theme.fonts.labelLarge, { width: Dimensions.get('window').width - 100 }]} numberOfLines={1}>{teacher}</Text>
     </PressableScale>;
   }
 
   function markCard(mark, special) {
     if (mark.id == clickedOnMark && !special) { return null; }
-    return <EmbeddedMarkCard key={mark.id} mark={mark} subject={subject} selectedSubSubject={selectedSubSubject} refreshAverages={refreshAverages} clickedOnMark={clickedOnMark} theme={theme} />
+    return <EmbeddedMarkCard key={mark.id} mark={mark} subject={subject} selectedSubSubject={selectedSubSubject} refreshAverages={refreshAverages} clickedOnMark={clickedOnMark} theme={theme}/>
   }
 
   function section(text, style) {
@@ -122,7 +122,7 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
                 {shownSubjectRef.current.coefficientType == 2
                   ? <WrenchIcon size={20} color={theme.colors.onSurfaceDisabled}/>
                   : shownSubjectRef.current.coefficientType == 1
-                    ? <BrainCircuitIcon size={20} color={theme.colors.onSurfaceDisabled} style={{ transform: [{ rotate: '90deg' }] }} />
+                    ? <BrainCircuitIcon size={20} color={theme.colors.onSurfaceDisabled} style={{ transform: [{ rotate: '90deg' }] }}/>
                     : null}
               </View>
             </PressableScale>
@@ -216,22 +216,25 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
       </View>
       <View style={{
         position: 'absolute',
-        top: 110,
+        top: 120,
         left: -20,
         width: Dimensions.get('screen').width,
         height: 1,
         backgroundColor: theme.colors.surface,
       }}/>
       <ScrollView style={{
-        height: "80%",
+        height: Dimensions.get('screen').height * 0.8 - 140,
         paddingTop: 10,
+        marginTop: 10,
       }} showsVerticalScrollIndicator={false}>
         {shownSubjectRef.current.teachers.length != 0 && section("Professeurs", { marginBottom: 10 })}
         {[...(shownSubjectRef.current.teachers.values() ?? [])].map((teacher, key) => teacherCard(teacher, key))}
+        
         {section("Dernières notes", { marginTop: shownSubjectRef.current.teachers.length != 0 ? 5 : 0 })}
         {clickedOnMark ? markCard(shownSubjectRef.current.marks.find((mark) => mark.id == clickedOnMark), true) : null}
         {shownSubjectRef.current.marks.map((mark) => markCard(mark))}
         {shownSubjectRef.current.marks.length == 0 ? <Text style={[theme.fonts.labelLarge, { alignSelf: 'center', marginTop: 75 }]}>Aucune note pour l'instant</Text> : null}
+        
         <View style={{ height: 70 }}/>
       </ScrollView>
     </View>

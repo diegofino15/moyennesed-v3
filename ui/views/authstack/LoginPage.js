@@ -55,7 +55,7 @@ function LoginPage({ isConnecting, setIsConnecting, setLoggedIn, pageStyle, them
       {/* Login input */}
       <CustomInput
         label="Identifiant"
-        icon={<UserIcon size={30} color={theme.colors.onSurfaceDisabled} />}
+        icon={<UserIcon size={30} color={theme.colors.onSurfaceDisabled}/>}
         onChangeText={(text) => setUsername(text)}
         secureTextEntry={false}
         theme={theme}
@@ -63,7 +63,7 @@ function LoginPage({ isConnecting, setIsConnecting, setLoggedIn, pageStyle, them
       />
       <CustomInput
         label="Mot de passe"
-        icon={<KeyRoundIcon size={30} color={theme.colors.onSurfaceDisabled} />}
+        icon={<KeyRoundIcon size={30} color={theme.colors.onSurfaceDisabled}/>}
         onChangeText={(text) => setPassword(text)}
         secureTextEntry={true}
         theme={theme}

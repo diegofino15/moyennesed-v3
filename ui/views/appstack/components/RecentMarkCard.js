@@ -22,7 +22,7 @@ function RecentMarkCard({ mark, subject, refreshAverages, theme }) {
         "80%"
       ]}
       selectedSnapPoint={0}
-      children={<SubjectPopup subject={subject} selectedSubSubject={mark.subSubjectCode} refreshAverages={refreshAverages} clickedOnMark={mark.id} theme={theme} />}
+      children={<SubjectPopup subject={subject} selectedSubSubject={mark.subSubjectCode} refreshAverages={refreshAverages} clickedOnMark={mark.id} theme={theme}/>}
     />;
   }
 

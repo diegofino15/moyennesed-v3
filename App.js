@@ -87,7 +87,7 @@ function App() {
           {/* AuthStack / AppStack */}
           {loggedInRef.current
             ? <AppStack theme={theme}/>
-            : <AuthStack theme={theme} />}
+            : <AuthStack theme={theme}/>}
           </AppContextProvider>
         </PaperProvider>
       </BottomSheetModalProvider>
