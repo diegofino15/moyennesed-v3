@@ -77,7 +77,7 @@ export class Account {
     // Set preferences
     if (!Preferences.haveBeenChanged) {
       Preferences.setAllowGuessMarkCoefficients(!(jsonData.parametrage.coefficientNote ?? false));
-      Preferences.setAllowGuessSubjectCoefficients(!(jsonData.parametrage.moyenneCoefMatiere ?? false));
+      Preferences.setAllowGuessSubjectCoefficients(!((jsonData.parametrage.moyenneCoefMatiere ?? false) || (jsonData.parametrage.colonneCoefficientMatiere ?? false)));
       Preferences.save();
       console.log(`Preferences have been changed : Marks : ${Preferences.allowGuessMarkCoefficients} | Subjects : ${Preferences.allowGuessSubjectCoefficients}`);
     }
