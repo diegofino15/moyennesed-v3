@@ -11,7 +11,7 @@ import { formatCoefficient, formatDate, formatDate2, formatMark } from '../../..
 import { getSubjectColor } from '../../../../utils/Colors';
 
 
-function EmbeddedMarkCard({ mark, subject, selectedSubSubject, refreshAverages, clickedOnMark, theme }) {
+function EmbeddedMarkCard({ mark, subject, selectedSubSubject, refreshAverages, clickedOnMark, windowDimensions, theme }) {
   const [showChangeCoefficient, setShowChangeCoefficient] = useState(false);
 
   const [_subjectColor, _setSubjectColor] = useState(getSubjectColor(subject.code));
@@ -203,19 +203,19 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, refreshAverages, 
           minWidth: 50,
           height: 30,
         }}>
-          <XIcon size={15} color={theme.colors.onSurface}/>
+          <XIcon size={15 * windowDimensions.fontScale} color={theme.colors.onSurface}/>
           <Text style={[theme.fonts.headlineSmall, { fontSize: 17 }]}>{formatCoefficient(mark.coefficient)}</Text>
-          {showChangeCoefficient ? <ChevronUpIcon size={15} color={theme.colors.onSurfaceDisabled} style={{ marginLeft: 5 }}/> : <ChevronDownIcon size={15} color={theme.colors.onSurfaceDisabled} style={{ marginLeft: 5 }}/>}
+          {showChangeCoefficient ? <ChevronUpIcon size={15 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled} style={{ marginLeft: 5 }}/> : <ChevronDownIcon size={15 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled} style={{ marginLeft: 5 }}/>}
 
           <View style={{
             position: 'absolute',
-            bottom: -7.5,
-            right: -7.5,
+            bottom: -7.5 * windowDimensions.fontScale,
+            right: -7.5 * windowDimensions.fontScale,
           }}>
             {mark.coefficientType == 2
-              ? <WrenchIcon size={20} color={theme.colors.onSurfaceDisabled}/>
+              ? <WrenchIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/>
               : mark.coefficientType == 1
-                ? <BrainCircuitIcon size={20} color={theme.colors.onSurfaceDisabled} style={{ transform: [{ rotate: '90deg' }] }}/>
+                ? <BrainCircuitIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled} style={{ transform: [{ rotate: '90deg' }] }}/>
                 : null}
           </View>
         </PressableScale>

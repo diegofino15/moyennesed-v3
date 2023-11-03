@@ -9,7 +9,7 @@ import { UnavailableServers } from '../global_components/UnavailableServers';
 import { UserData } from '../../../core/UserData';
 
 
-function LoginPage({ isConnecting, setIsConnecting, setLoggedIn, pageStyle, theme }) {
+function LoginPage({ isConnecting, setIsConnecting, setLoggedIn, pageStyle, windowDimensions, theme }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [connectionFailed, setConnectionFailed] = useState(false);
@@ -80,8 +80,9 @@ function LoginPage({ isConnecting, setIsConnecting, setLoggedIn, pageStyle, them
         title="🤔 Mot de passe oublié ?"
         description={`Ça arrive à tout le monde ! Cliquez ici pour réinitialiser votre mot de passe.`}
         onPress={openForgotPasswordURL}
-        theme={theme}
         style={{ marginTop: 20 }}
+        windowDimensions={windowDimensions}
+        theme={theme}
       />
     </View>
   );

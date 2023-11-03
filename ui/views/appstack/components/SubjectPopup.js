@@ -15,7 +15,7 @@ import { formatAverage, formatCoefficient } from '../../../../utils/Utils';
 import { getSubjectColor } from '../../../../utils/Colors';
 
 
-function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnMark, theme }) {
+function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnMark, windowDimensions, theme }) {
   const [_shownSubject, setShownSubject, shownSubjectRef] = useState(subject);
   useEffect(() => {
     if (selectedSubSubject) {
@@ -33,14 +33,14 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
       flexDirection: 'row',
       alignItems: 'center',
     }}>
-      <GraduationCapIcon size={30} color={theme.colors.onSurfaceDisabled} style={{ marginRight: 10 }}/>
+      <GraduationCapIcon size={30 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled} style={{ marginRight: 10 }}/>
       <Text style={[theme.fonts.labelLarge, { width: Dimensions.get('window').width - 100 }]} numberOfLines={2}>{teacher}</Text>
     </PressableScale>;
   }
 
   function markCard(mark, special) {
     if (mark.id == clickedOnMark && !special) { return null; }
-    return <EmbeddedMarkCard key={mark.id} mark={mark} subject={subject} selectedSubSubject={selectedSubSubject} refreshAverages={refreshAverages} clickedOnMark={clickedOnMark} theme={theme}/>
+    return <EmbeddedMarkCard key={mark.id} mark={mark} subject={subject} selectedSubSubject={selectedSubSubject} refreshAverages={refreshAverages} clickedOnMark={clickedOnMark} windowDimensions={windowDimensions} theme={theme}/>
   }
 
   function section(text, style) {
@@ -73,7 +73,7 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
           borderRadius: 20,
           marginRight: 10,
         }}>
-          <Text style={[theme.fonts.headlineLarge, { fontFamily: 'Bitter-Bold', fontSize: 30 }]}>{formatAverage(shownSubjectRef.current.average)}</Text>
+          <Text style={[theme.fonts.headlineLarge, { fontFamily: 'Bitter-Bold', fontSize: 29 }]}>{formatAverage(shownSubjectRef.current.average, false)}</Text>
         </View>
         <View style={{
           justifyContent: 'space-evenly',
@@ -110,19 +110,19 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
               minWidth: 50,
               height: 30,
             }}>
-              <XIcon size={15} color={theme.colors.onSurface}/>
+              <XIcon size={15 * windowDimensions.fontScale} color={theme.colors.onSurface}/>
               <Text style={[theme.fonts.headlineSmall, { fontSize: 17 }]}>{formatCoefficient(shownSubjectRef.current.coefficient)}</Text>
-              {showChangeCoefficient ? <ChevronUpIcon size={15} color={theme.colors.onSurfaceDisabled} style={{ marginLeft: 5 }}/> : <ChevronDownIcon size={15} color={theme.colors.onSurfaceDisabled} style={{ marginLeft: 5 }}/>}
+              {showChangeCoefficient ? <ChevronUpIcon size={15 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled} style={{ marginLeft: 5 }}/> : <ChevronDownIcon size={15 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled} style={{ marginLeft: 5 }}/>}
 
               <View style={{
                 position: 'absolute',
-                bottom: -7.5,
-                right: -7.5,
+                bottom: -7.5 * windowDimensions.fontScale,
+                right: -7.5 * windowDimensions.fontScale,
               }}>
                 {shownSubjectRef.current.coefficientType == 2
-                  ? <WrenchIcon size={20} color={theme.colors.onSurfaceDisabled}/>
+                  ? <WrenchIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/>
                   : shownSubjectRef.current.coefficientType == 1
-                    ? <BrainCircuitIcon size={20} color={theme.colors.onSurfaceDisabled} style={{ transform: [{ rotate: '90deg' }] }}/>
+                    ? <BrainCircuitIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled} style={{ transform: [{ rotate: '90deg' }] }}/>
                     : null}
               </View>
             </PressableScale>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Dimensions, View } from "react-native";
+import { Dimensions, View, useWindowDimensions } from "react-native";
 
 import { PeriodSwitcher } from "./PeriodSwitcher";
 import { MarksOverview } from "./MarksOverview";
@@ -36,6 +36,9 @@ function EmbeddedMarksView({
     // TODO : Detect current period
   }, []);
 
+  // Window dimensions
+  const windowDimensions = useWindowDimensions();
+
   // Informations popup
   const [infoPopupOpen, setInfoPopupOpen] = useState(false);
   function renderInfosPopup() {
@@ -44,7 +47,7 @@ function EmbeddedMarksView({
       isOpen={infoPopupOpen}
       onClose={() => setInfoPopupOpen(false)}
       snapPoints={[
-        Math.min(325 / Dimensions.get('screen').height, 1) * 100 + "%",
+        Math.min(325 / Dimensions.get('screen').height * windowDimensions.fontScale, 1) * 100 + "%",
       ]}
       theme={theme}
       children={<InformationsPopup theme={theme}/>}
@@ -70,6 +73,7 @@ function EmbeddedMarksView({
         redCheck={!isConnected || !gotMarks || marksNeedUpdate}
         refreshAverages={refreshAverages}
         setInfoPopupOpen={setInfoPopupOpen}
+        windowDimensions={windowDimensions}
         theme={theme}
       />
 

@@ -10,9 +10,10 @@ function formatMark(mark, isClass) {
     }
 }
 
-function formatAverage(average) {
+function formatAverage(average, decimals=true) {
     if (average == null) { return "--"; }
-    return average.toFixed(2).replace(".", ",");
+    if (decimals) { return average.toFixed(2).replace('.', ','); }
+    return (Math.round(average * 100) / 100).toString().replace('.', ',');
 }
 
 function formatCoefficient(coefficient) {

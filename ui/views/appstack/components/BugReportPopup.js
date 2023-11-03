@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { View, Text, Platform } from 'react-native';
+import { View, Text, Platform, Dimensions } from 'react-native';
 import { CheckCircle2Icon, CircleIcon } from 'lucide-react-native';
 import { PressableScale } from 'react-native-pressable-scale';
 import * as Haptics from 'expo-haptics';
@@ -10,7 +10,7 @@ import { firebase } from '../../../../utils/firebaseUtils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-function BugReportPopup({ theme }) {
+function BugReportPopup({ windowDimensions, theme }) {
   const [selectedPossibleBug, setSelectedPossibleBug] = useState(0);
   const possibleBugs = [
     {
@@ -120,14 +120,14 @@ function BugReportPopup({ theme }) {
         marginTop: 10,
         borderRadius: 10,
       }}>
-        <Text style={theme.fonts.bodyLarge}>{bug.title}</Text>
+        <Text style={[theme.fonts.bodyLarge, { width: Dimensions.get('window').width - 80 }]} numberOfLines={2}>{bug.title}</Text>
         <Text style={theme.fonts.labelMedium}>{bug.subtitle}</Text>
         <View style={{
           position: 'absolute',
           right: 5,
           top: 5,
         }}>
-          {selectedPossibleBug == key ? <CheckCircle2Icon size={20} color={theme.colors.onSurfaceDisabled}/> : <CircleIcon size={20} color={theme.colors.onSurfaceDisabled}/>}
+          {selectedPossibleBug == key ? <CheckCircle2Icon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/> : <CircleIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/>}
         </View>
       </PressableScale>)}
 

@@ -15,6 +15,7 @@ function MarksOverview({
   redCheck,
   refreshAverages,
   setInfoPopupOpen,
+  windowDimensions,
   theme
 }) {
   // Work with subject groups
@@ -43,10 +44,10 @@ function MarksOverview({
           }}>
             <Text style={[theme.fonts.labelMedium, { alignSelf: 'flex-start', width: Dimensions.get('window').width - 115, height: 30 }]}>{period.title}</Text>
             {loading
-              ? <ActivityIndicator size={30} color={theme.colors.onSurface}/>
+              ? <ActivityIndicator size={30 * windowDimensions.fontScale} color={theme.colors.onSurface}/>
               : redCheck
-                ? <AlertTriangleIcon size={30} color='red'/>
-                : <CheckCircle2Icon size={25} color='green'/>}
+                ? <AlertTriangleIcon size={30 * windowDimensions.fontScale} color='red'/>
+                : <CheckCircle2Icon size={25 * windowDimensions.fontScale} color='green'/>}
           </View>
           
           <Text style={theme.fonts.headlineLarge}>{formatAverage(period.average)}</Text>
@@ -65,7 +66,7 @@ function MarksOverview({
             marginBottom: 10,
           }}>
             <Text style={theme.fonts.bodyLarge}>Dernières notes</Text>
-            <PressableScale onPress={() => setInfoPopupOpen(true)}><HelpCircleIcon size={20} color={theme.colors.onSurfaceDisabled}/></PressableScale>
+            <PressableScale onPress={() => setInfoPopupOpen(true)}><HelpCircleIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/></PressableScale>
           </View>
           <View style={{
             height: 92,
@@ -92,6 +93,7 @@ function MarksOverview({
                       mark={mark} 
                       subject={subject}
                       refreshAverages={refreshAverages}
+                      windowDimensions={windowDimensions}
                       theme={theme}
                     />
                   </View>;
@@ -145,6 +147,7 @@ function MarksOverview({
             <SubjectCard
               mainSubject={subject}
               refreshAverages={refreshAverages}
+              windowDimensions={windowDimensions}
               theme={theme}
             />
           </View>;
@@ -171,6 +174,7 @@ function MarksOverview({
             <SubjectCard
               mainSubject={subject}
               refreshAverages={refreshAverages}
+              windowDimensions={windowDimensions}
               theme={theme}
             />
           </View>;

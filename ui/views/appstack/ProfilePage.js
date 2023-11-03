@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { View, SafeAreaView, ScrollView, Text, Image, Switch, ActivityIndicator, Dimensions, Platform } from 'react-native';
+import { View, SafeAreaView, ScrollView, Text, Image, Switch, ActivityIndicator, Dimensions, Platform, useWindowDimensions } from 'react-native';
 import { BrainCircuitIcon, BugIcon, CheckIcon, ChevronLeftIcon, MailIcon, MessageSquareDashedIcon, RefreshCcwIcon, UserIcon, WrenchIcon, XIcon } from 'lucide-react-native';
 import { PressableScale } from 'react-native-pressable-scale';
 import * as Haptics from "expo-haptics";
@@ -45,6 +45,9 @@ function ProfilePage({
     setUnavailableServers(UserData.unavailableServers);
   }, [UserData.unavailableServers, updateScreenRef.current]);
 
+  // Window dimensions
+  const windowDimensions = useWindowDimensions();
+
   // Bug report popup
   const [bugReportPopupOpen, setBugReportPopupOpen] = useState(false);
   function renderBugReportPopup() {
@@ -53,9 +56,9 @@ function ProfilePage({
       isOpen={bugReportPopupOpen}
       onClose={() => setBugReportPopupOpen(false)}
       snapPoints={[
-        Math.min(550 / Dimensions.get('screen').height, 1) * 100 + "%",
+        Math.min(550 / Dimensions.get('screen').height * windowDimensions.fontScale, 1) * 100 + "%",
       ]}
-      children={<BugReportPopup theme={theme}/>}
+      children={<BugReportPopup windowDimensions={windowDimensions} theme={theme}/>}
     />;
   }
   
@@ -169,8 +172,8 @@ function ProfilePage({
               {connectingRef.current
               ? null
               : connectedRef.current
-                ? <CheckIcon size={20} color='white'/>
-                : <XIcon size={20} color='white'/>}
+                ? <CheckIcon size={20 * windowDimensions.fontScale} color='white'/>
+                : <XIcon size={20 * windowDimensions.fontScale} color='white'/>}
               <Text style={[
                 theme.fonts.labelLarge,
                 { color: 'white', marginLeft: 10 }
@@ -194,8 +197,8 @@ function ProfilePage({
               }}
             >
               {connectingRef.current
-              ? <ActivityIndicator size={25} color='white'/>
-              : <RefreshCcwIcon size={25} color='white'/>}
+              ? <ActivityIndicator size={25 * windowDimensions.fontScale} color='white'/>
+              : <RefreshCcwIcon size={25 * windowDimensions.fontScale} color='white'/>}
             </PressableScale>
           </View>
         </PressableScale>
@@ -216,7 +219,7 @@ function ProfilePage({
           paddingVertical: 15,
         }}>
           <Text style={[theme.fonts.labelLarge, { textAlign: 'justify' }]}>{UserData.mainAccount.isParent ? "Votre" : "Ton"} établissement ne fournit pas les coefs ? L'IA de MoyennesED est là pour les deviner !</Text>
-          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify', marginBottom: 10 }]}>Une icône <BrainCircuitIcon size={20} color={theme.colors.onSurfaceDisabled} style={{ transform: [{ rotate: '90deg' }] }}/> apparaîtra auprès des coefficients estimés.</Text>
+          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify', marginBottom: 10 }]}>Une icône <BrainCircuitIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled} style={{ transform: [{ rotate: '90deg' }] }}/> apparaîtra auprès des coefficients estimés.</Text>
 
           <View style={{
             flexDirection: 'row',
@@ -258,7 +261,7 @@ function ProfilePage({
 
           <Separator theme={theme} style={{ marginTop: 10, marginBottom: 10, backgroundColor: theme.colors.background }}/>
 
-          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify', marginBottom: 10 }]}>{UserData.mainAccount.isParent ? "Vous pourrez" : "Tu pourras"} toujours spécifier un coefficient personnalisé, et une icône <WrenchIcon size={20} color={theme.colors.onSurfaceDisabled}/> apparaîtra.</Text>
+          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify', marginBottom: 10 }]}>{UserData.mainAccount.isParent ? "Vous pourrez" : "Tu pourras"} toujours spécifier un coefficient personnalisé, et une icône <WrenchIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/> apparaîtra.</Text>
 
           <View style={{
             flexDirection: 'row',
@@ -303,9 +306,9 @@ function ProfilePage({
         }}>
           <Text style={[theme.fonts.labelLarge, { textAlign: 'justify' }]}>L'appli ne fonctionne pas bien ?</Text>
           <Text style={[theme.fonts.labelLarge, { textAlign: 'justify', marginBottom: 10 }]}>Envo{UserData.mainAccount.isParent ? "yez" : "ie"} un signalement de bug tout en restant complêtement anonyme.</Text>
-          <CustomLink title="Signaler un bug" onPress={() => setBugReportPopupOpen(true)} icon={<BugIcon size={20} color={theme.colors.onSurfaceDisabled}/>} theme={theme}/>
+          <CustomLink title="Signaler un bug" onPress={() => setBugReportPopupOpen(true)} icon={<BugIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/>} windowDimensions={windowDimensions} theme={theme}/>
           <Text style={[theme.fonts.labelLarge, { alignSelf: 'center' }]}>ou</Text>
-          <CustomLink title="Envoyer un mail" link='mailto:moyennesed@gmail.com' icon={<MailIcon size={20} color={theme.colors.onSurfaceDisabled}/>} theme={theme}/>
+          <CustomLink title="Envoyer un mail" link='mailto:moyennesed@gmail.com' icon={<MailIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/>} windowDimensions={windowDimensions} theme={theme}/>
         </View>
 
         {/* Informations */}
@@ -318,13 +321,13 @@ function ProfilePage({
           paddingVertical: 15,
         }}>
           <Text style={[theme.fonts.labelLarge, { textAlign: 'justify', marginBottom: 10 }]}>MoyennesED est une application non-officielle, elle ne peut être tenue responsable de problèmes potentiels liés à son utilisation.</Text>
-          <CustomLink title="Site officiel ÉcoleDirecte" link='https://www.ecoledirecte.com' style={{ marginBottom: 10 }} theme={theme}/>
-          <CustomLink title="Confidentialité" link='https://moyennesed.my.to/privacy-policy.html' theme={theme}/>
+          <CustomLink title="Site officiel ÉcoleDirecte" link='https://www.ecoledirecte.com' style={{ marginBottom: 10 }} windowDimensions={windowDimensions} theme={theme}/>
+          <CustomLink title="Confidentialité" link='https://moyennesed.my.to/privacy-policy.html' windowDimensions={windowDimensions} theme={theme}/>
 
           <Separator theme={theme} style={{ marginTop: 10, marginBottom: 10, backgroundColor: theme.colors.background }}/>
 
           <Text style={[theme.fonts.labelLarge, { textAlign: 'justify', marginBottom: 10 }]}>L'application {UserData.mainAccount.isParent ? "vous est" : "t'es"} utile ? Écri{UserData.mainAccount.isParent ? "vez" : "s"} un commentaire pour soutenir le développeur !</Text>
-          <CustomLink title="Écrire un commentaire" link={Platform.OS == 'ios' ? 'https://apps.apple.com/app/apple-store/id6446418445?action=write-review' : 'https://play.google.com/store/apps/details?id=me.diegof.moyennesed&showAllReviews=true'} style={{ marginBottom: 10 }} icon={<MessageSquareDashedIcon size={20} color={theme.colors.onSurfaceDisabled}/>} theme={theme}/>
+          <CustomLink title="Écrire un commentaire" link={Platform.OS == 'ios' ? 'https://apps.apple.com/app/apple-store/id6446418445?action=write-review' : 'https://play.google.com/store/apps/details?id=me.diegof.moyennesed&showAllReviews=true'} style={{ marginBottom: 10 }} icon={<MessageSquareDashedIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/>} windowDimensions={windowDimensions} theme={theme}/>
         </View>
         
         {/* Disconnect button */}

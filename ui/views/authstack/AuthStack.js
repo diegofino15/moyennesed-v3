@@ -1,5 +1,5 @@
 import { useRef, useEffect, } from 'react';
-import { View, SafeAreaView, ScrollView, ActivityIndicator, Dimensions, StyleSheet } from 'react-native';
+import { View, SafeAreaView, ScrollView, ActivityIndicator, Dimensions, StyleSheet, useWindowDimensions } from 'react-native';
 import { ChevronRightIcon } from 'lucide-react-native';
 import useState from 'react-usestateref'
 
@@ -25,6 +25,9 @@ function AuthStack({ theme }) {
 
   // To change to AppStack once logged-in
   const appCtx = useAppContext();
+
+  // Window dimensions
+  const windowDimensions = useWindowDimensions();
 
   // For scroll and button click
   const [_screenIndex, setScreenIndex, screenIndexRef] = useState(0);
@@ -64,10 +67,10 @@ function AuthStack({ theme }) {
         }}
       >
         {/* Welcome page */}
-        <WelcomePage pageStyle={styles.pageView} theme={theme}/>
+        <WelcomePage pageStyle={styles.pageView} windowDimensions={windowDimensions} theme={theme}/>
 
         {/* Features page  */}
-        <FeaturesPage pageStyle={styles.pageView} theme={theme}/>
+        <FeaturesPage pageStyle={styles.pageView} windowDimensions={windowDimensions} theme={theme}/>
 
         {/* Login page  */}
         <LoginPage
@@ -75,6 +78,7 @@ function AuthStack({ theme }) {
           setIsConnecting={setIsConnecting}
           setLoggedIn={setLoggedIn}
           pageStyle={styles.pageView}
+          windowDimensions={windowDimensions}
           theme={theme}
         />
 
@@ -93,7 +97,7 @@ function AuthStack({ theme }) {
           <CustomButton
             title={screenIndexRef.current < 2 ? "Continuer" : loggedIn ? "C'est parti !" : "Connexion"}
             onPress={buttonClick}
-            rightIcon={screenIndexRef.current < 2 ? <ChevronRightIcon size={20} color={theme.colors.onPrimary}/> : null}
+            rightIcon={screenIndexRef.current < 2 ? <ChevronRightIcon size={20 * windowDimensions.fontScale} color={theme.colors.onPrimary}/> : null}
             loadIcon={<ActivityIndicator size={20} color={theme.colors.onPrimary}/>}
             overrideIsLoading={isConnectingRef.current}
             willLoad={screenIndexRef.current === 2}
