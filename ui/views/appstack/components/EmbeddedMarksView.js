@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Dimensions, View, useWindowDimensions } from "react-native";
+import useState from "react-usestateref";
 
 import { PeriodSwitcher } from "./PeriodSwitcher";
 import { MarksOverview } from "./MarksOverview";
@@ -31,9 +32,15 @@ function EmbeddedMarksView({
   }
 
   // Which period is currently shown
-  const [shownPeriod, setShownPeriod] = useState(0);
+  const [shownPeriod, setShownPeriod, shownPeriodRef] = useState(0);
   useEffect(() => {
-    // TODO : Detect current period
+    shownPeriodRef.current = 0;
+    for (let [_, period] of shownAccountRef.current.periods) {
+      if (period.isFinished) { shownPeriodRef.current += 1; }
+    }
+    if (shownPeriodRef.current == shownAccountRef.current.periods.size) { shownPeriodRef.current -= 1; }
+    setShownPeriod(shownPeriodRef.current);
+    console.log(`Set shown period to ${shownPeriodRef.current}`);
   }, []);
 
   // Window dimensions
