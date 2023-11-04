@@ -25,7 +25,6 @@ function ChildSwitcher({ selectedChildAccount, setSelectedChildAccount, theme })
               key={item}
               onPress={() => {
                 if (selectedChildAccount != item) {
-                  console.log(`Setting selected account to ${item}`);
                   setSelectedChildAccount(item);
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
                 }

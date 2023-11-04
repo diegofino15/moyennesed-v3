@@ -75,7 +75,7 @@ function EmbeddedMarksView({
 
       <MarksOverview
         period={[...shownAccountRef.current.periods.values()].at(shownPeriod) ?? {}}
-        accoundID={shownAccountRef.current.id}
+        accountID={shownAccountRef.current.id}
         loading={autoRefreshing || isConnecting}
         redCheck={!isConnected || !gotMarks || marksNeedUpdate}
         refreshAverages={refreshAverages}
