@@ -34,7 +34,7 @@ Ensuite, installez les dependencies et lancez le projet avec expo et yarn :
 yarn install
 yarn start
 ```
-Puis installer l'application ExpoGo sur votre appareil ou lancez un simulateur, et connectez vous au serveur lancé avec ```yarn start```
+Puis installez l'application ExpoGo sur votre appareil ou lancez un simulateur, et connectez vous au serveur lancé avec ```yarn start```
 
 ## Contact
 Si vous avez des questions ou des suggestions, n’hésitez pas à ouvrir une issue sur GitHub ou à me contacter directement via mail à moyennesed@gmail.com.
