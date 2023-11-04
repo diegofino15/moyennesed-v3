@@ -51,7 +51,7 @@ export class Account {
   }
   toCache() {
     var savablePeriods = new Map();
-    this.periods.forEach((period, key) => {
+    this.periods.forEach((period) => {
       savablePeriods.set(period.code, getCachePeriod(period));
     });
     

@@ -154,13 +154,18 @@ function _getCalculatedSubjectClassAverage(subject) {
 }
 
 function getCacheSubject(subject) {
+  var savableSubSubjects = new Map();
+  subject.subSubjects.forEach((subSubject, key) => {
+    savableSubSubjects.set(key, getCacheSubject(subSubject));
+  });
+  
   return {
     "id": subject.id,
     "name": subject.name,
     "teachers": subject.teachers,
 
     "isSubSubject": subject.isSubSubject,
-    "subSubjects": Array.from(subject.subSubjects.entries()),
+    "subSubjects": Array.from(savableSubSubjects.entries()),
 
     "marks": subject.marks,
     "average": subject.average,
@@ -176,13 +181,22 @@ function getCacheSubject(subject) {
 }
 
 function getSubjectFromCache(cacheSubject) {
+  var subSubjects = new Map();
+  try {
+    new Map(cacheSubject.subSubjects).forEach((cacheSubSubject, key) => {
+      subSubjects.set(key, getSubjectFromCache(cacheSubSubject));
+    });
+  } catch (e) {
+    console.warn("Invalid cache was loaded, skipping sub subjects...");
+  }
+  
   return {
     "id": cacheSubject.id,
     "name": cacheSubject.name,
     "teachers": cacheSubject.teachers,
 
     "isSubSubject": cacheSubject.isSubSubject,
-    "subSubjects": new Map(cacheSubject.subSubjects),
+    "subSubjects": subSubjects,
 
     "marks": cacheSubject.marks,
     "average": cacheSubject.average,

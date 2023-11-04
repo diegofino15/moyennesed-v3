@@ -1,4 +1,4 @@
-import useStateRef from "react-usestateref";
+import useState from "react-usestateref";
 import { View, ScrollView, Text, ActivityIndicator, Dimensions } from "react-native";
 import { AlertTriangleIcon, CheckCircle2Icon, HelpCircleIcon, InfoIcon } from "lucide-react-native";
 
@@ -6,11 +6,12 @@ import { RecentMarkCard } from "./RecentMarkCard";
 import { SubjectCard } from "./SubjectCard";
 import { formatAverage } from "../../../../utils/Utils";
 import { PressableScale } from "react-native-pressable-scale";
+import { useEffect } from "react";
 
 
 function MarksOverview({
   period,
-  accoundID,
+  accountID,
   loading,
   redCheck,
   refreshAverages,
@@ -19,7 +20,13 @@ function MarksOverview({
   theme
 }) {
   // Work with subject groups
-  const [_drawnSubjects, _setDrawnSubjects, drawnSubjectsRef] = useStateRef(new Array());
+  const [_drawnSubjects, _setDrawnSubjects, drawnSubjectsRef] = useState(new Array());
+  const [_subjectIndex, setSubjectIndex, subjectIndexRef] = useState(0);
+  const [_animate, setAnimate, animateRef] = useState(false);
+  useEffect(() => {
+    setSubjectIndex(0);
+    setAnimate(!animateRef.current);
+  }, [period.code, accountID]);
 
   return (
     <View>
@@ -77,7 +84,7 @@ function MarksOverview({
             {period.marks?.length == 0 ? <Text style={[
               theme.fonts.labelLarge, { alignSelf: 'center' }
             ]}>Aucune note pour l'instant</Text> : <ScrollView
-              key={accoundID + "-" + period.code}
+              key={accountID + "-" + period.code}
               horizontal
               showsHorizontalScrollIndicator={false}
             >
@@ -140,6 +147,7 @@ function MarksOverview({
         {subjectGroup.subjectCodes.map((subjectCode, subjectCodeKey) => {
           if (!drawnSubjectsRef.current.includes(subjectCode)) { drawnSubjectsRef.current.push(subjectCode); }
           const subject = period.subjects.get(subjectCode);
+          subjectIndexRef.current += 1;
           return <View key={subjectCodeKey} style={{
             marginTop: 5,
             marginBottom: 5,
@@ -148,12 +156,15 @@ function MarksOverview({
               mainSubject={subject}
               refreshAverages={refreshAverages}
               windowDimensions={windowDimensions}
+              animateRef={animateRef}
+              index={subjectIndexRef.current}
               theme={theme}
             />
           </View>;
         })}
       </View>)}
       
+      {/* Show remaining subjects */}
       <View>
         {drawnSubjectsRef.current.length != 0 ? <Text style={theme.fonts.labelLarge}>AUTRES MATIERES</Text> : null}
         {drawnSubjectsRef.current.length != 0 ? <View style={{
@@ -167,6 +178,7 @@ function MarksOverview({
         
         {[...(period.subjects?.values() ?? [])].map((subject, subjectKey) => {
           if (drawnSubjectsRef.current.includes(subject.code)) { return null; }
+          subjectIndexRef.current += 1;
           return <View key={subjectKey} style={{
             marginTop: 5,
             marginBottom: 5,
@@ -175,6 +187,8 @@ function MarksOverview({
               mainSubject={subject}
               refreshAverages={refreshAverages}
               windowDimensions={windowDimensions}
+              animateRef={animateRef}
+              index={subjectIndexRef.current}
               theme={theme}
             />
           </View>;

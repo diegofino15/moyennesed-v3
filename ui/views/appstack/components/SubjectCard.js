@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { View, Text, Dimensions } from 'react-native';
+import { useState, useRef, useEffect } from 'react';
+import { View, Text, Animated, Easing, Dimensions } from 'react-native';
 import { ArrowRightIcon } from 'lucide-react-native';
 import { PressableScale } from 'react-native-pressable-scale';
 
@@ -9,7 +9,7 @@ import { getSubjectColor } from '../../../../utils/Colors';
 import { formatAverage, formatMark } from '../../../../utils/Utils';
 
 
-function SubjectCard({ mainSubject, refreshAverages, windowDimensions, theme }) {
+function SubjectCard({ mainSubject, refreshAverages, windowDimensions, index, animateRef, theme }) {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [subSubjectOpened, setSubSubjectOpened] = useState("");
 
@@ -85,8 +85,32 @@ function SubjectCard({ mainSubject, refreshAverages, windowDimensions, theme }) 
     );
   }
 
+  const appearAnimation = useRef(new Animated.Value(0)).current;
+  useEffect(() => {
+    appearAnimation.setValue(0);
+    Animated.timing(appearAnimation, {
+      toValue: 1,
+      duration: 400,
+      easing: Easing.elastic(1),
+      useNativeDriver: true,
+      delay: index * 100,
+    }).start();
+  }, [animateRef.current]);
+
   return (
-    <View>
+    <Animated.View style={{
+      opacity: appearAnimation,
+      transform: [{
+        translateY: appearAnimation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [50, 0],
+        })}, {
+        scale: appearAnimation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0.9, 1],
+        })
+      }],
+    }}>
       {subjectCard(mainSubject)}
       {[...(mainSubject.subSubjects?.values() ?? [])].map((subSubject, key) => <View key={key} style={{
         flexDirection: 'row',
@@ -96,7 +120,7 @@ function SubjectCard({ mainSubject, refreshAverages, windowDimensions, theme }) 
         <ArrowRightIcon size={30} color={theme.colors.onSurface} style={{ marginRight: 10 }}/>
         {subjectCard(subSubject)}
       </View>)}
-    </View>
+    </Animated.View>
   );
 }
 
