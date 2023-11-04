@@ -1,9 +1,10 @@
-import { useState, useRef, useEffect } from 'react';
-import { View, Text, Animated, Easing, Dimensions } from 'react-native';
+import { useState } from 'react';
+import { View, Text, Dimensions } from 'react-native';
 import { ArrowRightIcon } from 'lucide-react-native';
 import { PressableScale } from 'react-native-pressable-scale';
 
 import { BottomSheet } from '../../global_components/BottomSheet';
+import { AnimatedComponent } from '../../global_components/AnimatedComponents';
 import { SubjectPopup } from './SubjectPopup';
 import { getSubjectColor } from '../../../../utils/Colors';
 import { formatAverage, formatMark } from '../../../../utils/Utils';
@@ -85,32 +86,8 @@ function SubjectCard({ mainSubject, refreshAverages, windowDimensions, index, an
     );
   }
 
-  const appearAnimation = useRef(new Animated.Value(0)).current;
-  useEffect(() => {
-    appearAnimation.setValue(0);
-    Animated.timing(appearAnimation, {
-      toValue: 1,
-      duration: 400,
-      easing: Easing.elastic(1),
-      useNativeDriver: true,
-      delay: index * 100,
-    }).start();
-  }, [animateRef.current]);
-
   return (
-    <Animated.View style={{
-      opacity: appearAnimation,
-      transform: [{
-        translateY: appearAnimation.interpolate({
-          inputRange: [0, 1],
-          outputRange: [50, 0],
-        })}, {
-        scale: appearAnimation.interpolate({
-          inputRange: [0, 1],
-          outputRange: [0.9, 1],
-        })
-      }],
-    }}>
+    <AnimatedComponent index={index} animateRef={animateRef} children={<View>
       {subjectCard(mainSubject)}
       {[...(mainSubject.subSubjects?.values() ?? [])].map((subSubject, key) => <View key={key} style={{
         flexDirection: 'row',
@@ -120,7 +97,7 @@ function SubjectCard({ mainSubject, refreshAverages, windowDimensions, index, an
         <ArrowRightIcon size={30} color={theme.colors.onSurface} style={{ marginRight: 10 }}/>
         {subjectCard(subSubject)}
       </View>)}
-    </Animated.View>
+    </View>}/>
   );
 }
 

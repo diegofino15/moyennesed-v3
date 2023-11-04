@@ -7,6 +7,7 @@ import { SubjectCard } from "./SubjectCard";
 import { formatAverage } from "../../../../utils/Utils";
 import { PressableScale } from "react-native-pressable-scale";
 import { useEffect } from "react";
+import { AnimatedComponent } from "../../global_components/AnimatedComponents";
 
 
 function MarksOverview({
@@ -30,7 +31,7 @@ function MarksOverview({
 
   return (
     <View>
-      <View style={{
+      <AnimatedComponent index={0} animateRef={animateRef} children={<View style={{
         width: '100%',
         backgroundColor: theme.colors.surface,
         borderRadius: 20,
@@ -109,10 +110,10 @@ function MarksOverview({
             </ScrollView>}
           </View>
         </View>
-      </View>
+      </View>}/>
 
       {/* Loop trough all subjects groups and show affiliated subjects */}
-      {[...(period.subjectGroups?.values() ?? [])].map((subjectGroup, subjectGroupKey) => <View key={subjectGroupKey} style={{
+      {[...(period.subjectGroups?.values() ?? [])].map((subjectGroup, index) => <View key={index} style={{
         marginBottom: 20,
       }}>
         <View style={{
