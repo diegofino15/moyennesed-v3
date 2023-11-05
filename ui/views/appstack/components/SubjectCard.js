@@ -10,7 +10,7 @@ import { getSubjectColor } from '../../../../utils/Colors';
 import { formatAverage, formatMark } from '../../../../utils/Utils';
 
 
-function SubjectCard({ mainSubject, refreshAverages, windowDimensions, index, animateRef, theme }) {
+function SubjectCard({ mainSubject, refreshAverages, windowDimensions, index, forceUpdate, theme }) {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [subSubjectOpened, setSubSubjectOpened] = useState("");
 
@@ -87,7 +87,7 @@ function SubjectCard({ mainSubject, refreshAverages, windowDimensions, index, an
   }
 
   return (
-    <AnimatedComponent index={index} animateRef={animateRef} children={<View>
+    <AnimatedComponent index={index} forceUpdate={forceUpdate} children={<View>
       {subjectCard(mainSubject)}
       {[...(mainSubject.subSubjects?.values() ?? [])].map((subSubject, key) => <View key={key} style={{
         flexDirection: 'row',

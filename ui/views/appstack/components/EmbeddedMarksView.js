@@ -61,6 +61,13 @@ function EmbeddedMarksView({
     />;
   }
 
+  // Period keys
+  const [_periodKeys, setPeriodKeys, periodKeysRef] = useState(["A000"]);
+  useEffect(() => {
+    setPeriodKeys(["A000"]);
+    setPeriodKeys([...shownAccountRef.current.periods.keys(), "A000"]);
+  }, [gotMarks, shownAccountRef.current.id]);
+  
   return (
     <View style={{
       marginHorizontal: 20,
@@ -73,17 +80,19 @@ function EmbeddedMarksView({
         theme={theme}
       />
 
-      <MarksOverview
-        period={[...shownAccountRef.current.periods.values()].at(shownPeriod) ?? {}}
-        accountID={shownAccountRef.current.id}
-        loading={autoRefreshing || isConnecting}
-        redCheck={!isConnected || !gotMarks || marksNeedUpdate}
-        refreshAverages={refreshAverages}
-        setInfoPopupOpen={setInfoPopupOpen}
-        windowDimensions={windowDimensions}
-        theme={theme}
-      />
-
+      {periodKeysRef.current.map((periodKey, index) => {
+        if (index == shownPeriod || shownPeriod == -1) { return <MarksOverview
+          key={periodKey}
+          period={shownAccountRef.current.periods.get(periodKey) ?? {}}
+          accountID={shownAccountRef.current.id}
+          loading={autoRefreshing || isConnecting}
+          redCheck={!isConnected || !gotMarks || marksNeedUpdate}
+          refreshAverages={refreshAverages}
+          setInfoPopupOpen={setInfoPopupOpen}
+          windowDimensions={windowDimensions}
+          theme={theme}
+        />;}
+      })}
       {renderInfosPopup()}
     </View>
   );

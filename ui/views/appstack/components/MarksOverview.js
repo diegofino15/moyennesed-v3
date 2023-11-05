@@ -23,15 +23,17 @@ function MarksOverview({
   // Work with subject groups
   const [_drawnSubjects, _setDrawnSubjects, drawnSubjectsRef] = useState(new Array());
   const [_subjectIndex, setSubjectIndex, subjectIndexRef] = useState(0);
-  const [_animate, setAnimate, animateRef] = useState(false);
+
+  // Force update animation
+  const [_forceUpdate, setForceUpdate, forceUpdateRef] = useState(false);
   useEffect(() => {
     setSubjectIndex(0);
-    setAnimate(!animateRef.current);
-  }, [period.code, accountID]);
+    setForceUpdate(!forceUpdateRef.current);
+  }, [accountID]);
 
   return (
     <View>
-      <AnimatedComponent index={0} animateRef={animateRef} children={<View style={{
+      <AnimatedComponent index={0} forceUpdate={forceUpdateRef.current} children={<View style={{
         width: '100%',
         backgroundColor: theme.colors.surface,
         borderRadius: 20,
@@ -157,8 +159,8 @@ function MarksOverview({
               mainSubject={subject}
               refreshAverages={refreshAverages}
               windowDimensions={windowDimensions}
-              animateRef={animateRef}
               index={subjectIndexRef.current}
+              forceUpdate={forceUpdateRef.current}
               theme={theme}
             />
           </View>;
@@ -188,8 +190,8 @@ function MarksOverview({
               mainSubject={subject}
               refreshAverages={refreshAverages}
               windowDimensions={windowDimensions}
-              animateRef={animateRef}
               index={subjectIndexRef.current}
+              forceUpdate={forceUpdateRef.current}
               theme={theme}
             />
           </View>;

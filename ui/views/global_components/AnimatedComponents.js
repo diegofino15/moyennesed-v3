@@ -2,7 +2,7 @@ import { useRef, useEffect } from "react";
 import { Animated, Easing } from "react-native";
 
 
-function AnimatedComponent({ index, animateRef, children }) {
+function AnimatedComponent({ index, forceUpdate, children }) {
   const appearAnimation = useRef(new Animated.Value(0)).current;
   useEffect(() => {
     appearAnimation.setValue(0);
@@ -13,7 +13,7 @@ function AnimatedComponent({ index, animateRef, children }) {
       useNativeDriver: true,
       delay: index * 100,
     }).start();
-  }, [animateRef.current]);
+  }, [forceUpdate]);
   
   return (
     <Animated.View style={{
