@@ -115,70 +115,70 @@ function MarksOverview({
       </View>}/>
 
       {/* Loop trough all subjects groups and show affiliated subjects */}
-      {[...(period.subjectGroups?.values() ?? [])].map((subjectGroup, index) => <View key={index} style={{
-        marginBottom: 20,
-      }}>
-        <View style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginRight: 9.5, // Accurate ?
+      {[...(period.subjectGroups?.values() ?? [])].map((subjectGroup, index) => {
+        subjectIndexRef.current += 1;
+        return <View key={index} style={{
+          marginBottom: 20,
         }}>
-          <Text style={[theme.fonts.labelLarge, {
-            width: '75%',
-          }]}>{subjectGroup.name}</Text>
-          <View style={{
+          <AnimatedComponent index={subjectIndexRef.current} forceUpdate={forceUpdateRef.current} children={<View style={{
             flexDirection: 'row',
-            alignItems: 'flex-end',
-            justifyContent: 'flex-end',
-            width: '25%',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginRight: 9.5, // Accurate ?
           }}>
-            <Text style={[theme.fonts.headlineMedium, { fontSize: 20, fontFamily: 'Bitter-Bold', color: theme.colors.onSurfaceDisabled }]}>{formatAverage(subjectGroup.average)}</Text>
-            {subjectGroup.average ? <Text style={[theme.fonts.labelSmall, { fontFamily: 'Bitter-Bold' }]}>/20</Text> : null}
+            <Text style={[theme.fonts.labelLarge, {
+              width: '75%',
+            }]}>{subjectGroup.name}</Text>
+            <View style={{
+              flexDirection: 'row',
+              alignItems: 'flex-end',
+              justifyContent: 'flex-end',
+              width: '25%',
+            }}>
+              <Text style={[theme.fonts.headlineMedium, { fontSize: 20, fontFamily: 'Bitter-Bold', color: theme.colors.onSurfaceDisabled }]}>{formatAverage(subjectGroup.average)}</Text>
+              {subjectGroup.average ? <Text style={[theme.fonts.labelSmall, { fontFamily: 'Bitter-Bold' }]}>/20</Text> : null}
+            </View>
+          </View>}/>
+          <View style={{
+            position: 'absolute',
+            height: "100%",
+            left: -10,
+          }}>
+            <AnimatedComponent index={subjectIndexRef.current} forceUpdate={forceUpdateRef.current} children={<View style={{ backgroundColor: theme.colors.surface, width: 4, borderRadius: 1, height: "100%" }}/>}/>
           </View>
-        </View>
-        <View style={{
-          padding: 2,
-          borderRadius: 1,
-          backgroundColor: theme.colors.surface,
-          position: 'absolute',
-          zIndex: -10,
-          height: "100%",
-          left: -10,
-        }}/>
 
-        {subjectGroup.subjectCodes.map((subjectCode, subjectCodeKey) => {
-          if (!drawnSubjectsRef.current.includes(subjectCode)) { drawnSubjectsRef.current.push(subjectCode); }
-          const subject = period.subjects.get(subjectCode);
-          subjectIndexRef.current += 1;
-          return <View key={subjectCodeKey} style={{
-            marginTop: 5,
-            marginBottom: 5,
-          }}>
-            <SubjectCard
-              mainSubject={subject}
-              refreshAverages={refreshAverages}
-              windowDimensions={windowDimensions}
-              index={subjectIndexRef.current}
-              forceUpdate={forceUpdateRef.current}
-              theme={theme}
-            />
-          </View>;
-        })}
-      </View>)}
+          {subjectGroup.subjectCodes.map((subjectCode, subjectCodeKey) => {
+            if (!drawnSubjectsRef.current.includes(subjectCode)) { drawnSubjectsRef.current.push(subjectCode); }
+            const subject = period.subjects.get(subjectCode);
+            subjectIndexRef.current += 1;
+            return <View key={subjectCodeKey} style={{
+              marginTop: 5,
+              marginBottom: 5,
+            }}>
+              <SubjectCard
+                mainSubject={subject}
+                refreshAverages={refreshAverages}
+                windowDimensions={windowDimensions}
+                index={subjectIndexRef.current}
+                forceUpdate={forceUpdateRef.current}
+                theme={theme}
+              />
+            </View>;
+          })}
+        </View>
+      })}
       
       {/* Show remaining subjects */}
       <View>
-        {drawnSubjectsRef.current.length != 0 ? <Text style={theme.fonts.labelLarge}>AUTRES MATIERES</Text> : null}
+        {drawnSubjectsRef.current.length != 0 ? <AnimatedComponent index={subjectIndexRef.current + 1} forceUpdate={forceUpdateRef.current} children={<Text style={theme.fonts.labelLarge}>AUTRES MATIERES</Text>}/> : null}
         {drawnSubjectsRef.current.length != 0 ? <View style={{
-          padding: 2,
-          backgroundColor: theme.colors.surface,
           position: 'absolute',
-          zIndex: -1,
-          height: '100%',
+          height: "100%",
           left: -10,
-        }}/> : null}
-        
+        }}>
+          <AnimatedComponent index={subjectIndexRef.current + 1} forceUpdate={forceUpdateRef.current} children={<View style={{ backgroundColor: theme.colors.surface, width: 4, borderRadius: 1, height: "100%" }}/>}/>
+        </View> : null}
+
         {[...(period.subjects?.values() ?? [])].map((subject, subjectKey) => {
           if (drawnSubjectsRef.current.includes(subject.code)) { return null; }
           subjectIndexRef.current += 1;
