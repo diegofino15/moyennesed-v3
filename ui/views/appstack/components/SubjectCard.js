@@ -73,6 +73,7 @@ function SubjectCard({ mainSubject, refreshAverages, getMark, windowDimensions, 
           }}>
             {(subject.subSubjects.size == 0) && subject.marks.map((markID) => {
               const mark = getMark(markID);
+              if (mark == undefined) { return null; }
               return <Text key={markID} style={[
                 theme.fonts.headlineMedium,
                 {
