@@ -172,6 +172,12 @@ function getSubjectFromCache(cacheSubject) {
   } catch (e) {
     console.warn("Invalid cache was loaded, skipping sub subjects...");
   }
+
+  var marks = new Array();
+  cacheSubject.marks.forEach(mark => {
+    if (!mark.id) { marks.push(mark); }
+    else { marks.push(mark.id); }
+  });
   
   return {
     "id": cacheSubject.id,
@@ -181,7 +187,7 @@ function getSubjectFromCache(cacheSubject) {
     "isSubSubject": cacheSubject.isSubSubject,
     "subSubjects": subSubjects,
 
-    "marks": cacheSubject.marks,
+    "marks": marks,
     "average": cacheSubject.average,
     "classAverage": cacheSubject.classAverage,
 
