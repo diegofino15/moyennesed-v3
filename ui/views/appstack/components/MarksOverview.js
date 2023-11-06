@@ -1,6 +1,6 @@
 import useState from "react-usestateref";
 import { View, ScrollView, Text, ActivityIndicator, Dimensions } from "react-native";
-import { AlertTriangleIcon, CheckCircle2Icon, HelpCircleIcon, InfoIcon } from "lucide-react-native";
+import { AlertTriangleIcon, CheckCircle2Icon, HelpCircleIcon, Users2Icon } from "lucide-react-native";
 
 import { RecentMarkCard } from "./RecentMarkCard";
 import { SubjectCard } from "./SubjectCard";
@@ -64,8 +64,9 @@ function MarksOverview({
           <Text style={[theme.fonts.labelMedium, { marginBottom: 5, marginRight: 5 }]}>MOYENNE GÉNÉRALE</Text>
           
           {period.classAverage ? <View style={{ flexDirection: 'row' }}>
-            <Text style={theme.fonts.labelSmall}>Classe : </Text>
-            <Text style={[theme.fonts.headlineSmall, { color: theme.colors.onSurfaceDisabled, fontSize: 13 }]}>{formatAverage(period.classAverage)}</Text>
+            <Users2Icon size={15 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled} style={{ marginRight: 5 }}/>
+            <Text style={[theme.fonts.labelSmall, { bottom: 1 }]}>: </Text>
+            <Text style={[theme.fonts.labelSmall, { fontFamily: 'Bitter-Regular' }]}>{formatAverage(period.classAverage)}</Text>
           </View> : null}
           
           <View style={{

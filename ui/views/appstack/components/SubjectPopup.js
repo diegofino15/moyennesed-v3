@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { View, Text, Dimensions } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { BrainCircuitIcon, ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, GraduationCapIcon, MinusIcon, PlusIcon, Trash2Icon, WrenchIcon, XIcon } from 'lucide-react-native';
+import { BrainCircuitIcon, ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, GraduationCapIcon, MinusIcon, PlusIcon, Trash2Icon, WrenchIcon, XIcon, Users2Icon } from 'lucide-react-native';
 import { PressableScale } from 'react-native-pressable-scale';
 import useState from 'react-usestateref';
 import * as Haptics from "expo-haptics";
@@ -88,8 +88,9 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
             <Text style={theme.fonts.bodyLarge}>{shownSubjectRef.current.name}</Text>
           </Text>
           
-          {subject.classAverage ? <View style={{ flexDirection: 'row' }}>
-            <Text style={theme.fonts.labelMedium}>Classe : </Text>
+          {subject.classAverage ? <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Users2Icon size={15 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled} style={{ marginRight: 5 }}/>
+            <Text style={[theme.fonts.labelMedium, { bottom: 1 }]}>: </Text>
             <Text style={[theme.fonts.labelMedium, { fontFamily: 'Bitter-Regular' }]}>{formatAverage(shownSubjectRef.current.classAverage)}</Text>
           </View> : null}
           

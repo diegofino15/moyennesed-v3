@@ -1,5 +1,5 @@
 import { View, Text, Dimensions } from 'react-native';
-import { ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, MinusIcon, PlusIcon, Trash2Icon, XIcon, WrenchIcon, BrainCircuitIcon, CalendarCheck2Icon, Users2Icon } from 'lucide-react-native';
+import { ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, MinusIcon, PlusIcon, Trash2Icon, XIcon, WrenchIcon, BrainCircuitIcon, Users2Icon } from 'lucide-react-native';
 import { PressableScale } from 'react-native-pressable-scale';
 import useState from 'react-usestateref';
 import * as Haptics from "expo-haptics";
