@@ -147,20 +147,12 @@ function getPeriodFromCache(cachePeriod) {
   new Map(cachePeriod.subjectGroups).forEach((cacheSubjectGroup, key) => {
     subjectGroups.set(key, cacheSubjectGroup);
   });
-
-  var marks;
-  try {
-    marks = new Map(cachePeriod.marks);
-  } catch (e) {
-    marks = new Map();
-    console.warn("Invalid cache was loaded, skipping marks...");
-  }
-
+  
   return {
     "code": cachePeriod.code,
     "title": cachePeriod.title,
     "isFinished": cachePeriod.isFinished,
-    "marks": marks,
+    "marks": new Map(cachePeriod.marks),
     "subjects": subjects,
     "subjectGroups": subjectGroups,
     "average": cachePeriod.average,

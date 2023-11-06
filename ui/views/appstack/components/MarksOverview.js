@@ -92,6 +92,7 @@ function MarksOverview({
               showsHorizontalScrollIndicator={false}
             >
               {[...(period.marks?.values() ?? [])].map((mark, markKey) => {
+                if (!mark) { return null; }
                 if (markKey < 10) {
                   const subject = period.subjects.get(mark.subjectCode);
                   return <View
