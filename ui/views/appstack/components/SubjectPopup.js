@@ -9,13 +9,12 @@ import * as Haptics from "expo-haptics";
 import { EmbeddedMarkCard } from './EmbeddedMarkCard';
 import { Separator } from '../../global_components/Separator';
 import { Preferences } from '../../../../core/Preferences';
-import { _sortMarks } from '../../../../core/Subject';
 import { CoefficientManager } from '../../../../core/CoefficientsManager';
 import { formatAverage, formatCoefficient } from '../../../../utils/Utils';
 import { getSubjectColor } from '../../../../utils/Colors';
 
 
-function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnMark, windowDimensions, theme }) {
+function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnMark, getMark, windowDimensions, theme }) {
   const [_shownSubject, setShownSubject, shownSubjectRef] = useState(subject);
   useEffect(() => {
     if (selectedSubSubject) {
@@ -38,9 +37,10 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
     </PressableScale>;
   }
 
-  function markCard(mark, special) {
+  function markCard(markID, special) {
+    const mark = getMark(markID);
     if (mark.id == clickedOnMark && !special) { return null; }
-    return <EmbeddedMarkCard key={mark.id} mark={mark} subject={subject} selectedSubSubject={selectedSubSubject} refreshAverages={refreshAverages} clickedOnMark={clickedOnMark} windowDimensions={windowDimensions} theme={theme}/>
+    return <EmbeddedMarkCard key={markID} mark={mark} subject={subject} selectedSubSubject={selectedSubSubject} refreshAverages={refreshAverages} clickedOnMark={clickedOnMark} windowDimensions={windowDimensions} theme={theme}/>
   }
 
   function section(text, style) {
@@ -121,7 +121,7 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
               }}>
                 {shownSubjectRef.current.coefficientType == 2
                   ? <WrenchIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/>
-                  : shownSubjectRef.current.coefficientType == 1
+                  : shownSubjectRef.current.coefficientType == 1 && shownSubjectRef.current.coefficient != 1
                     ? <BrainCircuitIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled} style={{ transform: [{ rotate: '90deg' }] }}/>
                     : null}
               </View>
@@ -231,8 +231,8 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
         {[...(shownSubjectRef.current.teachers.values() ?? [])].map((teacher, key) => teacherCard(teacher, key))}
         
         {section("Dernières notes", { marginTop: shownSubjectRef.current.teachers.length != 0 ? 5 : 0 })}
-        {clickedOnMark ? markCard(shownSubjectRef.current.marks.find((mark) => mark.id == clickedOnMark), true) : null}
-        {shownSubjectRef.current.marks.map((mark) => markCard(mark))}
+        {clickedOnMark ? markCard(shownSubjectRef.current.marks.find((markID) => markID == clickedOnMark), true) : null}
+        {shownSubjectRef.current.marks.map((markID) => markCard(markID))}
         {shownSubjectRef.current.marks.length == 0 ? <Text style={[theme.fonts.labelLarge, { alignSelf: 'center', marginTop: 75 }]}>Aucune note pour l'instant</Text> : null}
         
         <View style={{ height: 70 }}/>

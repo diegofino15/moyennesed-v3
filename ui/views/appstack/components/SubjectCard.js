@@ -10,7 +10,7 @@ import { getSubjectColor } from '../../../../utils/Colors';
 import { formatAverage, formatMark } from '../../../../utils/Utils';
 
 
-function SubjectCard({ mainSubject, refreshAverages, windowDimensions, index, forceUpdate, theme }) {
+function SubjectCard({ mainSubject, refreshAverages, getMark, windowDimensions, index, forceUpdate, theme }) {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [subSubjectOpened, setSubSubjectOpened] = useState("");
 
@@ -24,7 +24,7 @@ function SubjectCard({ mainSubject, refreshAverages, windowDimensions, index, fo
         (255 / Dimensions.get('screen').height * 100) + "%",
         "80%",
       ]}
-      children={<SubjectPopup subject={mainSubject} selectedSubSubject={subject.subCode} refreshAverages={refreshAverages} windowDimensions={windowDimensions} theme={theme}/>}
+      children={<SubjectPopup subject={mainSubject} selectedSubSubject={subject.subCode} refreshAverages={refreshAverages} getMark={getMark} windowDimensions={windowDimensions} theme={theme}/>}
     />;
   }
 
@@ -54,7 +54,7 @@ function SubjectCard({ mainSubject, refreshAverages, windowDimensions, index, fo
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-            <Text style={[theme.fonts.bodyLarge, { width: 240 - (subject.isSubSubject ? 40 : 0) }]} numberOfLines={1}>{subject.name}</Text>
+            <Text style={[theme.fonts.bodyLarge, { width: Dimensions.get('window').width - 140 - (subject.isSubSubject ? 40 : 0) }]} numberOfLines={1}>{subject.name}</Text>
             <View style={{
               flexDirection: 'row',
               alignItems: 'flex-end',
@@ -71,14 +71,17 @@ function SubjectCard({ mainSubject, refreshAverages, windowDimensions, index, fo
             borderRadius: 10,
             overflow: 'hidden',
           }}>
-            {(subject.subSubjects.size == 0) && subject.marks.map((mark) => <Text key={mark.id} style={[
-              theme.fonts.headlineMedium,
-              {
-                marginRight: 15,
-                color: mark.isEffective ? theme.colors.onSurface : theme.colors.onSurfaceDisabled,
-                textDecorationLine: mark.isEffective ? 'none' : 'line-through',
-              }
-            ]}>{formatMark(mark)}</Text>)}
+            {(subject.subSubjects.size == 0) && subject.marks.map((markID) => {
+              const mark = getMark(markID);
+              return <Text key={markID} style={[
+                theme.fonts.headlineMedium,
+                {
+                  marginRight: 15,
+                  color: mark.isEffective ? theme.colors.onSurface : theme.colors.onSurfaceDisabled,
+                  textDecorationLine: mark.isEffective ? 'none' : 'line-through',
+                }
+              ]}>{formatMark(mark)}</Text>
+            })}
           </View>
         </PressableScale>
         {renderPopup(subject)}

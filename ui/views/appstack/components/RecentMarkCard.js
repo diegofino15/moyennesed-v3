@@ -8,7 +8,7 @@ import { SubjectPopup } from './SubjectPopup';
 import { getSubjectColor } from '../../../../utils/Colors';
 
 
-function RecentMarkCard({ mark, subject, refreshAverages, windowDimensions, theme }) {
+function RecentMarkCard({ mark, subject, refreshAverages, getMark, windowDimensions, theme }) {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
 
   function renderPopup() {
@@ -22,7 +22,7 @@ function RecentMarkCard({ mark, subject, refreshAverages, windowDimensions, them
         "80%"
       ]}
       selectedSnapPoint={0}
-      children={<SubjectPopup subject={subject} selectedSubSubject={mark.subSubjectCode} refreshAverages={refreshAverages} clickedOnMark={mark.id} windowDimensions={windowDimensions} theme={theme}/>}
+      children={<SubjectPopup subject={subject} selectedSubSubject={mark.subSubjectCode} refreshAverages={refreshAverages} clickedOnMark={mark.id} getMark={getMark} windowDimensions={windowDimensions} theme={theme}/>}
     />;
   }
 

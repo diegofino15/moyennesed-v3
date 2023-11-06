@@ -1,11 +1,10 @@
 import { View, Text, Dimensions } from 'react-native';
-import { ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, MinusIcon, PlusIcon, Trash2Icon, XIcon, WrenchIcon, BrainCircuitIcon } from 'lucide-react-native';
+import { ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, MinusIcon, PlusIcon, Trash2Icon, XIcon, WrenchIcon, BrainCircuitIcon, CalendarCheck2Icon, Users2Icon } from 'lucide-react-native';
 import { PressableScale } from 'react-native-pressable-scale';
 import useState from 'react-usestateref';
 import * as Haptics from "expo-haptics";
 
 import { Preferences } from '../../../../core/Preferences';
-import { _sortMarks } from '../../../../core/Subject';
 import { CoefficientManager } from '../../../../core/CoefficientsManager';
 import { formatCoefficient, formatDate, formatDate2, formatMark } from '../../../../utils/Utils';
 import { getSubjectColor } from '../../../../utils/Colors';
@@ -79,8 +78,9 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, refreshAverages, 
           justifyContent: 'space-between',
           width: Dimensions.get('window').width - 200,
         }}>
-          {mark.classValue ? <View style={{ flexDirection: 'row', marginTop: 5 }}>
-            <Text style={theme.fonts.labelMedium}>Classe : </Text>
+          {mark.classValue ? <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5 }}>
+            <Users2Icon size={15 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled} style={{ marginRight: 5 }}/>
+            <Text style={[theme.fonts.labelMedium, { bottom: 1 }]}>: </Text>
             <Text style={[theme.fonts.labelMedium, { fontFamily: 'Bitter-Regular' }]}>{formatMark(mark, true)}</Text>
           </View> : null}
           <Text style={[theme.fonts.labelMedium, { marginTop: 5 }]} numberOfLines={1}>{mark.classValue ? formatDate2(mark.dateEntered) : formatDate(mark.dateEntered)}</Text>
@@ -214,7 +214,7 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, refreshAverages, 
           }}>
             {mark.coefficientType == 2
               ? <WrenchIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/>
-              : mark.coefficientType == 1
+              : mark.coefficientType == 1 && mark.coefficient != 1
                 ? <BrainCircuitIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled} style={{ transform: [{ rotate: '90deg' }] }}/>
                 : null}
           </View>

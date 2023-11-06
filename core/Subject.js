@@ -73,43 +73,25 @@ function addMarkToSubject(subject, mark) {
     }
     addMarkToSubject(subSubject, mark);
   }
-  subject.marks.push(mark);
+  subject.marks.push(mark.id);
 }
 
-function sortSubjectMarks(subject) {
-  _sortMarks(subject.marks);
+function calculateSubjectAverages(subject, getMark) {
   for (let [_, subSubject] of subject.subSubjects) {
-    _sortMarks(subSubject.marks);
-  }
-}
-
-function _sortMarks(marks) {
-  marks.sort((a, b) => {
-    if (a.dateEntered < b.dateEntered) {
-      return 1;
-    }
-    if (a.dateEntered > b.dateEntered) {
-      return -1;
-    }
-    return 0;
-  });
-}
-
-function calculateSubjectAverages(subject) {
-  for (let [_, subSubject] of subject.subSubjects) {
-    calculateSubjectAverages(subSubject);
+    calculateSubjectAverages(subSubject, getMark);
   }
 
-  subject.average = _getCalculatedSubjectAverage(subject);
-  subject.classAverage = _getCalculatedSubjectClassAverage(subject);
+  subject.average = _getCalculatedSubjectAverage(subject, getMark);
+  subject.classAverage = _getCalculatedSubjectClassAverage(subject, getMark);
 }
 
-function _getCalculatedSubjectAverage(subject) {
+function _getCalculatedSubjectAverage(subject, getMark) {
   let sum = 0;
   let coefficient = 0;
 
   if (subject.subSubjects.size == 0) {
-    subject.marks.forEach(mark => {
+    subject.marks.forEach(markID => {
+      const mark = getMark(markID);
       if (mark.isEffective) {
         sum += (mark.value / mark.valueOn * 20) * mark.coefficient;
         coefficient += mark.coefficient;
@@ -119,7 +101,7 @@ function _getCalculatedSubjectAverage(subject) {
 
   subject.subSubjects.forEach((subSubject, _) => {
     if (subSubject.marks.length != 0) {
-      sum += _getCalculatedSubjectAverage(subSubject) * subSubject.coefficient;
+      sum += _getCalculatedSubjectAverage(subSubject, getMark) * subSubject.coefficient;
       coefficient += subSubject.coefficient;
     }
   });
@@ -128,12 +110,13 @@ function _getCalculatedSubjectAverage(subject) {
   return sum / coefficient;
 }
 
-function _getCalculatedSubjectClassAverage(subject) {
+function _getCalculatedSubjectClassAverage(subject, getMark) {
   let sum = 0;
   let coefficient = 0;
 
   if (subject.subSubjects.size == 0) {
-    subject.marks.forEach(mark => {
+    subject.marks.forEach(markID => {
+      const mark = getMark(markID);
       if (mark.isEffective && mark.classValue) {
         sum += (mark.classValue / mark.valueOn * 20) * mark.coefficient;
         coefficient += mark.coefficient;
@@ -142,9 +125,9 @@ function _getCalculatedSubjectClassAverage(subject) {
   }
 
   subject.subSubjects.forEach((subSubject, _) => {
-    let subSubjectsAverage = _getCalculatedSubjectClassAverage(subSubject);
-    if (subSubjectsAverage) {
-      sum += subSubjectsAverage * subSubject.coefficient;
+    let subSubjectAverage = _getCalculatedSubjectClassAverage(subSubject, getMark);
+    if (subSubjectAverage) {
+      sum += subSubjectAverage * subSubject.coefficient;
       coefficient += subSubject.coefficient;
     }
   });
@@ -211,4 +194,4 @@ function getSubjectFromCache(cacheSubject) {
   };  
 }
 
-export { getFormattedSubject, addSubSubjectToSubject, addMarkToSubject, sortSubjectMarks, _sortMarks, calculateSubjectAverages, getCacheSubject, getSubjectFromCache };
+export { getFormattedSubject, addSubSubjectToSubject, addMarkToSubject, calculateSubjectAverages, getCacheSubject, getSubjectFromCache };

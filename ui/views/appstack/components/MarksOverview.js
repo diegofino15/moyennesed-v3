@@ -84,14 +84,14 @@ function MarksOverview({
             width: Dimensions.get('window').width - 80,
             justifyContent: 'center',
           }}>
-            {period.marks?.length == 0 ? <Text style={[
+            {period.marks?.size == 0 ? <Text style={[
               theme.fonts.labelLarge, { alignSelf: 'center' }
             ]}>Aucune note pour l'instant</Text> : <ScrollView
               key={accountID + "-" + period.code}
               horizontal
               showsHorizontalScrollIndicator={false}
             >
-              {period.marks?.map((mark, markKey) => {
+              {[...(period.marks?.values() ?? [])].map((mark, markKey) => {
                 if (markKey < 10) {
                   const subject = period.subjects.get(mark.subjectCode);
                   return <View
@@ -103,6 +103,9 @@ function MarksOverview({
                       mark={mark} 
                       subject={subject}
                       refreshAverages={refreshAverages}
+                      getMark={(markID) => {
+                        return period.marks.get(markID);
+                      }}
                       windowDimensions={windowDimensions}
                       theme={theme}
                     />
@@ -158,6 +161,9 @@ function MarksOverview({
               <SubjectCard
                 mainSubject={subject}
                 refreshAverages={refreshAverages}
+                getMark={(markID) => {
+                  return period.marks.get(markID);
+                }}
                 windowDimensions={windowDimensions}
                 index={subjectIndexRef.current}
                 forceUpdate={forceUpdateRef.current}
@@ -189,6 +195,9 @@ function MarksOverview({
             <SubjectCard
               mainSubject={subject}
               refreshAverages={refreshAverages}
+              getMark={(markID) => {
+                return period.marks.get(markID);
+              }}
               windowDimensions={windowDimensions}
               index={subjectIndexRef.current}
               forceUpdate={forceUpdateRef.current}

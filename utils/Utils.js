@@ -1,3 +1,18 @@
+// Core
+function _sortMarks(marks) {
+    marks.sort((a, b) => {
+        if (a.dateEntered < b.dateEntered) {
+            return 1;
+        }
+        if (a.dateEntered > b.dateEntered) {
+            return -1;
+        }
+        return 0;
+    });
+}
+
+
+// UI
 function formatMark(mark, isClass) {
     if (!isClass) {
         if (!mark.value) { return mark.valueStr; }
@@ -20,7 +35,6 @@ function formatCoefficient(coefficient) {
     if (coefficient == null) { return "--"; }
     return coefficient.toString().replace(".", ",");
 }
-
 
 const daysNames = [
     "Dimanche",
@@ -60,4 +74,4 @@ function capitalizeWords(string) {
     return words.join(" ");
 }
 
-export { formatMark, formatAverage, formatCoefficient, formatDate, formatDate2, capitalizeWords };
+export { formatMark, formatAverage, formatCoefficient, formatDate, formatDate2, capitalizeWords, _sortMarks };

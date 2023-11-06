@@ -1,8 +1,9 @@
-import { getFormattedPeriod, addMarkToPeriod, sortAllPeriodMarks, calculateAllPeriodAverages, getCachePeriod, getPeriodFromCache } from "./Period";
+import { getFormattedPeriod, addMarkToPeriod, calculateAllPeriodAverages, getCachePeriod, getPeriodFromCache } from "./Period";
 import { getFormattedMark } from "./Mark";
 import { Preferences } from "./Preferences";
 import { capitalizeWords } from "../utils/Utils";
 import { CoefficientManager } from "./CoefficientsManager";
+import { _sortMarks } from "../utils/Utils";
 
 
 export class Account {
@@ -92,17 +93,21 @@ export class Account {
     });
 
     // Add marks
+    var sortedMarks = new Array();
     jsonData.notes.forEach(markData => {
       const mark = getFormattedMark(markData);
       if (mark.valueStr) {
-        const period = this.periods.get(mark.periodCode);
-        addMarkToPeriod(period, mark);
+        sortedMarks.push(mark);
       }
+    });
+    _sortMarks(sortedMarks);
+    sortedMarks.forEach(mark => {
+      const period = this.periods.get(mark.periodCode);
+      addMarkToPeriod(period, mark);
     });
 
     // Calculate averages
     for (let [_, period] of this.periods) {
-      sortAllPeriodMarks(period);
       calculateAllPeriodAverages(period);
     }
 
