@@ -152,6 +152,7 @@ function MainPage({
         "Allez, pense aux grandes vacances c'est pas si loin...",
         "Déjà des contrôles toutes les semaines...",
         "Si t'aimes bien l'appli hésite pas à aller la noter !",
+        "Corrige les coefs manuellement si ceux-ci ne sont pas bons !",
         "Reste à l'affut des mises à jour !",
       );
     }
