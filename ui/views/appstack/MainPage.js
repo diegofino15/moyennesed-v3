@@ -200,7 +200,7 @@ function MainPage({
             <Text style={[
               theme.fonts.titleSmall,
               { fontFamily: 'Montserrat-Medium', marginBottom: 5 }
-            ]}>{UserData.mainAccount.firstName.length === 0 && connectingRef.current ? "Connexion..." : UserData.mainAccount.firstName.length === 0 ? "Déconnecté" : `Bonjour ${UserData.mainAccount.firstName} !`}</Text>
+            ]} numberOfLines={1}>{UserData.mainAccount.firstName.length === 0 && connectingRef.current ? "Connexion..." : UserData.mainAccount.firstName.length === 0 ? "Déconnecté" : `Bonjour ${UserData.mainAccount.firstName} !`}</Text>
             <Text style={[
               theme.fonts.labelMedium,
               { overflow: 'visible', maxHeight: 50 }
