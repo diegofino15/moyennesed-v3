@@ -20,7 +20,10 @@ export class UserData {
 
   static async login(username, password) {
     this.API_URL = "https://api.ecoledirecte.com";
-    if (username.substring(0, 4) == "demo") { this.API_URL = "http://api.moyennesed.my.to:777/test-api"; }
+    if (username.substring(0, 4) == "demo") {
+      this.API_URL = "https://api.moyennesed.my.to/test-api";
+      console.log("Using demo API...");
+    }
     
     console.log(`Logging-in ${username}...`);
     this.connected = false;
