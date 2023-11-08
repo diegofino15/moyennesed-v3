@@ -2,7 +2,7 @@
   "expo": {
     "name": "MoyennesED",
     "slug": "moyennesed-v3",
-    "version": "3.1.1",
+    "version": "3.1.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -17,7 +17,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "me.diegof.moyennesed",
-      "buildNumber": "2"
+      "buildNumber": "1"
     },
     "android": {
       "adaptiveIcon": {
@@ -25,7 +25,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "me.diegof.moyennesed",
-      "versionCode": 8
+      "versionCode": 9
     },
     "web": {
       "favicon": "./assets/favicon.png"
