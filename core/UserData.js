@@ -4,6 +4,7 @@ import { Account } from "./Account";
 import { Preferences } from "./Preferences";
 import { CoefficientManager } from "./CoefficientsManager";
 import { calculateAllPeriodAverages } from "./Period";
+import { Logger } from "../utils/Logger";
 
 
 export class UserData {
@@ -22,10 +23,10 @@ export class UserData {
     this.API_URL = "https://api.ecoledirecte.com";
     if (username.substring(0, 4) == "demo") {
       this.API_URL = "https://api.moyennesed.my.to/test-api";
-      console.log("Using demo API...");
+      Logger.info("Using demo API...");
     }
     
-    console.log(`Logging-in ${username}...`);
+    Logger.login(`Logging-in ${username}...`);
     this.connected = false;
     this.connecting = true;
     this.unavailableServers = false;
@@ -35,7 +36,7 @@ export class UserData {
       `data={"identifiant":"${username}", "motdepasse":"${password}"}`,
       { headers: { "Content-Type": "text/plain" } },
     ).catch(error => {
-      console.warn(`An error occured while logging in : ${error}`);
+      Logger.login(`An error occured while logging in : ${error}`, true);
     });
     response ??= { status: 500 };
     this.loginLogs = response.data;
@@ -43,26 +44,26 @@ export class UserData {
     var success = 0;
     switch (response.status) {
       case 200:
-        console.log("API request successful");
+        Logger.login("API request successful");
         switch (response.data.code) {
           case 200:
-            console.log("Login successful !");
+            Logger.login("Login successful !");
             this.token = response.data.token;
             this.formatReceivedLoginData(response.data.data.accounts.at(0));
             await AsyncStorage.setItem("credentials", JSON.stringify({ username, password }));
             success = 1;
             break;
           case 505: // Wrong password
-            console.log(`Couldn't connect, wrong password for ${username}`);
+            Logger.login(`Couldn't connect, wrong password for ${username}`);
             break;
           default:
-            console.warn(`API responded with unknown code ${response.data.code}`);
+            Logger.login(`API responded with unknown code ${response.data.code}`, true);
             success = -1;
             break;
         }
         break;
       default:
-        console.warn("API request failed");
+        Logger.login("API request failed", true);
         success = -1;
         break;
     }
@@ -80,13 +81,13 @@ export class UserData {
       this.mainAccount.periods = this.marksDataCache.get(this.mainAccount.id.toString());
     }
     
-    console.log(`Created account ${this.mainAccount.fullName()} (${this.mainAccount.id}) (${this.mainAccount.isParent ? "parent" : "student"} account)`);
+    Logger.core(`Created account ${this.mainAccount.fullName()} (${this.mainAccount.id}) (${this.mainAccount.isParent ? "parent" : "student"} account)`);
     this.childrenAccounts.clear();
     if (this.mainAccount.isParent) {
       jsonData.profile.eleves.forEach(childData => {
         const childAccount = new Account();
         childAccount.init(childData, true);
-        console.log("-> Created child account " + childAccount.fullName() + " (" + childAccount.id + ")");
+        Logger.core("-> Created child account " + childAccount.fullName() + " (" + childAccount.id + ")");
         if (this.marksDataCache.has(childAccount.id.toString()) && this.marksDataCache.get(childAccount.id.toString())) {
           childAccount.periods = this.marksDataCache.get(childAccount.id.toString());
         }
@@ -96,7 +97,7 @@ export class UserData {
   }
 
   static async refreshLogin() {
-    console.log("Refreshing login...");
+    Logger.info("Refreshing login...");
     const credentials = JSON.parse(await AsyncStorage.getItem("credentials"));
     if (credentials) {
       return await this.login(credentials.username, credentials.password);
@@ -107,39 +108,39 @@ export class UserData {
   static async getMarks(accountID) {
     this.unavailableServers = false;
 
-    console.log(`Getting marks for account ${accountID}...`);
+    Logger.marks(`Getting marks for account ${accountID}...`);
     var response = await axios.post(
       `${this.API_URL}/v3/eleves/${accountID}/notes.awp?verbe=get&v=4`,
       'data={"anneeScolaire": ""}',
       { headers: { "Content-Type": "text/plain", "X-Token": this.token } },
     ).catch(error => {
-      console.warn(`An error occured while getting marks : ${error}`);
+      Logger.marks(`An error occured while getting marks : ${error}`, true);
     });
     response ??= { status: 500 };
     this.marksLogs[accountID] = response.data;
     
     switch (response.status) {
       case 200:
-        console.log("API request successful");
+        Logger.marks("API request successful");
         switch (response.data.code) {
           case 200:
-            console.log(`Got marks for account ${accountID} !`);
+            Logger.marks(`Got marks for account ${accountID} !`);
             this.token = response.data.token;
             return response.data.data;
           case 520: // Outdated token
-            console.log("Outdated token, reconnecting...");
+            Logger.info("Outdated token, reconnecting...");
             const reloginSuccessful = await this.refreshLogin();
             if (reloginSuccessful) {
               return await this.getMarks(accountID);
             }
             return 0;
           default:
-            console.warn(`API responded with unknown code ${response.data.code}`);
+            Logger.marks(`API responded with unknown code ${response.data.code}`, true);
             this.unavailableServers = true;
             return -1;
         }
       default:
-        console.warn("API request failed");
+        Logger.marks("API request failed", true);
         this.unavailableServers = true;
         return -1;
     }
@@ -224,7 +225,7 @@ export class UserData {
   }
 
   static async logout() {
-    console.log("Logging out...");
+    Logger.info("Logging out...");
     this.connected = false;
     this.connecting = false;
     this.mainAccount.erase();
@@ -241,7 +242,7 @@ export class UserData {
     this.temporaryProfilePhoto = "";
     await AsyncStorage.removeItem("photo");
     this.lastBugReport = null;
-    console.log("Logged out !");
+    Logger.info("Logged out !");
   }
 
   // Profile photo
@@ -249,11 +250,11 @@ export class UserData {
   static async loadProfilePhoto(account, callback, forceLoad=false) {
     return await AsyncStorage.getItem("photo").then(async (cachePhoto) => {
       if (cachePhoto && !forceLoad) {
-        console.log("Loaded profile photo from cache");
+        Logger.core("Loaded profile photo from cache");
         this.temporaryProfilePhoto = cachePhoto;
         callback(cachePhoto);
       } else {
-        console.log("Loading profile photo...");
+        Logger.core("Loading profile photo...");
         if (!account.photoURL) { return null; }
         return await fetch(`https:${account.photoURL}`, { headers: { 'Referer': `http:${account.photoURL}`, 'Host': 'doc1.ecoledirecte.com' } })
         .then(async (response) => {
@@ -264,12 +265,12 @@ export class UserData {
             const base64data = fileReaderInstance.result;
             this.temporaryProfilePhoto = base64data;
             AsyncStorage.setItem("photo", base64data);
-            console.log("Got profile photo !");
+            Logger.core("Got profile photo !");
             callback(base64data);
           }
         })
         .catch(error => {
-          console.warn("Error getting profile photo: " + error);
+          Logger.core("Error getting profile photo: " + error, true);
           this.temporaryProfilePhoto = "";
           AsyncStorage.removeItem("photo");
           callback("");

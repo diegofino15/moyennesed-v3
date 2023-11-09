@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Logger } from "../utils/Logger";
 
 
 export class Preferences {
@@ -40,10 +41,10 @@ export class Preferences {
         this.allowGuessSubjectCoefficients = preferences.allowGuessSubjectCoefficients;
         this.allowCustomCoefficients = preferences.allowCustomCoefficients;
         this.haveBeenChanged = true;
-        console.log("Preferences loaded !");
-        console.log(`-> AllowGuessMarkCoefficients : ${this.allowGuessMarkCoefficients}`)
-        console.log(`-> AllowGuessSubjectCoefficients : ${this.allowGuessSubjectCoefficients}`)
-        console.log(`-> AllowCustomCoefficients : ${this.allowCustomCoefficients}`)
+        Logger.load("Preferences loaded !");
+        Logger.load(`-> AllowGuessMarkCoefficients : ${this.allowGuessMarkCoefficients}`)
+        Logger.load(`-> AllowGuessSubjectCoefficients : ${this.allowGuessSubjectCoefficients}`)
+        Logger.load(`-> AllowCustomCoefficients : ${this.allowCustomCoefficients}`)
       }
     });
   }

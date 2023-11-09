@@ -8,6 +8,7 @@ import { EmbeddedMarksView } from './components/EmbeddedMarksView';
 import { CustomSquareButton } from "../global_components/CustomSquareButton";
 import { ChildSwitcher } from "./components/ChildSwitcher";
 import { UserData } from "../../../core/UserData";
+import { Logger } from "../../../utils/Logger";
 
 
 function MainPage({
@@ -24,7 +25,7 @@ function MainPage({
     else {
       if (selectedChildAccountRef.current.length === 0) {
         selectedChildAccountRef.current = UserData.childrenAccounts.keys().next().value;
-        console.log(`Automatically selecting child account : ${selectedChildAccountRef.current}`);
+        Logger.core(`Automatically selecting child account : ${selectedChildAccountRef.current}`);
       }
       return UserData.childrenAccounts.get(selectedChildAccountRef.current);
     }
@@ -50,7 +51,7 @@ function MainPage({
       if (gettingMarksRef.current.has(accountToUpdate.id) && gettingMarksRef.current.get(accountToUpdate.id)) { return; }
       
       if (!gotMarksRef.current.has(accountToUpdate.id) || !gotMarksRef.current.get(accountToUpdate.id)) {
-        console.log(`Getting marks for ${accountToUpdate.id}...`);
+        Logger.marks(`Getting marks for ${accountToUpdate.id}...`);
         setRefreshing(true);
         gettingMarksRef.current.set(accountToUpdate.id, true);
         gotMarksRef.current.set(accountToUpdate.id, false); UserData.gotMarksFor.set(accountToUpdate.id, false);
@@ -58,7 +59,7 @@ function MainPage({
         const marks = await UserData.getMarks(accountToUpdate.id);
         if (marks == -1) {
           gettingMarksRef.current.set(accountToUpdate.id, false);
-          console.warn(`Couldn't get marks for ${accountToUpdate.id}`);
+          Logger.marks(`Couldn't get marks for ${accountToUpdate.id}`, true);
           setRefreshing(false);
           setManualRefreshing(false);
           return;
@@ -70,7 +71,7 @@ function MainPage({
         gotMarksRef.current.set(accountToUpdate.id, true); UserData.gotMarksFor.set(accountToUpdate.id, true);
         gettingMarksRef.current.set(accountToUpdate.id, false);
         await UserData.saveCache();
-        console.log(`Got marks for ${accountToUpdate.id} !`);
+        Logger.marks(`Got marks for ${accountToUpdate.id} !`);
 
         setUpdateScreen(!updateScreenRef.current);
         setRefreshing(false);
@@ -79,7 +80,7 @@ function MainPage({
           setManualRefreshing(false);
         }
       } else if (marksNeedUpdateRef.current.has(accountToUpdate.id) && marksNeedUpdateRef.current.get(accountToUpdate.id)) {
-        console.log(`Refreshing marks for ${accountToUpdate.id}...`);
+        Logger.core(`Refreshing marks for ${accountToUpdate.id}...`);
         setRefreshing(true);
         gettingMarksRef.current.set(accountToUpdate.id, true);
         marksNeedUpdateRef.current.set(accountToUpdate.id, false); UserData.marksNeedUpdate.set(accountToUpdate.id, false);
@@ -88,7 +89,7 @@ function MainPage({
         if (marks == -1) {
           gotMarksRef.current.set(accountToUpdate.id, false); UserData.gotMarksFor.set(accountToUpdate.id, false);
           gettingMarksRef.current.set(accountToUpdate.id, false);
-          console.warn(`Couldn't get marks for ${accountToUpdate.id}`);
+          Logger.core(`Couldn't refresh marks for ${accountToUpdate.id}`, true);
           setRefreshing(false);
           setManualRefreshing(false);
           return;
@@ -99,7 +100,7 @@ function MainPage({
         });
         gettingMarksRef.current.set(accountToUpdate.id, false);
         await UserData.saveCache();
-        console.log(`Refreshed marks for ${accountToUpdate.id} !`);
+        Logger.core(`Refreshed marks for ${accountToUpdate.id} !`);
 
         setUpdateScreen(!updateScreenRef.current);
         setRefreshing(false);

@@ -1,6 +1,7 @@
 import { getFormattedSubject, addSubSubjectToSubject, calculateSubjectAverages, getCacheSubject, getSubjectFromCache, addMarkToSubject } from "./Subject";
 import { addSubjectToSubjectGroup, getFormattedSubjectGroup } from "./SubjectGroup";
 import { registerSubject } from "../utils/Colors";
+import { Logger } from "../utils/Logger";
 
 
 function getFormattedPeriod(jsonData) {
@@ -52,7 +53,7 @@ function addMarkToPeriod(period, mark) {
   period.marks.set(mark.id, mark);
   var subject = period.subjects.get(mark.subjectCode);
   if (subject == undefined) {
-    console.warn("Detected mark without subject, creating it...");
+    Logger.core("Detected mark without subject, creating it...", true);
     subject = getFormattedSubject({
       id: parseInt(Math.random().toString(36).substring(2, 9)),
       coef: 0,

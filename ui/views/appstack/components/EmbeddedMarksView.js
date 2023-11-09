@@ -9,6 +9,7 @@ import { InformationsPopup } from "./InformationsPopup";
 import { UserData } from "../../../../core/UserData";
 import { calculateAllPeriodAverages } from "../../../../core/Period";
 import { CoefficientManager } from "../../../../core/CoefficientsManager";
+import { Logger } from "../../../../utils/Logger";
 
 
 function EmbeddedMarksView({
@@ -40,7 +41,7 @@ function EmbeddedMarksView({
     }
     if (shownPeriodRef.current == shownAccountRef.current.periods.size) { shownPeriodRef.current -= 1; }
     setShownPeriod(shownPeriodRef.current);
-    console.log(`Set shown period to ${shownPeriodRef.current}`);
+    Logger.core(`Set shown period to ${shownPeriodRef.current}`);
   }, [gotMarks]);
 
   // Window dimensions

@@ -14,6 +14,7 @@ import { UserData } from './core/UserData';
 import { Preferences } from './core/Preferences';
 import { CoefficientManager } from './core/CoefficientsManager';
 import { AppContextProvider } from './utils/AppContext';
+import { Logger } from './utils/Logger';
 
 
 // Keep splash screen visible while loading
@@ -41,17 +42,17 @@ function App() {
         if (!loggedInLoadedRef.current) {
           const jsonCredentials = await AsyncStorage.getItem('credentials');
           if (jsonCredentials !== null) {
-            console.log("Detected already logged-in account (loading cache...)");
+            Logger.info("Detected already logged-in account (loading cache...)");
             await Preferences.load();
             await CoefficientManager.load();
             await UserData.loadCache();
             setLoggedIn(true);
           } else {
-            console.log("No account detected, showing auth stack");
+            Logger.info("No account detected, showing auth stack");
           }
         }
       } catch (e) {
-        console.warn(`An error occured on startup, ${e}`);
+        Logger.info(`An error occured on startup, ${e}`, true);
       } finally {
         setLoggedInLoaded(true);
       }

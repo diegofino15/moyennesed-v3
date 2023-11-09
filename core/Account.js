@@ -4,6 +4,7 @@ import { Preferences } from "./Preferences";
 import { capitalizeWords } from "../utils/Utils";
 import { CoefficientManager } from "./CoefficientsManager";
 import { _sortMarks } from "../utils/Utils";
+import { Logger } from '../utils/Logger';
 
 
 export class Account {
@@ -80,7 +81,7 @@ export class Account {
       Preferences.setAllowGuessMarkCoefficients(!(jsonData.parametrage.coefficientNote ?? false));
       Preferences.setAllowGuessSubjectCoefficients(!((jsonData.parametrage.moyenneCoefMatiere ?? false) || (jsonData.parametrage.colonneCoefficientMatiere ?? false)));
       Preferences.save();
-      console.log(`Preferences have been changed : Marks : ${Preferences.allowGuessMarkCoefficients} | Subjects : ${Preferences.allowGuessSubjectCoefficients}`);
+      Logger.core(`Preferences have been changed : Marks : ${Preferences.allowGuessMarkCoefficients} | Subjects : ${Preferences.allowGuessSubjectCoefficients}`);
     }
     
     // Save periods

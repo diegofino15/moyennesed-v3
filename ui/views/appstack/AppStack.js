@@ -6,6 +6,7 @@ import { MainPage } from './MainPage';
 import { ProfilePage } from './ProfilePage';
 import { UserData } from '../../../core/UserData';
 import { useAppContext } from '../../../utils/AppContext';
+import { Logger } from '../../../utils/Logger';
 
 
 function AppStack({ theme }) {
@@ -20,7 +21,7 @@ function AppStack({ theme }) {
   // Auto-connect (only first launch)
   if (!(connectedRef.current || connectingRef.current) && !triedToConnectRef.current) {
     setTriedToConnect(true);
-    console.log("Auto-connecting...");
+    Logger.info("Auto-connecting...");
     refreshLogin();
   }
 

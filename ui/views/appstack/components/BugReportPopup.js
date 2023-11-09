@@ -3,11 +3,12 @@ import { View, Text, Platform, Dimensions } from 'react-native';
 import { CheckCircle2Icon, CircleIcon } from 'lucide-react-native';
 import { PressableScale } from 'react-native-pressable-scale';
 import * as Haptics from 'expo-haptics';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { CustomButton } from '../../global_components/CustomButton';
 import { UserData } from '../../../../core/UserData';
 import { firebase } from '../../../../utils/firebaseUtils';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Logger } from '../../../../utils/Logger';
 
 
 function BugReportPopup({ windowDimensions, theme }) {
@@ -81,7 +82,7 @@ function BugReportPopup({ windowDimensions, theme }) {
 
   async function sendBugReport() {
     if (Date.now() - (UserData.lastBugReport ?? 0) > UserData.bugReportCooldown) {
-      console.log("Sending bug report...");
+      Logger.info("Sending bug report...");
       setSendingBugReport(true);
       const dataToSend = {
         'date': new Date().toISOString(),
@@ -97,7 +98,7 @@ function BugReportPopup({ windowDimensions, theme }) {
       setSentBugReport(true);
       setSendingBugReport(false);
       setCanSendBugReport(false);
-      console.log("Sent bug report !");
+      Logger.info("Sent bug report !");
     } else {
       setCanSendBugReport(false);
     }

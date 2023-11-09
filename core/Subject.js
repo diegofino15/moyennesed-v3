@@ -1,6 +1,7 @@
 import { Preferences } from "./Preferences";
 import { CoefficientManager } from "./CoefficientsManager";
 import { capitalizeWords } from "../utils/Utils";
+import { Logger } from "../utils/Logger";
 
 
 function getFormattedSubject(jsonData) {
@@ -59,7 +60,7 @@ function addMarkToSubject(subject, mark) {
   if (mark.subSubjectCode && !subject.isSubSubject) {
     var subSubject = subject.subSubjects.get(mark.subSubjectCode);
     if (subSubject == undefined) {
-      console.warn("Detected mark without sub-subject, creating it...");
+      Logger.core("Detected mark without sub-subject, creating it...", true);
       subSubject = getFormattedSubject({
         id: parseInt(Math.random().toString(36).substring(2, 9)),
         coef: 0,
@@ -170,7 +171,7 @@ function getSubjectFromCache(cacheSubject) {
       subSubjects.set(key, getSubjectFromCache(cacheSubSubject));
     });
   } catch (e) {
-    console.warn("Invalid cache was loaded, skipping sub subjects...");
+    Logger.load("Invalid cache was loaded, skipping sub subjects...", true);
   }
 
   var marks = new Array();
