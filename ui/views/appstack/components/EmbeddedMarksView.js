@@ -58,7 +58,7 @@ function EmbeddedMarksView({
         Math.min(325 / Dimensions.get('screen').height * windowDimensions.fontScale, 1) * 100 + "%",
       ]}
       theme={theme}
-      children={<InformationsPopup theme={theme}/>}
+      children={<InformationsPopup windowDimensions={windowDimensions} theme={theme}/>}
     />;
   }
 

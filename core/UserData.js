@@ -33,7 +33,7 @@ export class UserData {
 
     var response = await axios.post(
       `${this.API_URL}/v3/login.awp?v=4`,
-      `data={"identifiant":"${username}", "motdepasse":"${password}"}`,
+      `data={"identifiant":"${encodeURIComponent(username)}", "motdepasse":"${encodeURIComponent(password)}"}`,
       { headers: { "Content-Type": "text/plain" } },
     ).catch(error => {
       Logger.login(`An error occured while logging in : ${error}`, true);
