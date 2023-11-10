@@ -5,23 +5,23 @@ export class Logger {
     else { console.log(`LOAD  - ${message}`); }
   }}
 
-  static showLoginLogs = false;
+  static showLoginLogs = true;
   static login(message, warn=false) { if (this.showLoginLogs) {
     if (warn) { console.warn(`LOGIN - ${message}`); }
     else { console.log(`LOGIN - ${message}`); }
   }}
-  static showMarksLogs = false;
+  static showMarksLogs = true;
   static marks(message, warn=false) { if (this.showMarksLogs) {
     if (warn) { console.warn(`MARKS - ${message}`); }
     else { console.log(`MARKS - ${message}`); }
   }}
 
-  static showCoreLogs = false;
+  static showCoreLogs = true;
   static core(message, warn=false) { if (this.showCoreLogs) {
     if (warn) { console.warn(`CORE  - ${message}`); }
     else { console.log(`CORE  - ${message}`); }
   }}
-  static showInfoLogs = false;
+  static showInfoLogs = true;
   static info(message, warn=false) { if (this.showInfoLogs) {
     if (warn) { console.warn(`INFO  - ${message}`); }
     else { console.info(`${message}`); }

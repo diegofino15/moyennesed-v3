@@ -1,5 +1,5 @@
 import { useRef, useEffect } from "react";
-import { View, Text, Dimensions } from "react-native";
+import { View, Text, Dimensions, Platform } from "react-native";
 import LottieView from "lottie-react-native";
 
 import { UserData } from "../../../core/UserData";
@@ -38,7 +38,7 @@ function LoggedInPage({ pageStyle, theme }) {
         position: 'absolute',
         top: 200,
       }}>
-        <LottieView
+        {Platform.OS != "web" && <LottieView
           ref={animationRef}
           autoPlay
           loop={true}
@@ -53,7 +53,7 @@ function LoggedInPage({ pageStyle, theme }) {
           style={{
             width: Dimensions.get('window').width,
           }}
-        />
+        />}
       </View>
     </View>
   );

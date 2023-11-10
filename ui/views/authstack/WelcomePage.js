@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { View, Text, Dimensions } from "react-native";
+import { View, Text, Dimensions, Platform } from "react-native";
 import LottieView from 'lottie-react-native';
 
 
@@ -26,13 +26,13 @@ function WelcomePage({ pageStyle, theme }) {
         position: 'absolute',
         top: 180,
       }}>
-        <LottieView
+        {Platform.OS != "web" && <LottieView
           ref={animationRef}
           source={require("../../../assets/lottie/welcome-animation.json")}
           style={{
             width: Dimensions.get('window').width,
           }}
-        />
+        />}
       </View>
     </View>
   );
