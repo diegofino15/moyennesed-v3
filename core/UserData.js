@@ -25,15 +25,20 @@ export class UserData {
       this.API_URL = "https://api.moyennesed.my.to/test-api";
       Logger.info("Using demo API...");
     }
-    
+
     Logger.login(`Logging-in ${username}...`);
     this.connected = false;
     this.connecting = true;
     this.unavailableServers = false;
 
+    const credentials = {
+      "identifiant": username,
+      "motdepasse": encodeURIComponent(password),
+    };
+
     var response = await axios.post(
       `${this.API_URL}/v3/login.awp?v=4`,
-      `data={"identifiant":"${encodeURIComponent(username)}", "motdepasse":"${encodeURIComponent(password)}"}`,
+      `data=${JSON.stringify(credentials)}`,
       { headers: { "Content-Type": "text/plain" } },
     ).catch(error => {
       Logger.login(`An error occured while logging in : ${error}`, true);

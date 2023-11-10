@@ -55,7 +55,7 @@ function AuthStack({ theme }) {
       <ScrollView
         horizontal={true}
         showsHorizontalScrollIndicator={false}
-        snapToInterval={Dimensions.get('window').width - 20}
+        snapToInterval={Dimensions.get('window').width}
         bounces={false}
         scrollEnabled={loggedIn ? false : true}
         decelerationRate={0}
