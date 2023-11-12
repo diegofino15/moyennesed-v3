@@ -54,7 +54,7 @@ function SubjectCard({ mainSubject, refreshAverages, getMark, windowDimensions, 
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-            <Text style={[theme.fonts.bodyLarge, { width: Dimensions.get('window').width - 140 - (subject.isSubSubject ? 40 : 0) }]} numberOfLines={1}>{subject.name}</Text>
+            <Text style={[theme.fonts.bodyLarge, { width: Dimensions.get('window').width - (140 + (subject.isSubSubject ? 40 : 0)) * windowDimensions.fontScale }]} numberOfLines={1}>{subject.name}</Text>
             <View style={{
               flexDirection: 'row',
               alignItems: 'flex-end',

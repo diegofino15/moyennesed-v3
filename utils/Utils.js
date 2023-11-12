@@ -63,9 +63,9 @@ function formatDate(givenDate) {
     const date = new Date(givenDate);
     return `${daysNames[date.getDay()]} ${date.getDate()} ${monthsNames[date.getMonth()]}`;
 }
-function formatDate2(givenDate) {
+function formatDate2(givenDate, sub=3) {
     const date = new Date(givenDate);
-    return `${date.getDate()} ${monthsNames[date.getMonth()].substring(0, 3)}.`;
+    return `${date.getDate()} ${monthsNames[date.getMonth()].substring(0, sub)}.`;
 }
 
 function capitalizeWords(string) {

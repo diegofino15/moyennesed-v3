@@ -24,6 +24,9 @@ function CustomInput({
           ...theme.fonts.bodyLarge,
           marginLeft: 10,
           width: Dimensions.get('window').width - 105,
+          position: 'absolute',
+          left: 40,
+          height: 50,
         }}
         placeholder={label}
         onChangeText={onChangeText}

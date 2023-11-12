@@ -18,7 +18,7 @@ function RecentMarkCard({ mark, subject, refreshAverages, getMark, windowDimensi
       isOpen={isBottomSheetOpen}
       onClose={() => setIsBottomSheetOpen(false)}
       snapPoints={[
-        (Math.min((350 + 50 * (subject.teachers.length ?? 0)) / Dimensions.get('screen').height * windowDimensions.fontScale, 0.8) * 100).toString() + "%",
+        (Math.min((380 + 50 * (subject.teachers.length ?? 0)) / Dimensions.get('screen').height * windowDimensions.fontScale, 0.8) * 100).toString() + "%",
         "80%"
       ]}
       selectedSnapPoint={0}
@@ -101,7 +101,7 @@ function RecentMarkCard({ mark, subject, refreshAverages, getMark, windowDimensi
             position: 'absolute',
             bottom: -7.5,
             right: 10,
-            backgroundColor: '#DA3633',
+            backgroundColor: theme.colors.tertiary,
             paddingHorizontal: 5,
             paddingVertical: 3,
             borderRadius: 5,

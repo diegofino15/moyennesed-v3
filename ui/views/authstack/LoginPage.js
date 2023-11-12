@@ -68,7 +68,7 @@ function LoginPage({ isConnecting, setIsConnecting, setLoggedIn, pageStyle, wind
         secureTextEntry={true}
         theme={theme}
         style={{
-          borderColor: connectionFailed ? '#DA3633' : theme.colors.surface,
+          borderColor: connectionFailed ? theme.colors.tertiary : theme.colors.surface,
         }}
       />
       {unavailableServers && <View style={{ marginTop: 20 }}>

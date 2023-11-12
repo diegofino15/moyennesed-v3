@@ -1,13 +1,13 @@
-import useState from "react-usestateref";
+import { useEffect } from "react";
 import { View, ScrollView, Text, ActivityIndicator, Dimensions } from "react-native";
-import { AlertTriangleIcon, CheckCircle2Icon, HelpCircleIcon, Users2Icon } from "lucide-react-native";
+import { CheckCircle2Icon, HelpCircleIcon, Users2Icon, WifiOffIcon } from "lucide-react-native";
+import { PressableScale } from "react-native-pressable-scale";
+import useState from "react-usestateref";
 
 import { RecentMarkCard } from "./RecentMarkCard";
 import { SubjectCard } from "./SubjectCard";
-import { formatAverage } from "../../../../utils/Utils";
-import { PressableScale } from "react-native-pressable-scale";
-import { useEffect } from "react";
 import { AnimatedComponent } from "../../global_components/AnimatedComponents";
+import { formatAverage } from "../../../../utils/Utils";
 
 
 function MarksOverview({
@@ -52,12 +52,12 @@ function MarksOverview({
             width: '100%',
             marginBottom: 20,
           }}>
-            <Text style={[theme.fonts.labelMedium, { alignSelf: 'flex-start', width: Dimensions.get('window').width - 115, height: 30 }]}>{period.title}</Text>
+            <Text style={[theme.fonts.labelMedium, { width: Dimensions.get('window').width - 115, height: 30 }]}>{period.title}</Text>
             {loading
               ? <ActivityIndicator size={30 * windowDimensions.fontScale} color={theme.colors.onSurface}/>
               : redCheck
-                ? <AlertTriangleIcon size={30 * windowDimensions.fontScale} color='red'/>
-                : <CheckCircle2Icon size={25 * windowDimensions.fontScale} color='green'/>}
+                ? <WifiOffIcon size={25 * windowDimensions.fontScale} color={theme.colors.tertiary}/>
+                : <CheckCircle2Icon size={25 * windowDimensions.fontScale} color={theme.colors.secondary}/>}
           </View>
           
           <Text style={theme.fonts.headlineLarge}>{formatAverage(period.average)}</Text>

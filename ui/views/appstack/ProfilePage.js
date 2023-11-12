@@ -158,7 +158,7 @@ function ProfilePage({
           marginBottom: 20,
         }}>
           <View style={{
-            backgroundColor: connectedRef.current ? '#4CAF50' : connectingRef.current ? '#2296F3' : '#DA3633',
+            backgroundColor: connectedRef.current ? theme.colors.secondary : connectingRef.current ? theme.colors.primary : theme.colors.tertiary,
             borderRadius: 10,
             width: '100%',
             flexDirection: 'row',
@@ -338,14 +338,14 @@ function ProfilePage({
           confirmLabel="Cela effacera toutes vos préférences"
           onPress={logout}
           willLoad={true}
-          loadIcon={<ActivityIndicator size={20} color='#DA3633'/>}
+          loadIcon={<ActivityIndicator size={20} color={theme.colors.tertiary}/>}
           style={{
             backgroundColor: theme.colors.background,
             borderWidth: 2,
-            borderColor: '#DA3633'
+            borderColor: theme.colors.tertiary,
           }}
           textStyle={{
-            color: '#DA3633',
+            color: theme.colors.tertiary,
           }}
         />
 

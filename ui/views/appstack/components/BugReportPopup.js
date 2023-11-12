@@ -138,7 +138,7 @@ function BugReportPopup({ windowDimensions, theme }) {
         confirmLabel={`Envo${UserData.mainAccount.isParent ? "yez" : "ies"}-en qu'un seul !`}
         onPress={sendBugReport}
         style={{
-          backgroundColor: (canSendBugReport || sentBugReport) ? theme.colors.primary : '#DA3633',
+          backgroundColor: (canSendBugReport || sentBugReport) ? theme.colors.primary : theme.colors.tertiary,
           marginTop: 20,
         }}
         theme={theme}

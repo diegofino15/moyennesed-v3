@@ -23,6 +23,10 @@ function setThemeData(theme) {
     primary: '#1985A1',
     onPrimary: '#FFF',
     onPrimaryDisabled: '#888',
+
+    secondary: '#4CAF50',
+
+    tertiary: '#DA3633',
   };
   theme.fonts = {
     default: {

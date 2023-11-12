@@ -1,17 +1,20 @@
 import { useEffect } from 'react';
 import { View, Text, Dimensions } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { BrainCircuitIcon, ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, GraduationCapIcon, MinusIcon, PlusIcon, Trash2Icon, WrenchIcon, XIcon, Users2Icon } from 'lucide-react-native';
+import { BrainCircuitIcon, ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, GraduationCapIcon, MinusIcon, PlusIcon, Trash2Icon, WrenchIcon, XIcon, Users2Icon, TrendingUpIcon } from 'lucide-react-native';
 import { PressableScale } from 'react-native-pressable-scale';
+import { LineChart } from 'react-native-chart-kit';
 import useState from 'react-usestateref';
 import * as Haptics from "expo-haptics";
 
 import { EmbeddedMarkCard } from './EmbeddedMarkCard';
 import { Separator } from '../../global_components/Separator';
+import { UserData } from '../../../../core/UserData';
 import { Preferences } from '../../../../core/Preferences';
 import { CoefficientManager } from '../../../../core/CoefficientsManager';
-import { formatAverage, formatCoefficient } from '../../../../utils/Utils';
+import { formatAverage, formatCoefficient, formatDate2 } from '../../../../utils/Utils';
 import { getSubjectColor } from '../../../../utils/Colors';
+import { AnimatedComponent } from '../../global_components/AnimatedComponents';
 
 
 function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnMark, getMark, windowDimensions, theme }) {
@@ -21,6 +24,31 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
       setShownSubject(subject.subSubjects.get(selectedSubSubject));
     }
   }, []);
+
+  function chooserItem(title, index, icon) {
+    return <PressableScale
+      key={index}
+      onPress={() => {
+        if (choosenSection != index) {
+          setChoosenSection(index);
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        }
+      }}
+      style={{
+        width: (Dimensions.get('window').width - 50) / 2,
+        borderRadius: 10,
+        padding: 10,
+        backgroundColor: choosenSection == index ? theme.colors.primary : theme.colors.surface,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    }}>
+      {icon}
+      <Text style={[theme.fonts.labelMedium, {
+        color: choosenSection == index ? theme.colors.onPrimary : theme.colors.onSurfaceDisabled,
+      }]}>{title}</Text>
+    </PressableScale>;
+  }
   
   function teacherCard(teacher, key) {
     return <PressableScale key={key} style={{
@@ -55,7 +83,25 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
     </View>;
   }
 
+  const [choosenSection, setChoosenSection] = useState(0);
   const [showChangeCoefficient, setShowChangeCoefficient] = useState(false);
+
+  // Calculate one time for graph
+  var marksIndexes = [];
+  var marksValues = [];
+  var marksDates = [];
+  shownSubjectRef.current.marks.forEach((markID, index) => {
+    const mark = getMark(markID);
+    if (mark.isEffective) {
+      marksIndexes.push(index);
+      marksValues.push(mark.value / mark.valueOn * 20);
+      marksDates.push(formatDate2(mark.dateEntered, 1));
+    }
+  });
+  marksValues.reverse();
+  marksDates.reverse();
+  marksIndexes.reverse();
+  const [selectedGraphMark, setSelectedGraphMark] = useState(null);
 
   return (
     <View>
@@ -134,7 +180,7 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
                   backgroundColor: theme.colors.background,
                   borderRadius: 5,
                   borderWidth: 1,
-                  borderColor: '#DA3633',
+                  borderColor: theme.colors.tertiary,
                   width: 30,
                   height: 30,
                   alignItems: 'center',
@@ -215,18 +261,27 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
           </View>
         </View>
       </View>
+      
       <View style={{
-        position: 'absolute',
-        top: 120,
+        width: Dimensions.get('window').width - 40,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+      }}>
+        {chooserItem("Détails", 0)}
+        {chooserItem("Graphique", 1, <TrendingUpIcon size={20} color={choosenSection == 1 ? theme.colors.onPrimary : theme.colors.onSurfaceDisabled} style={{ marginRight: 10 }}/>)}
+      </View>
+      
+      <View style={{
         left: -20,
-        width: Dimensions.get('screen').width,
         height: 1,
+        marginTop: 10,
+        width: Dimensions.get('screen').width,
         backgroundColor: theme.colors.surface,
       }}/>
-      <ScrollView style={{
-        height: Dimensions.get('screen').height * 0.8 - 140,
+
+      {choosenSection == 0 ? <ScrollView style={{
+        height: Dimensions.get('screen').height * 0.8 - 180,
         paddingTop: 10,
-        marginTop: 10,
       }} showsVerticalScrollIndicator={false}>
         {shownSubjectRef.current.teachers.length != 0 && section("Professeurs", { marginBottom: 10 })}
         {[...(shownSubjectRef.current.teachers.values() ?? [])].map((teacher, key) => teacherCard(teacher, key))}
@@ -237,7 +292,60 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
         {shownSubjectRef.current.marks.length == 0 ? <Text style={[theme.fonts.labelLarge, { alignSelf: 'center', marginTop: 75 }]}>Aucune note pour l'instant</Text> : null}
         
         <View style={{ height: 70 }}/>
-      </ScrollView>
+      </ScrollView> : <View style={{
+        
+      }}>
+        {shownSubjectRef.current.marks.length == 0
+          ? <Text style={[theme.fonts.labelLarge, { alignSelf: 'center', marginTop: 95 }]}>Aucune donnée à afficher</Text>
+          : <ScrollView showsVerticalScrollIndicator={false} style={{
+            paddingTop: 20,
+            height: Dimensions.get('screen').height * 0.8 - 180,
+          }}>
+              <View style={{
+                borderRadius: 20,
+                paddingTop: 20,
+                backgroundColor: getSubjectColor(shownSubjectRef.current.code, true),
+                marginBottom: 10,
+              }}>
+                <LineChart
+                  data={{
+                    labels: marksDates,
+                    datasets: [
+                      { data: marksValues },
+                      { data: [0], withDots: false },
+                      { data: [20], withDots: false },
+                    ]
+                  }}
+                  // hidePointsAtIndex={marksToHide}
+                  width={Dimensions.get("window").width - 40} // from react-native
+                  height={250}
+                  chartConfig={{
+                    backgroundGradientFrom: getSubjectColor(shownSubjectRef.current.code, true),
+                    backgroundGradientTo: getSubjectColor(shownSubjectRef.current.code, true),
+                    decimalPlaces: 2,
+                    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                    labelColor: (opacity = 1) => theme.colors.onPrimary,
+                    propsForDots: {
+                      r: "6",
+                      strokeWidth: "2",
+                      stroke: getSubjectColor(shownSubjectRef.current.code),
+                    },
+                  }}
+                  bezier
+                  onDataPointClick={(data) => setSelectedGraphMark(shownSubjectRef.current.marks.at(marksIndexes.at(data.index)))}
+                  getDotColor={(datapoint, index) => { return shownSubjectRef.current.marks.at(marksIndexes.at(index)) == selectedGraphMark ? getSubjectColor(shownSubjectRef.current.code, true) : "white"}}
+                  style={{
+                    borderRadius: 20,
+                  }}
+                />
+              </View>
+
+              {selectedGraphMark == null
+              ? <Text style={[theme.fonts.labelLarge, { alignSelf: 'center', marginTop: 10 }]}>Séléctionne{UserData.mainAccount.isParent ? "z" : ""} une note</Text>
+              : <AnimatedComponent index={0} forceUpdate={selectedGraphMark} children={[markCard(selectedGraphMark, true)]}/>}
+              <View style={{ height: 70 }}/>
+          </ScrollView>}
+      </View>}
     </View>
   );
 }

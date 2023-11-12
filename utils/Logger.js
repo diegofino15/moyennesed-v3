@@ -24,6 +24,6 @@ export class Logger {
   static showInfoLogs = true;
   static info(message, warn=false) { if (this.showInfoLogs) {
     if (warn) { console.warn(`INFO  - ${message}`); }
-    else { console.info(`${message}`); }
+    else { console.log(`INFO  - ${message}`); }
   }}
 };
