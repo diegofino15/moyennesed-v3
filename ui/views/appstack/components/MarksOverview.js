@@ -1,15 +1,16 @@
 import { useEffect } from "react";
 import { View, ScrollView, Text, ActivityIndicator, Dimensions } from "react-native";
-import { CheckCircle2Icon, HelpCircleIcon, TrendingUpIcon, Users2Icon, WifiOffIcon } from "lucide-react-native";
+import { CheckCircle2Icon, DraftingCompassIcon, HelpCircleIcon, TrendingUpIcon, Users2Icon, WifiOffIcon, RefreshCcwIcon } from "lucide-react-native";
 import { PressableScale } from "react-native-pressable-scale";
+import { LineChart } from "react-native-chart-kit";
+import * as Haptics from 'expo-haptics';
 import useState from "react-usestateref";
 
 import { RecentMarkCard } from "./RecentMarkCard";
 import { SubjectCard } from "./SubjectCard";
-import { BottomSheet } from "../../global_components/BottomSheet";
 import { AnimatedComponent } from "../../global_components/AnimatedComponents";
 import { formatAverage } from "../../../../utils/Utils";
-import { GeneralAverageGraphPopup } from "./GeneralAverageGraphPopup";
+import { CoefficientManager } from "../../../../core/CoefficientsManager";
 
 
 function MarksOverview({
@@ -35,19 +36,13 @@ function MarksOverview({
     setForceUpdate(!forceUpdateRef.current);
   }, [accountID]);
 
-  const [isGraphOpened, setIsGraphOpened] = useState(false);
-  function renderPopup() {
-    if (!isGraphOpened) { return null; }
-    return <BottomSheet
-      key="graph"
-      isOpen={isGraphOpened}
-      onClose={() => setIsGraphOpened(false)}
-      snapPoints={[
-        (Math.min(550 / Dimensions.get('screen').height * windowDimensions.fontScale, 0.8) * 100).toString() + "%",
-      ]}
-      children={<GeneralAverageGraphPopup period={period} manualRefreshingRef={manualRefreshingRef} refresh={refresh} theme={theme}/>}
-    />;
-  }
+  const [isGraphSelected, setIsGraphSelected] = useState(false);
+  const numberOfMarks = 15;
+  const [_shownGraphValues, setShownGraphValues, shownGraphValuesRef] = useState([]);
+  useEffect(() => {
+    const shownValues = [...(period.averageHistory?.values() ?? [])];
+    setShownGraphValues(shownValues.splice(Math.max(0, shownValues.length - numberOfMarks), numberOfMarks));
+  }, [isGraphSelected, manualRefreshingRef.current, loading]);
 
   return (
     <View>
@@ -58,6 +53,7 @@ function MarksOverview({
         marginBottom: 20,
         padding: 20,
         paddingBottom: 0,
+        overflow: 'hidden',
       }}>
         {/* Currently shown period */}
         <View style={{
@@ -70,38 +66,96 @@ function MarksOverview({
             width: '100%',
             marginBottom: 20,
           }}>
-            {period.average ? <PressableScale onPress={() => setIsGraphOpened(true)} style={{
-              backgroundColor: theme.colors.background,
-              borderRadius: 5,
-              paddingHorizontal: 8,
-              paddingVertical: 4,
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-              <TrendingUpIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled} style={{ marginRight: 10 }}/>
-              <Text style={theme.fonts.labelMedium}>Graph.</Text>
-            </PressableScale> : <View/>}
+            {period.average ? <View style={{ flexDirection: 'row' }}>
+              <PressableScale onPress={() => {
+                setIsGraphSelected(!isGraphSelected);
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              }} style={{
+                backgroundColor: theme.colors.background,
+                borderRadius: 5,
+                paddingHorizontal: 8,
+                paddingVertical: 4,
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+                {!isGraphSelected ? <View style={{ flexDirection: 'row' }}>
+                  <TrendingUpIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled} style={{ marginRight: 10 }}/>
+                  <Text style={theme.fonts.labelMedium}>Évolution</Text>
+                </View> : <View style={{ flexDirection: 'row' }}>
+                  <DraftingCompassIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled} style={{ marginRight: 10 }}/>
+                  <Text style={theme.fonts.labelMedium}>Moyenne</Text>
+                </View>}
+              </PressableScale>
+              {isGraphSelected && !CoefficientManager.isAverageHistoryUpdated && !manualRefreshingRef.current && <PressableScale onPress={refresh} style={{
+                backgroundColor: theme.colors.primary,
+                borderColor: theme.colors.surface,
+                borderWidth: 1,
+                borderRadius: 5,
+                padding: 2,
+                paddingHorizontal: 3,
+                marginLeft: 5,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+                <RefreshCcwIcon size={20} color={theme.colors.onPrimary}/>
+              </PressableScale>}
+            </View> : <View/>}
             {loading
               ? <ActivityIndicator size={30 * windowDimensions.fontScale} color={theme.colors.onSurface}/>
               : redCheck
                 ? <WifiOffIcon size={25 * windowDimensions.fontScale} color={theme.colors.tertiary}/>
                 : <CheckCircle2Icon size={25 * windowDimensions.fontScale} color={theme.colors.secondary}/>}
           </View>
-          
-          <Text style={theme.fonts.headlineLarge}>{formatAverage(period.average)}</Text>
-          <Text style={[theme.fonts.labelMedium, { marginBottom: 5, marginRight: 5 }]}>MOYENNE GÉNÉRALE</Text>
-          
-          {period.classAverage ? <View style={{ flexDirection: 'row' }}>
-            <Users2Icon size={15 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled} style={{ marginRight: 5 }}/>
-            <Text style={[theme.fonts.labelSmall, { bottom: 1 }]}>: </Text>
-            <Text style={[theme.fonts.labelSmall, { fontFamily: 'Bitter-Regular' }]}>{formatAverage(period.classAverage)}</Text>
-          </View> : null}
-          
+
+          {!isGraphSelected ? <View style={{
+            alignItems: 'center',
+            minHeight: 100,
+          }}>
+            <Text style={theme.fonts.headlineLarge}>{formatAverage(period.average)}</Text>
+            <Text style={[theme.fonts.labelMedium, { marginBottom: 5, marginRight: 5 }]}>MOYENNE GÉNÉRALE</Text>
+            
+            {period.classAverage ? <View style={{ flexDirection: 'row' }}>
+              <Users2Icon size={15 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled} style={{ marginRight: 5 }}/>
+              <Text style={[theme.fonts.labelSmall, { bottom: 1 }]}>: </Text>
+              <Text style={[theme.fonts.labelSmall, { fontFamily: 'Bitter-Regular' }]}>{formatAverage(period.classAverage)}</Text>
+            </View> : null}
+          </View> : <View style={{
+            height: 100,
+          }}>
+            <LineChart
+              data={{
+                datasets: [
+                  { data: shownGraphValuesRef.current },
+                  { data: [Math.max(Math.min(...shownGraphValuesRef.current) - 1, 0)], withDots: false },
+                  { data: [Math.min(Math.max(...shownGraphValuesRef.current) + 1, 20)], withDots: false },
+                ]
+              }}
+              width={Dimensions.get("window").width - 50}
+              height={100}
+              chartConfig={{
+                backgroundGradientFrom: theme.colors.surface,
+                backgroundGradientTo: theme.colors.surface,
+                decimalPlaces: 1,
+                color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                labelColor: (opacity = 1) => theme.colors.onSurfaceDisabled,
+                propsForDots: {
+                  r: "2",
+                  strokeWidth: "2",
+                  stroke: "black",
+                },
+              }}
+              bezier
+              style={{
+                left: -15,
+              }}
+            />
+          </View>}
+
           <View style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
             width: '100%',
-            marginTop: 30,
+            marginTop: 10,
             marginBottom: 10,
           }}>
             <Text style={theme.fonts.bodyLarge}>Dernières notes</Text>
@@ -236,9 +290,6 @@ function MarksOverview({
           </View>;
         })}
       </View>
-
-      {/* Show graph popup */}
-      {renderPopup()}
     </View>
   );
 }

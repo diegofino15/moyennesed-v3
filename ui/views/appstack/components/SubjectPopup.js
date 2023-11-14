@@ -9,12 +9,12 @@ import * as Haptics from "expo-haptics";
 
 import { EmbeddedMarkCard } from './EmbeddedMarkCard';
 import { Separator } from '../../global_components/Separator';
+import { AnimatedComponent } from '../../global_components/AnimatedComponents';
 import { UserData } from '../../../../core/UserData';
 import { Preferences } from '../../../../core/Preferences';
 import { CoefficientManager } from '../../../../core/CoefficientsManager';
-import { formatAverage, formatCoefficient, formatDate2 } from '../../../../utils/Utils';
 import { getSubjectColor } from '../../../../utils/Colors';
-import { AnimatedComponent } from '../../global_components/AnimatedComponents';
+import { formatAverage, formatCoefficient, formatDate2 } from '../../../../utils/Utils';
 
 
 function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnMark, getMark, windowDimensions, theme }) {
@@ -92,7 +92,7 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
   var marksDates = [];
   shownSubjectRef.current.marks?.forEach((markID, index) => {
     const mark = getMark(markID);
-    if (mark.isEffective) {
+    if (mark?.isEffective ?? false) {
       marksIndexes.push(index);
       marksValues.push(mark.value / mark.valueOn * 20);
       marksDates.push(formatDate2(mark.dateEntered, 1));
@@ -268,7 +268,7 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
         justifyContent: 'space-between',
       }}>
         {chooserItem("Détails", 0)}
-        {chooserItem("Graphique", 1, <TrendingUpIcon size={20} color={choosenSection == 1 ? theme.colors.onPrimary : theme.colors.onSurfaceDisabled} style={{ marginRight: 10 }}/>)}
+        {chooserItem("Évolution", 1, <TrendingUpIcon size={20} color={choosenSection == 1 ? theme.colors.onPrimary : theme.colors.onSurfaceDisabled} style={{ marginRight: 10 }}/>)}
       </View>
       
       <View style={{
@@ -292,9 +292,7 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
         {shownSubjectRef.current.marks.length == 0 ? <Text style={[theme.fonts.labelLarge, { alignSelf: 'center', marginTop: 75 }]}>Aucune note pour l'instant</Text> : null}
         
         <View style={{ height: 70 }}/>
-      </ScrollView> : <View style={{
-        
-      }}>
+      </ScrollView> : <View>
         {shownSubjectRef.current.marks.length == 0
           ? <Text style={[theme.fonts.labelLarge, { alignSelf: 'center', marginTop: 95 }]}>Aucune donnée à afficher</Text>
           : <ScrollView showsVerticalScrollIndicator={false} style={{
@@ -327,12 +325,12 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
                     labelColor: (opacity = 1) => theme.colors.onPrimary,
                   }}
                   bezier
-                  onDataPointClick={(data) => setSelectedGraphMark(shownSubjectRef.current.marks.at(marksIndexes.at(data.index)))}
-                  getDotColor={(datapoint, index) => { return shownSubjectRef.current.marks.at(marksIndexes.at(index)) == selectedGraphMark ? getSubjectColor(shownSubjectRef.current.code, true) : "white"}}
+                  onDataPointClick={(data) => setSelectedGraphMark(shownSubjectRef.current.marks.at(marksIndexes.at(data.index) ?? 0))}
+                  getDotColor={(datapoint, index) => { return shownSubjectRef.current.marks.at(marksIndexes.at(index) ?? 0) == selectedGraphMark ? getSubjectColor(shownSubjectRef.current.code, true) : "white"}}
                   getDotProps={(datapoint, index) => {
                     const mark = getMark(shownSubjectRef.current.marks.at(marksIndexes.at(index)));
                     return {
-                      r: Math.min(10, 3 + mark.coefficient * 2).toString(),
+                      r: Math.min(10, 3 + (mark?.coefficient ?? 1) * 2).toString(),
                       strokeWidth: "2",
                       stroke: getSubjectColor(shownSubjectRef.current.code),
                     };
