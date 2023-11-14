@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { View, SafeAreaView, ScrollView, Text, Image, Switch, ActivityIndicator, Dimensions, Platform, useWindowDimensions } from 'react-native';
-import { BrainCircuitIcon, BugIcon, CheckIcon, ChevronLeftIcon, MailIcon, MessageSquareDashedIcon, RefreshCcwIcon, UserIcon, WrenchIcon, XIcon, GithubIcon } from 'lucide-react-native';
+import { BrainCircuitIcon, BugIcon, CheckIcon, ChevronLeftIcon, MailIcon, MessageSquareDashedIcon, RefreshCcwIcon, UserIcon, WrenchIcon, XIcon } from 'lucide-react-native';
 import { PressableScale } from 'react-native-pressable-scale';
 import * as Haptics from "expo-haptics";
 
@@ -275,6 +275,7 @@ function ProfilePage({
                 Preferences.setAllowCustomCoefficients(value);
                 Preferences.save();
                 UserData.recalculateAllCoefficients();
+                CoefficientManager.isAverageHistoryUpdated = false;
                 CoefficientManager.save();
                 setAllowCustomCoefficients(value);
                 setUpdateScreen(!updateScreenRef.current);
@@ -284,6 +285,7 @@ function ProfilePage({
           <PressableScale onPress={() => {
             CoefficientManager.customMarkCoefficients.clear();
             CoefficientManager.customSubjectCoefficients.clear();
+            CoefficientManager.isAverageHistoryUpdated = false;
             CoefficientManager.save();
             UserData.recalculateAllCoefficients();
             setUpdateScreen(!updateScreenRef.current);
@@ -326,16 +328,6 @@ function ProfilePage({
 
           <Text style={[theme.fonts.labelLarge, { textAlign: 'justify', marginBottom: 10 }]}>L'application {UserData.mainAccount.isParent ? "vous est" : "t'es"} utile ? Écri{UserData.mainAccount.isParent ? "vez" : "s"} un commentaire pour soutenir le développeur !</Text>
           <CustomLink title="Écrire un commentaire" link={Platform.OS == 'ios' ? 'https://apps.apple.com/app/apple-store/id6446418445?action=write-review' : 'https://play.google.com/store/apps/details?id=me.diegof.moyennesed&showAllReviews=true'} style={{ marginBottom: 10 }} icon={<MessageSquareDashedIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/>} windowDimensions={windowDimensions} theme={theme}/>
-        </View>
-        <View style={{
-          backgroundColor: theme.colors.surface,
-          borderRadius: 20,
-          marginBottom: 20,
-          paddingHorizontal: 20,
-          paddingVertical: 15,
-        }}>
-          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify', marginBottom: 10 }]}>MoyennesED est un projet open source, le code est disponible publiquement.</Text>
-          <CustomLink title="Projet GitHub" link='https://github.com/diegofino15/moyennesed-v3' icon={<GithubIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/>} windowDimensions={windowDimensions} theme={theme}/>
         </View>
         
         {/* Disconnect button */}

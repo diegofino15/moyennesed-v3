@@ -132,6 +132,17 @@ function MarksOverview({
               }}
               width={Dimensions.get("window").width - 50}
               height={100}
+              renderDotContent={(params) => {
+                if (params.index == (shownGraphValuesRef.current.length - 1)) {
+                  return <View style={{
+                    position: 'absolute',
+                    top: params.y - 20,
+                    left: params.x - 15,
+                  }}>
+                    <Text style={theme.fonts.headlineSmall}>{formatAverage(params.indexData)}</Text>
+                  </View>;
+                }
+              }}
               chartConfig={{
                 backgroundGradientFrom: theme.colors.surface,
                 backgroundGradientTo: theme.colors.surface,

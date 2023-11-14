@@ -66,6 +66,7 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
   }
 
   function markCard(markID, special) {
+    if (!markID) { return null; }
     const mark = getMark(markID);
     if (mark.id == clickedOnMark && !special) { return null; }
     return <EmbeddedMarkCard key={markID} mark={mark} subject={subject} selectedSubSubject={selectedSubSubject} refreshAverages={refreshAverages} clickedOnMark={clickedOnMark} windowDimensions={windowDimensions} theme={theme}/>
