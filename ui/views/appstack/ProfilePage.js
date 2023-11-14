@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { View, SafeAreaView, ScrollView, Text, Image, Switch, ActivityIndicator, Dimensions, Platform, useWindowDimensions } from 'react-native';
-import { BrainCircuitIcon, BugIcon, CheckIcon, ChevronLeftIcon, MailIcon, MessageSquareDashedIcon, RefreshCcwIcon, UserIcon, WrenchIcon, XIcon } from 'lucide-react-native';
+import { BrainCircuitIcon, BugIcon, CheckIcon, ChevronLeftIcon, MailIcon, MessageSquareDashedIcon, RefreshCcwIcon, UserIcon, WrenchIcon, XIcon, GithubIcon } from 'lucide-react-native';
 import { PressableScale } from 'react-native-pressable-scale';
 import * as Haptics from "expo-haptics";
 
@@ -304,8 +304,6 @@ function ProfilePage({
           paddingHorizontal: 20,
           paddingVertical: 15,
         }}>
-          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify' }]}>L'appli ne fonctionne pas bien ?</Text>
-          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify', marginBottom: 10 }]}>Envo{UserData.mainAccount.isParent ? "yez" : "ie"} un signalement de bug tout en restant complètement anonyme.</Text>
           <CustomLink title="Signaler un bug" onPress={() => setBugReportPopupOpen(true)} icon={<BugIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/>} windowDimensions={windowDimensions} theme={theme}/>
           <Text style={[theme.fonts.labelLarge, { alignSelf: 'center' }]}>ou</Text>
           <CustomLink title="Envoyer un mail" link='mailto:moyennesed@gmail.com' icon={<MailIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/>} windowDimensions={windowDimensions} theme={theme}/>
@@ -328,6 +326,16 @@ function ProfilePage({
 
           <Text style={[theme.fonts.labelLarge, { textAlign: 'justify', marginBottom: 10 }]}>L'application {UserData.mainAccount.isParent ? "vous est" : "t'es"} utile ? Écri{UserData.mainAccount.isParent ? "vez" : "s"} un commentaire pour soutenir le développeur !</Text>
           <CustomLink title="Écrire un commentaire" link={Platform.OS == 'ios' ? 'https://apps.apple.com/app/apple-store/id6446418445?action=write-review' : 'https://play.google.com/store/apps/details?id=me.diegof.moyennesed&showAllReviews=true'} style={{ marginBottom: 10 }} icon={<MessageSquareDashedIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/>} windowDimensions={windowDimensions} theme={theme}/>
+        </View>
+        <View style={{
+          backgroundColor: theme.colors.surface,
+          borderRadius: 20,
+          marginBottom: 20,
+          paddingHorizontal: 20,
+          paddingVertical: 15,
+        }}>
+          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify', marginBottom: 10 }]}>MoyennesED est un projet open source, le code est disponible publiquement.</Text>
+          <CustomLink title="Projet GitHub" link='https://github.com/diegofino15/moyennesed-v3' icon={<GithubIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/>} windowDimensions={windowDimensions} theme={theme}/>
         </View>
         
         {/* Disconnect button */}

@@ -15,7 +15,7 @@ import { Logger } from "../../../../utils/Logger";
 function EmbeddedMarksView({
   shownAccountRef, isConnected, isConnecting,
   gotMarks, marksNeedUpdate,
-  autoRefreshing,
+  autoRefreshing, refresh, manualRefreshingRef,
   theme,
 }) {
   // Update screen
@@ -90,6 +90,8 @@ function EmbeddedMarksView({
           redCheck={!isConnected || !gotMarks || marksNeedUpdate}
           refreshAverages={refreshAverages}
           setInfoPopupOpen={setInfoPopupOpen}
+          refresh={refresh}
+          manualRefreshingRef={manualRefreshingRef}
           windowDimensions={windowDimensions}
           theme={theme}
         />;}

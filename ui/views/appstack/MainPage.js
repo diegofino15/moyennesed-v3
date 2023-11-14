@@ -232,6 +232,8 @@ function MainPage({
           gotMarks={gotMarksRef.current.get(shownAccountRef.current.id)}
           marksNeedUpdate={marksNeedUpdateRef.current.get(shownAccountRef.current.id)}
           autoRefreshing={!manualRefreshingRef.current && refreshingRef.current}
+          refresh={refresh}
+          manualRefreshingRef={manualRefreshingRef}
           theme={theme}
         />
 

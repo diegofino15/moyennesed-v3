@@ -2,6 +2,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 export class CoefficientManager {
+  // Status
+  static isAverageHistoryUpdated = true;
+  
   // Mark filters
   static markCoefficientFilter = new Map(Object.entries({
     "dm": 0.5,
@@ -90,6 +93,7 @@ export class CoefficientManager {
   // Custom mark coefficients
   static customMarkCoefficients = new Map();
   static setCustomMarkCoefficient(markID, coefficient) {
+    this.isAverageHistoryUpdated = false;
     coefficient = Math.min(Math.max(coefficient, 0), 50);
     this.customMarkCoefficients.set(markID, coefficient);
   }
@@ -97,11 +101,13 @@ export class CoefficientManager {
     return this.customMarkCoefficients.get(markID);
   }
   static deleteCustomMarkCoefficient(markID) {
+    this.isAverageHistoryUpdated = false;
     this.customMarkCoefficients.delete(markID);
   }
   // Custom subject coefficients
   static customSubjectCoefficients = new Map();
   static setCustomSubjectCoefficient(subjectID, coefficient) {
+    this.isAverageHistoryUpdated = false;
     coefficient = Math.min(Math.max(coefficient, 0), 50);
     this.customSubjectCoefficients.set(subjectID, coefficient);
   }
@@ -109,11 +115,13 @@ export class CoefficientManager {
     return this.customSubjectCoefficients.get(subjectID);
   }
   static deleteCustomSubjectCoefficient(subjectID) {
+    this.isAverageHistoryUpdated = false;
     this.customSubjectCoefficients.delete(subjectID);
   }
 
   // Erase
   static async erase() {
+    this.isAverageHistoryUpdated = false;
     this.guessedMarkCoefficients.clear();
     this.guessedSubjectCoefficients.clear();
     this.defaultEDMarkCoefficients.clear();

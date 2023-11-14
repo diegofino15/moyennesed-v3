@@ -137,6 +137,13 @@ function _getCalculatedSubjectClassAverage(subject, getMark) {
   return sum / coefficient;
 }
 
+function sortAllSubjectMarks(subject) {
+  subject.marks.reverse();
+  subject.subSubjects.forEach(subSubject => {
+    sortAllSubjectMarks(subSubject);
+  });
+}
+
 function getCacheSubject(subject) {
   var savableSubSubjects = new Map();
   subject.subSubjects.forEach((subSubject, key) => {
@@ -201,4 +208,4 @@ function getSubjectFromCache(cacheSubject) {
   };  
 }
 
-export { getFormattedSubject, addSubSubjectToSubject, addMarkToSubject, calculateSubjectAverages, getCacheSubject, getSubjectFromCache };
+export { getFormattedSubject, addSubSubjectToSubject, addMarkToSubject, calculateSubjectAverages, _getCalculatedSubjectAverage, sortAllSubjectMarks, getCacheSubject, getSubjectFromCache };

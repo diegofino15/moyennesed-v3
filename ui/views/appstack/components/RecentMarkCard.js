@@ -93,7 +93,7 @@ function RecentMarkCard({ mark, subject, refreshAverages, getMark, windowDimensi
           }}>
             <Text style={theme.fonts.labelSmall} numberOfLines={1}>{subject?.name ?? "Pas de matière"}</Text>
             {mark.subSubjectCode ? <View style={{ width: 25, alignItems: 'center' }}><ChevronRightIcon size={15} color={theme.colors.onSurfaceDisabled}/></View> : null}
-            {_subSubjectName ? <Text style={theme.fonts.labelSmall} numberOfLines={1}>{_subSubjectName}</Text> : null}
+            {mark.subSubjectCode ? <Text style={theme.fonts.labelSmall} numberOfLines={1}>{_subSubjectName}</Text> : null}
           </View>
         </View>
         {!mark.isEffective ? <View

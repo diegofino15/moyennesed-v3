@@ -1,10 +1,10 @@
 // Core
-function _sortMarks(marks) {
+function _sortMarks(marks, rev=true) {
     marks.sort((a, b) => {
-        if (a.dateEntered < b.dateEntered) {
+        if (rev ? (a.dateEntered > b.dateEntered) : (a.dateEntered < b.dateEntered)) {
             return 1;
         }
-        if (a.dateEntered > b.dateEntered) {
+        if (rev ? (a.dateEntered < b.dateEntered) : (a.dateEntered > b.dateEntered)) {
             return -1;
         }
         return 0;

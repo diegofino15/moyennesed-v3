@@ -1,13 +1,15 @@
 import { useEffect } from "react";
 import { View, ScrollView, Text, ActivityIndicator, Dimensions } from "react-native";
-import { CheckCircle2Icon, HelpCircleIcon, Users2Icon, WifiOffIcon } from "lucide-react-native";
+import { CheckCircle2Icon, HelpCircleIcon, TrendingUpIcon, Users2Icon, WifiOffIcon } from "lucide-react-native";
 import { PressableScale } from "react-native-pressable-scale";
 import useState from "react-usestateref";
 
 import { RecentMarkCard } from "./RecentMarkCard";
 import { SubjectCard } from "./SubjectCard";
+import { BottomSheet } from "../../global_components/BottomSheet";
 import { AnimatedComponent } from "../../global_components/AnimatedComponents";
 import { formatAverage } from "../../../../utils/Utils";
+import { GeneralAverageGraphPopup } from "./GeneralAverageGraphPopup";
 
 
 function MarksOverview({
@@ -17,6 +19,8 @@ function MarksOverview({
   redCheck,
   refreshAverages,
   setInfoPopupOpen,
+  refresh,
+  manualRefreshingRef,
   windowDimensions,
   theme
 }) {
@@ -30,6 +34,20 @@ function MarksOverview({
     setSubjectIndex(0);
     setForceUpdate(!forceUpdateRef.current);
   }, [accountID]);
+
+  const [isGraphOpened, setIsGraphOpened] = useState(false);
+  function renderPopup() {
+    if (!isGraphOpened) { return null; }
+    return <BottomSheet
+      key="graph"
+      isOpen={isGraphOpened}
+      onClose={() => setIsGraphOpened(false)}
+      snapPoints={[
+        (Math.min(550 / Dimensions.get('screen').height * windowDimensions.fontScale, 0.8) * 100).toString() + "%",
+      ]}
+      children={<GeneralAverageGraphPopup period={period} manualRefreshingRef={manualRefreshingRef} refresh={refresh} theme={theme}/>}
+    />;
+  }
 
   return (
     <View>
@@ -52,7 +70,17 @@ function MarksOverview({
             width: '100%',
             marginBottom: 20,
           }}>
-            <Text style={[theme.fonts.labelMedium, { width: Dimensions.get('window').width - 115, height: 30 }]}>{period.title}</Text>
+            {period.average ? <PressableScale onPress={() => setIsGraphOpened(true)} style={{
+              backgroundColor: theme.colors.background,
+              borderRadius: 5,
+              paddingHorizontal: 8,
+              paddingVertical: 4,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+              <TrendingUpIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled} style={{ marginRight: 10 }}/>
+              <Text style={theme.fonts.labelMedium}>Graph.</Text>
+            </PressableScale> : <View/>}
             {loading
               ? <ActivityIndicator size={30 * windowDimensions.fontScale} color={theme.colors.onSurface}/>
               : redCheck
@@ -92,7 +120,7 @@ function MarksOverview({
               horizontal
               showsHorizontalScrollIndicator={false}
             >
-              {[...(period.marks?.values() ?? [])].map((mark, markKey) => {
+              {[...(period.marks?.values() ?? [])].reverse().map((mark, markKey) => {
                 if (!mark) { return null; }
                 if (markKey < 10) {
                   const subject = period.subjects.get(mark.subjectCode);
@@ -208,6 +236,9 @@ function MarksOverview({
           </View>;
         })}
       </View>
+
+      {/* Show graph popup */}
+      {renderPopup()}
     </View>
   );
 }

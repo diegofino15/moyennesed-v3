@@ -1,7 +1,8 @@
-import { getFormattedSubject, addSubSubjectToSubject, calculateSubjectAverages, getCacheSubject, getSubjectFromCache, addMarkToSubject } from "./Subject";
+import { getFormattedSubject, addSubSubjectToSubject, calculateSubjectAverages, getCacheSubject, getSubjectFromCache, addMarkToSubject, _getCalculatedSubjectAverage, sortAllSubjectMarks } from "./Subject";
 import { addSubjectToSubjectGroup, getFormattedSubjectGroup } from "./SubjectGroup";
 import { registerSubject } from "../utils/Colors";
 import { Logger } from "../utils/Logger";
+import { _sortMarks } from "../utils/Utils";
 
 
 function getFormattedPeriod(jsonData) {
@@ -45,6 +46,7 @@ function getFormattedPeriod(jsonData) {
     "subjects": subjects,
     "subjectGroups": subjectGroups,
     "average": undefined,
+    "averageHistory": new Map(),
     "classAverage": undefined,
   };
 }
@@ -87,21 +89,28 @@ function calculateAllPeriodAverages(period) {
   });
 }
 
-function _getCalculatedGeneralAverage(period) {
+function _getCalculatedGeneralAverage(period, set=true) {
   let sum = 0;
   let coefficient = 0;
 
   period.subjects.forEach((subject) => {
-    calculateSubjectAverages(subject, (markID) => {
-      return period.marks.get(markID);
-    });
-    if (subject.average) {
-      sum += subject.average * subject.coefficient;
+    var subjectAverage;
+    if (set) {
+      calculateSubjectAverages(subject, (markID) => {
+        return period.marks.get(markID);
+      });
+      subjectAverage = subject.average;
+    } else {
+      subjectAverage = _getCalculatedSubjectAverage(subject, (markID) => period.marks.get(markID));
+    }
+    if (subjectAverage) {
+      sum += subjectAverage * subject.coefficient;
       coefficient += subject.coefficient;
     }
   });
 
   if (coefficient === 0) { return undefined; }
+  if (!set) { period.averageHistory.set(period.marks.size, sum / coefficient); }
   return sum / coefficient;
 }
 
@@ -120,6 +129,12 @@ function _getCalculatedGeneralClassAverage(period) {
   return sum / coefficient;
 }
 
+function sortAllPeriodMarks(period) {
+  period.subjects.forEach(subject => {
+    sortAllSubjectMarks(subject);
+  });
+}
+
 function getCachePeriod(period) {
   var savableSubjects = new Map();
   period.subjects.forEach((subject, key) => {
@@ -134,6 +149,7 @@ function getCachePeriod(period) {
     "subjects": Array.from(savableSubjects.entries()),
     "subjectGroups": Array.from(period.subjectGroups.entries()),
     "average": period.average,
+    "averageHistory": Array.from(period.averageHistory.entries()),
     "classAverage": period.classAverage,
   };
 }
@@ -157,8 +173,9 @@ function getPeriodFromCache(cachePeriod) {
     "subjects": subjects,
     "subjectGroups": subjectGroups,
     "average": cachePeriod.average,
+    "averageHistory": new Map(cachePeriod.averageHistory),
     "classAverage": cachePeriod.classAverage,
   };
 }
 
-export { getFormattedPeriod, addMarkToPeriod, calculateAllPeriodAverages, getCachePeriod, getPeriodFromCache };
+export { getFormattedPeriod, addMarkToPeriod, calculateAllPeriodAverages, _getCalculatedGeneralAverage, sortAllPeriodMarks, getCachePeriod, getPeriodFromCache };

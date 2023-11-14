@@ -90,7 +90,7 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
   var marksIndexes = [];
   var marksValues = [];
   var marksDates = [];
-  shownSubjectRef.current.marks.forEach((markID, index) => {
+  shownSubjectRef.current.marks?.forEach((markID, index) => {
     const mark = getMark(markID);
     if (mark.isEffective) {
       marksIndexes.push(index);
@@ -317,7 +317,7 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
                     ]
                   }}
                   // hidePointsAtIndex={marksToHide}
-                  width={Dimensions.get("window").width - 40} // from react-native
+                  width={Dimensions.get("window").width - 40}
                   height={250}
                   chartConfig={{
                     backgroundGradientFrom: getSubjectColor(shownSubjectRef.current.code, true),
@@ -325,15 +325,18 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
                     decimalPlaces: 2,
                     color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                     labelColor: (opacity = 1) => theme.colors.onPrimary,
-                    propsForDots: {
-                      r: "6",
-                      strokeWidth: "2",
-                      stroke: getSubjectColor(shownSubjectRef.current.code),
-                    },
                   }}
                   bezier
                   onDataPointClick={(data) => setSelectedGraphMark(shownSubjectRef.current.marks.at(marksIndexes.at(data.index)))}
                   getDotColor={(datapoint, index) => { return shownSubjectRef.current.marks.at(marksIndexes.at(index)) == selectedGraphMark ? getSubjectColor(shownSubjectRef.current.code, true) : "white"}}
+                  getDotProps={(datapoint, index) => {
+                    const mark = getMark(shownSubjectRef.current.marks.at(marksIndexes.at(index)));
+                    return {
+                      r: Math.min(10, 3 + mark.coefficient * 2).toString(),
+                      strokeWidth: "2",
+                      stroke: getSubjectColor(shownSubjectRef.current.code),
+                    };
+                  }}
                   style={{
                     borderRadius: 20,
                   }}
