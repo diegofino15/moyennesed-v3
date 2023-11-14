@@ -42,7 +42,7 @@ function MarksOverview({
   useEffect(() => {
     const shownValues = [...(period.averageHistory?.values() ?? [])];
     setShownGraphValues(shownValues.splice(Math.max(0, shownValues.length - numberOfMarks), numberOfMarks));
-  }, [isGraphSelected, manualRefreshingRef.current, loading]);
+  }, [isGraphSelected, manualRefreshingRef.current, loading, accountID]);
 
   return (
     <View>
