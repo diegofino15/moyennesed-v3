@@ -101,7 +101,7 @@ function MarksOverview({
               </PressableScale>}
             </View> : <View/>}
             {loading
-              ? <ActivityIndicator size={30 * windowDimensions.fontScale} color={theme.colors.onSurface}/>
+              ? <ActivityIndicator size={25 * windowDimensions.fontScale} color={theme.colors.onSurface}/>
               : redCheck
                 ? <WifiOffIcon size={25 * windowDimensions.fontScale} color={theme.colors.tertiary}/>
                 : <CheckCircle2Icon size={25 * windowDimensions.fontScale} color={theme.colors.secondary}/>}
@@ -110,6 +110,7 @@ function MarksOverview({
           {!isGraphSelected ? <View style={{
             alignItems: 'center',
             minHeight: 100,
+            justifyContent: 'center',
           }}>
             <Text style={theme.fonts.headlineLarge}>{formatAverage(period.average)}</Text>
             <Text style={[theme.fonts.labelMedium, { marginBottom: 5, marginRight: 5 }]}>MOYENNE GÉNÉRALE</Text>

@@ -11,7 +11,7 @@ const subjectColors = [
   ['#FFB6C1', '#FFC3D0'],   // Pastel Pink
 ];
 
-const attribuatedSubjectColors = {};
+var attribuatedSubjectColors = {};
 
 var currentIndex = 0;
 function registerSubject(subjectCode) {
@@ -31,4 +31,9 @@ function getSubjectColor(subjectCode, isLight = false) {
   return attribuatedSubjectColors[subjectCode][0];
 }
 
-export { registerSubject, getSubjectColor };
+function resetSubjectColors() {
+  currentIndex = 0;
+  attribuatedSubjectColors = {};
+}
+
+export { registerSubject, getSubjectColor, resetSubjectColors };

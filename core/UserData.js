@@ -1,9 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from 'axios';
+
 import { Account } from "./Account";
 import { Preferences } from "./Preferences";
 import { CoefficientManager } from "./CoefficientsManager";
 import { calculateAllPeriodAverages } from "./Period";
+import { resetSubjectColors } from "../utils/Colors";
 import { Logger } from "../utils/Logger";
 
 
@@ -247,6 +249,7 @@ export class UserData {
     this.temporaryProfilePhoto = "";
     await AsyncStorage.removeItem("photo");
     this.lastBugReport = null;
+    resetSubjectColors();
     Logger.info("Logged out !");
   }
 

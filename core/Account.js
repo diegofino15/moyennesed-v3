@@ -86,7 +86,7 @@ export class Account {
     
     // Save periods
     const possiblePeriodCodes = new Array("A001", "A002", "A003");
-    jsonData.periodes.forEach(periodData => {
+    (jsonData.periodes ?? []).forEach(periodData => {
       if (possiblePeriodCodes.includes(periodData.codePeriode)) {
         const period = getFormattedPeriod(periodData)
         this.periods.set(period.code, period);
@@ -95,7 +95,7 @@ export class Account {
 
     // Add marks
     var sortedMarks = new Array();
-    jsonData.notes.forEach(markData => {
+    (jsonData.notes ?? []).forEach(markData => {
       const mark = getFormattedMark(markData);
       if (mark.valueStr) {
         sortedMarks.push(mark);
