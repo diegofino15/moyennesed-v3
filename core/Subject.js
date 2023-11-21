@@ -101,8 +101,9 @@ function _getCalculatedSubjectAverage(subject, getMark) {
   }
 
   subject.subSubjects.forEach((subSubject, _) => {
-    if (subSubject.marks.length != 0) {
-      sum += _getCalculatedSubjectAverage(subSubject, getMark) * subSubject.coefficient;
+    let subSubjectAverage = _getCalculatedSubjectAverage(subSubject, getMark);
+    if (subSubjectAverage) {
+      sum += subSubjectAverage * subSubject.coefficient;
       coefficient += subSubject.coefficient;
     }
   });

@@ -135,7 +135,7 @@ function MarksOverview({
               height={100}
               renderDotContent={(params) => {
                 if (params.index == (shownGraphValuesRef.current.length - 1)) {
-                  return <View style={{
+                  return <View key={params.index} style={{
                     position: 'absolute',
                     top: params.y - 20,
                     left: params.x - 15,

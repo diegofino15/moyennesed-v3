@@ -26,7 +26,7 @@ function FeaturesPage({ pageStyle, windowDimensions, theme }) {
           windowDimensions={windowDimensions}
         />
         <InfoCard
-          title="🧠 Avec des fonctionnalités uniques"
+          title="🧠 Des fonctionnalités uniques"
           description="Profitez des fonctionnalités uniques comme le 'devine coefficient notes', pour approximer encore mieux vos moyennes."
           theme={theme}
           style={{ marginBottom: 20 }}
@@ -35,6 +35,13 @@ function FeaturesPage({ pageStyle, windowDimensions, theme }) {
         <InfoCard
           title="🔒 Plus sécurisée que jamais"
           description="Aucune de vos données ne nous est envoyée, tout reste sur votre appareil."
+          theme={theme}
+          style={{ marginBottom: 20 }}
+          windowDimensions={windowDimensions}
+        />
+        <InfoCard
+          title="👨‍💻 Un support actif"
+          description="Vous rencontrez un problème ? Envoyez un mail ou signalez un bug directement depuis l'application."
           theme={theme}
           windowDimensions={windowDimensions}
         />

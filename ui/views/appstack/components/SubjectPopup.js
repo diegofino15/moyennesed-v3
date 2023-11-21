@@ -91,17 +91,20 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
   var marksIndexes = [];
   var marksValues = [];
   var marksDates = [];
-  shownSubjectRef.current.marks?.forEach((markID, index) => {
-    const mark = getMark(markID);
-    if (mark?.isEffective ?? false) {
-      marksIndexes.push(index);
-      marksValues.push(mark.value / mark.valueOn * 20);
-      marksDates.push(formatDate2(mark.dateEntered, 1));
-    }
-  });
-  marksValues.reverse();
-  marksDates.reverse();
-  marksIndexes.reverse();
+  function calculateGraphValues() {
+    shownSubjectRef.current.marks?.forEach((markID, index) => {
+      const mark = getMark(markID);
+      if (mark?.isEffective ?? false) {
+        marksIndexes.push(index);
+        marksValues.push(mark.value / mark.valueOn * 20);
+        marksDates.push(formatDate2(mark.dateEntered, 1));
+      }
+    });
+    marksValues.reverse();
+    marksDates.reverse();
+    marksIndexes.reverse();
+  }
+  calculateGraphValues();
   const [selectedGraphMark, setSelectedGraphMark] = useState(null);
 
   return (
@@ -294,7 +297,7 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
         
         <View style={{ height: 70 }}/>
       </ScrollView> : <View>
-        {shownSubjectRef.current.marks.length == 0
+        {marksValues.length == 0
           ? <Text style={[theme.fonts.labelLarge, { alignSelf: 'center', marginTop: 95 }]}>Aucune donnée à afficher</Text>
           : <ScrollView showsVerticalScrollIndicator={false} style={{
             paddingTop: 20,

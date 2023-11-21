@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react';
 import { StatusBar } from 'react-native';
-import { PaperProvider, useTheme } from 'react-native-paper';
+import { useTheme } from 'react-native-paper';
 import useState from 'react-usestateref'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -28,13 +28,13 @@ function App() {
   // Initialize UI data
   const [_fontsLoaded, setFontsLoaded, fontsLoadedRef] = useState(false);
   const theme = useTheme();
-  setThemeData(theme);
 
   // Prepare function
   useEffect(() => {
     async function prepare() {
       try {
         if (!fontsLoadedRef.current) {
+          setThemeData(theme);
           await useFonts();
           setFontsLoaded(true);
         }
@@ -81,16 +81,13 @@ function App() {
         backgroundColor='transparent'
       />
       <BottomSheetModalProvider>
-        {/* Theme provider */}
-        <PaperProvider theme={theme}>
-          {/* Provider needed to update UI when logging-in/out */}
-          <AppContextProvider state={{ loggedIn, setLoggedIn }}>
+        {/* Provider needed to update UI when logging-in/out */}
+        <AppContextProvider state={{ loggedIn, setLoggedIn }}>
           {/* AuthStack / AppStack */}
           {loggedInRef.current
             ? <AppStack theme={theme}/>
             : <AuthStack theme={theme}/>}
-          </AppContextProvider>
-        </PaperProvider>
+        </AppContextProvider>
       </BottomSheetModalProvider>
     </GestureHandlerRootView>
   );

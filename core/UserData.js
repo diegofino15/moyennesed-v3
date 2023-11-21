@@ -17,14 +17,17 @@ export class UserData {
   static mainAccount = new Account();
   static childrenAccounts = new Map();
 
-  static token = "";
   static API_URL = "https://api.ecoledirecte.com";
+  static CUSTOM_API_URL = "https://api.moyennesed.my.to/test-api";
+  static usedURL = "";
+
+  static token = "";
   static currentYearPeriod = "";
 
   static async login(username, password) {
-    this.API_URL = "https://api.ecoledirecte.com";
-    if (username.substring(0, 4) == "demo") {
-      this.API_URL = "https://api.moyennesed.my.to/test-api";
+    this.usedURL = this.API_URL;
+    if (username.substring(0, 11) == "demoaccount") {
+      this.usedURL = this.CUSTOM_API_URL;
       Logger.info("Using demo API...");
     }
 
@@ -39,7 +42,7 @@ export class UserData {
     };
 
     var response = await axios.post(
-      `${this.API_URL}/v3/login.awp?v=4`,
+      `${this.usedURL}/v3/login.awp?v=4`,
       `data=${JSON.stringify(credentials)}`,
       { headers: { "Content-Type": "text/plain" } },
     ).catch(error => {
@@ -117,7 +120,7 @@ export class UserData {
 
     Logger.marks(`Getting marks for account ${accountID}...`);
     var response = await axios.post(
-      `${this.API_URL}/v3/eleves/${accountID}/notes.awp?verbe=get&v=4`,
+      `${this.usedURL}/v3/eleves/${accountID}/notes.awp?verbe=get&v=4`,
       'data={"anneeScolaire": ""}',
       { headers: { "Content-Type": "text/plain", "X-Token": this.token } },
     ).catch(error => {

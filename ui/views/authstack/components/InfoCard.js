@@ -25,10 +25,10 @@ function InfoCard({
           width: '100%',
           justifyContent: 'space-between',
           alignItems: 'center',
+          marginBottom: 5,
         }}>
           <Text style={{
             ...theme.fonts.bodyMedium,
-            marginBottom: 5,
           }}>
             {title}
           </Text>

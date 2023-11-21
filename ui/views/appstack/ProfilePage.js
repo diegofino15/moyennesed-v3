@@ -218,7 +218,7 @@ function ProfilePage({
           paddingHorizontal: 20,
           paddingVertical: 15,
         }}>
-          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify' }]}>{UserData.mainAccount.isParent ? "Votre" : "Ton"} établissement ne fournit pas les coefs ? L'IA de MoyennesED est là pour les deviner !</Text>
+          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify' }]}>{UserData.mainAccount.isParent ? "Vous n'avez" : "Tu n'as"} pas les coefs ? L'IA de MoyennesED est là pour les deviner !</Text>
           <Text style={[theme.fonts.labelLarge, { textAlign: 'justify', marginBottom: 10 }]}>Une icône <BrainCircuitIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled} style={{ transform: [{ rotate: '90deg' }] }}/> apparaîtra auprès des coefficients estimés.</Text>
 
           <View style={{
