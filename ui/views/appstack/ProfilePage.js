@@ -334,8 +334,8 @@ function ProfilePage({
         <CustomButton
           theme={theme}
           title="Déconnexion"
-          confirmTitle={`Êtes-vous sûr${UserData.mainAccount.getSuffix()} ?`}
-          confirmLabel="Cela effacera toutes vos préférences"
+          confirmTitle={`${UserData.mainAccount.isParent ? "Êtes-vous" : "Es-tu"} sûr${UserData.mainAccount.getSuffix()} ?`}
+          confirmLabel="Toutes les préférences seront effacées"
           onPress={logout}
           willLoad={true}
           loadIcon={<ActivityIndicator size={20} color={theme.colors.tertiary}/>}
