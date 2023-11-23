@@ -10,7 +10,7 @@ function FeaturesPage({ pageStyle, windowDimensions, theme }) {
       <Text style={[
         theme.fonts.titleMedium,
         { marginBottom: 10 }
-      ]}>Une appli simple, épurée, sans pubs</Text>
+      ]}>Une appli simple, épurée, efficace</Text>
       <Text style={[
         theme.fonts.labelLarge,
         { marginBottom: 30 }

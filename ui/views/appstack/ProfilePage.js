@@ -14,6 +14,7 @@ import { BugReportPopup } from './components/BugReportPopup';
 import { UserData } from '../../../core/UserData';
 import { Preferences } from '../../../core/Preferences';
 import { CoefficientManager } from '../../../core/CoefficientsManager';
+import { AdUnit } from './components/AdUnit';
 
 
 function ProfilePage({
@@ -207,10 +208,11 @@ function ProfilePage({
           <UnavailableServers style={{ marginBottom: 10 }} theme={theme}/>
         </View>}
 
-        <Separator theme={theme} style={{ marginBottom: 20 }}/>
+        <Separator theme={theme}/>
+        <AdUnit topSeparator={false} profile={true} theme={theme} style={{ marginHorizontal: 0, marginTop: 10 }}/>
 
         {/* Advanced settings  */}
-        <Text style={[theme.fonts.titleSmall, { marginBottom: 10 }]}>Fonctions avancées  <Text style={theme.fonts.labelLarge}>(auto)</Text></Text>
+        <Text style={[theme.fonts.titleSmall, { marginTop: 20, marginBottom: 10 }]}>Fonctions avancées  <Text style={theme.fonts.labelLarge}>(auto)</Text></Text>
         <View style={{
           backgroundColor: theme.colors.surface,
           borderRadius: 20,

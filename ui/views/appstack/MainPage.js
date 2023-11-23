@@ -5,8 +5,9 @@ import useState from "react-usestateref";
 import * as Haptics from "expo-haptics";
 
 import { EmbeddedMarksView } from './components/EmbeddedMarksView';
-import { CustomSquareButton } from "../global_components/CustomSquareButton";
+import { AdUnit } from "./components/AdUnit";
 import { ChildSwitcher } from "./components/ChildSwitcher";
+import { CustomSquareButton } from "../global_components/CustomSquareButton";
 import { UserData } from "../../../core/UserData";
 import { Logger } from "../../../utils/Logger";
 
@@ -177,7 +178,6 @@ function MainPage({
         <RefreshControl refreshing={manualRefreshingRef.current} onRefresh={refresh} tintColor={theme.colors.surface}/>
       }
       style={{
-        // paddingHorizontal: 20,
         width: Dimensions.get('window').width,
         backgroundColor: theme.colors.background,
       }}
@@ -224,7 +224,7 @@ function MainPage({
           selectedChildAccount={selectedChildAccountRef.current}
           setSelectedChildAccount={setSelectedChildAccount}
           theme={theme}
-        /> : null}
+        /> : <AdUnit theme={theme} style={{ marginBottom: 20 }}/>}
 
         {/* Shown account grades */}
         <EmbeddedMarksView

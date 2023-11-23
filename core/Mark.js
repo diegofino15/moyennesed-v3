@@ -33,7 +33,7 @@ function getFormattedMark(jsonData) {
     "valueStr": jsonData.valeur.toString().trim(),
     "value": parseFloat(jsonData.valeur.toString().replace(",", ".")),
     "classValue": jsonData.moyenneClasse ? parseFloat(jsonData.moyenneClasse.toString().replace(",", ".")) : undefined,
-    "valueOn": parseFloat(jsonData.noteSur.toString().replace(",", ".")),
+    "valueOn": valueOn,
     
     "coefficient": coefficient,
     "coefficientType": coefficientType,
