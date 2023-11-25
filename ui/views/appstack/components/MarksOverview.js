@@ -194,14 +194,12 @@ function MarksOverview({
                     key={markKey}
                     style={{
                       paddingRight: (markKey == 14 || markKey == period.marks.length - 1) ? 0 : 20,
-                  }}>
+                    }}>
                     <RecentMarkCard
                       mark={mark} 
                       subject={subject}
                       refreshAverages={refreshAverages}
-                      getMark={(markID) => {
-                        return period.marks.get(markID);
-                      }}
+                      getMark={(markID) => { return period.marks.get(markID); }}
                       windowDimensions={windowDimensions}
                       theme={theme}
                     />
