@@ -79,7 +79,7 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
       ...style
     }}>
       <Separator theme={theme} style={{ width: "28%" }}/>
-      <View style={{ width: '44%', alignItems: 'center' }}><Text style={[theme.fonts.labelLarge, { color: 'black' }]}>{text}</Text></View>
+      <View style={{ width: '44%', alignItems: 'center' }}><Text style={[theme.fonts.labelLarge, { color: theme.colors.onBackground }]}>{text}</Text></View>
       <Separator theme={theme} style={{ width: "28%" }}/>
     </View>;
   }
@@ -108,7 +108,7 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
   const [selectedGraphMark, setSelectedGraphMark] = useState(null);
 
   return (
-    <View>
+    <View style={{ backgroundColor: theme.colors.background }}>
       <View style={{
         height: 100,
         flexDirection: 'row',
@@ -124,7 +124,7 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
           borderRadius: 20,
           marginRight: 10,
         }}>
-          <Text style={[theme.fonts.headlineLarge, { fontFamily: 'Bitter-Bold', fontSize: 29 }]}>{formatAverage(shownSubjectRef.current.average, false)}</Text>
+          <Text style={[theme.fonts.headlineLarge, { fontFamily: 'Bitter-Bold', fontSize: 29, color: theme.colors.onSecondary }]}>{formatAverage(shownSubjectRef.current.average, false)}</Text>
         </View>
         <View style={{
           justifyContent: 'space-evenly',
@@ -321,14 +321,13 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
                       { data: [20], withDots: false },
                     ]
                   }}
-                  // hidePointsAtIndex={marksToHide}
                   width={Dimensions.get("window").width - 40}
                   height={250}
                   chartConfig={{
                     backgroundGradientFrom: getSubjectColor(shownSubjectRef.current.code, true),
                     backgroundGradientTo: getSubjectColor(shownSubjectRef.current.code, true),
                     decimalPlaces: 2,
-                    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                    color: (opacity = 1) => Preferences.isDarkMode ? `rgba(0, 0, 0, ${opacity})` : `rgba(255, 255, 255, ${opacity})`,
                     labelColor: (opacity = 1) => theme.colors.onPrimary,
                   }}
                   bezier

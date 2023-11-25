@@ -29,8 +29,8 @@ function getFormattedMark(jsonData) {
   
   // If value is based on program elements
   if (!value && !valueOn && valueStr.length == 0) {
-    var programElementsSum = 0;
-    var programElementsCoef = 0;
+    let programElementsSum = 0;
+    let programElementsCoef = 0;
     jsonData.elementsProgramme?.forEach((programElement) => {
       programElementsSum += parseFloat(programElement.valeur.toString().replace(",", ".")),
       programElementsCoef += 1;

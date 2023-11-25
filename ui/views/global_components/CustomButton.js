@@ -34,7 +34,7 @@ function CustomButton({ title, confirmTitle, confirmLabel, onPress, theme, leftI
       <View style={[{
         backgroundColor: theme.colors.primary,
         borderWidth: 1,
-        borderColor: theme.colors.onPrimary,
+        borderColor: theme.colors.background,
         paddingHorizontal: 20,
         paddingVertical: waitingForConfirmation && confirmLabel ? 12 : 20,
         borderRadius: 20,

@@ -9,7 +9,7 @@ import { useAppContext } from '../../../utils/AppContext';
 import { Logger } from '../../../utils/Logger';
 
 
-function AppStack({ theme }) {
+function AppStack({ setIsDarkMode, theme }) {
   // Main connection states
   const [_connected, setConnected, connectedRef] = useState(UserData.connected);
   useEffect(() => {
@@ -96,6 +96,7 @@ function AppStack({ theme }) {
         logout={logout}
         updateScreenRef={updateScreenRef}
         setUpdateScreen={setUpdateScreen}
+        setIsDarkMode={setIsDarkMode}
         theme={theme}
       />
     </ScrollView>

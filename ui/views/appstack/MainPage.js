@@ -174,7 +174,7 @@ function MainPage({
       showsVerticalScrollIndicator={false}
       contentInsetAdjustmentBehavior="automatic"
       refreshControl={
-        <RefreshControl refreshing={manualRefreshingRef.current} onRefresh={refresh} tintColor={theme.colors.surface}/>
+        <RefreshControl refreshing={manualRefreshingRef.current} onRefresh={refresh} tintColor={theme.colors.onBackground}/>
       }
       style={{
         width: Dimensions.get('window').width,

@@ -114,23 +114,26 @@ function BugReportPopup({ windowDimensions, theme }) {
           setSelectedPossibleBug(key);
           Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         }
-      }} key={key} style={{
-        paddingHorizontal: 10,
-        paddingVertical: 5,
-        backgroundColor: theme.colors.surface,
-        marginTop: 10,
-        borderRadius: 10,
-      }}>
-        <Text style={[theme.fonts.bodyLarge, { width: Dimensions.get('window').width - 80 }]} numberOfLines={2}>{bug.title}</Text>
-        <Text style={theme.fonts.labelMedium}>{bug.subtitle}</Text>
-        <View style={{
-          position: 'absolute',
-          right: 5,
-          top: 5,
+        }} key={key} style={{
+          paddingHorizontal: 10 - (selectedPossibleBug == key ? 1 : 0),
+          paddingVertical: 5 - (selectedPossibleBug == key ? 1 : 0),
+          backgroundColor: theme.colors.surface,
+          marginTop: 10,
+          borderRadius: 10,
+          borderWidth:  selectedPossibleBug == key ? 1 : 0,
+          borderColor: theme.colors.onSurfaceDisabled,
         }}>
-          {selectedPossibleBug == key ? <CheckCircle2Icon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/> : <CircleIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/>}
-        </View>
-      </PressableScale>)}
+          <Text style={[theme.fonts.bodyLarge, { width: Dimensions.get('window').width - 80 }]} numberOfLines={2}>{bug.title}</Text>
+          <Text style={theme.fonts.labelMedium}>{bug.subtitle}</Text>
+          <View style={{
+            position: 'absolute',
+            right: 5,
+            top: 5,
+          }}>
+            {selectedPossibleBug == key ? <CheckCircle2Icon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/> : <CircleIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/>}
+          </View>
+        </PressableScale>
+      )}
 
       <CustomButton
         title={sendingBugReport ? "Envoi..." : canSendBugReport ? "Envoyer" : sentBugReport ? "Envoyé !" : "Bug déjà signalé"}

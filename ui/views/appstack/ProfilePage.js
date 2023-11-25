@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { View, SafeAreaView, ScrollView, Text, Image, Switch, ActivityIndicator, Dimensions, Platform, useWindowDimensions } from 'react-native';
-import { BrainCircuitIcon, BugIcon, CheckIcon, ChevronLeftIcon, MailIcon, MessageSquareDashedIcon, RefreshCcwIcon, UserIcon, WrenchIcon, XIcon } from 'lucide-react-native';
+import { BrainCircuitIcon, BugIcon, CheckIcon, ChevronLeftIcon, MailIcon, MessageSquareDashedIcon, MoonIcon, RefreshCcwIcon, SunIcon, UserIcon, WrenchIcon, XIcon } from 'lucide-react-native';
 import { PressableScale } from 'react-native-pressable-scale';
 import * as Haptics from "expo-haptics";
 
@@ -23,6 +23,7 @@ function ProfilePage({
   profilePhotoRef,
   logout,
   updateScreenRef, setUpdateScreen,
+  setIsDarkMode,
   theme
 }) {
   async function closeProfilePage() { scrollViewRef.current?.scrollTo({x: 0, animated: true}); }
@@ -59,6 +60,7 @@ function ProfilePage({
         Math.min(550 / Dimensions.get('screen').height * windowDimensions.fontScale, 1) * 100 + "%",
       ]}
       children={<BugReportPopup windowDimensions={windowDimensions} theme={theme}/>}
+      theme={theme}
     />;
   }
   
@@ -103,10 +105,33 @@ function ProfilePage({
             width: Dimensions.get('window').width - 130,
             marginLeft: 20,
           }}>
-            <Text style={[
-              theme.fonts.titleSmall,
-              { fontFamily: 'Montserrat-Medium' }
-            ]}>Profil</Text>
+            <View style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+              <Text style={[
+                theme.fonts.titleSmall,
+                { fontFamily: 'Montserrat-Medium' }
+              ]}>Profil</Text>
+              <PressableScale
+                onPress={() => {
+                  setIsDarkMode(!Preferences.isDarkMode);
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  Preferences.isDarkMode = !Preferences.isDarkMode
+                  Preferences.save();
+                }}
+                style={{
+                  backgroundColor: theme.colors.surface,
+                  padding: 5,
+                  borderRadius: 5,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+              }}>
+                {Preferences.isDarkMode ? <SunIcon size={20} color={theme.colors.onSurfaceDisabled}/> : <MoonIcon size={20} color={theme.colors.onSurfaceDisabled}/>}
+                <Text style={[theme.fonts.labelMedium, { marginLeft: 5 }]}>Mode</Text>
+              </PressableScale>
+            </View>
             <Text style={theme.fonts.labelMedium} numberOfLines={2}>{UserData.mainAccount.isParent ? "Gérez vos" : "Gère tes"} paramètres et préférences de l'appli</Text>
           </View>
         </View>
@@ -172,11 +197,11 @@ function ProfilePage({
               {connectingRef.current
               ? null
               : connectedRef.current
-                ? <CheckIcon size={20 * windowDimensions.fontScale} color='white'/>
-                : <XIcon size={20 * windowDimensions.fontScale} color='white'/>}
+                ? <CheckIcon size={20 * windowDimensions.fontScale} color={theme.colors.onPrimary}/>
+                : <XIcon size={20 * windowDimensions.fontScale} color={theme.colors.onPrimary}/>}
               <Text style={[
                 theme.fonts.labelLarge,
-                { color: 'white', marginLeft: 10 }
+                { color: theme.colors.onPrimary, marginLeft: 10 }
               ]}>{connectedRef.current ? `Connecté${UserData.mainAccount.getSuffix()}` : connectingRef.current ? "Connexion en cours..." : `Non connecté${UserData.mainAccount.getSuffix()}`}</Text>
             </View>
             <PressableScale
@@ -189,7 +214,7 @@ function ProfilePage({
                 }
               }}
               style={{
-                borderColor: 'white',
+                borderColor: theme.colors.background,
                 borderLeftWidth: 1,
                 justifyContent: 'center',
                 alignItems: 'center',
@@ -197,8 +222,8 @@ function ProfilePage({
               }}
             >
               {connectingRef.current
-              ? <ActivityIndicator size={25 * windowDimensions.fontScale} color='white'/>
-              : <RefreshCcwIcon size={25 * windowDimensions.fontScale} color='white'/>}
+              ? <ActivityIndicator size={25 * windowDimensions.fontScale} color={theme.colors.onPrimary}/>
+              : <RefreshCcwIcon size={25 * windowDimensions.fontScale} color={theme.colors.onPrimary}/>}
             </PressableScale>
           </View>
         </PressableScale>
@@ -293,7 +318,7 @@ function ProfilePage({
           }} style={{
             marginTop: 5,
           }}>
-            <Text style={[theme.fonts.labelLarge, { color: 'red' }]}>Effacer coefficients personnalisés</Text>
+            <Text style={[theme.fonts.labelLarge, { color: theme.colors.tertiary }]}>Effacer coefficients personnalisés</Text>
           </PressableScale>
         </View>
 

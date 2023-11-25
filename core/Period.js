@@ -11,12 +11,12 @@ function getFormattedPeriod(jsonData) {
   
   jsonData.ensembleMatieres.disciplines.map(subjectData => {
     if (subjectData.groupeMatiere ?? false) {
-      var subjectGroup = getFormattedSubjectGroup(subjectData);
+      let subjectGroup = getFormattedSubjectGroup(subjectData);
       if (!subjectGroups.has(subjectGroup.id)) {
         subjectGroups.set(subjectGroup.id, subjectGroup);
       }
     } else {
-      var subject = getFormattedSubject(subjectData);
+      let subject = getFormattedSubject(subjectData);
       if (!subject.isSubSubject) {
         subjects.set(subject.code, subject);
         if (subject.subjectGroupID) {
@@ -24,7 +24,7 @@ function getFormattedPeriod(jsonData) {
         }
       }
       else {
-        var mainSubject = subjects.get(subject.code);
+        let mainSubject = subjects.get(subject.code);
         if (mainSubject == undefined) {
           mainSubject = getSubjectFromCache(getCacheSubject(subject));
           mainSubject.name = subject.code;
@@ -77,7 +77,7 @@ function calculateAllPeriodAverages(period) {
     let sum = 0;
     let coefficient = 0;
     subjectGroup.subjectCodes.forEach(subjectCode => {
-      const subject = period.subjects.get(subjectCode);
+      let subject = period.subjects.get(subjectCode);
       if (subject.average) {
         sum += subject.average * subject.coefficient;
         coefficient += subject.coefficient;
@@ -94,7 +94,7 @@ function _getCalculatedGeneralAverage(period, set=true, isClass=false) {
   var coefficient = 0;
 
   period.subjects.forEach((subject) => {
-    var subjectAverage;
+    let subjectAverage;
     if (set) {
       calculateSubjectAverages(subject, (markID) => { return period.marks.get(markID); });
       subjectAverage = isClass ? subject.classAverage : subject.average;

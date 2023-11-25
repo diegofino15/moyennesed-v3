@@ -11,6 +11,7 @@ import { SubjectCard } from "./SubjectCard";
 import { AnimatedComponent } from "../../global_components/AnimatedComponents";
 import { formatAverage } from "../../../../utils/Utils";
 import { CoefficientManager } from "../../../../core/CoefficientsManager";
+import { Preferences } from "../../../../core/Preferences";
 
 
 function MarksOverview({
@@ -148,12 +149,13 @@ function MarksOverview({
                 backgroundGradientFrom: theme.colors.surface,
                 backgroundGradientTo: theme.colors.surface,
                 decimalPlaces: 1,
-                color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                color: (opacity = 1) => Preferences.isDarkMode ? `rgba(255, 255, 255, ${opacity})` : `rgba(0, 0, 0, ${opacity})`,
                 labelColor: (opacity = 1) => theme.colors.onSurfaceDisabled,
+                
                 propsForDots: {
                   r: "2",
                   strokeWidth: "2",
-                  stroke: "black",
+                  stroke: theme.colors.onSurface,
                 },
               }}
               bezier

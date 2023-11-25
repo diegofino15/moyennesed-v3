@@ -56,7 +56,7 @@ function addSubSubjectToSubject(subject, subSubject) {
 
 function addMarkToSubject(subject, mark) {
   if (mark.subSubjectCode && !subject.isSubSubject) {
-    var subSubject = subject.subSubjects.get(mark.subSubjectCode);
+    let subSubject = subject.subSubjects.get(mark.subSubjectCode);
     if (subSubject == undefined) {
       Logger.core("Detected mark without sub-subject, creating it...", true);
       subSubject = getFormattedSubject({
@@ -90,8 +90,8 @@ function _getCalculatedSubjectAverage(subject, getMark, isClass, set=true) {
 
   if (subject.subSubjects.size == 0) {
     subject.marks.forEach(markID => {
-      const mark = getMark(markID);
-      const classCheck = isClass ? mark.classValue : true;
+      let mark = getMark(markID);
+      let classCheck = isClass ? mark.classValue : true;
       if (mark.isEffective && classCheck) {
         sum += ((isClass ? mark.classValue : mark.value) / mark.valueOn * 20) * mark.coefficient;
         coefficient += mark.coefficient;
@@ -100,7 +100,7 @@ function _getCalculatedSubjectAverage(subject, getMark, isClass, set=true) {
   }
 
   subject.subSubjects.forEach((subSubject, _) => {
-    var subSubjectAverage;
+    let subSubjectAverage;
     if (set) {
       calculateSubjectAverages(subSubject, getMark);
       subSubjectAverage = isClass ? subSubject.classAverage : subSubject.average;

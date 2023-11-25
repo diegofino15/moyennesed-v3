@@ -24,6 +24,7 @@ function RecentMarkCard({ mark, subject, refreshAverages, getMark, windowDimensi
       selectedSnapPoint={0}
       children={<SubjectPopup subject={subject} selectedSubSubject={mark.subSubjectCode} refreshAverages={refreshAverages} clickedOnMark={mark.id} getMark={getMark} windowDimensions={windowDimensions} theme={theme}/>}
       padding={0}
+      theme={theme}
     />;
   }
 
@@ -59,7 +60,7 @@ function RecentMarkCard({ mark, subject, refreshAverages, getMark, windowDimensi
             backgroundColor: _lightSubjectColor,
             borderRadius: 10,
           }}>
-            <Text style={[theme.fonts.headlineMedium, { fontFamily: 'Bitter-Bold' }]}>{mark.valueStr}</Text>
+            <Text style={[theme.fonts.headlineMedium, { fontFamily: 'Bitter-Bold', color: theme.colors.onSecondary }]}>{mark.valueStr}</Text>
           </View>
 
           {mark.valueOn != 20 ? <View
@@ -73,7 +74,7 @@ function RecentMarkCard({ mark, subject, refreshAverages, getMark, windowDimensi
               borderRadius: 5,
             }}
           >
-            <Text style={theme.fonts.headlineSmall}>/{mark.valueOn}</Text>
+            <Text style={[theme.fonts.headlineSmall, { color: theme.colors.onSecondary }]}>/{mark.valueOn}</Text>
           </View> : null}
         </View>
         <View style={{
@@ -108,7 +109,7 @@ function RecentMarkCard({ mark, subject, refreshAverages, getMark, windowDimensi
             borderRadius: 5,
           }}
         >
-          <Text style={[theme.fonts.labelSmall, { color: 'white' }]}>Non significative</Text>
+          <Text style={[theme.fonts.labelSmall, { color: theme.colors.onPrimary }]}>Non significative</Text>
         </View> : null}
       </PressableScale>
 

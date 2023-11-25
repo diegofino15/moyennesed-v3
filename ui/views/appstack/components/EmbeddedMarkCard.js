@@ -45,7 +45,7 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, refreshAverages, 
           backgroundColor: _lightSubjectColor,
           borderRadius: 10,
         }}>
-          <Text style={[theme.fonts.headlineMedium, { fontFamily: 'Bitter-Bold' }]}>{mark.valueStr}</Text>
+          <Text style={[theme.fonts.headlineMedium, { fontFamily: 'Bitter-Bold', color: theme.colors.onSecondary }]}>{mark.valueStr}</Text>
         </View>
 
         {mark.valueOn != 20 ? <View style={{
@@ -57,7 +57,7 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, refreshAverages, 
           paddingVertical: 3,
           borderRadius: 5,
         }}>
-          <Text style={theme.fonts.headlineSmall}>/{mark.valueOn}</Text>
+          <Text style={[theme.fonts.headlineSmall, { color: theme.colors.onSecondary }]}>/{mark.valueOn}</Text>
         </View> : null}
       </View>
       <View style={{
@@ -96,7 +96,7 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, refreshAverages, 
         paddingVertical: 3,
         borderRadius: 5,
       }}>
-        <Text style={[theme.fonts.labelSmall, { color: 'white' }]}>Non significative</Text>
+        <Text style={[theme.fonts.labelSmall, { color: theme.colors.onPrimary }]}>Non significative</Text>
       </View> : <View style={{
         flexDirection: 'row',
         justifyContent: 'space-between',

@@ -28,13 +28,17 @@ function App() {
   // Initialize UI data
   const [_fontsLoaded, setFontsLoaded, fontsLoadedRef] = useState(false);
   const theme = useTheme();
+  setThemeData(theme); // Here to get updated when changing light/dark mode
+  const [_isDarkMode, setIsDarkMode] = useState(Preferences.isDarkMode);
+  useEffect(() => {
+    setIsDarkMode(Preferences.isDarkMode);
+  }, [Preferences.isDarkMode]);
 
   // Prepare function
   useEffect(() => {
     async function prepare() {
       try {
         if (!fontsLoadedRef.current) {
-          setThemeData(theme);
           await useFonts();
           setFontsLoaded(true);
         }
@@ -77,7 +81,7 @@ function App() {
       {/* Top status bar */}
       <StatusBar
         translucent={true}
-        barStyle='dark-content'
+        barStyle={Preferences.isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor='transparent'
       />
       <BottomSheetModalProvider>
@@ -85,7 +89,7 @@ function App() {
         <AppContextProvider state={{ loggedIn, setLoggedIn }}>
           {/* AuthStack / AppStack */}
           {loggedInRef.current
-            ? <AppStack theme={theme}/>
+            ? <AppStack setIsDarkMode={setIsDarkMode} theme={theme}/>
             : <AuthStack theme={theme}/>}
         </AppContextProvider>
       </BottomSheetModalProvider>
