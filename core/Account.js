@@ -99,13 +99,19 @@ export class Account {
       const mark = getFormattedMark(markData);
       if (mark.valueStr) {
         sortedMarks.push(mark);
+      } else {
+        Logger.core(`Mark : ${mark.title} (${mark.valueStr}) is invalid`, true);
       }
     });
     _sortMarks(sortedMarks);
     sortedMarks.forEach(mark => {
       const period = this.periods.get(mark.periodCode);
-      addMarkToPeriod(period, mark);
-      _getCalculatedGeneralAverage(period, false);
+      if (period) {
+        addMarkToPeriod(period, mark);
+        _getCalculatedGeneralAverage(period, false, false);
+      } else {
+        Logger.core(`Mark : ${mark.title} (${mark.valueStr}) has invalid period code`, true);
+      }
     });
     CoefficientManager.isAverageHistoryUpdated = true;
 

@@ -9,7 +9,7 @@ function getFormattedMark(jsonData) {
   var coefficientType = 0;
   var newCoefficient;
   if (Preferences.allowGuessMarkCoefficients) {
-    newCoefficient = CoefficientManager.getGuessedMarkCoefficient(jsonData.id, jsonData.devoir);
+    newCoefficient = CoefficientManager.getGuessedMarkCoefficient(markID, jsonData.devoir);
     if (newCoefficient) {
       coefficient = newCoefficient;
       coefficientType = 1;
@@ -17,10 +17,27 @@ function getFormattedMark(jsonData) {
   }
   if (Preferences.allowCustomCoefficients) {
     newCoefficient = CoefficientManager.getCustomMarkCoefficient(markID);
-    if (newCoefficient != undefined) {
+    if (newCoefficient) {
       coefficient = newCoefficient;
       coefficientType = 2;
     }
+  }
+
+  var valueStr = jsonData.valeur.toString().trim();
+  var value = parseFloat(jsonData.valeur.toString().replace(",", "."));
+  var valueOn = parseFloat(jsonData.noteSur.toString().replace(",", "."));
+  
+  // If value is based on program elements
+  if (!value && !valueOn && valueStr.length == 0) {
+    var programElementsSum = 0;
+    var programElementsCoef = 0;
+    jsonData.elementsProgramme?.forEach((programElement) => {
+      programElementsSum += parseFloat(programElement.valeur.toString().replace(",", ".")),
+      programElementsCoef += 1;
+    });
+    value = programElementsSum / (programElementsCoef ?? 1);
+    valueOn = 5; // Not sure
+    valueStr = (Math.round(value * 100) / 100).toString().replace(".", ",");
   }
 
   return {
@@ -30,10 +47,10 @@ function getFormattedMark(jsonData) {
     "dateEntered": new Date(jsonData.dateSaisie),
     
     "isEffective": !(jsonData.nonSignificatif || jsonData.enLettre),
-    "valueStr": jsonData.valeur.toString().trim(),
-    "value": parseFloat(jsonData.valeur.toString().replace(",", ".")),
-    "classValue": jsonData.moyenneClasse ? parseFloat(jsonData.moyenneClasse.toString().replace(",", ".")) : undefined,
-    "valueOn": parseFloat(jsonData.noteSur.toString().replace(",", ".")),
+    "valueStr": valueStr,
+    "value": value,
+    "classValue": parseFloat(jsonData.moyenneClasse?.toString().replace(",", ".")),
+    "valueOn": valueOn,
     
     "coefficient": coefficient,
     "coefficientType": coefficientType,

@@ -23,6 +23,7 @@ function RecentMarkCard({ mark, subject, refreshAverages, getMark, windowDimensi
       ]}
       selectedSnapPoint={0}
       children={<SubjectPopup subject={subject} selectedSubSubject={mark.subSubjectCode} refreshAverages={refreshAverages} clickedOnMark={mark.id} getMark={getMark} windowDimensions={windowDimensions} theme={theme}/>}
+      padding={0}
     />;
   }
 

@@ -177,7 +177,6 @@ function MainPage({
         <RefreshControl refreshing={manualRefreshingRef.current} onRefresh={refresh} tintColor={theme.colors.surface}/>
       }
       style={{
-        // paddingHorizontal: 20,
         width: Dimensions.get('window').width,
         backgroundColor: theme.colors.background,
       }}

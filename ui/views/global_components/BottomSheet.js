@@ -3,7 +3,7 @@ import { View, Dimensions } from 'react-native';
 import { BottomSheetModal, BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 
 
-function BottomSheet({ isOpen, onClose, children, backgroundStyle, snapPoints, selectedSnapPoint=0 }) {
+function BottomSheet({ isOpen, onClose, children, backgroundStyle, snapPoints, selectedSnapPoint=0, padding=20 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   useEffect(() => {
     if (isOpen) { handleOpenModal(); }
@@ -44,7 +44,7 @@ function BottomSheet({ isOpen, onClose, children, backgroundStyle, snapPoints, s
       backdropComponent={renderBackdrop}
     >
       <View style={{
-        paddingHorizontal: 20,
+        paddingHorizontal: padding,
       }}>
         {children}
       </View>

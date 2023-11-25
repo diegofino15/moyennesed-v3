@@ -25,6 +25,7 @@ function SubjectCard({ mainSubject, refreshAverages, getMark, windowDimensions, 
         "80%",
       ]}
       children={<SubjectPopup subject={mainSubject} selectedSubSubject={subject.subCode} refreshAverages={refreshAverages} getMark={getMark} windowDimensions={windowDimensions} theme={theme}/>}
+      padding={0}
     />;
   }
 

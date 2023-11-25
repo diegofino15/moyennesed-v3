@@ -10,6 +10,7 @@ MoyennesED est une application mobile conçue pour permettre aux élèves de con
   - [x] + Coefficients personnalisables
   - [x] Paramètres configurables sur l'onglet profil
 - [x] Groupements de matières (ex: Spécialités / Tronc commun) + Sous matières (ex: Français > Écrit)
+- [x] Graphique d'évolution de la moyenne générale
 - [x] Système de signalement de bugs
 
 ## ⚛️ Fonctionnement

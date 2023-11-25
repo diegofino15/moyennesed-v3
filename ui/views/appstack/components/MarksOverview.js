@@ -115,11 +115,11 @@ function MarksOverview({
             <Text style={theme.fonts.headlineLarge}>{formatAverage(period.average)}</Text>
             <Text style={[theme.fonts.labelMedium, { marginBottom: 5, marginRight: 5 }]}>MOYENNE GÉNÉRALE</Text>
             
-            {period.classAverage ? <View style={{ flexDirection: 'row' }}>
+            <View style={{ flexDirection: 'row' }}>
               <Users2Icon size={15 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled} style={{ marginRight: 5 }}/>
               <Text style={[theme.fonts.labelSmall, { bottom: 1 }]}>: </Text>
               <Text style={[theme.fonts.labelSmall, { fontFamily: 'Bitter-Regular' }]}>{formatAverage(period.classAverage)}</Text>
-            </View> : null}
+            </View>
           </View> : <View style={{
             height: 100,
           }}>
@@ -188,12 +188,12 @@ function MarksOverview({
             >
               {[...(period.marks?.values() ?? [])].reverse().map((mark, markKey) => {
                 if (!mark) { return null; }
-                if (markKey < 10) {
+                if (markKey < 15) {
                   const subject = period.subjects.get(mark.subjectCode);
                   return <View
                     key={markKey}
                     style={{
-                      paddingRight: (markKey == 9 || markKey == period.marks.length - 1) ? 0 : 20,
+                      paddingRight: (markKey == 14 || markKey == period.marks.length - 1) ? 0 : 20,
                   }}>
                     <RecentMarkCard
                       mark={mark} 

@@ -14,7 +14,7 @@ const subjectColors = [
 var attribuatedSubjectColors = {};
 
 var currentIndex = 0;
-function registerSubject(subjectCode) {
+function registerSubjectColor(subjectCode) {
   if (attribuatedSubjectColors[subjectCode]) { return; }
   attribuatedSubjectColors[subjectCode] = subjectColors[currentIndex];
   currentIndex = (currentIndex + 1) % subjectColors.length;
@@ -26,7 +26,7 @@ function getSubjectColor(subjectCode, isLight = false) {
     return attribuatedSubjectColors[subjectCode][0];
   }
 
-  registerSubject(subjectCode);
+  registerSubjectColor(subjectCode);
   if (isLight) { return attribuatedSubjectColors[subjectCode][1]; }
   return attribuatedSubjectColors[subjectCode][0];
 }
@@ -36,4 +36,4 @@ function resetSubjectColors() {
   attribuatedSubjectColors = {};
 }
 
-export { registerSubject, getSubjectColor, resetSubjectColors };
+export { registerSubjectColor, getSubjectColor, resetSubjectColors };
