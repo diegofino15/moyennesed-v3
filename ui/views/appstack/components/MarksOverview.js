@@ -134,7 +134,7 @@ function MarksOverview({
               width={Dimensions.get("window").width - 50}
               height={100}
               renderDotContent={(params) => {
-                if (params.index == (shownGraphValuesRef.current.length - 1)) {
+                if (params.index == (shownGraphValuesRef.current.length - 1) && !isNaN(params.indexData)) {
                   return <View key={params.index} style={{
                     position: 'absolute',
                     top: params.y - 20,
