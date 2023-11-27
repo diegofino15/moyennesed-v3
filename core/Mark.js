@@ -36,7 +36,7 @@ function getFormattedMark(jsonData) {
       programElementsCoef += 1;
     });
     value = programElementsSum / (programElementsCoef ?? 1);
-    valueOn = 5; // Not sure
+    valueOn = 4; // Not sure
     valueStr = (Math.round(value * 100) / 100).toString().replace(".", ",");
   }
 
