@@ -1,5 +1,7 @@
 import { loadAsync } from 'expo-font';
 
+import { Preferences } from '../../core/Preferences';
+
 
 const useFonts = async () => await loadAsync({
   'Montserrat-Regular': require('../../assets/fonts/Montserrat-Regular.ttf'),
@@ -12,22 +14,44 @@ const useFonts = async () => await loadAsync({
 });
 
 function setThemeData(theme) {
-  theme.colors = {
-    background: '#FFF',
-    onBackground: '#000',
+  if (!Preferences.isDarkMode) {
+    theme.colors = {
+      background: '#FFF',
+      onBackground: '#000',
+    
+      surface: '#ECECEC',
+      onSurface: '#000',
+      onSurfaceDisabled: '#888',
+    
+      primary: '#1985A1',
+      onPrimary: '#FFF',
+      onPrimaryDisabled: '#888',
   
-    surface: '#ECECEC',
-    onSurface: '#000',
-    onSurfaceDisabled: '#888',
+      secondary: '#4CAF50',
+      onSecondary: '#000',
   
-    primary: '#1985A1',
-    onPrimary: '#FFF',
-    onPrimaryDisabled: '#888',
+      tertiary: '#DA3633',
+    };
+  } else {
+    theme.colors = {
+      background: '#0D1117',
+      onBackground: '#E6EDF3',
+    
+      surface: '#21262D',
+      onSurface: '#C9D1D9',
+      onSurfaceDisabled: '#7D8591',
+    
+      primary: '#1985A1',
+      onPrimary: '#E6EDF3',
+      onPrimaryDisabled: '#888',
+  
+      secondary: '#238636',
+      onSecondary: '#0D1117',
+  
+      tertiary: '#DA3633',
+    };
+  }
 
-    secondary: '#4CAF50',
-
-    tertiary: '#DA3633',
-  };
   theme.fonts = {
     default: {
       fontSize: 17,

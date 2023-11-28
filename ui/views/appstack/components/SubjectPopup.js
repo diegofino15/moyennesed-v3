@@ -79,7 +79,7 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
       ...style
     }}>
       <Separator theme={theme} style={{ width: "28%" }}/>
-      <View style={{ width: '44%', alignItems: 'center' }}><Text style={[theme.fonts.labelLarge, { color: 'black' }]}>{text}</Text></View>
+      <View style={{ width: '44%', alignItems: 'center' }}><Text style={[theme.fonts.labelLarge, { color: theme.colors.onBackground }]}>{text}</Text></View>
       <Separator theme={theme} style={{ width: "28%" }}/>
     </View>;
   }
@@ -108,11 +108,12 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
   const [selectedGraphMark, setSelectedGraphMark] = useState(null);
 
   return (
-    <View>
+    <View style={{ backgroundColor: theme.colors.background }}>
       <View style={{
         height: 100,
         flexDirection: 'row',
         marginBottom: 10,
+        paddingHorizontal: 20,
       }}>
         <View style={{
           width: 100,
@@ -123,7 +124,7 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
           borderRadius: 20,
           marginRight: 10,
         }}>
-          <Text style={[theme.fonts.headlineLarge, { fontFamily: 'Bitter-Bold', fontSize: 29 }]}>{formatAverage(shownSubjectRef.current.average, false)}</Text>
+          <Text style={[theme.fonts.headlineLarge, { fontFamily: 'Bitter-Bold', fontSize: 29, color: theme.colors.onSecondary }]}>{formatAverage(shownSubjectRef.current.average, false)}</Text>
         </View>
         <View style={{
           justifyContent: 'space-evenly',
@@ -138,11 +139,11 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
             <Text style={theme.fonts.bodyLarge}>{shownSubjectRef.current.name}</Text>
           </Text>
           
-          {subject.classAverage ? <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Users2Icon size={15 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled} style={{ marginRight: 5 }}/>
             <Text style={[theme.fonts.labelMedium, { bottom: 1 }]}>: </Text>
             <Text style={[theme.fonts.labelMedium, { fontFamily: 'Bitter-Regular' }]}>{formatAverage(shownSubjectRef.current.classAverage)}</Text>
-          </View> : null}
+          </View>
           
           <View style={{
             flexDirection: 'row',
@@ -267,16 +268,16 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
       </View>
       
       <View style={{
-        width: Dimensions.get('window').width - 40,
+        width: Dimensions.get('window').width,
         flexDirection: 'row',
         justifyContent: 'space-between',
+        paddingHorizontal: 20,
       }}>
         {chooserItem("Détails", 0)}
         {chooserItem("Évolution", 1, <TrendingUpIcon size={20} color={choosenSection == 1 ? theme.colors.onPrimary : theme.colors.onSurfaceDisabled} style={{ marginRight: 10 }}/>)}
       </View>
       
       <View style={{
-        left: -20,
         height: 1,
         marginTop: 10,
         width: Dimensions.get('screen').width,
@@ -286,6 +287,7 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
       {choosenSection == 0 ? <ScrollView style={{
         height: Dimensions.get('screen').height * 0.8 - 180,
         paddingTop: 10,
+        paddingHorizontal: 20,
       }} showsVerticalScrollIndicator={false}>
         {shownSubjectRef.current.teachers.length != 0 && section("Professeurs", { marginBottom: 10 })}
         {[...(shownSubjectRef.current.teachers.values() ?? [])].map((teacher, key) => teacherCard(teacher, key))}
@@ -301,6 +303,7 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
           ? <Text style={[theme.fonts.labelLarge, { alignSelf: 'center', marginTop: 95 }]}>Aucune donnée à afficher</Text>
           : <ScrollView showsVerticalScrollIndicator={false} style={{
             paddingTop: 20,
+            paddingHorizontal: 20,
             height: Dimensions.get('screen').height * 0.8 - 180,
           }}>
               <View style={{
@@ -318,14 +321,13 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
                       { data: [20], withDots: false },
                     ]
                   }}
-                  // hidePointsAtIndex={marksToHide}
                   width={Dimensions.get("window").width - 40}
                   height={250}
                   chartConfig={{
                     backgroundGradientFrom: getSubjectColor(shownSubjectRef.current.code, true),
                     backgroundGradientTo: getSubjectColor(shownSubjectRef.current.code, true),
                     decimalPlaces: 2,
-                    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                    color: (opacity = 1) => Preferences.isDarkMode ? `rgba(0, 0, 0, ${opacity})` : `rgba(255, 255, 255, ${opacity})`,
                     labelColor: (opacity = 1) => theme.colors.onPrimary,
                   }}
                   bezier

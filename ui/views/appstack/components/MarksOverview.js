@@ -11,6 +11,7 @@ import { SubjectCard } from "./SubjectCard";
 import { AnimatedComponent } from "../../global_components/AnimatedComponents";
 import { formatAverage } from "../../../../utils/Utils";
 import { CoefficientManager } from "../../../../core/CoefficientsManager";
+import { Preferences } from "../../../../core/Preferences";
 
 
 function MarksOverview({
@@ -115,11 +116,11 @@ function MarksOverview({
             <Text style={theme.fonts.headlineLarge}>{formatAverage(period.average)}</Text>
             <Text style={[theme.fonts.labelMedium, { marginBottom: 5, marginRight: 5 }]}>MOYENNE GÉNÉRALE</Text>
             
-            {period.classAverage ? <View style={{ flexDirection: 'row' }}>
+            <View style={{ flexDirection: 'row' }}>
               <Users2Icon size={15 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled} style={{ marginRight: 5 }}/>
               <Text style={[theme.fonts.labelSmall, { bottom: 1 }]}>: </Text>
               <Text style={[theme.fonts.labelSmall, { fontFamily: 'Bitter-Regular' }]}>{formatAverage(period.classAverage)}</Text>
-            </View> : null}
+            </View>
           </View> : <View style={{
             height: 100,
           }}>
@@ -134,7 +135,7 @@ function MarksOverview({
               width={Dimensions.get("window").width - 50}
               height={100}
               renderDotContent={(params) => {
-                if (params.index == (shownGraphValuesRef.current.length - 1)) {
+                if (params.index == (shownGraphValuesRef.current.length - 1) && !isNaN(params.indexData)) {
                   return <View key={params.index} style={{
                     position: 'absolute',
                     top: params.y - 20,
@@ -148,12 +149,13 @@ function MarksOverview({
                 backgroundGradientFrom: theme.colors.surface,
                 backgroundGradientTo: theme.colors.surface,
                 decimalPlaces: 1,
-                color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                color: (opacity = 1) => Preferences.isDarkMode ? `rgba(255, 255, 255, ${opacity})` : `rgba(0, 0, 0, ${opacity})`,
                 labelColor: (opacity = 1) => theme.colors.onSurfaceDisabled,
+                
                 propsForDots: {
                   r: "2",
                   strokeWidth: "2",
-                  stroke: "black",
+                  stroke: theme.colors.onSurface,
                 },
               }}
               bezier
@@ -188,20 +190,18 @@ function MarksOverview({
             >
               {[...(period.marks?.values() ?? [])].reverse().map((mark, markKey) => {
                 if (!mark) { return null; }
-                if (markKey < 10) {
+                if (markKey < 15) {
                   const subject = period.subjects.get(mark.subjectCode);
                   return <View
                     key={markKey}
                     style={{
-                      paddingRight: (markKey == 9 || markKey == period.marks.length - 1) ? 0 : 20,
-                  }}>
+                      paddingRight: (markKey == 14 || markKey == period.marks.length - 1) ? 0 : 20,
+                    }}>
                     <RecentMarkCard
                       mark={mark} 
                       subject={subject}
                       refreshAverages={refreshAverages}
-                      getMark={(markID) => {
-                        return period.marks.get(markID);
-                      }}
+                      getMark={(markID) => { return period.marks.get(markID); }}
                       windowDimensions={windowDimensions}
                       theme={theme}
                     />

@@ -95,7 +95,7 @@ export class UserData {
     this.childrenAccounts.clear();
     if (this.mainAccount.isParent) {
       jsonData.profile.eleves.forEach(childData => {
-        const childAccount = new Account();
+        let childAccount = new Account();
         childAccount.init(childData, true);
         Logger.core("-> Created child account " + childAccount.fullName() + " (" + childAccount.id + ")");
         if (this.marksDataCache.has(childAccount.id.toString()) && this.marksDataCache.get(childAccount.id.toString())) {
@@ -180,7 +180,7 @@ export class UserData {
       period.subjects.forEach(subject => {
         subject.coefficient = CoefficientManager.getDefaultEDSubjectCoefficient(subject.id);
         subject.coefficientType = 0;
-        var newCoefficient;
+        let newCoefficient;
         if (Preferences.allowGuessSubjectCoefficients) {
           newCoefficient = CoefficientManager.getGuessedSubjectCoefficient(subject.id, subject.code, subject.subCode, subject.name);
           if (newCoefficient) {
@@ -269,11 +269,11 @@ export class UserData {
         if (!account.photoURL) { return null; }
         return await fetch(`https:${account.photoURL}`, { headers: { 'Referer': `http:${account.photoURL}`, 'Host': 'doc1.ecoledirecte.com' } })
         .then(async (response) => {
-          const blob = await response.blob();
-          const fileReaderInstance = new FileReader();
+          let blob = await response.blob();
+          let fileReaderInstance = new FileReader();
           fileReaderInstance.readAsDataURL(blob); 
           fileReaderInstance.onload = () => {
-            const base64data = fileReaderInstance.result;
+            let base64data = fileReaderInstance.result;
             this.temporaryProfilePhoto = base64data;
             AsyncStorage.setItem("photo", base64data);
             Logger.core("Got profile photo !");
@@ -297,16 +297,16 @@ export class UserData {
   static async loadCache() {
     await AsyncStorage.getItem("cache").then(jsonValue => {
       if (jsonValue != null) {
-        const cache = JSON.parse(jsonValue);
+        let cache = JSON.parse(jsonValue);
 
         this.mainAccount = new Account();
         this.mainAccount.fromCache(cache.mainAccount);
         if (!this.mainAccount.isParent) { this.marksDataCache.set(this.mainAccount.id.toString(), this.mainAccount.periods); }
         this.childrenAccounts = new Map();
 
-        const cacheChildrenAccounts = new Map(cache.childrenAccounts);
-        cacheChildrenAccounts.forEach((cacheChildAccount, key) => {
-          const childAccount = new Account();
+        let cacheChildrenAccounts = new Map(cache.childrenAccounts);
+        cacheChildrenAccounts.forEach((cacheChildAccount) => {
+          let childAccount = new Account();
           childAccount.fromCache(cacheChildAccount);
           this.childrenAccounts.set(childAccount.id.toString(), childAccount);
           this.marksDataCache.set(childAccount.id.toString(), childAccount.periods); 
@@ -318,7 +318,7 @@ export class UserData {
     });
   }
   static async saveCache() {
-    const savableChildrenAccounts = new Map();
+    var savableChildrenAccounts = new Map();
     this.childrenAccounts.forEach((childAccount, key) => { savableChildrenAccounts.set(key, childAccount.toCache()); });
     
     await AsyncStorage.setItem("cache", JSON.stringify({

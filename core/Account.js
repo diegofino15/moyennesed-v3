@@ -45,7 +45,7 @@ export class Account {
     this.photoURL = cacheData.photoURL;
 
     if (!this.isParent) {
-      const cachePeriods = new Map(cacheData.periods);
+      let cachePeriods = new Map(cacheData.periods);
       cachePeriods.forEach((cachePeriodData, key) => {
         this.periods.set(key, getPeriodFromCache(cachePeriodData));
       });
@@ -88,7 +88,7 @@ export class Account {
     const possiblePeriodCodes = new Array("A001", "A002", "A003");
     (jsonData.periodes ?? []).forEach(periodData => {
       if (possiblePeriodCodes.includes(periodData.codePeriode)) {
-        const period = getFormattedPeriod(periodData)
+        let period = getFormattedPeriod(periodData)
         this.periods.set(period.code, period);
       }
     });
@@ -96,16 +96,22 @@ export class Account {
     // Add marks
     var sortedMarks = new Array();
     (jsonData.notes ?? []).forEach(markData => {
-      const mark = getFormattedMark(markData);
+      let mark = getFormattedMark(markData);
       if (mark.valueStr) {
         sortedMarks.push(mark);
+      } else {
+        Logger.core(`Mark : ${mark.title} (${mark.valueStr}) is invalid`, true);
       }
     });
     _sortMarks(sortedMarks);
     sortedMarks.forEach(mark => {
-      const period = this.periods.get(mark.periodCode);
-      addMarkToPeriod(period, mark);
-      _getCalculatedGeneralAverage(period, false);
+      let period = this.periods.get(mark.periodCode);
+      if (period) {
+        addMarkToPeriod(period, mark);
+        _getCalculatedGeneralAverage(period, false, false);
+      } else {
+        Logger.core(`Mark : ${mark.title} (${mark.valueStr}) has invalid period code`, true);
+      }
     });
     CoefficientManager.isAverageHistoryUpdated = true;
 

@@ -24,27 +24,33 @@ export class Preferences {
     this.haveBeenChanged = true;
   }
 
+  // Dark mode
+  static isDarkMode = false;
+
   // Save
   static async save() {
     await AsyncStorage.setItem("coefficients-preferences", JSON.stringify({
       allowGuessMarkCoefficients: this.allowGuessMarkCoefficients,
       allowGuessSubjectCoefficients: this.allowGuessSubjectCoefficients,
       allowCustomCoefficients: this.allowCustomCoefficients,
+      isDarkMode: this.isDarkMode,
     }));
   }
   // Load
   static async load() {
     await AsyncStorage.getItem("coefficients-preferences").then(jsonValue => {
       if (jsonValue != null) {
-        const preferences = JSON.parse(jsonValue);
+        let preferences = JSON.parse(jsonValue);
         this.allowGuessMarkCoefficients = preferences.allowGuessMarkCoefficients;
         this.allowGuessSubjectCoefficients = preferences.allowGuessSubjectCoefficients;
         this.allowCustomCoefficients = preferences.allowCustomCoefficients;
+        this.isDarkMode = preferences.isDarkMode ?? false;
         this.haveBeenChanged = true;
         Logger.load("Preferences loaded !");
         Logger.load(`-> AllowGuessMarkCoefficients : ${this.allowGuessMarkCoefficients}`)
         Logger.load(`-> AllowGuessSubjectCoefficients : ${this.allowGuessSubjectCoefficients}`)
         Logger.load(`-> AllowCustomCoefficients : ${this.allowCustomCoefficients}`)
+        Logger.load(`-> DarkMode : ${this.isDarkMode}`)
       }
     });
   }
@@ -55,6 +61,7 @@ export class Preferences {
     this.allowGuessMarkCoefficients = false;
     this.allowGuessSubjectCoefficients = false;
     this.allowCustomCoefficients = true;
+    this.isDarkMode = false;
     await AsyncStorage.removeItem("coefficients-preferences");
   }
 }

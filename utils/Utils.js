@@ -16,17 +16,17 @@ function _sortMarks(marks, rev=true) {
 function formatMark(mark, isClass) {
     if (!isClass) {
         if (!mark.value) { return mark.valueStr; }
-        if (mark.valueOn != 20) { return `${mark.value.toString().replace(".", ",")}/${mark.valueOn.toString().replace(".", ",")}`; }
+        if (mark.valueOn != 20) { return `${mark.valueStr}/${mark.valueOn.toString().replace(".", ",")}`; }
         return mark.value.toString().replace(".", ",");
     } else {
         if (!mark.classValue) { return "--"; }
-        if (mark.valueOn != 20) { return `${mark.classValue.toString().replace(".", ",")}/${mark.valueOn.toString().replace(".", ",")}`; }
-        return mark.classValue.toString().replace(".", ","); 
+        if (mark.valueOn != 20) { return `${mark.classValue.toFixed(2).replace(".", ",")}/${mark.valueOn.toString().replace(".", ",")}`; }
+        return mark.classValue.toFixed(2).replace(".", ","); 
     }
 }
 
 function formatAverage(average, decimals=true) {
-    if (average == null) { return "--"; }
+    if (!average) { return "--"; }
     if (decimals) { return average.toFixed(2).replace('.', ','); }
     return (Math.round(average * 100) / 100).toString().replace('.', ',');
 }

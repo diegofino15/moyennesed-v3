@@ -25,6 +25,8 @@ function SubjectCard({ mainSubject, refreshAverages, getMark, windowDimensions, 
         "80%",
       ]}
       children={<SubjectPopup subject={mainSubject} selectedSubSubject={subject.subCode} refreshAverages={refreshAverages} getMark={getMark} windowDimensions={windowDimensions} theme={theme}/>}
+      padding={0}
+      theme={theme}
     />;
   }
 
@@ -54,12 +56,12 @@ function SubjectCard({ mainSubject, refreshAverages, getMark, windowDimensions, 
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-            <Text style={[theme.fonts.bodyLarge, { width: Dimensions.get('window').width - (140 + (subject.isSubSubject ? 40 : 0)) * windowDimensions.fontScale }]} numberOfLines={1}>{subject.name}</Text>
+            <Text style={[theme.fonts.bodyLarge, { width: Dimensions.get('window').width - (140 + (subject.isSubSubject ? 40 : 0)) * windowDimensions.fontScale, color: theme.colors.onSecondary }]} numberOfLines={1}>{subject.name}</Text>
             <View style={{
               flexDirection: 'row',
               alignItems: 'flex-end',
             }}>
-              <Text style={[theme.fonts.headlineMedium, { fontSize: 20, fontFamily: 'Bitter-Bold' }]}>{formatAverage(subject.average)}</Text>
+              <Text style={[theme.fonts.headlineMedium, { fontSize: 20, fontFamily: 'Bitter-Bold', color: theme.colors.onSecondary }]}>{formatAverage(subject.average)}</Text>
               {subject.average ? <Text style={[theme.fonts.labelSmall, { color: 'black', fontFamily: 'Bitter-Bold' }]}>/20</Text> : null}
             </View>
           </View>
@@ -78,7 +80,7 @@ function SubjectCard({ mainSubject, refreshAverages, getMark, windowDimensions, 
                 theme.fonts.headlineMedium,
                 {
                   marginRight: 15,
-                  color: mark.isEffective ? theme.colors.onSurface : theme.colors.onSurfaceDisabled,
+                  color: mark.isEffective ? theme.colors.onSecondary : theme.colors.onSurfaceDisabled,
                   textDecorationLine: mark.isEffective ? 'none' : 'line-through',
                 }
               ]}>{formatMark(mark)}</Text>

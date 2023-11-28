@@ -40,7 +40,7 @@ export class CoefficientManager {
   }
   static guessMarkCoefficient(markTitle) {
     var coefficient = 1;
-    const lowerCaseTitle = (markTitle ?? "").toLowerCase();
+    var lowerCaseTitle = (markTitle ?? "").toLowerCase();
     this.markCoefficientFilter.forEach((value, key) => {
       if (lowerCaseTitle.includes(key)) {
         coefficient = value;
@@ -60,7 +60,7 @@ export class CoefficientManager {
   }
   static guessSubjectCoefficient(subjectName) {
     var coefficient = 1;
-    const upperCaseTitle = (subjectName ?? "").toUpperCase();
+    var upperCaseTitle = (subjectName ?? "").toUpperCase();
     this.subjectCoefficientFilter.forEach((value, key) => {
       if (upperCaseTitle.includes(key)) {
         coefficient = value;
@@ -146,13 +146,13 @@ export class CoefficientManager {
   static async load() {
     AsyncStorage.getItem("coefficients").then((jsonData) => {
       if (jsonData != null) {
-        jsonData = JSON.parse(jsonData);
-        this.guessedMarkCoefficients = new Map(jsonData.guessedMarkCoefficients);
-        this.guessedSubjectCoefficients = new Map(jsonData.guessedSubjectCoefficients);
-        this.defaultEDMarkCoefficients = new Map(jsonData.defaultEDMarkCoefficients);
-        this.defaultEDSubjectCoefficients = new Map(jsonData.defaultEDSubjectCoefficients);
-        this.customMarkCoefficients = new Map(jsonData.customMarkCoefficients);
-        this.customSubjectCoefficients = new Map(jsonData.customSubjectCoefficients);
+        let coefficients = JSON.parse(jsonData);
+        this.guessedMarkCoefficients = new Map(coefficients.guessedMarkCoefficients);
+        this.guessedSubjectCoefficients = new Map(coefficients.guessedSubjectCoefficients);
+        this.defaultEDMarkCoefficients = new Map(coefficients.defaultEDMarkCoefficients);
+        this.defaultEDSubjectCoefficients = new Map(coefficients.defaultEDSubjectCoefficients);
+        this.customMarkCoefficients = new Map(coefficients.customMarkCoefficients);
+        this.customSubjectCoefficients = new Map(coefficients.customSubjectCoefficients);
       }
     })
   }
