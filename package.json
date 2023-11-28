@@ -6,6 +6,7 @@
     "start": "expo start",
     "android": "expo run:android",
     "ios": "expo run:ios",
+    "build:ios": "react-native bundle --entry-file='App.js' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios'",
     "web": "expo start --web"
   },
   "dependencies": {
@@ -34,7 +35,7 @@
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "18.2.0",
-    "react-native": "^0.72.6",
+    "react-native": "0.72.6",
     "react-native-chart-kit": "^6.12.0",
     "react-native-gesture-handler": "~2.12.0",
     "react-native-paper": "^5.11.0",
