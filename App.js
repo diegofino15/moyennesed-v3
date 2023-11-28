@@ -5,6 +5,7 @@ import useState from 'react-usestateref'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { AdEventType, AppOpenAd } from 'react-native-google-mobile-ads';
 import * as SplashScreen from "expo-splash-screen";
 
 import { useFonts, setThemeData } from './ui/hooks/useStyles';
@@ -20,7 +21,17 @@ import { Logger } from './utils/Logger';
 // Keep splash screen visible while loading
 SplashScreen.preventAutoHideAsync();
 
+// AppOpen Ad
+const appOpenAdUnitID = "ca-app-pub-1869877675520642/7552640661";
+const appOpenAd = AppOpenAd.createForAdRequest(appOpenAdUnitID, {
+  requestNonPersonalizedAdsOnly: true,
+});
+
 function App() {
+  // Was app showed
+  const [_isAdLoaded, setIsAdLoaded, isAdLoadedRef] = useState(false);
+  const [_wasAdShowed, setWasAdShowed, wasAdShowedRef] = useState(false);
+
   // Decide to show AppStack or AuthStack
   const [loggedIn, setLoggedIn, loggedInRef] = useState(false);
   const [_loggedInLoaded, setLoggedInLoaded, loggedInLoadedRef] = useState(false);
@@ -36,6 +47,22 @@ function App() {
 
   // Prepare function
   useEffect(() => {
+    // Load AppOpen Ad
+    appOpenAd.load();
+    appOpenAd.addAdEventsListener((event) => {
+      if (event.type === AdEventType.LOADED) {
+        setIsAdLoaded(true);
+        if (loggedInLoadedRef.current && !wasAdShowedRef.current && loggedInRef.current) {
+          setWasAdShowed(true);
+          appOpenAd.show();
+        }
+      } else if (event.type == AdEventType.CLOSED) {
+        SplashScreen.hideAsync();
+      } else if (event.type == AdEventType.ERROR) {
+        Logger.info("AppOpen Ad couldn't open...", true);
+      }
+    });
+
     async function prepare() {
       try {
         if (!fontsLoadedRef.current) {
@@ -67,7 +94,14 @@ function App() {
   // Hide splash screen
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoadedRef.current && loggedInLoadedRef.current) {
-      await SplashScreen.hideAsync();
+      if (!wasAdShowedRef.current) {
+        if (isAdLoadedRef.current && loggedInRef.current) {
+          setWasAdShowed(true);
+          appOpenAd.show();
+        } else {
+          await SplashScreen.hideAsync();
+        }
+      }
     }
   }, [fontsLoadedRef.current, loggedInLoadedRef.current]);
 

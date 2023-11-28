@@ -5,7 +5,6 @@ import useState from "react-usestateref";
 import * as Haptics from "expo-haptics";
 
 import { EmbeddedMarksView } from './components/EmbeddedMarksView';
-import { AdUnit } from "./components/AdUnit";
 import { ChildSwitcher } from "./components/ChildSwitcher";
 import { CustomSquareButton } from "../global_components/CustomSquareButton";
 import { UserData } from "../../../core/UserData";
@@ -220,11 +219,11 @@ function MainPage({
         </View>
         
         {/* Children account chooser for parents */}
-        {UserData.mainAccount.isParent ? <ChildSwitcher
+        {UserData.mainAccount.isParent && <ChildSwitcher
           selectedChildAccount={selectedChildAccountRef.current}
           setSelectedChildAccount={setSelectedChildAccount}
           theme={theme}
-        /> : <AdUnit theme={theme} style={{ marginBottom: 20 }}/>}
+        />}
 
         {/* Shown account grades */}
         <EmbeddedMarksView
