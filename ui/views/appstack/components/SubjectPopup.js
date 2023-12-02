@@ -17,7 +17,7 @@ import { getSubjectColor } from '../../../../utils/Colors';
 import { formatAverage, formatCoefficient, formatDate2 } from '../../../../utils/Utils';
 
 
-function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnMark, getMark, windowDimensions, theme }) {
+function SubjectPopup({ subject, selectedSubSubject, refreshAverages, setSubjectCoefficient, clickedOnMark, getMark, windowDimensions, theme }) {
   const [_shownSubject, setShownSubject, shownSubjectRef] = useState(subject);
   useEffect(() => {
     if (selectedSubSubject) {
@@ -194,14 +194,7 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
                 }}
                 onPress={async () => {
                   CoefficientManager.deleteCustomSubjectCoefficient(shownSubjectRef.current.id);
-                  if (Preferences.allowGuessSubjectCoefficients) {
-                    shownSubjectRef.current.coefficient = CoefficientManager.getGuessedSubjectCoefficient(shownSubjectRef.current.id, shownSubjectRef.current.code, shownSubjectRef.current.subCode, shownSubjectRef.current.name);
-                    shownSubjectRef.current.coefficientType = 1;
-                  } else {
-                    shownSubjectRef.current.coefficient = CoefficientManager.getDefaultEDSubjectCoefficient(shownSubjectRef.current.id);
-                    shownSubjectRef.current.coefficientType = 0;
-                  }
-                  refreshAverages();
+                  setSubjectCoefficient(shownSubjectRef.current, -1);
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 }}
               >
@@ -227,9 +220,7 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
                   else if (shownSubjectRef.current.coefficient == 0.5) { newCoefficient = 0.25; }
                   else if (shownSubjectRef.current.coefficient == 0.25 || newCoefficient <= 0) { newCoefficient = 0; }
                   CoefficientManager.setCustomSubjectCoefficient(shownSubjectRef.current.id, newCoefficient)
-                  shownSubjectRef.current.coefficient = newCoefficient;
-                  shownSubjectRef.current.coefficientType = 2;
-                  refreshAverages();
+                  setSubjectCoefficient(shownSubjectRef.current, newCoefficient);
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 }}
               >
@@ -254,9 +245,7 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, clickedOnM
                   else if (shownSubjectRef.current.coefficient == 0.75) { newCoefficient = 1; }
                   newCoefficient = Math.min(newCoefficient, 50);
                   CoefficientManager.setCustomSubjectCoefficient(shownSubjectRef.current.id, newCoefficient)
-                  shownSubjectRef.current.coefficient = newCoefficient;
-                  shownSubjectRef.current.coefficientType = 2;
-                  refreshAverages();
+                  setSubjectCoefficient(shownSubjectRef.current, newCoefficient);
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 }}
               >

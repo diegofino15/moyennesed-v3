@@ -27,6 +27,9 @@ export class Preferences {
   // Dark mode
   static isDarkMode = false;
 
+  // Allow vibrations
+  static vibrate = true;
+
   // Save
   static async save() {
     await AsyncStorage.setItem("coefficients-preferences", JSON.stringify({
@@ -34,6 +37,7 @@ export class Preferences {
       allowGuessSubjectCoefficients: this.allowGuessSubjectCoefficients,
       allowCustomCoefficients: this.allowCustomCoefficients,
       isDarkMode: this.isDarkMode,
+      vibrate: this.vibrate,
     }));
   }
   // Load
@@ -45,12 +49,14 @@ export class Preferences {
         this.allowGuessSubjectCoefficients = preferences.allowGuessSubjectCoefficients;
         this.allowCustomCoefficients = preferences.allowCustomCoefficients;
         this.isDarkMode = preferences.isDarkMode ?? false;
+        this.vibrate = preferences.vibrate ?? true;
         this.haveBeenChanged = true;
         Logger.load("Preferences loaded !");
-        Logger.load(`-> AllowGuessMarkCoefficients : ${this.allowGuessMarkCoefficients}`)
-        Logger.load(`-> AllowGuessSubjectCoefficients : ${this.allowGuessSubjectCoefficients}`)
-        Logger.load(`-> AllowCustomCoefficients : ${this.allowCustomCoefficients}`)
-        Logger.load(`-> DarkMode : ${this.isDarkMode}`)
+        Logger.load(`-> AllowGuessMarkCoefficients : ${this.allowGuessMarkCoefficients}`);
+        Logger.load(`-> AllowGuessSubjectCoefficients : ${this.allowGuessSubjectCoefficients}`);
+        Logger.load(`-> AllowCustomCoefficients : ${this.allowCustomCoefficients}`);
+        Logger.load(`-> DarkMode : ${this.isDarkMode}`);
+        Logger.load(`-> Vibrate : ${this.vibrate}`);
       }
     });
   }
@@ -62,6 +68,7 @@ export class Preferences {
     this.allowGuessSubjectCoefficients = false;
     this.allowCustomCoefficients = true;
     this.isDarkMode = false;
+    this.vibrate = true;
     await AsyncStorage.removeItem("coefficients-preferences");
   }
 }

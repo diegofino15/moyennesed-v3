@@ -20,6 +20,7 @@ function MarksOverview({
   loading,
   redCheck,
   refreshAverages,
+  setSubjectCoefficient,
   setInfoPopupOpen,
   refresh,
   manualRefreshingRef,
@@ -201,6 +202,7 @@ function MarksOverview({
                       mark={mark} 
                       subject={subject}
                       refreshAverages={refreshAverages}
+                      setSubjectCoefficient={setSubjectCoefficient}
                       getMark={(markID) => { return period.marks.get(markID); }}
                       windowDimensions={windowDimensions}
                       theme={theme}
@@ -257,6 +259,7 @@ function MarksOverview({
               <SubjectCard
                 mainSubject={subject}
                 refreshAverages={refreshAverages}
+                setSubjectCoefficient={setSubjectCoefficient}
                 getMark={(markID) => {
                   return period.marks.get(markID);
                 }}
@@ -291,6 +294,7 @@ function MarksOverview({
             <SubjectCard
               mainSubject={subject}
               refreshAverages={refreshAverages}
+              setSubjectCoefficient={setSubjectCoefficient}
               getMark={(markID) => {
                 return period.marks.get(markID);
               }}

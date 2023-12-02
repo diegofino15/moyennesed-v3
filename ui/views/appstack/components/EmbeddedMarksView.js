@@ -9,6 +9,7 @@ import { InformationsPopup } from "./InformationsPopup";
 import { UserData } from "../../../../core/UserData";
 import { calculateAllPeriodAverages } from "../../../../core/Period";
 import { CoefficientManager } from "../../../../core/CoefficientsManager";
+import { Preferences } from "../../../../core/Preferences";
 import { Logger } from "../../../../utils/Logger";
 
 
@@ -30,6 +31,39 @@ function EmbeddedMarksView({
     }
     UserData.saveCache();
     updateScreen();
+  }
+  function setSubjectCoefficient(subject, coefficient) {
+    var newCoefficient = coefficient;
+    var newCoefficientType = 2;
+    if (coefficient == -1) {
+      if (Preferences.allowGuessSubjectCoefficients) {
+        newCoefficient = CoefficientManager.getGuessedSubjectCoefficient(subject.id, subject.code, subject.subCode, subject.name);
+        newCoefficientType = 1;
+      } else {
+        newCoefficient = CoefficientManager.getDefaultEDSubjectCoefficient(subject.id);
+        newCoefficientType = 0;
+      }
+    }
+
+    for (let [_, period] of shownAccountRef.current.periods) {
+      period.subjects.forEach(periodSubject => {
+        if (periodSubject.code == subject.code) {
+          if (!subject.subCode) {
+            periodSubject.coefficient = newCoefficient;
+            periodSubject.coefficientType = newCoefficientType;
+          } else {
+            periodSubject.subSubjects.forEach(periodSubSubject => {
+              if (periodSubSubject.subCode == subject.subCode) {
+                periodSubSubject.coefficient = newCoefficient;
+                periodSubSubject.coefficientType = newCoefficientType;
+              }
+            });
+          }
+        }
+      });
+    }
+
+    refreshAverages();
   }
 
   // Which period is currently shown
@@ -89,6 +123,7 @@ function EmbeddedMarksView({
           loading={autoRefreshing || isConnecting}
           redCheck={!isConnected || !gotMarks || marksNeedUpdate}
           refreshAverages={refreshAverages}
+          setSubjectCoefficient={setSubjectCoefficient}
           setInfoPopupOpen={setInfoPopupOpen}
           refresh={refresh}
           manualRefreshingRef={manualRefreshingRef}

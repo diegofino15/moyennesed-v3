@@ -1,11 +1,11 @@
 import { useCallback, useEffect } from 'react';
-import { StatusBar } from 'react-native';
+import { Platform, StatusBar } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import useState from 'react-usestateref'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-import { AdEventType, AppOpenAd } from 'react-native-google-mobile-ads';
+import { AdEventType, AppOpenAd, TestIds } from 'react-native-google-mobile-ads';
 import * as SplashScreen from "expo-splash-screen";
 
 import { useFonts, setThemeData } from './ui/hooks/useStyles';
@@ -21,13 +21,32 @@ import { Logger } from './utils/Logger';
 // Keep splash screen visible while loading
 SplashScreen.preventAutoHideAsync();
 
+const DEBUG = false;
+const isAdDisplayed = Math.random() < 0.3; // 1/3 chance
+
 // AppOpen Ad
-const appOpenAdUnitID = "ca-app-pub-1869877675520642/7552640661";
+Logger.info(`Display ad ? | ${isAdDisplayed}`);
+const appOpenAdUnitID = DEBUG ? TestIds.APP_OPEN : Platform.OS === "ios" ? "ca-app-pub-1869877675520642/7552640661" : "ca-app-pub-1869877675520642/2337387712";
 const appOpenAd = AppOpenAd.createForAdRequest(appOpenAdUnitID, {
   requestNonPersonalizedAdsOnly: true,
 });
 
 function App() {
+  appOpenAd.addAdEventsListener((event) => {
+    if (event.type === AdEventType.LOADED) {
+      setIsAdLoaded(true);
+      if (loggedInLoadedRef.current && !wasAdShowedRef.current && loggedInRef.current) {
+        setWasAdShowed(true);
+        appOpenAd.show();
+      }
+    } else if (event.type == AdEventType.CLOSED) {
+      SplashScreen.hideAsync();
+    } else if (event.type == AdEventType.ERROR) {
+      Logger.info("AppOpen Ad couldn't open...", true);
+      Logger.info(event.payload, true);
+    }
+  });
+
   // Was app showed
   const [_isAdLoaded, setIsAdLoaded, isAdLoadedRef] = useState(false);
   const [_wasAdShowed, setWasAdShowed, wasAdShowedRef] = useState(false);
@@ -47,23 +66,9 @@ function App() {
 
   // Prepare function
   useEffect(() => {
-    // Load AppOpen Ad
-    appOpenAd.load();
-    appOpenAd.addAdEventsListener((event) => {
-      if (event.type === AdEventType.LOADED) {
-        setIsAdLoaded(true);
-        if (loggedInLoadedRef.current && !wasAdShowedRef.current && loggedInRef.current) {
-          setWasAdShowed(true);
-          appOpenAd.show();
-        }
-      } else if (event.type == AdEventType.CLOSED) {
-        SplashScreen.hideAsync();
-      } else if (event.type == AdEventType.ERROR) {
-        Logger.info("AppOpen Ad couldn't open...", true);
-      }
-    });
-
     async function prepare() {
+      if (isAdDisplayed) { appOpenAd.load(); }
+      
       try {
         if (!fontsLoadedRef.current) {
           await useFonts();
@@ -94,12 +99,15 @@ function App() {
   // Hide splash screen
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoadedRef.current && loggedInLoadedRef.current) {
-      if (!wasAdShowedRef.current) {
-        if (isAdLoadedRef.current && loggedInRef.current) {
-          setWasAdShowed(true);
-          appOpenAd.show();
-        } else {
-          await SplashScreen.hideAsync();
+      if (!isAdDisplayed) { await SplashScreen.hideAsync(); }
+      else {
+        if (!wasAdShowedRef.current) {
+          if (isAdLoadedRef.current && loggedInRef.current) {
+            setWasAdShowed(true);
+            appOpenAd.show();
+          } else {
+            await SplashScreen.hideAsync();
+          }
         }
       }
     }
