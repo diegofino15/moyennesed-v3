@@ -8,6 +8,7 @@ import { Preferences } from '../../../../core/Preferences';
 import { CoefficientManager } from '../../../../core/CoefficientsManager';
 import { formatCoefficient, formatDate, formatDate2, formatMark } from '../../../../utils/Utils';
 import { getSubjectColor } from '../../../../utils/Colors';
+import { HapticsHandler } from '../../../../utils/HapticsHandler';
 
 
 function EmbeddedMarkCard({ mark, subject, selectedSubSubject, refreshAverages, clickedOnMark, windowDimensions, theme }) {
@@ -128,7 +129,7 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, refreshAverages, 
                 mark.coefficientType = 0;
               }
               refreshAverages();
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Light);
             }}
           >
             <Trash2Icon size={20} color={theme.colors.onSurfaceDisabled}/>
@@ -156,7 +157,7 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, refreshAverages, 
               mark.coefficient = newCoefficient;
               mark.coefficientType = 2;
               refreshAverages();
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Light);
             }}
           >
             <MinusIcon size={20} color={theme.colors.onSurfaceDisabled}/>
@@ -184,7 +185,7 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, refreshAverages, 
               mark.coefficient = newCoefficient;
               mark.coefficientType = 2;
               refreshAverages();
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Light);
             }}
           >
             <PlusIcon size={20} color={theme.colors.onSurfaceDisabled}/>

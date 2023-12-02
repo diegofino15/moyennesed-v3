@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { View, Text } from 'react-native';
 import { PressableScale } from 'react-native-pressable-scale';
+import { HapticsHandler } from '../../../utils/HapticsHandler';
+
 import * as Haptics from 'expo-haptics';
 
 
@@ -20,12 +22,12 @@ function CustomButton({ title, confirmTitle, confirmLabel, onPress, theme, leftI
           setIsLoading(true);
           onPress().then(() => {
             setIsLoading(false);
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+            HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Medium);
           });
         } else { onPress(); }
         setWaitingForConfirmation(false);
       }
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+      HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Medium);
     }
   }
 

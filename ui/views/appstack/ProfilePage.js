@@ -14,6 +14,7 @@ import { BugReportPopup } from './components/BugReportPopup';
 import { UserData } from '../../../core/UserData';
 import { Preferences } from '../../../core/Preferences';
 import { CoefficientManager } from '../../../core/CoefficientsManager';
+import { HapticsHandler } from '../../../utils/HapticsHandler';
 
 
 function ProfilePage({
@@ -40,6 +41,10 @@ function ProfilePage({
   useEffect(() => {
     setAllowCustomCoefficients(Preferences.allowCustomCoefficients);
   }, [Preferences.allowCustomCoefficients, updateScreenRef.current]);
+  const [allowVibrations, setAllowVibrations] = useState(Preferences.vibrate);
+  useEffect(() => {
+    setAllowVibrations(Preferences.vibrate);
+  }, [Preferences.vibrate, updateScreenRef.current]);
 
   const [unavailableServers, setUnavailableServers] = useState(UserData.unavailableServers);
   useEffect(() => {
@@ -117,7 +122,7 @@ function ProfilePage({
               <PressableScale
                 onPress={() => {
                   setIsDarkMode(!Preferences.isDarkMode);
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Light);
                   Preferences.isDarkMode = !Preferences.isDarkMode
                   Preferences.save();
                 }}
@@ -207,9 +212,9 @@ function ProfilePage({
             <PressableScale
               onPress={() => {
                 if (!connectingRef.current) {
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                  HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Medium);
                   refreshLogin().then(() => {
-                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                    HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Medium);
                   });
                 }
               }}
@@ -314,7 +319,7 @@ function ProfilePage({
             CoefficientManager.save();
             UserData.recalculateAllCoefficients();
             setUpdateScreen(!updateScreenRef.current);
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Light);
           }} style={{
             marginTop: 5,
           }}>
@@ -353,6 +358,33 @@ function ProfilePage({
 
           <Text style={[theme.fonts.labelLarge, { textAlign: 'justify', marginBottom: 10 }]}>L'application {UserData.mainAccount.isParent ? "vous est" : "t'es"} utile ? Écri{UserData.mainAccount.isParent ? "vez" : "s"} un commentaire pour soutenir le développeur !</Text>
           <CustomLink title="Écrire un commentaire" link={Platform.OS == 'ios' ? 'https://apps.apple.com/app/apple-store/id6446418445?action=write-review' : 'https://play.google.com/store/apps/details?id=me.diegof.moyennesed&showAllReviews=true'} style={{ marginBottom: 10 }} icon={<MessageSquareDashedIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/>} windowDimensions={windowDimensions} theme={theme}/>
+        </View>
+
+        {/* Preferences */}
+        <Text style={[theme.fonts.titleSmall, { marginBottom: 10 }]}>Préférences</Text>
+        <View style={{
+          backgroundColor: theme.colors.surface,
+          borderRadius: 20,
+          marginBottom: 20,
+          paddingHorizontal: 20,
+          paddingVertical: 15,
+        }}>
+          <View style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
+            <Text style={[theme.fonts.bodyLarge, { width: Dimensions.get('window').width - 140 }]}>Vibrations</Text>
+            <Switch
+              value={allowVibrations}
+              onValueChange={async (value) => {
+                Preferences.vibrate = value;
+                Preferences.save();
+                setAllowVibrations(value);
+                setUpdateScreen(!updateScreenRef.current);
+              }}
+            />
+          </View>
         </View>
         
         {/* Disconnect button */}

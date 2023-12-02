@@ -1,5 +1,7 @@
 import { View } from 'react-native';
 import { PressableScale } from 'react-native-pressable-scale';
+import { HapticsHandler } from '../../../utils/HapticsHandler';
+
 import * as Haptics from 'expo-haptics';
 
 
@@ -7,7 +9,7 @@ function CustomSquareButton({ icon, onPress, hasShadow, theme }) {
   function onPressActive() {
     if (onPress) {
       onPress();
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Light);
     }
   }
 

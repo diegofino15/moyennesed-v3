@@ -9,6 +9,7 @@ import { ChildSwitcher } from "./components/ChildSwitcher";
 import { CustomSquareButton } from "../global_components/CustomSquareButton";
 import { UserData } from "../../../core/UserData";
 import { Logger } from "../../../utils/Logger";
+import { HapticsHandler } from "../../../utils/HapticsHandler";
 
 
 function MainPage({
@@ -76,7 +77,7 @@ function MainPage({
         setUpdateScreen(!updateScreenRef.current);
         setRefreshing(false);
         if (manualRefreshingRef.current) {
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Light);
           setManualRefreshing(false);
         }
       } else if (marksNeedUpdateRef.current.has(accountToUpdate.id) && marksNeedUpdateRef.current.get(accountToUpdate.id)) {
@@ -105,7 +106,7 @@ function MainPage({
         setUpdateScreen(!updateScreenRef.current);
         setRefreshing(false);
         if (manualRefreshingRef.current) {
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Light);
           setManualRefreshing(false);
         }
       }
@@ -120,7 +121,7 @@ function MainPage({
 
   // Refresh marks
   function refresh() {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Light);
     marksNeedUpdateRef.current.set(shownAccountRef.current.id, true); UserData.marksNeedUpdate.set(shownAccountRef.current.id, true);
     setManualRefreshing(true);
   }

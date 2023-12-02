@@ -15,6 +15,7 @@ import { Preferences } from '../../../../core/Preferences';
 import { CoefficientManager } from '../../../../core/CoefficientsManager';
 import { getSubjectColor } from '../../../../utils/Colors';
 import { formatAverage, formatCoefficient, formatDate2 } from '../../../../utils/Utils';
+import { HapticsHandler } from '../../../../utils/HapticsHandler';
 
 
 function SubjectPopup({ subject, selectedSubSubject, refreshAverages, setSubjectCoefficient, clickedOnMark, getMark, windowDimensions, theme }) {
@@ -31,7 +32,7 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, setSubject
       onPress={() => {
         if (choosenSection != index) {
           setChoosenSection(index);
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Light);
         }
       }}
       style={{
@@ -195,7 +196,7 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, setSubject
                 onPress={async () => {
                   CoefficientManager.deleteCustomSubjectCoefficient(shownSubjectRef.current.id);
                   setSubjectCoefficient(shownSubjectRef.current, -1);
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Light);
                 }}
               >
                 <Trash2Icon size={20} color={theme.colors.onSurfaceDisabled}/>
@@ -221,7 +222,7 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, setSubject
                   else if (shownSubjectRef.current.coefficient == 0.25 || newCoefficient <= 0) { newCoefficient = 0; }
                   CoefficientManager.setCustomSubjectCoefficient(shownSubjectRef.current.id, newCoefficient)
                   setSubjectCoefficient(shownSubjectRef.current, newCoefficient);
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Light);
                 }}
               >
                 <MinusIcon size={20} color={theme.colors.onSurfaceDisabled}/>
@@ -246,7 +247,7 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, setSubject
                   newCoefficient = Math.min(newCoefficient, 50);
                   CoefficientManager.setCustomSubjectCoefficient(shownSubjectRef.current.id, newCoefficient)
                   setSubjectCoefficient(shownSubjectRef.current, newCoefficient);
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Light);
                 }}
               >
                 <PlusIcon size={20} color={theme.colors.onSurfaceDisabled}/>

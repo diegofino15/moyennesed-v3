@@ -12,6 +12,7 @@ import { AnimatedComponent } from "../../global_components/AnimatedComponents";
 import { formatAverage } from "../../../../utils/Utils";
 import { CoefficientManager } from "../../../../core/CoefficientsManager";
 import { Preferences } from "../../../../core/Preferences";
+import { HapticsHandler } from "../../../../utils/HapticsHandler";
 
 
 function MarksOverview({
@@ -71,7 +72,7 @@ function MarksOverview({
             {period.average ? <View style={{ flexDirection: 'row' }}>
               <PressableScale onPress={() => {
                 setIsGraphSelected(!isGraphSelected);
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Light);
               }} style={{
                 backgroundColor: theme.colors.background,
                 borderRadius: 5,

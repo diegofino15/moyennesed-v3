@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import { PressableScale } from 'react-native-pressable-scale';
+import { HapticsHandler } from '../../../../utils/HapticsHandler';
+
 import * as Haptics from "expo-haptics";
 
 
@@ -22,7 +24,7 @@ function PeriodSwitcher({ periods, shownPeriod, setShownPeriod, theme }) {
           if (selectedPeriod != periodKey) {
             setSelectedPeriod(periodKey);
             setShownPeriod(periodKey);
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Light);
           }
         }}
         key={periodKey}

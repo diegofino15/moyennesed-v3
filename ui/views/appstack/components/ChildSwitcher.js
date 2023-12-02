@@ -4,6 +4,7 @@ import * as Haptics from "expo-haptics";
 
 import { Separator } from '../../global_components/Separator';
 import { UserData } from '../../../../core/UserData';
+import { HapticsHandler } from '../../../../utils/HapticsHandler';
 
 
 function ChildSwitcher({ selectedChildAccount, setSelectedChildAccount, theme }) {
@@ -26,7 +27,7 @@ function ChildSwitcher({ selectedChildAccount, setSelectedChildAccount, theme })
               onPress={() => {
                 if (selectedChildAccount != item) {
                   setSelectedChildAccount(item);
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                  HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Medium);
                 }
               }}
             >

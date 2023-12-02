@@ -9,6 +9,7 @@ import { CustomButton } from '../../global_components/CustomButton';
 import { UserData } from '../../../../core/UserData';
 import { firebase } from '../../../../utils/firebaseUtils';
 import { Logger } from '../../../../utils/Logger';
+import { HapticsHandler } from '../../../../utils/HapticsHandler';
 
 
 function BugReportPopup({ windowDimensions, theme }) {
@@ -112,7 +113,7 @@ function BugReportPopup({ windowDimensions, theme }) {
       {possibleBugs.map((bug, key) => <PressableScale onPress={() => {
         if (selectedPossibleBug != key) {
           setSelectedPossibleBug(key);
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Light);
         }
         }} key={key} style={{
           paddingHorizontal: 10 - (selectedPossibleBug == key ? 1 : 0),
