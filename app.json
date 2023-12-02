@@ -39,6 +39,11 @@
           "ios": {
             "deploymentTarget": "13.0",
             "useFrameworks": "static"
+          },
+          "android": {
+            "compileSdkVersion": 33,
+            "targetSdkVersion": 33,
+            "buildToolsVersion": "34.0.0"
           }
         }
       ]
