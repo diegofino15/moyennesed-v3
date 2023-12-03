@@ -17,6 +17,7 @@ function EmbeddedMarksView({
   shownAccountRef, isConnected, isConnecting,
   gotMarks, marksNeedUpdate,
   autoRefreshing, refresh, manualRefreshingRef,
+  maybeOpenInterstitialAd,
   theme,
 }) {
   // Update screen
@@ -128,6 +129,7 @@ function EmbeddedMarksView({
           refresh={refresh}
           manualRefreshingRef={manualRefreshingRef}
           windowDimensions={windowDimensions}
+          maybeOpenInterstitialAd={maybeOpenInterstitialAd}
           theme={theme}
         />;}
       })}

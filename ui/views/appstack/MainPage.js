@@ -17,6 +17,7 @@ function MainPage({
   scrollViewRef,
   profilePhotoRef, 
   updateScreenRef, setUpdateScreen,
+  maybeOpenInterstitialAd,
   theme
 }) {
   // Account shown on screen
@@ -222,7 +223,10 @@ function MainPage({
         {/* Children account chooser for parents */}
         {UserData.mainAccount.isParent && <ChildSwitcher
           selectedChildAccount={selectedChildAccountRef.current}
-          setSelectedChildAccount={setSelectedChildAccount}
+          setSelectedChildAccount={(account) => {
+            setSelectedChildAccount(account);
+            maybeOpenInterstitialAd();
+          }}
           theme={theme}
         />}
 
@@ -236,6 +240,7 @@ function MainPage({
           autoRefreshing={!manualRefreshingRef.current && refreshingRef.current}
           refresh={refresh}
           manualRefreshingRef={manualRefreshingRef}
+          maybeOpenInterstitialAd={maybeOpenInterstitialAd}
           theme={theme}
         />
 

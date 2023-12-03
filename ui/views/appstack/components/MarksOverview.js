@@ -26,6 +26,7 @@ function MarksOverview({
   refresh,
   manualRefreshingRef,
   windowDimensions,
+  maybeOpenInterstitialAd,
   theme
 }) {
   // Work with subject groups
@@ -73,6 +74,7 @@ function MarksOverview({
               <PressableScale onPress={() => {
                 setIsGraphSelected(!isGraphSelected);
                 HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Light);
+                maybeOpenInterstitialAd();
               }} style={{
                 backgroundColor: theme.colors.background,
                 borderRadius: 5,

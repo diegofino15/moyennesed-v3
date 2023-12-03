@@ -5,14 +5,14 @@ import useState from 'react-usestateref'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-import { AdEventType, AppOpenAd, TestIds } from 'react-native-google-mobile-ads';
+import { AdEventType, AppOpenAd } from 'react-native-google-mobile-ads';
 import * as SplashScreen from "expo-splash-screen";
 
 import { useFonts, setThemeData } from './ui/hooks/useStyles';
 import { AuthStack } from './ui/views/authstack/AuthStack';
 import { AppStack } from './ui/views/appstack/AppStack';
 import { UserData } from './core/UserData';
-import { Preferences } from './core/Preferences';
+import { Preferences, DEBUG } from './core/Preferences';
 import { CoefficientManager } from './core/CoefficientsManager';
 import { AppContextProvider } from './utils/AppContext';
 import { Logger } from './utils/Logger';
@@ -21,17 +21,16 @@ import { Logger } from './utils/Logger';
 // Keep splash screen visible while loading
 SplashScreen.preventAutoHideAsync();
 
-const DEBUG = false;
-const isAdDisplayed = Math.random() < 0.3; // 1/3 chance
-
 // AppOpen Ad
-Logger.info(`Display ad ? | ${isAdDisplayed}`);
-const appOpenAdUnitID = DEBUG ? TestIds.APP_OPEN : Platform.OS === "ios" ? "ca-app-pub-1869877675520642/7552640661" : "ca-app-pub-1869877675520642/2337387712";
+const isAdDisplayed = Math.random() <= 0.33; // 1/3 chance
+Logger.info(`Display AppOpen ad ? | ${isAdDisplayed}`);
+const appOpenAdUnitID = DEBUG ? "ca-app-pub-3940256099942544/9257395921" : Platform.OS === "ios" ? "ca-app-pub-1869877675520642/7552640661" : "ca-app-pub-1869877675520642/2337387712";
 const appOpenAd = AppOpenAd.createForAdRequest(appOpenAdUnitID, {
   requestNonPersonalizedAdsOnly: true,
 });
 
 function App() {
+  // AppOpen Ad
   appOpenAd.addAdEventsListener((event) => {
     if (event.type === AdEventType.LOADED) {
       setIsAdLoaded(true);
@@ -46,8 +45,6 @@ function App() {
       Logger.info(event.payload, true);
     }
   });
-
-  // Was app showed
   const [_isAdLoaded, setIsAdLoaded, isAdLoadedRef] = useState(false);
   const [_wasAdShowed, setWasAdShowed, wasAdShowedRef] = useState(false);
 
