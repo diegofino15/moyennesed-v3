@@ -225,7 +225,7 @@ function MainPage({
           selectedChildAccount={selectedChildAccountRef.current}
           setSelectedChildAccount={(account) => {
             setSelectedChildAccount(account);
-            maybeOpenInterstitialAd();
+            if (connectedRef.current) { maybeOpenInterstitialAd(); }
           }}
           theme={theme}
         />}

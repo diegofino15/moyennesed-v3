@@ -30,7 +30,7 @@ function ProfilePage({
 }) {
   async function closeProfilePage() {
     scrollViewRef.current?.scrollTo({x: 0, animated: true});
-    maybeOpenInterstitialAd();
+    if (connectedRef.current) { maybeOpenInterstitialAd(); }
   }
   
   const [allowGuessMarkCoefficients, setAllowGuessMarkCoefficients] = useState(Preferences.allowGuessMarkCoefficients);
