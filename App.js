@@ -27,9 +27,12 @@ SplashScreen.preventAutoHideAsync();
 const willAppOpenAdBeDisplayed = Math.random() <= 0.33; // 1/3 chance
 Logger.info(`Display AppOpen ad ? | ${willAppOpenAdBeDisplayed}`);
 const appOpenAdUnitID = DEBUG ? "ca-app-pub-3940256099942544/9257395921" : Platform.OS === "ios" ? "ca-app-pub-1869877675520642/7552640661" : "ca-app-pub-1869877675520642/2337387712";
-const appOpenAd = AppOpenAd.createForAdRequest(appOpenAdUnitID, {
-  requestNonPersonalizedAdsOnly: true,
-});
+var appOpenAd;
+if (willAppOpenAdBeDisplayed) {
+  appOpenAd = AppOpenAd.createForAdRequest(appOpenAdUnitID, {
+    requestNonPersonalizedAdsOnly: true,
+  });
+}
 
 function App() {
   // AppOpen Ad

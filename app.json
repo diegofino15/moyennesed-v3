@@ -2,7 +2,7 @@
   "expo": {
     "name": "MoyennesED",
     "slug": "moyennesed-v3",
-    "version": "3.3",
+    "version": "3.3.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -17,7 +17,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "me.diegof.moyennesed",
-      "buildNumber": "3"
+      "buildNumber": "1"
     },
     "android": {
       "adaptiveIcon": {
