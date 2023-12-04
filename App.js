@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from 'react';
-import { Platform, StatusBar } from 'react-native';
+import { Dimensions, Platform, StatusBar } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import useState from 'react-usestateref'
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -8,6 +8,8 @@ import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { AdEventType, AppOpenAd } from 'react-native-google-mobile-ads';
 import * as SplashScreen from "expo-splash-screen";
 
+import { BottomSheet } from './ui/views/global_components/BottomSheet';
+import { AndroidAdverstisement } from './ui/views/global_components/AndroidAdvertisement';
 import { useFonts, setThemeData } from './ui/hooks/useStyles';
 import { AuthStack } from './ui/views/authstack/AuthStack';
 import { AppStack } from './ui/views/appstack/AppStack';
@@ -22,8 +24,8 @@ import { Logger } from './utils/Logger';
 SplashScreen.preventAutoHideAsync();
 
 // AppOpen Ad
-const isAdDisplayed = Math.random() <= 0.33; // 1/3 chance
-Logger.info(`Display AppOpen ad ? | ${isAdDisplayed}`);
+const willAppOpenAdBeDisplayed = Math.random() <= 0.33; // 1/3 chance
+Logger.info(`Display AppOpen ad ? | ${willAppOpenAdBeDisplayed}`);
 const appOpenAdUnitID = DEBUG ? "ca-app-pub-3940256099942544/9257395921" : Platform.OS === "ios" ? "ca-app-pub-1869877675520642/7552640661" : "ca-app-pub-1869877675520642/2337387712";
 const appOpenAd = AppOpenAd.createForAdRequest(appOpenAdUnitID, {
   requestNonPersonalizedAdsOnly: true,
@@ -31,40 +33,63 @@ const appOpenAd = AppOpenAd.createForAdRequest(appOpenAdUnitID, {
 
 function App() {
   // AppOpen Ad
-  appOpenAd.addAdEventsListener((event) => {
-    if (event.type === AdEventType.LOADED) {
-      setIsAdLoaded(true);
-      if (loggedInLoadedRef.current && !wasAdShowedRef.current && loggedInRef.current) {
-        setWasAdShowed(true);
-        appOpenAd.show();
+  if (willAppOpenAdBeDisplayed) {
+    appOpenAd.addAdEventsListener((event) => {
+      if (event.type === AdEventType.LOADED) {
+        setIsAppOpenAdLoaded(true);
+        if (loggedInLoadedRef.current && !wasAppOpenAdShowedRef.current && loggedInRef.current) {
+          setWasAppOpenAdShowed(true);
+          appOpenAd.show();
+        }
+      } else if (event.type == AdEventType.CLOSED) {
+        SplashScreen.hideAsync();
+      } else if (event.type == AdEventType.ERROR) {
+        Logger.info("AppOpen Ad couldn't open...", true);
+        Logger.info(event.payload, true);
       }
-    } else if (event.type == AdEventType.CLOSED) {
-      SplashScreen.hideAsync();
-    } else if (event.type == AdEventType.ERROR) {
-      Logger.info("AppOpen Ad couldn't open...", true);
-      Logger.info(event.payload, true);
-    }
-  });
-  const [_isAdLoaded, setIsAdLoaded, isAdLoadedRef] = useState(false);
-  const [_wasAdShowed, setWasAdShowed, wasAdShowedRef] = useState(false);
+    });
+  }
+  const [_isAppOpenAdLoaded, setIsAppOpenAdLoaded, isAppOpenAdLoadedRef] = useState(false);
+  const [_wasAppOpenAdShowed, setWasAppOpenAdShowed, wasAppOpenAdShowedRef] = useState(false);
 
   // Decide to show AppStack or AuthStack
   const [loggedIn, setLoggedIn, loggedInRef] = useState(false);
   const [_loggedInLoaded, setLoggedInLoaded, loggedInLoadedRef] = useState(false);
+
+  // Android advertisement
+  const [isAndroidAdvertisementShown, setIsAndroidAdvertisementShown] = useState(false);
+  useEffect(() => {
+    if (loggedIn && !Preferences.androidAdvertisementShown && Platform.OS == "ios") {
+      setIsAndroidAdvertisementShown(true);
+      Preferences.androidAdvertisementShown = true;
+      Preferences.save();
+    }
+  }, [loggedIn]);
+  function renderAndroidAdvertisement() {
+    if (!isAndroidAdvertisementShown) { return null; }
+    else {
+      return <BottomSheet
+        key={"android"}
+        isOpen={isAndroidAdvertisementShown}
+        onClose={() => setIsAndroidAdvertisementShown(false)}
+        snapPoints={["70%"]}
+        children={<AndroidAdverstisement windowDimensions={Dimensions.get('screen')} theme={theme}/>}
+        theme={theme}
+      />;
+    }
+  }
 
   // Initialize UI data
   const [_fontsLoaded, setFontsLoaded, fontsLoadedRef] = useState(false);
   const theme = useTheme();
   setThemeData(theme); // Here to get updated when changing light/dark mode
   const [_isDarkMode, setIsDarkMode] = useState(Preferences.isDarkMode);
-  useEffect(() => {
-    setIsDarkMode(Preferences.isDarkMode);
-  }, [Preferences.isDarkMode]);
+  useEffect(() => { setIsDarkMode(Preferences.isDarkMode); }, [Preferences.isDarkMode]);
 
   // Prepare function
   useEffect(() => {
     async function prepare() {
-      if (isAdDisplayed) { appOpenAd.load(); }
+      if (willAppOpenAdBeDisplayed) { appOpenAd.load(); }
       
       try {
         if (!fontsLoadedRef.current) {
@@ -96,11 +121,11 @@ function App() {
   // Hide splash screen
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoadedRef.current && loggedInLoadedRef.current) {
-      if (!isAdDisplayed) { await SplashScreen.hideAsync(); }
+      if (!willAppOpenAdBeDisplayed) { await SplashScreen.hideAsync(); }
       else {
-        if (!wasAdShowedRef.current) {
-          if (isAdLoadedRef.current && loggedInRef.current) {
-            setWasAdShowed(true);
+        if (!wasAppOpenAdShowedRef.current) {
+          if (isAppOpenAdLoadedRef.current && loggedInRef.current) {
+            setWasAppOpenAdShowed(true);
             appOpenAd.show();
           } else {
             await SplashScreen.hideAsync();
@@ -130,6 +155,7 @@ function App() {
           {loggedInRef.current
             ? <AppStack setIsDarkMode={setIsDarkMode} theme={theme}/>
             : <AuthStack theme={theme}/>}
+          {renderAndroidAdvertisement()}
         </AppContextProvider>
       </BottomSheetModalProvider>
     </GestureHandlerRootView>

@@ -208,6 +208,7 @@ function MarksOverview({
                       setSubjectCoefficient={setSubjectCoefficient}
                       getMark={(markID) => { return period.marks.get(markID); }}
                       windowDimensions={windowDimensions}
+                      maybeOpenInterstitialAd={maybeOpenInterstitialAd}
                       theme={theme}
                     />
                   </View>;
@@ -269,6 +270,7 @@ function MarksOverview({
                 windowDimensions={windowDimensions}
                 index={subjectIndexRef.current}
                 forceUpdate={forceUpdateRef.current}
+                maybeOpenInterstitialAd={maybeOpenInterstitialAd}
                 theme={theme}
               />
             </View>;
@@ -304,6 +306,7 @@ function MarksOverview({
               windowDimensions={windowDimensions}
               index={subjectIndexRef.current}
               forceUpdate={forceUpdateRef.current}
+              maybeOpenInterstitialAd={maybeOpenInterstitialAd}
               theme={theme}
             />
           </View>;

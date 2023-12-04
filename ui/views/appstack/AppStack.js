@@ -12,7 +12,7 @@ import { DEBUG } from '../../../core/Preferences';
 
 
 // Interstitial Ad
-const interstitialAdDelay = 60000; // 1min
+const interstitialAdDelay = 40000; // 40sec
 const interstitialAdUnitID = DEBUG ? 'ca-app-pub-3940256099942544/1033173712' : Platform.OS == "ios" ? "ca-app-pub-1869877675520642/8836784242" : "ca-app-pub-1869877675520642/2850794547";
 var interstitialAd;
 
@@ -73,11 +73,9 @@ function AppStack({ setIsDarkMode, theme }) {
   // Interstitial Ad
   const [lastTimeClosedInterstitialAd, setLastTimeClosedInterstitialAd, lastTimeClosedInterstitialAdRef] = useState(Date.now());
   useEffect(() => {
-    Logger.info("Reloaded Interstitial Ad");
     interstitialAd = InterstitialAd.createForAdRequest(interstitialAdUnitID, {
       requestNonPersonalizedAdsOnly: true,
     });
-    interstitialAd.load();
     interstitialAd.addAdEventsListener((event) => {
       if (event.type == AdEventType.CLOSED) {
         setIsShowingInterstitialAd(false);
@@ -88,6 +86,8 @@ function AppStack({ setIsDarkMode, theme }) {
         Logger.info(event.payload, true);
       }
     });
+    interstitialAd.load();
+    Logger.info("Reloaded Interstitial Ad");
   }, [lastTimeClosedInterstitialAdRef.current]);
   const [isShowingInterstitialAd, setIsShowingInterstitialAd] = useState(false);
   function maybeOpenInterstitialAd() {

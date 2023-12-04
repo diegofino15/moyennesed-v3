@@ -18,7 +18,7 @@ import { formatAverage, formatCoefficient, formatDate2 } from '../../../../utils
 import { HapticsHandler } from '../../../../utils/HapticsHandler';
 
 
-function SubjectPopup({ subject, selectedSubSubject, refreshAverages, setSubjectCoefficient, clickedOnMark, getMark, windowDimensions, theme }) {
+function SubjectPopup({ subject, selectedSubSubject, refreshAverages, setSubjectCoefficient, clickedOnMark, getMark, windowDimensions, maybeOpenInterstitialAd, theme }) {
   const [_shownSubject, setShownSubject, shownSubjectRef] = useState(subject);
   useEffect(() => {
     if (selectedSubSubject) {
@@ -32,6 +32,7 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, setSubject
       onPress={() => {
         if (choosenSection != index) {
           setChoosenSection(index);
+          if (index == 1) { maybeOpenInterstitialAd(); }
           HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Light);
         }
       }}

@@ -110,7 +110,7 @@ export class Account {
         addMarkToPeriod(period, mark);
         _getCalculatedGeneralAverage(period, false, false);
       } else {
-        Logger.core(`Mark : ${mark.title} (${mark.valueStr}) has invalid period code`, true);
+        Logger.core(`Mark : ${mark.title} (${mark.valueStr}) has invalid period code : ${mark.periodCode}`, true);
       }
     });
     CoefficientManager.isAverageHistoryUpdated = true;
