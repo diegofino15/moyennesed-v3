@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Logger } from "../utils/Logger";
 
-const DEBUG = false;
+const DEBUG = true;
 export { DEBUG };
 
 export class Preferences {

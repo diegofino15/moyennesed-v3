@@ -1,5 +1,5 @@
 import { useRef, useEffect, } from 'react';
-import { View, SafeAreaView, ScrollView, ActivityIndicator, Dimensions, StyleSheet, useWindowDimensions } from 'react-native';
+import { View, SafeAreaView, ScrollView, ActivityIndicator, Dimensions, StyleSheet, useWindowDimensions, StatusBar, Platform } from 'react-native';
 import { ChevronRightIcon } from 'lucide-react-native';
 import useState from 'react-usestateref'
 
@@ -14,14 +14,13 @@ import { useAppContext } from '../../../utils/AppContext';
 function AuthStack({ theme }) {
   // Is logged in ?
   const [loggedIn, setLoggedIn] = useState(false);
+  const [isConnecting, setIsConnecting, isConnectingRef] = useState(false);
   useEffect(() => {
     if (loggedIn) {
       setScreenIndex(3);
       setTimeout(() => scrollViewRef.current?.scrollTo({x: Dimensions.get('window').width * screenIndexRef.current, animated: true}), 300);
     }
   }, [loggedIn]);
-
-  const [isConnecting, setIsConnecting, isConnectingRef] = useState(false);
 
   // To change to AppStack once logged-in
   const appCtx = useAppContext();
@@ -50,6 +49,7 @@ function AuthStack({ theme }) {
       backgroundColor: theme.colors.background,
       width: '100%',
       height: '100%',
+      paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
     }}>
       {/* Main scrollable component */}
       <ScrollView

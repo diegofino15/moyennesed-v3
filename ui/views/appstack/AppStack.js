@@ -19,9 +19,7 @@ var interstitialAd;
 function AppStack({ setIsDarkMode, theme }) {
   // Main connection states
   const [_connected, setConnected, connectedRef] = useState(UserData.connected);
-  useEffect(() => {
-    if (connectedRef.current && !UserData.connected) { setConnected(UserData.connected); }
-  }, [UserData.connected]);
+  useEffect(() => { if (connectedRef.current && !UserData.connected) { setConnected(UserData.connected); } }, [UserData.connected]);
   const [_connecting, setConnecting, connectingRef] = useState(UserData.connecting);
   const [_triedToConnect, setTriedToConnect, triedToConnectRef] = useState(false);
 
@@ -48,22 +46,23 @@ function AppStack({ setIsDarkMode, theme }) {
     appCtx.setLoggedIn(false);
   }
   
-  // For switching between pages
+  // For switching between main page and profile page
   const scrollViewRef = useRef(null);
 
   // Profile photo
   const [_profilePhoto, setProfilePhoto, profilePhotoRef] = useState(UserData.temporaryProfilePhoto);
   const [_gettingProfilePhoto, _setGettingProfilePhoto, gettingProfilePhotoRef] = useState(false);
-  function refreshProfilePhoto(force=false) {
-    gettingProfilePhotoRef.current = true;
-    UserData.loadProfilePhoto(UserData.mainAccount, (photo) => {
-      setProfilePhoto(photo);
-      gettingProfilePhotoRef.current = false;
-    }, force);
-  }
   useEffect(() => {
+    function refreshProfilePhoto() {
+      gettingProfilePhotoRef.current = true;
+      UserData.loadProfilePhoto(UserData.mainAccount, (photo) => {
+        setProfilePhoto(photo);
+        gettingProfilePhotoRef.current = false;
+      });
+    }
+
     if (!UserData.mainAccount.isParent && !profilePhotoRef.current && !gettingProfilePhotoRef.current) {
-      refreshProfilePhoto(false);
+      refreshProfilePhoto();
     }
   }, [UserData.mainAccount.photoURL]);
 
@@ -113,8 +112,8 @@ function AppStack({ setIsDarkMode, theme }) {
       <MainPage
         connectedRef={connectedRef}
         connectingRef={connectingRef}
-        scrollViewRef={scrollViewRef}
         profilePhotoRef={profilePhotoRef}
+        scrollViewRef={scrollViewRef}
         updateScreenRef={updateScreenRef}
         setUpdateScreen={setUpdateScreen}
         maybeOpenInterstitialAd={maybeOpenInterstitialAd}

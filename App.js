@@ -8,15 +8,15 @@ import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { AdEventType, AppOpenAd } from 'react-native-google-mobile-ads';
 import * as SplashScreen from "expo-splash-screen";
 
-import { BottomSheet } from './ui/views/global_components/BottomSheet';
-import { AndroidAdverstisement } from './ui/views/global_components/AndroidAdvertisement';
 import { useFonts, setThemeData } from './ui/hooks/useStyles';
 import { AuthStack } from './ui/views/authstack/AuthStack';
 import { AppStack } from './ui/views/appstack/AppStack';
+import { BottomSheet } from './ui/views/global_components/BottomSheet';
+import { AndroidAdverstisement } from './ui/views/global_components/AndroidAdvertisement';
+import { AppContextProvider } from './utils/AppContext';
 import { UserData } from './core/UserData';
 import { Preferences, DEBUG } from './core/Preferences';
 import { CoefficientManager } from './core/CoefficientsManager';
-import { AppContextProvider } from './utils/AppContext';
 import { Logger } from './utils/Logger';
 
 
@@ -85,9 +85,9 @@ function App() {
   // Initialize UI data
   const [_fontsLoaded, setFontsLoaded, fontsLoadedRef] = useState(false);
   const theme = useTheme();
-  setThemeData(theme); // Here to get updated when changing light/dark mode
+
   const [_isDarkMode, setIsDarkMode] = useState(Preferences.isDarkMode);
-  useEffect(() => { setIsDarkMode(Preferences.isDarkMode); }, [Preferences.isDarkMode]);
+  setThemeData(theme); // Here to get updated when changing light/dark mode
 
   // Prepare function
   useEffect(() => {
@@ -139,9 +139,7 @@ function App() {
   }, [fontsLoadedRef.current, loggedInLoadedRef.current]);
 
   // Return null if UI is not loaded
-  if (!fontsLoadedRef.current || !loggedInLoadedRef.current) {
-    return null;
-  }
+  if (!fontsLoadedRef.current || !loggedInLoadedRef.current) { return null; }
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
@@ -158,6 +156,8 @@ function App() {
           {loggedInRef.current
             ? <AppStack setIsDarkMode={setIsDarkMode} theme={theme}/>
             : <AuthStack theme={theme}/>}
+          
+          {/* Android advertisement */}
           {renderAndroidAdvertisement()}
         </AppContextProvider>
       </BottomSheetModalProvider>

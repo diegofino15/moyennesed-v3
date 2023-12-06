@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { View, SafeAreaView, ScrollView, Text, Image, Switch, ActivityIndicator, Dimensions, Platform, useWindowDimensions } from 'react-native';
+import { View, SafeAreaView, ScrollView, Text, Image, Switch, ActivityIndicator, Dimensions, Platform, StatusBar, useWindowDimensions } from 'react-native';
 import { BrainCircuitIcon, BugIcon, CheckIcon, ChevronLeftIcon, MailIcon, MessageSquareDashedIcon, MoonIcon, RefreshCcwIcon, SunIcon, UserIcon, WrenchIcon, XIcon } from 'lucide-react-native';
 import { PressableScale } from 'react-native-pressable-scale';
 import * as Haptics from "expo-haptics";
@@ -95,6 +95,7 @@ function ProfilePage({
         marginTop: 10,
         width: '100%',
         height: '100%',
+        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
       }}>
         {/* Title and go-back button */}
         <View style={{
@@ -127,7 +128,7 @@ function ProfilePage({
                 onPress={() => {
                   setIsDarkMode(!Preferences.isDarkMode);
                   HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Light);
-                  Preferences.isDarkMode = !Preferences.isDarkMode
+                  Preferences.isDarkMode = !Preferences.isDarkMode;
                   Preferences.save();
                 }}
                 style={{

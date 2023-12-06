@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { View, ScrollView, SafeAreaView, Text, Image, RefreshControl, Dimensions } from "react-native";
+import { View, ScrollView, SafeAreaView, Text, Image, RefreshControl, Dimensions, StatusBar, Platform } from "react-native";
 import { UserIcon } from "lucide-react-native";
 import useState from "react-usestateref";
 import * as Haptics from "expo-haptics";
@@ -14,8 +14,8 @@ import { HapticsHandler } from "../../../utils/HapticsHandler";
 
 function MainPage({
   connectedRef, connectingRef,
-  scrollViewRef,
   profilePhotoRef, 
+  scrollViewRef,
   updateScreenRef, setUpdateScreen,
   maybeOpenInterstitialAd,
   theme
@@ -33,9 +33,7 @@ function MainPage({
     }
   }
   const [_shownAccount, setShownAccount, shownAccountRef] = useState(getAccount());
-  useEffect(() => {
-    setShownAccount(getAccount());
-  }, [connectedRef.current, selectedChildAccountRef.current]);
+  useEffect(() => { setShownAccount(getAccount()); }, [connectedRef.current, selectedChildAccountRef.current]);
 
   // Is user refreshing the page ?
   const [_refreshing, setRefreshing, refreshingRef] = useState(false);
@@ -166,9 +164,7 @@ function MainPage({
 
   // Update screen
   const [_refresh, _setRefresh] = useState(false);
-  useEffect(() => {
-    _setRefresh(!_refresh);
-  }, [updateScreenRef.current]);
+  useEffect(() => { _setRefresh(!_refresh); }, [updateScreenRef.current]);
 
   return (
     <ScrollView
@@ -188,6 +184,7 @@ function MainPage({
         marginTop: 10,
         width: '100%',
         height: '100%',
+        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
       }}>
         {/* Title */}
         <View style={{

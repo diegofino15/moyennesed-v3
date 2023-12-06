@@ -258,9 +258,9 @@ export class UserData {
 
   // Profile photo
   static temporaryProfilePhoto = "";
-  static async loadProfilePhoto(account, callback, forceLoad=false) {
+  static async loadProfilePhoto(account, callback) {
     return await AsyncStorage.getItem("photo").then(async (cachePhoto) => {
-      if (cachePhoto && !forceLoad) {
+      if (cachePhoto) {
         Logger.core("Loaded profile photo from cache");
         this.temporaryProfilePhoto = cachePhoto;
         callback(cachePhoto);
