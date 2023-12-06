@@ -14,7 +14,7 @@ import { UserData } from '../../../../core/UserData';
 import { Preferences } from '../../../../core/Preferences';
 import { CoefficientManager } from '../../../../core/CoefficientsManager';
 import { getSubjectColor } from '../../../../utils/Colors';
-import { formatAverage, formatCoefficient, formatDate2 } from '../../../../utils/Utils';
+import { formatAverage, formatCoefficient } from '../../../../utils/Utils';
 import { HapticsHandler } from '../../../../utils/HapticsHandler';
 
 
@@ -92,18 +92,15 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, setSubject
   // Calculate one time for graph
   var marksIndexes = [];
   var marksValues = [];
-  var marksDates = [];
   function calculateGraphValues() {
     shownSubjectRef.current.marks?.forEach((markID, index) => {
       const mark = getMark(markID);
       if (mark?.isEffective ?? false) {
         marksIndexes.push(index);
         marksValues.push(mark.value / mark.valueOn * 20);
-        marksDates.push(formatDate2(mark.dateEntered, 1));
       }
     });
     marksValues.reverse();
-    marksDates.reverse();
     marksIndexes.reverse();
   }
   calculateGraphValues();
@@ -302,22 +299,22 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, setSubject
                 paddingTop: 20,
                 backgroundColor: getSubjectColor(shownSubjectRef.current.code, true),
                 marginBottom: 10,
+                overflow: 'hidden',
               }}>
                 <LineChart
                   data={{
-                    labels: marksDates,
                     datasets: [
                       { data: marksValues },
                       { data: [0], withDots: false },
                       { data: [20], withDots: false },
                     ]
                   }}
-                  width={Dimensions.get("window").width - 40}
+                  width={Dimensions.get("window").width - 30}
                   height={250}
                   chartConfig={{
                     backgroundGradientFrom: getSubjectColor(shownSubjectRef.current.code, true),
                     backgroundGradientTo: getSubjectColor(shownSubjectRef.current.code, true),
-                    decimalPlaces: 2,
+                    decimalPlaces: 0,
                     color: (opacity = 1) => Preferences.isDarkMode ? `rgba(0, 0, 0, ${opacity})` : `rgba(255, 255, 255, ${opacity})`,
                     labelColor: (opacity = 1) => theme.colors.onPrimary,
                   }}
@@ -334,6 +331,8 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, setSubject
                   }}
                   style={{
                     borderRadius: 20,
+                    left: -20,
+                    marginTop: 10,
                   }}
                 />
               </View>
