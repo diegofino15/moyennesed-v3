@@ -5,6 +5,7 @@ import { PressableScale } from "react-native-pressable-scale";
 import { LineChart } from "react-native-chart-kit";
 import * as Haptics from 'expo-haptics';
 import useState from "react-usestateref";
+import { ContextMenuView } from 'react-native-ios-context-menu';
 
 import { RecentMarkCard } from "./RecentMarkCard";
 import { SubjectCard } from "./SubjectCard";
@@ -50,15 +51,30 @@ function MarksOverview({
 
   return (
     <View>
-      <AnimatedComponent index={0} forceUpdate={forceUpdateRef.current} children={<View style={{
-        width: '100%',
-        backgroundColor: theme.colors.surface,
-        borderRadius: 20,
-        marginBottom: 20,
-        padding: 20,
-        paddingBottom: 0,
-        overflow: 'hidden',
-      }}>
+      <AnimatedComponent index={0} forceUpdate={forceUpdateRef.current} children={<ContextMenuView
+        style={{
+          width: '100%',
+          backgroundColor: theme.colors.surface,
+          borderRadius: 20,
+          marginBottom: 20,
+          padding: 20,
+          paddingBottom: 0,
+          overflow: 'hidden',
+        }}
+        menuConfig={{
+          menuTitle: 'BasicUsageExample01',
+          menuItems: [{
+            actionKey  : 'key-01',
+            actionTitle: 'Action #1',
+          }, {
+            actionKey  : 'key-02'   ,
+            actionTitle: 'Action #2',
+          }, {
+            actionKey  : 'key-03'   ,
+            actionTitle: 'Action #3',
+          }],
+        }}
+      >
         {/* Currently shown period */}
         <View style={{
           flexDirection: 'column',
@@ -217,7 +233,7 @@ function MarksOverview({
             </ScrollView>}
           </View>
         </View>
-      </View>}/>
+      </ContextMenuView>}/>
 
       {/* Loop trough all subjects groups and show affiliated subjects */}
       {[...(period.subjectGroups?.values() ?? [])].map((subjectGroup, index) => {
