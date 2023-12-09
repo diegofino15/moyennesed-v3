@@ -36,6 +36,8 @@ if (willAppOpenAdBeDisplayed) {
 
 function App() {
   // AppOpen Ad
+  const [_isAppOpenAdLoaded, setIsAppOpenAdLoaded, isAppOpenAdLoadedRef] = useState(false);
+  const [_wasAppOpenAdShowed, setWasAppOpenAdShowed, wasAppOpenAdShowedRef] = useState(false);
   if (willAppOpenAdBeDisplayed) {
     appOpenAd.addAdEventsListener((event) => {
       if (event.type === AdEventType.LOADED) {
@@ -52,8 +54,6 @@ function App() {
       }
     });
   }
-  const [_isAppOpenAdLoaded, setIsAppOpenAdLoaded, isAppOpenAdLoadedRef] = useState(false);
-  const [_wasAppOpenAdShowed, setWasAppOpenAdShowed, wasAppOpenAdShowedRef] = useState(false);
 
   // Decide to show AppStack or AuthStack
   const [loggedIn, setLoggedIn, loggedInRef] = useState(false);

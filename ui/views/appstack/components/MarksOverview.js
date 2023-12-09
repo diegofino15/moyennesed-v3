@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { View, ScrollView, Text, ActivityIndicator, Dimensions } from "react-native";
-import { CheckCircle2Icon, DraftingCompassIcon, HelpCircleIcon, TrendingUpIcon, Users2Icon, WifiOffIcon, RefreshCcwIcon } from "lucide-react-native";
+import { CheckCircle2Icon, DraftingCompassIcon, HelpCircleIcon, TrendingUpIcon, Users2Icon, WifiOffIcon, RefreshCcwIcon, ArrowDownUpIcon, ArrowUpDownIcon } from "lucide-react-native";
 import { PressableScale } from "react-native-pressable-scale";
 import { LineChart } from "react-native-chart-kit";
 import * as Haptics from 'expo-haptics';
@@ -40,6 +40,7 @@ function MarksOverview({
     setForceUpdate(!forceUpdateRef.current);
   }, [accountID]);
 
+  // Graph
   const [isGraphSelected, setIsGraphSelected] = useState(false);
   const numberOfMarks = 15;
   const [_shownGraphValues, setShownGraphValues, shownGraphValuesRef] = useState([]);
@@ -47,6 +48,9 @@ function MarksOverview({
     const shownValues = [...(period.averageHistory?.values() ?? [])];
     setShownGraphValues(shownValues.splice(Math.max(0, shownValues.length - numberOfMarks), numberOfMarks));
   }, [isGraphSelected, manualRefreshingRef.current, loading, accountID]);
+
+  // Show subject groups class averages
+  const [showSubjectGroupClassAverage, setShowSubjectGroupClassAverage] = useState(false);
 
   return (
     <View>
@@ -231,17 +235,24 @@ function MarksOverview({
             alignItems: 'center',
             marginRight: 9.5, // Accurate ?
           }}>
-            <Text style={[theme.fonts.labelLarge, {
-              width: '75%',
-            }]}>{subjectGroup.name}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', width: Dimensions.get('window').width - 160 }}>
+              <Text style={theme.fonts.labelLarge}>{subjectGroup.name}</Text>
+              <PressableScale style={{ marginLeft: 10 }} onPress={() => setShowSubjectGroupClassAverage(!showSubjectGroupClassAverage)}>
+                {showSubjectGroupClassAverage ? <ArrowUpDownIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/> : <ArrowDownUpIcon size={20} color={theme.colors.onSurfaceDisabled}/>}
+              </PressableScale>
+            </View>
             <View style={{
               flexDirection: 'row',
               alignItems: 'flex-end',
               justifyContent: 'flex-end',
               width: '25%',
             }}>
-              <Text style={[theme.fonts.headlineMedium, { fontSize: 20, fontFamily: 'Bitter-Bold', color: theme.colors.onSurfaceDisabled }]}>{formatAverage(subjectGroup.average)}</Text>
-              {subjectGroup.average ? <Text style={[theme.fonts.labelSmall, { fontFamily: 'Bitter-Bold' }]}>/20</Text> : null}
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                {showSubjectGroupClassAverage && <Users2Icon size={15 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/>}
+                {showSubjectGroupClassAverage && <Text style={[theme.fonts.labelSmall, { marginRight: 5 }]}> : </Text>}
+                <Text style={[theme.fonts.headlineMedium, { fontSize: 20, fontFamily: 'Bitter-Bold', color: theme.colors.onSurfaceDisabled }]}>{formatAverage(showSubjectGroupClassAverage ? subjectGroup.classAverage : subjectGroup.average)}</Text>
+              </View>
+              {(showSubjectGroupClassAverage ? subjectGroup.classAverage : subjectGroup.average) ? <Text style={[theme.fonts.labelSmall, { fontFamily: 'Bitter-Bold' }]}>/20</Text> : null}
             </View>
           </View>}/>
           <View style={{

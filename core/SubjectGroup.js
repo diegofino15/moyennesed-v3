@@ -4,6 +4,7 @@ function getFormattedSubjectGroup(jsonData) {
     "name": jsonData.discipline.toUpperCase(),
     "subjectCodes": new Array(),
     "average": undefined,
+    "classAverage": undefined,
   };
 }
 

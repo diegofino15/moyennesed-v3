@@ -75,16 +75,25 @@ function calculateAllPeriodAverages(period) {
 
   period.subjectGroups.forEach(subjectGroup => {
     let sum = 0;
+    let sumClass = 0;
     let coefficient = 0;
+    let coefficientClass = 0;
     subjectGroup.subjectCodes.forEach(subjectCode => {
       let subject = period.subjects.get(subjectCode);
       if (subject.average) {
         sum += subject.average * subject.coefficient;
         coefficient += subject.coefficient;
       }
+      if (subject.classAverage) {
+        sumClass += subject.classAverage * subject.coefficient;
+        coefficientClass += subject.coefficient;
+      }
     });
     if (coefficient != 0) {
       subjectGroup.average = sum / coefficient;
+    }
+    if (coefficientClass != 0) {
+      subjectGroup.classAverage = sumClass / coefficientClass;
     }
   });
 }
@@ -143,18 +152,13 @@ function getPeriodFromCache(cachePeriod) {
     subjects.set(key, getSubjectFromCache(cacheSubject));
   });
 
-  var subjectGroups = new Map();
-  new Map(cachePeriod.subjectGroups).forEach((cacheSubjectGroup, key) => {
-    subjectGroups.set(key, cacheSubjectGroup);
-  });
-  
   return {
     "code": cachePeriod.code,
     "title": cachePeriod.title,
     "isFinished": cachePeriod.isFinished,
     "marks": new Map(cachePeriod.marks),
     "subjects": subjects,
-    "subjectGroups": subjectGroups,
+    "subjectGroups": new Map(cachePeriod.subjectGroups),
     "average": cachePeriod.average,
     "averageHistory": cachePeriod.averageHistory,
     "classAverage": cachePeriod.classAverage,
