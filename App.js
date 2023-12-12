@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from 'react';
-import { Dimensions, Platform, StatusBar } from 'react-native';
+import { Platform, StatusBar } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import useState from 'react-usestateref'
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -11,8 +11,6 @@ import * as SplashScreen from "expo-splash-screen";
 import { useFonts, setThemeData } from './ui/hooks/useStyles';
 import { AuthStack } from './ui/views/authstack/AuthStack';
 import { AppStack } from './ui/views/appstack/AppStack';
-import { BottomSheet } from './ui/views/global_components/BottomSheet';
-import { AndroidAdverstisement } from './ui/views/global_components/AndroidAdvertisement';
 import { AppContextProvider } from './utils/AppContext';
 import { UserData } from './core/UserData';
 import { Preferences, DEBUG } from './core/Preferences';
@@ -58,29 +56,6 @@ function App() {
   // Decide to show AppStack or AuthStack
   const [loggedIn, setLoggedIn, loggedInRef] = useState(false);
   const [_loggedInLoaded, setLoggedInLoaded, loggedInLoadedRef] = useState(false);
-
-  // Android advertisement
-  const [isAndroidAdvertisementShown, setIsAndroidAdvertisementShown] = useState(false);
-  useEffect(() => {
-    if (loggedIn && !Preferences.androidAdvertisementShown && Platform.OS == "ios") {
-      setIsAndroidAdvertisementShown(true);
-      Preferences.androidAdvertisementShown = true;
-      Preferences.save();
-    }
-  }, [loggedIn]);
-  function renderAndroidAdvertisement() {
-    if (!isAndroidAdvertisementShown) { return null; }
-    else {
-      return <BottomSheet
-        key={"android"}
-        isOpen={isAndroidAdvertisementShown}
-        onClose={() => setIsAndroidAdvertisementShown(false)}
-        snapPoints={["70%"]}
-        children={<AndroidAdverstisement windowDimensions={Dimensions.get('screen')} theme={theme}/>}
-        theme={theme}
-      />;
-    }
-  }
 
   // Initialize UI data
   const [_fontsLoaded, setFontsLoaded, fontsLoadedRef] = useState(false);
@@ -156,9 +131,6 @@ function App() {
           {loggedInRef.current
             ? <AppStack setIsDarkMode={setIsDarkMode} theme={theme}/>
             : <AuthStack theme={theme}/>}
-          
-          {/* Android advertisement */}
-          {renderAndroidAdvertisement()}
         </AppContextProvider>
       </BottomSheetModalProvider>
     </GestureHandlerRootView>

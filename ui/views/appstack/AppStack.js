@@ -1,20 +1,13 @@
 import { useRef, useEffect } from 'react';
 import { ScrollView, Dimensions } from 'react-native';
 import useState from 'react-usestateref'
-import { AdEventType, InterstitialAd } from 'react-native-google-mobile-ads';
 
 import { MainPage } from './MainPage';
 import { ProfilePage } from './ProfilePage';
 import { UserData } from '../../../core/UserData';
 import { useAppContext } from '../../../utils/AppContext';
 import { Logger } from '../../../utils/Logger';
-import { DEBUG } from '../../../core/Preferences';
 
-
-// Interstitial Ad
-const interstitialAdDelay = 40000; // 40sec
-const interstitialAdUnitID = DEBUG ? 'ca-app-pub-3940256099942544/1033173712' : Platform.OS == "ios" ? "ca-app-pub-1869877675520642/8836784242" : "ca-app-pub-1869877675520642/2850794547";
-var interstitialAd;
 
 function AppStack({ setIsDarkMode, theme }) {
   // Main connection states
@@ -69,33 +62,6 @@ function AppStack({ setIsDarkMode, theme }) {
   // Update screen from anywhere
   const [_updateScreen, setUpdateScreen, updateScreenRef] = useState(false);
 
-  // Interstitial Ad
-  const [lastTimeClosedInterstitialAd, setLastTimeClosedInterstitialAd, lastTimeClosedInterstitialAdRef] = useState(Date.now());
-  useEffect(() => {
-    interstitialAd = InterstitialAd.createForAdRequest(interstitialAdUnitID, {
-      requestNonPersonalizedAdsOnly: true,
-    });
-    interstitialAd.addAdEventsListener((event) => {
-      if (event.type == AdEventType.CLOSED) {
-        setIsShowingInterstitialAd(false);
-        interstitialAd.removeAllListeners();
-        setLastTimeClosedInterstitialAd(Date.now());
-      } else if (event.type == AdEventType.ERROR) {
-        Logger.info("Interstitial Ad couldn't open...", true);
-        Logger.info(event.payload, true);
-      }
-    });
-    interstitialAd.load();
-    Logger.info("Reloaded Interstitial Ad");
-  }, [lastTimeClosedInterstitialAdRef.current]);
-  const [isShowingInterstitialAd, setIsShowingInterstitialAd] = useState(false);
-  function maybeOpenInterstitialAd() {
-    if (interstitialAd?.loaded && !isShowingInterstitialAd && (Date.now() - lastTimeClosedInterstitialAd) >= interstitialAdDelay) {
-      setIsShowingInterstitialAd(true);
-      interstitialAd?.show();
-    }
-  }
-
   return (
     <ScrollView
       horizontal={true}
@@ -116,7 +82,6 @@ function AppStack({ setIsDarkMode, theme }) {
         scrollViewRef={scrollViewRef}
         updateScreenRef={updateScreenRef}
         setUpdateScreen={setUpdateScreen}
-        maybeOpenInterstitialAd={maybeOpenInterstitialAd}
         theme={theme}
       />
 
@@ -131,7 +96,6 @@ function AppStack({ setIsDarkMode, theme }) {
         updateScreenRef={updateScreenRef}
         setUpdateScreen={setUpdateScreen}
         setIsDarkMode={setIsDarkMode}
-        maybeOpenInterstitialAd={maybeOpenInterstitialAd}
         theme={theme}
       />
     </ScrollView>

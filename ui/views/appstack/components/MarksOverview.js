@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { View, ScrollView, Text, ActivityIndicator, Dimensions } from "react-native";
-import { CheckCircle2Icon, DraftingCompassIcon, HelpCircleIcon, TrendingUpIcon, Users2Icon, WifiOffIcon, RefreshCcwIcon, ArrowDownUpIcon, ArrowUpDownIcon } from "lucide-react-native";
+import { CheckCircle2Icon, DraftingCompassIcon, HelpCircleIcon, TrendingUpIcon, Users2Icon, WifiOffIcon, RefreshCcwIcon, ArrowDownUpIcon, ArrowUpDownIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react-native";
 import { PressableScale } from "react-native-pressable-scale";
 import { LineChart } from "react-native-chart-kit";
 import * as Haptics from 'expo-haptics';
@@ -26,17 +26,16 @@ function MarksOverview({
   refresh,
   manualRefreshingRef,
   windowDimensions,
-  maybeOpenInterstitialAd,
   theme
 }) {
   // Work with subject groups
   const [_drawnSubjects, _setDrawnSubjects, drawnSubjectsRef] = useState(new Array());
-  const [_subjectIndex, setSubjectIndex, subjectIndexRef] = useState(0);
+  const [_animatedSubjectIndex, setAnimatedSubjectIndex, animatedSubjectIndexRef] = useState(0);
 
   // Force update animation
   const [_forceUpdate, setForceUpdate, forceUpdateRef] = useState(false);
   useEffect(() => {
-    setSubjectIndex(0);
+    setAnimatedSubjectIndex(0);
     setForceUpdate(!forceUpdateRef.current);
   }, [accountID]);
 
@@ -78,7 +77,6 @@ function MarksOverview({
               <PressableScale onPress={() => {
                 setIsGraphSelected(!isGraphSelected);
                 HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Light);
-                maybeOpenInterstitialAd();
               }} style={{
                 backgroundColor: theme.colors.background,
                 borderRadius: 5,
@@ -212,7 +210,6 @@ function MarksOverview({
                       setSubjectCoefficient={setSubjectCoefficient}
                       getMark={(markID) => { return period.marks.get(markID); }}
                       windowDimensions={windowDimensions}
-                      maybeOpenInterstitialAd={maybeOpenInterstitialAd}
                       theme={theme}
                     />
                   </View>;
@@ -225,34 +222,45 @@ function MarksOverview({
 
       {/* Loop trough all subjects groups and show affiliated subjects */}
       {[...(period.subjectGroups?.values() ?? [])].map((subjectGroup, index) => {
-        subjectIndexRef.current += 1;
+        animatedSubjectIndexRef.current += 1;
         return <View key={index} style={{
           marginBottom: 20,
         }}>
-          <AnimatedComponent index={subjectIndexRef.current} forceUpdate={forceUpdateRef.current} children={<View style={{
+          <AnimatedComponent index={animatedSubjectIndexRef.current} forceUpdate={forceUpdateRef.current} children={<View style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
-            marginRight: 9.5, // Accurate ?
           }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', width: Dimensions.get('window').width - 160 }}>
-              <Text style={theme.fonts.labelLarge}>{subjectGroup.name}</Text>
-              <PressableScale style={{ marginLeft: 10 }} onPress={() => setShowSubjectGroupClassAverage(!showSubjectGroupClassAverage)}>
-                {showSubjectGroupClassAverage ? <ArrowUpDownIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/> : <ArrowDownUpIcon size={20} color={theme.colors.onSurfaceDisabled}/>}
+            <Text style={[theme.fonts.labelLarge, { width: Dimensions.get('screen').width - 175 * windowDimensions.fontScale }]}>{subjectGroup.name}</Text>
+            
+            {/* Changeable to see average or class average */}
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: 135 * windowDimensions.fontScale }}>
+              {showSubjectGroupClassAverage ? <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Users2Icon size={15 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/>
+                <Text style={theme.fonts.labelSmall}> :</Text>
+              </View> : <View/>}
+              <PressableScale onPress={() => setShowSubjectGroupClassAverage(!showSubjectGroupClassAverage)} style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                paddingRight: 7,
+                paddingLeft: 5,
+                width: 110 * windowDimensions.fontScale,
+
+                borderWidth: 2,
+                borderColor: theme.colors.surface,
+                borderRadius: 5,
+              }}>
+                {showSubjectGroupClassAverage ? <ChevronUpIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/> : <ChevronDownIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/>}
+                <View style={{
+                  flexDirection: 'row',
+                  alignItems: 'flex-end',
+                  justifyContent: 'flex-end',
+                }}>
+                  <Text style={[theme.fonts.headlineMedium, { fontSize: 20, fontFamily: 'Bitter-Bold', color: theme.colors.onSurfaceDisabled }]}>{formatAverage(showSubjectGroupClassAverage ? subjectGroup.classAverage : subjectGroup.average)}</Text>
+                  {(showSubjectGroupClassAverage ? subjectGroup.classAverage : subjectGroup.average) ? <Text style={[theme.fonts.labelSmall, { fontFamily: 'Bitter-Bold' }]}>/20</Text> : null}
+                </View>
               </PressableScale>
-            </View>
-            <View style={{
-              flexDirection: 'row',
-              alignItems: 'flex-end',
-              justifyContent: 'flex-end',
-              width: '25%',
-            }}>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                {showSubjectGroupClassAverage && <Users2Icon size={15 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/>}
-                {showSubjectGroupClassAverage && <Text style={[theme.fonts.labelSmall, { marginRight: 5 }]}> : </Text>}
-                <Text style={[theme.fonts.headlineMedium, { fontSize: 20, fontFamily: 'Bitter-Bold', color: theme.colors.onSurfaceDisabled }]}>{formatAverage(showSubjectGroupClassAverage ? subjectGroup.classAverage : subjectGroup.average)}</Text>
-              </View>
-              {(showSubjectGroupClassAverage ? subjectGroup.classAverage : subjectGroup.average) ? <Text style={[theme.fonts.labelSmall, { fontFamily: 'Bitter-Bold' }]}>/20</Text> : null}
             </View>
           </View>}/>
           <View style={{
@@ -260,13 +268,13 @@ function MarksOverview({
             height: "100%",
             left: -10,
           }}>
-            <AnimatedComponent index={subjectIndexRef.current} forceUpdate={forceUpdateRef.current} children={<View style={{ backgroundColor: theme.colors.surface, width: 4, borderRadius: 1, height: "100%" }}/>}/>
+            <AnimatedComponent index={animatedSubjectIndexRef.current} forceUpdate={forceUpdateRef.current} children={<View style={{ backgroundColor: theme.colors.surface, width: 4, borderRadius: 1, height: "100%" }}/>}/>
           </View>
 
           {subjectGroup.subjectCodes.map((subjectCode, subjectCodeKey) => {
             if (!drawnSubjectsRef.current.includes(subjectCode)) { drawnSubjectsRef.current.push(subjectCode); }
             const subject = period.subjects.get(subjectCode);
-            subjectIndexRef.current += 1;
+            animatedSubjectIndexRef.current += 1;
             return <View key={subjectCodeKey} style={{
               marginTop: 5,
               marginBottom: 5,
@@ -279,9 +287,8 @@ function MarksOverview({
                   return period.marks.get(markID);
                 }}
                 windowDimensions={windowDimensions}
-                index={subjectIndexRef.current}
+                index={animatedSubjectIndexRef.current}
                 forceUpdate={forceUpdateRef.current}
-                maybeOpenInterstitialAd={maybeOpenInterstitialAd}
                 theme={theme}
               />
             </View>;
@@ -291,18 +298,18 @@ function MarksOverview({
       
       {/* Show remaining subjects */}
       <View>
-        {drawnSubjectsRef.current.length != 0 ? <AnimatedComponent index={subjectIndexRef.current + 1} forceUpdate={forceUpdateRef.current} children={<Text style={theme.fonts.labelLarge}>AUTRES MATIERES</Text>}/> : null}
+        {drawnSubjectsRef.current.length != 0 ? <AnimatedComponent index={animatedSubjectIndexRef.current + 1} forceUpdate={forceUpdateRef.current} children={<Text style={theme.fonts.labelLarge}>AUTRES MATIERES</Text>}/> : null}
         {drawnSubjectsRef.current.length != 0 ? <View style={{
           position: 'absolute',
           height: "100%",
           left: -10,
         }}>
-          <AnimatedComponent index={subjectIndexRef.current + 1} forceUpdate={forceUpdateRef.current} children={<View style={{ backgroundColor: theme.colors.surface, width: 4, borderRadius: 1, height: "100%" }}/>}/>
+          <AnimatedComponent index={animatedSubjectIndexRef.current + 1} forceUpdate={forceUpdateRef.current} children={<View style={{ backgroundColor: theme.colors.surface, width: 4, borderRadius: 1, height: "100%" }}/>}/>
         </View> : null}
 
         {[...(period.subjects?.values() ?? [])].map((subject, subjectKey) => {
           if (drawnSubjectsRef.current.includes(subject.code)) { return null; }
-          subjectIndexRef.current += 1;
+          animatedSubjectIndexRef.current += 1;
           return <View key={subjectKey} style={{
             marginTop: 5,
             marginBottom: 5,
@@ -315,9 +322,8 @@ function MarksOverview({
                 return period.marks.get(markID);
               }}
               windowDimensions={windowDimensions}
-              index={subjectIndexRef.current}
+              index={animatedSubjectIndexRef.current}
               forceUpdate={forceUpdateRef.current}
-              maybeOpenInterstitialAd={maybeOpenInterstitialAd}
               theme={theme}
             />
           </View>;

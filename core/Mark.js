@@ -28,6 +28,7 @@ function getFormattedMark(jsonData) {
   var valueOn = parseFloat(jsonData.noteSur.toString().replace(",", "."));
   
   // If value is based on program elements
+  var isEffective = !(jsonData.nonSignificatif || jsonData.enLettre);
   if (!value && !valueOn && valueStr.length == 0) {
     let programElementsSum = 0;
     let programElementsCoef = 0;
@@ -36,6 +37,10 @@ function getFormattedMark(jsonData) {
       programElementsCoef += 1;
     });
     value = programElementsSum / (programElementsCoef ?? 1);
+    if (value < 0) {
+      isEffective = false;
+      value = 0;
+    }
     valueOn = 4; // Not sure
     valueStr = (Math.round(value * 100) / 100).toString().replace(".", ",");
   }
@@ -46,7 +51,7 @@ function getFormattedMark(jsonData) {
     "date": new Date(jsonData.date),
     "dateEntered": new Date(jsonData.dateSaisie),
     
-    "isEffective": !(jsonData.nonSignificatif || jsonData.enLettre),
+    "isEffective": isEffective,
     "valueStr": valueStr,
     "value": value,
     "classValue": parseFloat(jsonData.moyenneClasse?.toString().replace(",", ".")),

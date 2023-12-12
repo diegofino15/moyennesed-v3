@@ -10,7 +10,7 @@ import { getSubjectColor } from '../../../../utils/Colors';
 import { formatAverage, formatMark } from '../../../../utils/Utils';
 
 
-function SubjectCard({ mainSubject, refreshAverages, setSubjectCoefficient, getMark, windowDimensions, index, forceUpdate, maybeOpenInterstitialAd, theme }) {
+function SubjectCard({ mainSubject, refreshAverages, setSubjectCoefficient, getMark, windowDimensions, index, forceUpdate, theme }) {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [subSubjectOpened, setSubSubjectOpened] = useState("");
 
@@ -24,7 +24,7 @@ function SubjectCard({ mainSubject, refreshAverages, setSubjectCoefficient, getM
         (255 / Dimensions.get('screen').height * 100) + "%",
         "80%",
       ]}
-      children={<SubjectPopup subject={mainSubject} selectedSubSubject={subject.subCode} refreshAverages={refreshAverages} setSubjectCoefficient={setSubjectCoefficient} getMark={getMark} windowDimensions={windowDimensions} maybeOpenInterstitialAd={maybeOpenInterstitialAd} theme={theme}/>}
+      children={<SubjectPopup subject={mainSubject} selectedSubSubject={subject.subCode} refreshAverages={refreshAverages} setSubjectCoefficient={setSubjectCoefficient} getMark={getMark} windowDimensions={windowDimensions} theme={theme}/>}
       padding={0}
       theme={theme}
     />;

@@ -25,13 +25,9 @@ function ProfilePage({
   logout,
   updateScreenRef, setUpdateScreen,
   setIsDarkMode,
-  maybeOpenInterstitialAd,
   theme
 }) {
-  async function closeProfilePage() {
-    scrollViewRef.current?.scrollTo({x: 0, animated: true});
-    if (connectedRef.current) { maybeOpenInterstitialAd(); }
-  }
+  async function closeProfilePage() { scrollViewRef.current?.scrollTo({x: 0, animated: true}); }
   
   const [allowGuessMarkCoefficients, setAllowGuessMarkCoefficients] = useState(Preferences.allowGuessMarkCoefficients);
   useEffect(() => {
