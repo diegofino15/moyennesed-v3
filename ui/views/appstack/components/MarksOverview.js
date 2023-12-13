@@ -283,9 +283,7 @@ function MarksOverview({
                 mainSubject={subject}
                 refreshAverages={refreshAverages}
                 setSubjectCoefficient={setSubjectCoefficient}
-                getMark={(markID) => {
-                  return period.marks.get(markID);
-                }}
+                getMark={(markID) => period.marks.get(markID)}
                 windowDimensions={windowDimensions}
                 index={animatedSubjectIndexRef.current}
                 forceUpdate={forceUpdateRef.current}
@@ -298,13 +296,14 @@ function MarksOverview({
       
       {/* Show remaining subjects */}
       <View>
-        {drawnSubjectsRef.current.length != 0 ? <AnimatedComponent index={animatedSubjectIndexRef.current + 1} forceUpdate={forceUpdateRef.current} children={<Text style={theme.fonts.labelLarge}>AUTRES MATIERES</Text>}/> : null}
+        {(() => { animatedSubjectIndexRef.current += 1 })()}
+        {drawnSubjectsRef.current.length != 0 ? <AnimatedComponent index={animatedSubjectIndexRef.current} forceUpdate={forceUpdateRef.current} children={<Text style={theme.fonts.labelLarge}>AUTRES MATIERES</Text>}/> : null}
         {drawnSubjectsRef.current.length != 0 ? <View style={{
           position: 'absolute',
           height: "100%",
           left: -10,
         }}>
-          <AnimatedComponent index={animatedSubjectIndexRef.current + 1} forceUpdate={forceUpdateRef.current} children={<View style={{ backgroundColor: theme.colors.surface, width: 4, borderRadius: 1, height: "100%" }}/>}/>
+          <AnimatedComponent index={animatedSubjectIndexRef.current} forceUpdate={forceUpdateRef.current} children={<View style={{ backgroundColor: theme.colors.surface, width: 4, borderRadius: 1, height: "100%" }}/>}/>
         </View> : null}
 
         {[...(period.subjects?.values() ?? [])].map((subject, subjectKey) => {
@@ -318,9 +317,7 @@ function MarksOverview({
               mainSubject={subject}
               refreshAverages={refreshAverages}
               setSubjectCoefficient={setSubjectCoefficient}
-              getMark={(markID) => {
-                return period.marks.get(markID);
-              }}
+              getMark={(markID) => period.marks.get(markID)}
               windowDimensions={windowDimensions}
               index={animatedSubjectIndexRef.current}
               forceUpdate={forceUpdateRef.current}
