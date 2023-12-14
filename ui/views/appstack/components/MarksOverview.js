@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { View, ScrollView, Text, ActivityIndicator, Dimensions } from "react-native";
-import { CheckCircle2Icon, DraftingCompassIcon, HelpCircleIcon, TrendingUpIcon, Users2Icon, WifiOffIcon, RefreshCcwIcon, ArrowDownUpIcon, ArrowUpDownIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react-native";
+import { CheckCircle2Icon, DraftingCompassIcon, HelpCircleIcon, TrendingUpIcon, Users2Icon, WifiOffIcon, RefreshCcwIcon, ArrowDownUpIcon, ArrowUpDownIcon, ChevronDownIcon, ChevronUpIcon, PlusSquareIcon, PlusIcon } from "lucide-react-native";
 import { PressableScale } from "react-native-pressable-scale";
 import { LineChart } from "react-native-chart-kit";
 import * as Haptics from 'expo-haptics';
@@ -8,7 +8,9 @@ import useState from "react-usestateref";
 
 import { RecentMarkCard } from "./RecentMarkCard";
 import { SubjectCard } from "./SubjectCard";
+import { AddMarkPopup } from "./AddMarkPopup";
 import { AnimatedComponent } from "../../global_components/AnimatedComponents";
+import { BottomSheet } from "../../global_components/BottomSheet";
 import { formatAverage } from "../../../../utils/Utils";
 import { CoefficientManager } from "../../../../core/CoefficientsManager";
 import { Preferences } from "../../../../core/Preferences";
@@ -50,6 +52,20 @@ function MarksOverview({
 
   // Show subject groups class averages
   const [showSubjectGroupClassAverage, setShowSubjectGroupClassAverage] = useState(false);
+
+  // Add mark popup
+  const [isAddMarkPopupOpen, setIsAddMarkPopupOpen] = useState(false);
+  function renderAddMarkPopup() {
+    if (!isAddMarkPopupOpen) { return null; }
+    return <BottomSheet
+      key={"add-mark"}
+      isOpen={isAddMarkPopupOpen}
+      onClose={() => setIsAddMarkPopupOpen(false)}
+      snapPoints={["80%"]}
+      children={<AddMarkPopup theme={theme}/>}
+      theme={theme}
+    />;
+  }
 
   return (
     <View>
@@ -178,8 +194,22 @@ function MarksOverview({
             marginTop: 10,
             marginBottom: 10,
           }}>
-            <Text style={theme.fonts.bodyLarge}>Dernières notes</Text>
-            <PressableScale onPress={() => setInfoPopupOpen(true)}><HelpCircleIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/></PressableScale>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={theme.fonts.bodyLarge}>Dernières notes</Text>
+              <PressableScale onPress={() => setInfoPopupOpen(true)} style={{ marginLeft: 5 }}><HelpCircleIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/></PressableScale>
+            </View>
+            <PressableScale style={{
+              backgroundColor: theme.colors.background,
+              marginLeft: 5,
+              padding: 2,
+              paddingHorizontal: 3,
+              borderRadius: 5,
+            }} onPress={() => {
+              setIsAddMarkPopupOpen(true);
+              HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Light);
+            }}>
+              <PlusIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/>
+            </PressableScale>
           </View>
           <View style={{
             height: 92,
@@ -239,7 +269,10 @@ function MarksOverview({
                 <Users2Icon size={15 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/>
                 <Text style={theme.fonts.labelSmall}> :</Text>
               </View> : <View/>}
-              <PressableScale onPress={() => setShowSubjectGroupClassAverage(!showSubjectGroupClassAverage)} style={{
+              <PressableScale onPress={() => {
+                setShowSubjectGroupClassAverage(!showSubjectGroupClassAverage);
+                HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Light);
+              }} style={{
                 flexDirection: 'row',
                 alignItems: 'center',
                 justifyContent: 'space-between',
@@ -326,6 +359,9 @@ function MarksOverview({
           </View>;
         })}
       </View>
+
+      {/* Add mark popup */}
+      {renderAddMarkPopup()}
     </View>
   );
 }
