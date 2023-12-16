@@ -239,7 +239,10 @@ function MarksOverview({
                 <Users2Icon size={15 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/>
                 <Text style={theme.fonts.labelSmall}> :</Text>
               </View> : <View/>}
-              <PressableScale onPress={() => setShowSubjectGroupClassAverage(!showSubjectGroupClassAverage)} style={{
+              <PressableScale onPress={() => {
+                HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Light);
+                setShowSubjectGroupClassAverage(!showSubjectGroupClassAverage);
+              }} style={{
                 flexDirection: 'row',
                 alignItems: 'center',
                 justifyContent: 'space-between',

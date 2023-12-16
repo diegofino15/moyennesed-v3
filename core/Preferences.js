@@ -1,8 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Logger } from "../utils/Logger";
 
-const DEBUG = true;
-export { DEBUG };
 
 export class Preferences {
   static haveBeenChanged = false;
@@ -32,9 +30,6 @@ export class Preferences {
   // Allow vibrations
   static vibrate = true;
 
-  // Was Android advertisement shown
-  static androidAdvertisementShown = false;
-
   // Save
   static async save() {
     await AsyncStorage.setItem("coefficients-preferences", JSON.stringify({
@@ -43,7 +38,6 @@ export class Preferences {
       allowCustomCoefficients: this.allowCustomCoefficients,
       isDarkMode: this.isDarkMode,
       vibrate: this.vibrate,
-      androidAdvertisementShown: this.androidAdvertisementShown,
     }));
   }
   // Load
@@ -56,7 +50,6 @@ export class Preferences {
         this.allowCustomCoefficients = preferences.allowCustomCoefficients;
         this.isDarkMode = preferences.isDarkMode ?? false;
         this.vibrate = preferences.vibrate ?? true;
-        this.androidAdvertisementShown = preferences.androidAdvertisementShown ?? false;
         this.haveBeenChanged = true;
         Logger.load("Preferences loaded !");
         Logger.load(`-> AllowGuessMarkCoefficients : ${this.allowGuessMarkCoefficients}`);
@@ -64,7 +57,6 @@ export class Preferences {
         Logger.load(`-> AllowCustomCoefficients : ${this.allowCustomCoefficients}`);
         Logger.load(`-> DarkMode : ${this.isDarkMode}`);
         Logger.load(`-> Vibrate : ${this.vibrate}`);
-        Logger.load(`-> AndroidAdvertisementShown : ${this.androidAdvertisementShown}`);
       }
     });
   }
@@ -76,7 +68,6 @@ export class Preferences {
     this.allowGuessSubjectCoefficients = false;
     this.allowCustomCoefficients = true;
     this.isDarkMode = false;
-    this.androidAdvertisementShown = false;
     this.vibrate = true;
     await AsyncStorage.removeItem("coefficients-preferences");
   }

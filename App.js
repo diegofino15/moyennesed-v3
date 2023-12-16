@@ -1,11 +1,10 @@
 import { useCallback, useEffect } from 'react';
-import { Platform, StatusBar } from 'react-native';
+import { StatusBar } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import useState from 'react-usestateref'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-import { AdEventType, AppOpenAd } from 'react-native-google-mobile-ads';
 import * as SplashScreen from "expo-splash-screen";
 
 import { useFonts, setThemeData } from './ui/hooks/useStyles';
@@ -13,8 +12,9 @@ import { AuthStack } from './ui/views/authstack/AuthStack';
 import { AppStack } from './ui/views/appstack/AppStack';
 import { AppContextProvider } from './utils/AppContext';
 import { UserData } from './core/UserData';
-import { Preferences, DEBUG } from './core/Preferences';
+import { Preferences } from './core/Preferences';
 import { CoefficientManager } from './core/CoefficientsManager';
+import { AdsHandler } from './utils/AdsHandler';
 import { Logger } from './utils/Logger';
 
 
@@ -22,37 +22,12 @@ import { Logger } from './utils/Logger';
 SplashScreen.preventAutoHideAsync();
 
 // AppOpen Ad
+AdsHandler.initialize();
+
 const willAppOpenAdBeDisplayed = Math.random() <= 0.33; // 1/3 chance
 Logger.info(`Display AppOpen ad ? | ${willAppOpenAdBeDisplayed}`);
-const appOpenAdUnitID = DEBUG ? "ca-app-pub-3940256099942544/9257395921" : Platform.OS === "ios" ? "ca-app-pub-1869877675520642/7552640661" : "ca-app-pub-1869877675520642/2337387712";
-var appOpenAd;
-if (willAppOpenAdBeDisplayed) {
-  appOpenAd = AppOpenAd.createForAdRequest(appOpenAdUnitID, {
-    requestNonPersonalizedAdsOnly: true,
-  });
-}
 
 function App() {
-  // AppOpen Ad
-  const [_isAppOpenAdLoaded, setIsAppOpenAdLoaded, isAppOpenAdLoadedRef] = useState(false);
-  const [_wasAppOpenAdShowed, setWasAppOpenAdShowed, wasAppOpenAdShowedRef] = useState(false);
-  if (willAppOpenAdBeDisplayed) {
-    appOpenAd.addAdEventsListener((event) => {
-      if (event.type === AdEventType.LOADED) {
-        setIsAppOpenAdLoaded(true);
-        if (loggedInLoadedRef.current && !wasAppOpenAdShowedRef.current && loggedInRef.current) {
-          setWasAppOpenAdShowed(true);
-          appOpenAd.show();
-        }
-      } else if (event.type == AdEventType.CLOSED) {
-        SplashScreen.hideAsync();
-      } else if (event.type == AdEventType.ERROR) {
-        Logger.info("AppOpen Ad couldn't open...", true);
-        Logger.info(event.payload, true);
-      }
-    });
-  }
-
   // Decide to show AppStack or AuthStack
   const [loggedIn, setLoggedIn, loggedInRef] = useState(false);
   const [_loggedInLoaded, setLoggedInLoaded, loggedInLoadedRef] = useState(false);
@@ -67,8 +42,6 @@ function App() {
   // Prepare function
   useEffect(() => {
     async function prepare() {
-      if (willAppOpenAdBeDisplayed) { appOpenAd.load(); }
-      
       try {
         if (!fontsLoadedRef.current) {
           await useFonts();
@@ -79,6 +52,7 @@ function App() {
           const jsonCredentials = await AsyncStorage.getItem('credentials');
           if (jsonCredentials !== null) {
             Logger.info("Detected already logged-in account (loading cache...)");
+            if (willAppOpenAdBeDisplayed) { AdsHandler.showAppOpenAd(); }
             await Preferences.load();
             await CoefficientManager.load();
             await UserData.loadCache();
@@ -99,17 +73,7 @@ function App() {
   // Hide splash screen
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoadedRef.current && loggedInLoadedRef.current) {
-      if (!willAppOpenAdBeDisplayed) { await SplashScreen.hideAsync(); }
-      else {
-        if (!wasAppOpenAdShowedRef.current) {
-          if (isAppOpenAdLoadedRef.current && loggedInRef.current) {
-            setWasAppOpenAdShowed(true);
-            appOpenAd.show();
-          } else {
-            await SplashScreen.hideAsync();
-          }
-        }
-      }
+      await SplashScreen.hideAsync();
     }
   }, [fontsLoadedRef.current, loggedInLoadedRef.current]);
 
