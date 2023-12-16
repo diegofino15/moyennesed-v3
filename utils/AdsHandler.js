@@ -4,7 +4,7 @@ import mobileAds, { MaxAdContentRating, AdsConsent, AppOpenAd, AdEventType, Test
 import { Logger } from './Logger';
 
 
-class AdsHandler {
+export class AdsHandler {
   static debugMode = false;
   static initialized = false;
 
@@ -64,5 +64,3 @@ class AdsHandler {
     appOpenAd.load();
   }
 }
-
-export { AdsHandler };

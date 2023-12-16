@@ -1,9 +1,8 @@
 import { getFormattedPeriod, addMarkToPeriod, calculateAllPeriodAverages, getCachePeriod, getPeriodFromCache, _getCalculatedGeneralAverage, sortAllPeriodMarks } from "./Period";
 import { getFormattedMark } from "./Mark";
 import { Preferences } from "./Preferences";
-import { capitalizeWords } from "../utils/Utils";
 import { CoefficientManager } from "./CoefficientsManager";
-import { _sortMarks } from "../utils/Utils";
+import { _sortMarks, capitalizeWords } from "../utils/Utils";
 import { Logger } from '../utils/Logger';
 
 
