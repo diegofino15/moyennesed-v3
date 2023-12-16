@@ -6182,11 +6182,6 @@ react-native-paper@^5.11.3:
     color "^3.1.2"
     use-latest-callback "^0.1.5"
 
-react-native-permissions@^4.0.1:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-4.0.1.tgz#9f9fe089a4a4740b7e4a75d7340f63d81016a2fc"
-  integrity sha512-wiC+zsVbysV2/pvrwB6sawB3Uhs1xWSfUCxRBmg3vBi7uc9egxAJZcMovSQGTzTHRrY3Lo3hyD/zHJ4xQ+fnWw==
-
 react-native-pressable-scale@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/react-native-pressable-scale/-/react-native-pressable-scale-2.1.0.tgz#c33d6d5b5eb9da98c63b3492c192cb5cc4f65f8c"
