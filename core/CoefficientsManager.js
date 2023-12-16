@@ -48,6 +48,9 @@ export class CoefficientManager {
     });
     return coefficient;
   }
+  static deleteGuessedMarkCoefficient(markID) {
+    this.guessedMarkCoefficients.delete(markID);
+  }
   // Guessed subject coefficients
   static guessedSubjectCoefficients = new Map();
   static getGuessedSubjectCoefficient(subjectID, subjectCode, subjectSubCode, subjectName) {
@@ -78,6 +81,9 @@ export class CoefficientManager {
   }
   static getDefaultEDMarkCoefficient(markID) {
     return this.defaultEDMarkCoefficients.get(markID);
+  }
+  static deleteDefaultEDMarkCoefficient(markID) {
+    this.defaultEDMarkCoefficients.delete(markID);
   }
   // Default subject coefficients
   static defaultEDSubjectCoefficients = new Map();

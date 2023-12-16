@@ -112,6 +112,15 @@ export class Account {
         Logger.core(`Mark : ${mark.title} (${mark.valueStr}) has invalid period code : ${mark.periodCode}`, true);
       }
     });
+    Preferences.customMarks.forEach(customMark => {
+      let period = this.periods.get(customMark.periodCode);
+      if (period) {
+        addMarkToPeriod(period, customMark);
+        _getCalculatedGeneralAverage(period, false, false);
+      } else {
+        Logger.core(`Custom mark : ${customMark.title} (${customMark.valueStr}) has invalid period code : ${customMark.periodCode}`, true);
+      }
+    });
     CoefficientManager.isAverageHistoryUpdated = true;
 
     // Calculate averages

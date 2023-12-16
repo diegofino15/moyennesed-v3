@@ -62,7 +62,7 @@ function MarksOverview({
       isOpen={isAddMarkPopupOpen}
       onClose={() => setIsAddMarkPopupOpen(false)}
       snapPoints={["80%"]}
-      children={<AddMarkPopup theme={theme}/>}
+      children={<AddMarkPopup period={period} refreshAverages={refreshAverages} theme={theme}/>}
       theme={theme}
     />;
   }

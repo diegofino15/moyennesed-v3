@@ -30,6 +30,14 @@ export class Preferences {
   // Allow vibrations
   static vibrate = true;
 
+  // Custom marks
+  static customMarks = new Map();
+  static addCustomMark(mark) { this.customMarks.set(mark.id, mark); }
+  static removeCustomMark(markId) { this.customMarks.delete(markId); }
+  static resetCustomMarks() { this.customMarks.clear(); }
+
+  // Helper functions
+
   // Save
   static async save() {
     await AsyncStorage.setItem("coefficients-preferences", JSON.stringify({
@@ -38,6 +46,7 @@ export class Preferences {
       allowCustomCoefficients: this.allowCustomCoefficients,
       isDarkMode: this.isDarkMode,
       vibrate: this.vibrate,
+      customMarks: Array.from(this.customMarks.entries()),
     }));
   }
   // Load
@@ -50,6 +59,7 @@ export class Preferences {
         this.allowCustomCoefficients = preferences.allowCustomCoefficients;
         this.isDarkMode = preferences.isDarkMode ?? false;
         this.vibrate = preferences.vibrate ?? true;
+        this.customMarks = new Map(preferences.customMarks);
         this.haveBeenChanged = true;
         Logger.load("Preferences loaded !");
         Logger.load(`-> AllowGuessMarkCoefficients : ${this.allowGuessMarkCoefficients}`);
@@ -57,6 +67,7 @@ export class Preferences {
         Logger.load(`-> AllowCustomCoefficients : ${this.allowCustomCoefficients}`);
         Logger.load(`-> DarkMode : ${this.isDarkMode}`);
         Logger.load(`-> Vibrate : ${this.vibrate}`);
+        Logger.load(`-> CustomMarks : ${this.customMarks.size}`);
       }
     });
   }
@@ -69,6 +80,7 @@ export class Preferences {
     this.allowCustomCoefficients = true;
     this.isDarkMode = false;
     this.vibrate = true;
+    this.resetCustomMarks();
     await AsyncStorage.removeItem("coefficients-preferences");
   }
 }

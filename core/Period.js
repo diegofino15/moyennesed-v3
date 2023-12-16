@@ -51,7 +51,7 @@ function getFormattedPeriod(jsonData) {
   };
 }
 
-function addMarkToPeriod(period, mark) {
+function addMarkToPeriod(period, mark, isCustom) {
   period.marks.set(mark.id, mark);
   var subject = period.subjects.get(mark.subjectCode);
   if (subject == undefined) {
@@ -66,7 +66,18 @@ function addMarkToPeriod(period, mark) {
     });
     period.subjects.set(mark.subjectCode, subject);
   }
-  addMarkToSubject(subject, mark);
+  addMarkToSubject(subject, mark, isCustom);
+}
+
+function removeMarkFromPeriod(period, mark) {
+  if (!mark) { return; }
+  period.marks.delete(mark.id);
+  var subject = period.subjects.get(mark.subjectCode);
+  subject.marks.splice(subject.marks.indexOf(mark.id), 1);
+  if (mark.subSubjectCode) {
+    let subSubject = subject.subSubjects.get(mark.subSubjectCode);
+    subSubject.marks.splice(subSubject.marks.indexOf(mark.id), 1);
+  }
 }
 
 function calculateAllPeriodAverages(period) {
@@ -165,4 +176,4 @@ function getPeriodFromCache(cachePeriod) {
   };
 }
 
-export { getFormattedPeriod, addMarkToPeriod, calculateAllPeriodAverages, _getCalculatedGeneralAverage, sortAllPeriodMarks, getCachePeriod, getPeriodFromCache };
+export { getFormattedPeriod, addMarkToPeriod, removeMarkFromPeriod, calculateAllPeriodAverages, _getCalculatedGeneralAverage, sortAllPeriodMarks, getCachePeriod, getPeriodFromCache };

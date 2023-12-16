@@ -24,10 +24,14 @@ function EmbeddedMarksView({
   function updateScreen() { setScreenUpdated(!screenUpdated); }
 
   // Recalculate averages on coefficient changes
-  function refreshAverages() {
+  function refreshAverages(periodCode=null) {
     CoefficientManager.save();
-    for (let [_, period] of shownAccountRef.current.periods) {
-      calculateAllPeriodAverages(period);
+    if (!periodCode) {
+      for (let [_, period] of shownAccountRef.current.periods) {
+        calculateAllPeriodAverages(period);
+      }
+    } else {
+      calculateAllPeriodAverages(shownAccountRef.current.periods.get(periodCode));
     }
     UserData.saveCache();
     updateScreen();

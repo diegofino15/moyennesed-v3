@@ -2,8 +2,8 @@ import { useEffect, useState, useCallback } from 'react';
 import { View, Text, Linking, Alert } from "react-native";
 import { UserIcon, KeyRoundIcon } from 'lucide-react-native';
 
-import { CustomInput } from './components/CustomInput';
 import { InfoCard } from './components/InfoCard';
+import { CustomInput } from '../global_components/CustomInput';
 import { Separator } from '../global_components/Separator';
 import { UnavailableServers } from '../global_components/UnavailableServers';
 import { UserData } from '../../../core/UserData';

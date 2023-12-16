@@ -2,7 +2,7 @@ import { Preferences } from "./Preferences";
 import { CoefficientManager } from "./CoefficientsManager";
 
 
-function getFormattedMark(jsonData) {
+function getFormattedMark(jsonData, isCustom=false) {
   const markID = jsonData.id;
   
   var coefficient = CoefficientManager.setDefaultEDMarkCoefficient(markID, parseFloat(jsonData.coef.toString().replace(",", ".")));
@@ -63,7 +63,29 @@ function getFormattedMark(jsonData) {
     "periodCode": jsonData.codePeriode.substring(0, 4),
     "subjectCode": jsonData.codeMatiere,
     "subSubjectCode": jsonData.codeSousMatiere,
+
+    "isCustom": isCustom,
   };
 }
 
-export { getFormattedMark };
+function createCustomMark(markID, markTitle, markValue, markValueOn, markCoefficient, markDate, periodCode, subjectCode, subSubjectCode) {
+  return {
+    "id": markID,
+    "title": markTitle,
+    "date": markDate,
+    "dateEntered": markDate,
+    "isEffective": true,
+    "valueStr": markValue.toString().replace(".", ","),
+    "value": markValue,
+    "classValue": undefined,
+    "valueOn": markValueOn,
+    "coefficient": markCoefficient,
+    "coefficientType": 2,
+    "periodCode": periodCode,
+    "subjectCode": subjectCode,
+    "subSubjectCode": subSubjectCode,
+    "isCustom": true,
+  };
+}
+
+export { getFormattedMark, createCustomMark };

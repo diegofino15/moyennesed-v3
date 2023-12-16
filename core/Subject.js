@@ -54,7 +54,7 @@ function addSubSubjectToSubject(subject, subSubject) {
   subject.subSubjects.set(subSubject.subCode, subSubject);
 }
 
-function addMarkToSubject(subject, mark) {
+function addMarkToSubject(subject, mark, isCustom) {
   if (mark.subSubjectCode && !subject.isSubSubject) {
     let subSubject = subject.subSubjects.get(mark.subSubjectCode);
     if (subSubject == undefined) {
@@ -70,9 +70,10 @@ function addMarkToSubject(subject, mark) {
       });
       subject.subSubjects.set(mark.subSubjectCode, subSubject);
     }
-    addMarkToSubject(subSubject, mark);
+    addMarkToSubject(subSubject, mark, isCustom);
   }
-  subject.marks.push(mark.id);
+  if (!isCustom) { subject.marks.push(mark.id); }
+  else { subject.marks.unshift(mark.id); }
 }
 
 function calculateSubjectAverages(subject, getMark) {

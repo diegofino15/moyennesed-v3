@@ -128,7 +128,7 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, refreshAverages, 
                 mark.coefficient = CoefficientManager.getDefaultEDMarkCoefficient(mark.id);
                 mark.coefficientType = 0;
               }
-              refreshAverages();
+              refreshAverages(mark.periodCode);
               HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Light);
             }}
           >
@@ -156,7 +156,7 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, refreshAverages, 
               CoefficientManager.setCustomMarkCoefficient(mark.id, newCoefficient)
               mark.coefficient = newCoefficient;
               mark.coefficientType = 2;
-              refreshAverages();
+              refreshAverages(mark.periodCode);
               HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Light);
             }}
           >
@@ -184,7 +184,7 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, refreshAverages, 
               CoefficientManager.setCustomMarkCoefficient(mark.id, newCoefficient)
               mark.coefficient = newCoefficient;
               mark.coefficientType = 2;
-              refreshAverages();
+              refreshAverages(mark.periodCode);
               HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Light);
             }}
           >

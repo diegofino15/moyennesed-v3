@@ -4,8 +4,10 @@ import { View, TextInput, Dimensions } from 'react-native';
 function CustomInput({
   label,
   icon,
+  value,
   onChangeText,
   secureTextEntry,
+  isNumerical=false,
   theme,
   style
 }) {
@@ -29,11 +31,13 @@ function CustomInput({
           height: 50,
         }}
         placeholder={label}
+        value={value}
         onChangeText={onChangeText}
         secureTextEntry={secureTextEntry}
         placeholderTextColor={theme.colors.onSurfaceDisabled}
         autoCapitalize='none'
         autoCorrect={false}
+        keyboardType={isNumerical ? 'numeric' : 'default'}
       />
     </View>
   );
