@@ -16,7 +16,7 @@ function MainPage({
   connectedRef, connectingRef,
   profilePhotoRef, 
   scrollViewRef,
-  updateScreenRef, setUpdateScreen,
+  updateScreen,
   theme
 }) {
   // Account shown on screen
@@ -72,7 +72,7 @@ function MainPage({
         await UserData.saveCache();
         Logger.marks(`Got marks for ${accountToUpdate.id} !`);
 
-        setUpdateScreen(!updateScreenRef.current);
+        updateScreen();
         setRefreshing(false);
         if (manualRefreshingRef.current) {
           HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Light);
@@ -101,7 +101,7 @@ function MainPage({
         await UserData.saveCache();
         Logger.core(`Refreshed marks for ${accountToUpdate.id} !`);
 
-        setUpdateScreen(!updateScreenRef.current);
+        updateScreen();
         setRefreshing(false);
         if (manualRefreshingRef.current) {
           HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Light);
@@ -160,10 +160,6 @@ function MainPage({
     }
     setWelcomeMessage(welcomeMessages[Math.floor(Math.random() * welcomeMessages.length)]);
   }, []);
-
-  // Update screen
-  const [_refresh, _setRefresh] = useState(false);
-  useEffect(() => { _setRefresh(!_refresh); }, [updateScreenRef.current]);
 
   return (
     <ScrollView

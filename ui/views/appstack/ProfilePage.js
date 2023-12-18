@@ -23,7 +23,8 @@ function ProfilePage({
   scrollViewRef,
   profilePhotoRef,
   logout,
-  updateScreenRef, setUpdateScreen,
+  updateScreen,
+  updateScreenRef,
   setIsDarkMode,
   theme
 }) {
@@ -266,7 +267,7 @@ function ProfilePage({
                 UserData.recalculateAllCoefficients();
                 CoefficientManager.save();
                 setAllowGuessMarkCoefficients(value);
-                setUpdateScreen(!updateScreenRef.current);
+                updateScreen();
               }}
             />
           </View>
@@ -285,7 +286,7 @@ function ProfilePage({
                 UserData.recalculateAllCoefficients();
                 CoefficientManager.save();
                 setAllowGuessSubjectCoefficients(value);
-                setUpdateScreen(!updateScreenRef.current);
+                updateScreen();
               }}
             />
           </View>
@@ -309,7 +310,7 @@ function ProfilePage({
                 CoefficientManager.isAverageHistoryUpdated = false;
                 CoefficientManager.save();
                 setAllowCustomCoefficients(value);
-                setUpdateScreen(!updateScreenRef.current);
+                updateScreen();
               }}
             />
           </View>
@@ -319,7 +320,7 @@ function ProfilePage({
             CoefficientManager.isAverageHistoryUpdated = false;
             CoefficientManager.save();
             UserData.recalculateAllCoefficients();
-            setUpdateScreen(!updateScreenRef.current);
+            updateScreen();
             HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Light);
           }} style={{
             marginTop: 5,
@@ -382,7 +383,7 @@ function ProfilePage({
                 Preferences.vibrate = value;
                 Preferences.save();
                 setAllowVibrations(value);
-                setUpdateScreen(!updateScreenRef.current);
+                updateScreen();
               }}
             />
           </View>

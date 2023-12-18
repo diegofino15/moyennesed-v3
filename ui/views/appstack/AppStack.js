@@ -61,6 +61,7 @@ function AppStack({ setIsDarkMode, theme }) {
 
   // Update screen from anywhere
   const [_updateScreen, setUpdateScreen, updateScreenRef] = useState(false);
+  function updateScreen() { setUpdateScreen(!updateScreenRef.current); }
 
   return (
     <ScrollView
@@ -80,8 +81,7 @@ function AppStack({ setIsDarkMode, theme }) {
         connectingRef={connectingRef}
         profilePhotoRef={profilePhotoRef}
         scrollViewRef={scrollViewRef}
-        updateScreenRef={updateScreenRef}
-        setUpdateScreen={setUpdateScreen}
+        updateScreen={updateScreen}
         theme={theme}
       />
 
@@ -93,8 +93,8 @@ function AppStack({ setIsDarkMode, theme }) {
         scrollViewRef={scrollViewRef}
         profilePhotoRef={profilePhotoRef}
         logout={logout}
+        updateScreen={updateScreen}
         updateScreenRef={updateScreenRef}
-        setUpdateScreen={setUpdateScreen}
         setIsDarkMode={setIsDarkMode}
         theme={theme}
       />

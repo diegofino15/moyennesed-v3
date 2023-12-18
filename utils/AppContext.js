@@ -1,6 +1,7 @@
 import { createContext, useContext } from 'react';
 
 
+// Context needed to switch from AppStack to AuthStack
 const AppContext = createContext({
   loggedIn: false,
   setLoggedIn: () => {},

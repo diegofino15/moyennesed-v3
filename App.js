@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import { StatusBar } from 'react-native';
-import { useTheme } from 'react-native-paper';
 import useState from 'react-usestateref'
+import { useTheme } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
@@ -10,10 +10,10 @@ import * as SplashScreen from "expo-splash-screen";
 import { useFonts, setThemeData } from './ui/hooks/useStyles';
 import { AuthStack } from './ui/views/authstack/AuthStack';
 import { AppStack } from './ui/views/appstack/AppStack';
-import { AppContextProvider } from './utils/AppContext';
 import { UserData } from './core/UserData';
 import { Preferences } from './core/Preferences';
 import { CoefficientManager } from './core/CoefficientsManager';
+import { AppContextProvider } from './utils/AppContext';
 import { AdsHandler } from './utils/AdsHandler';
 import { Logger } from './utils/Logger';
 
@@ -24,9 +24,7 @@ SplashScreen.preventAutoHideAsync();
 // AppOpen Ad
 AdsHandler.initialize();
 
-const willAppOpenAdBeDisplayed = Math.random() <= 0.33; // 1/3 chance
-Logger.info(`Display AppOpen ad ? | ${willAppOpenAdBeDisplayed}`);
-
+// Main App
 function App() {
   // Decide to show AppStack or AuthStack
   const [loggedIn, setLoggedIn, loggedInRef] = useState(false);
@@ -52,7 +50,10 @@ function App() {
           const jsonCredentials = await AsyncStorage.getItem('credentials');
           if (jsonCredentials !== null) {
             Logger.info("Detected already logged-in account (loading cache...)");
-            if (willAppOpenAdBeDisplayed) { AdsHandler.showAppOpenAd(); }
+            if (Math.random() <= 0.33) {
+              Logger.info("Displaying AppOpen ad");
+              AdsHandler.showAppOpenAd();
+            }
             await Preferences.load();
             await CoefficientManager.load();
             await UserData.loadCache();
