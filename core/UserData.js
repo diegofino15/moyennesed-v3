@@ -24,7 +24,10 @@ export class UserData {
   static token = "";
   static currentYearPeriod = "";
 
-  static async login(username, password) {
+  static tempUsername;
+  static tempPassword;
+  static isWaitingForConfirmation = false;
+  static async login(username, password, validate=true, validateIndex=0) {
     this.usedURL = this.API_URL;
     if (username.substring(0, 11) == "demoaccount") {
       this.usedURL = this.CUSTOM_API_URL;
@@ -35,6 +38,9 @@ export class UserData {
     this.connected = false;
     this.connecting = true;
     this.unavailableServers = false;
+
+    this.tempUsername = username;
+    this.tempPassword = password;
 
     const credentials = {
       "identifiant": username,
@@ -59,8 +65,9 @@ export class UserData {
           case 200:
             Logger.login("Login successful !");
             this.token = response.data.token;
-            this.formatReceivedLoginData(response.data.data.accounts.at(0));
-            await AsyncStorage.setItem("credentials", JSON.stringify({ username, password }));
+            this.isWaitingForConfirmation = false;
+            if (validate || response.data.data.accounts.length == 1) { await this.validateWantedAccountID(validateIndex ? validateIndex : 0); }
+            else { this.isWaitingForConfirmation = true; }
             success = 1;
             break;
           case 505: // Wrong password
@@ -82,6 +89,15 @@ export class UserData {
     this.connected = success == 1;
     this.unavailableServers = success == -1;
     return success;
+  }
+  static async validateWantedAccountID(index) {
+    await AsyncStorage.setItem("credentials", JSON.stringify({
+      "username": this.tempUsername,
+      "password": this.tempPassword,
+      "index": index
+    }));
+    this.formatReceivedLoginData(this.loginLogs.data.accounts.at(index));
+    this.isWaitingForConfirmation = false;
   }
   static formatReceivedLoginData(jsonData) {
     this.currentYearPeriod = jsonData.anneeScolaireCourante;
@@ -110,7 +126,7 @@ export class UserData {
     Logger.info("Refreshing login...");
     const credentials = JSON.parse(await AsyncStorage.getItem("credentials"));
     if (credentials) {
-      return await this.login(credentials.username, credentials.password);
+      return await this.login(credentials.username, credentials.password, true, credentials.index);
     }
     return -1;
   }

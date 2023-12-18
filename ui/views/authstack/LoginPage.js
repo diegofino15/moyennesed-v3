@@ -19,7 +19,7 @@ function LoginPage({ isConnecting, setIsConnecting, setLoggedIn, pageStyle, wind
     async function handleLogin() {
       setConnectionFailed(false);
       setUnavailableServers(false);
-      const successful = await UserData.login(username, password);
+      const successful = await UserData.login(username, password, false);
       setConnectionFailed(successful != 1);
       setUnavailableServers(successful == -1);
       setIsConnecting(false);

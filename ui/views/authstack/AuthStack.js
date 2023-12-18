@@ -9,6 +9,7 @@ import { LoginPage } from './LoginPage';
 import { LoggedInPage } from './LoggedInPage';
 import { CustomButton } from '../global_components/CustomButton';
 import { useAppContext } from '../../../utils/AppContext';
+import { UserData } from '../../../core/UserData';
 
 
 function AuthStack({ theme }) {
@@ -33,6 +34,7 @@ function AuthStack({ theme }) {
   const scrollViewRef = useRef(null);
   async function buttonClick() {
     if (loggedIn) {
+      if (UserData.isWaitingForConfirmation) { await UserData.validateWantedAccountID(selectedAccount); }
       appCtx.setLoggedIn(true);
       return;
     }
@@ -43,6 +45,9 @@ function AuthStack({ theme }) {
       setIsConnecting(true);
     }
   };
+
+  // For logged-in page
+  const [selectedAccount, setSelectedAccount] = useState(0);
 
   return (
     <SafeAreaView style={{
@@ -83,7 +88,7 @@ function AuthStack({ theme }) {
         />
 
         {/* Logged-in view */}
-        {loggedIn && <LoggedInPage pageStyle={styles.pageView} theme={theme}/>}
+        {loggedIn && <LoggedInPage selectedAccount={selectedAccount} setSelectedAccount={setSelectedAccount} pageStyle={styles.pageView} windowDimensions={windowDimensions} theme={theme}/>}
       </ScrollView>
       
       {/* Continue button */}
