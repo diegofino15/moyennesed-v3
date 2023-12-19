@@ -1,99 +1,98 @@
-import { useCallback, useEffect } from 'react';
-import { StatusBar } from 'react-native';
-import useState from 'react-usestateref'
-import { useTheme } from 'react-native-paper';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { useEffect, useCallback } from "react";
+import useState from "react-usestateref";
+import { StatusBar } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
+import { useTheme } from "react-native-paper";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
-import { useFonts, setThemeData } from './ui/hooks/useStyles';
-import { AuthStack } from './ui/views/authstack/AuthStack';
-import { AppStack } from './ui/views/appstack/AppStack';
-import { UserData } from './core/UserData';
-import { Preferences } from './core/Preferences';
-import { CoefficientManager } from './core/CoefficientsManager';
-import { AppContextProvider } from './utils/AppContext';
-import { AdsHandler } from './utils/AdsHandler';
-import { Logger } from './utils/Logger';
+import { AuthStack } from "./ui/views/authstack/AuthStack";
+import { AppStack } from "./ui/views/appstack/AppStack";
+import { useFonts, refreshTheme } from "./ui/hooks/useStyles";
+import { UserData } from "./core/UserData";
+import { Preferences } from "./core/Preferences";
+import { CoefficientManager } from "./core/CoefficientsManager";
+import { AdsHandler } from "./utils/AdsHandler";
+import { AppContextProvider } from "./utils/AppContext";
+import { Logger } from "./utils/Logger";
 
 
-// Keep splash screen visible while loading
+// Keep SplashScreen on while app is loading
 SplashScreen.preventAutoHideAsync();
 
-// AppOpen Ad
+// Initialize AdsHandler for AppOpen ad to appear
 AdsHandler.initialize();
 
 // Main App
 function App() {
-  // Decide to show AppStack or AuthStack
-  const [loggedIn, setLoggedIn, loggedInRef] = useState(false);
-  const [_loggedInLoaded, setLoggedInLoaded, loggedInLoadedRef] = useState(false);
+  // App state needed to show either AppStack or AuthStack
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [isAppLoaded, setIsAppLoaded] = useState(false);
 
-  // Initialize UI data
-  const [_fontsLoaded, setFontsLoaded, fontsLoadedRef] = useState(false);
+  // Light/Dark mode
   const theme = useTheme();
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  useEffect(() => { setIsDarkMode(Preferences.isDarkMode); }, [Preferences.isDarkMode]);
+  refreshTheme(theme, isDarkMode);
 
-  const [_isDarkMode, setIsDarkMode] = useState(Preferences.isDarkMode);
-  setThemeData(theme); // Here to get updated when changing light/dark mode
-
-  // Prepare function
-  useEffect(() => {
-    async function prepare() {
-      try {
-        if (!fontsLoadedRef.current) {
-          await useFonts();
-          setFontsLoaded(true);
-        }
-        
-        if (!loggedInLoadedRef.current) {
-          const jsonCredentials = await AsyncStorage.getItem('credentials');
-          if (jsonCredentials !== null) {
-            Logger.info("Detected already logged-in account (loading cache...)");
-            if (Math.random() <= 0.33) {
-              Logger.info("Displaying AppOpen ad");
-              AdsHandler.showAppOpenAd();
-            }
-            await Preferences.load();
-            await CoefficientManager.load();
-            await UserData.loadCache();
-            setLoggedIn(true);
-          } else {
-            Logger.info("No account detected, showing auth stack");
-          }
-        }
-      } catch (e) {
-        Logger.info(`An error occured on startup, ${e}`, true);
-      } finally {
-        setLoggedInLoaded(true);
-      }
-    }
-    prepare();
-  }, []);
-
-  // Hide splash screen
+  // Hide SplashScreen once app is loaded
   const onLayoutRootView = useCallback(async () => {
-    if (fontsLoadedRef.current && loggedInLoadedRef.current) {
+    if (isAppLoaded) {
       await SplashScreen.hideAsync();
     }
-  }, [fontsLoadedRef.current, loggedInLoadedRef.current]);
+  }, [isAppLoaded]);
 
-  // Return null if UI is not loaded
-  if (!fontsLoadedRef.current || !loggedInLoadedRef.current) { return null; }
+  // Main initialize function
+  useEffect(() => { initialize(); });
+  async function initialize() {
+    if (isAppLoaded || loggedIn) { return; }
+
+    try {
+      // Load fonts
+      await useFonts();
+
+      // Load credentials file to detect already logged-in account
+      const jsonCredentials = await AsyncStorage.getItem("credentials");
+      if (jsonCredentials) {
+        Logger.load("Detected logged-in account, loading cache...");
+
+        // Show AppOpen ad
+        if (Math.random() <= 0.33) { AdsHandler.showAppOpenAd(); }
+
+        // Load all local files
+        await Preferences.load();
+        await CoefficientManager.load();
+        await UserData.loadCache();
+
+        setLoggedIn(true);
+      } else {
+        Logger.load("No account detected, showing AuthStack");
+      }
+    } catch (e) {
+      Logger.load("An error occured on startup", true);
+      Logger.load(e, true);
+    } finally {
+      setIsAppLoaded(true);
+    }
+  }
+
+  // Don't load UI until app is loaded
+  if (!isAppLoaded) { return null; }
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
       {/* Top status bar */}
       <StatusBar
         translucent={true}
-        barStyle={Preferences.isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor='transparent'
+        backgroundColor="transparent"
+        barStyle={isDarkMode ? "light-content" : "dark-content"}
       />
       <BottomSheetModalProvider>
-        {/* Provider needed to update UI when logging-in/out */}
+        {/* Update UI when logging-in/out */}
         <AppContextProvider state={{ loggedIn, setLoggedIn }}>
           {/* AuthStack / AppStack */}
-          {loggedInRef.current
+          {loggedIn
             ? <AppStack setIsDarkMode={setIsDarkMode} theme={theme}/>
             : <AuthStack theme={theme}/>}
         </AppContextProvider>

@@ -3,6 +3,7 @@ import { loadAsync } from 'expo-font';
 import { Preferences } from '../../core/Preferences';
 
 
+// Load all fonts used troughout the app
 const useFonts = async () => await loadAsync({
   'Montserrat-Regular': require('../../assets/fonts/Montserrat-Regular.ttf'),
   'Montserrat-Medium': require('../../assets/fonts/Montserrat-Medium.ttf'),
@@ -13,8 +14,9 @@ const useFonts = async () => await loadAsync({
   'Bitter-Bold': require('../../assets/fonts/Bitter-Bold.ttf'),
 });
 
-function setThemeData(theme) {
-  if (!Preferences.isDarkMode) {
+// Function called on startup and on light/dark mode switch
+function refreshTheme(theme, isDarkMode) {
+  if (!isDarkMode) {
     theme.colors = {
       background: '#FFF',
       onBackground: '#000',
@@ -131,4 +133,4 @@ function setThemeData(theme) {
   };
 }
 
-export { useFonts, setThemeData };
+export { useFonts, refreshTheme };
