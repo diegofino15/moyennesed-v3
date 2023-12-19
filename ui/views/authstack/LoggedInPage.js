@@ -25,7 +25,7 @@ function LoggedInPage({ selectedAccount, setSelectedAccount, pageStyle, windowDi
       <Text style={[
         theme.fonts.titleMedium,
         { marginBottom: 10 }
-      ]}>{UserData.isWaitingForConfirmation ? "Sélectionnez un compte" : `Bonjour ${UserData.mainAccount.firstName} !`}</Text>
+      ]}>{UserData.isWaitingForConfirmation ? "Sélectionnez un des comptes ci-dessous" : `Bonjour ${UserData.mainAccount.firstName} !`}</Text>
       <Text style={[
         theme.fonts.labelLarge,
         { marginBottom: 30 }
@@ -37,7 +37,7 @@ function LoggedInPage({ selectedAccount, setSelectedAccount, pageStyle, windowDi
       </Text> : <Text style={theme.fonts.labelLarge}>Vous êtes connecté{UserData.mainAccount.getSuffix()} en tant que <Text style={[theme.fonts.labelLarge, { fontFamily: 'Montserrat-Bold' }]}>compte {UserData.mainAccount.isParent ? "parent" : "élève"}</Text>.</Text>}
     
       {/* Animation */}
-      {UserData.isWaitingForConfirmation ? <View style={{ marginTop: 30 }}>
+      {UserData.isWaitingForConfirmation ? <View style={{ marginTop: 20 }}>
         {UserData.loginLogs.data.accounts.map((account, index) => <PressableScale onPress={() => {
           if (selectedAccount != index) {
             setSelectedAccount(index);
@@ -63,6 +63,7 @@ function LoggedInPage({ selectedAccount, setSelectedAccount, pageStyle, windowDi
             </View>
           </PressableScale>
         )}
+        <Text style={[theme.fonts.labelLarge, { marginTop: 20 }]}>Pour changer de compte, il faudra vous déconnecter puis vous reconnecter.</Text>
       </View> : <View style={{
         position: 'absolute',
         top: 200,
