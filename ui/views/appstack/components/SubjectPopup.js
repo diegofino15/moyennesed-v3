@@ -212,7 +212,7 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, setSubject
                   marginRight: 5,
                 }}
                 onPress={async () => {
-                  var newCoefficient = shownSubjectRef.current.coefficient - 1;
+                  var newCoefficient = shownSubjectRef.current.coefficient - 0.5;
                   if (shownSubjectRef.current.coefficient == 1) { newCoefficient = 0.75; }
                   else if (shownSubjectRef.current.coefficient == 0.75) { newCoefficient = 0.5; }
                   else if (shownSubjectRef.current.coefficient == 0.5) { newCoefficient = 0.25; }
@@ -236,7 +236,7 @@ function SubjectPopup({ subject, selectedSubSubject, refreshAverages, setSubject
                   justifyContent: 'center',
                 }}
                 onPress={async () => {
-                  var newCoefficient = shownSubjectRef.current.coefficient + 1;
+                  var newCoefficient = shownSubjectRef.current.coefficient + 0.5;
                   if (shownSubjectRef.current.coefficient == 0) { newCoefficient = 0.25; }
                   else if (shownSubjectRef.current.coefficient == 0.25) { newCoefficient = 0.5; }
                   else if (shownSubjectRef.current.coefficient == 0.5) { newCoefficient = 0.75; }

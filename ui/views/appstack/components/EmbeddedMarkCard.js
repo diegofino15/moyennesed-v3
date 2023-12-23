@@ -148,7 +148,7 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, refreshAverages, 
               marginRight: 5,
             }}
             onPress={async () => {
-              var newCoefficient = mark.coefficient - 1;
+              var newCoefficient = mark.coefficient - 0.5;
               if (mark.coefficient == 1) { newCoefficient = 0.75; }
               else if (mark.coefficient == 0.75) { newCoefficient = 0.5; }
               else if (mark.coefficient == 0.5) { newCoefficient = 0.25; }
@@ -175,7 +175,7 @@ function EmbeddedMarkCard({ mark, subject, selectedSubSubject, refreshAverages, 
               marginRight: 10,
             }}
             onPress={async () => {
-              var newCoefficient = mark.coefficient + 1;
+              var newCoefficient = mark.coefficient + 0.5;
               if (mark.coefficient == 0) { newCoefficient = 0.25; }
               else if (mark.coefficient == 0.25) { newCoefficient = 0.5; }
               else if (mark.coefficient == 0.5) { newCoefficient = 0.75; }
