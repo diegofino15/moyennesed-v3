@@ -5,7 +5,7 @@ import { Logger } from './Logger';
 
 
 export class AdsHandler {
-  static debugMode = true;
+  static debugMode = false;
   static initialized = false;
 
   // Main configuration

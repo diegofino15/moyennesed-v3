@@ -26,7 +26,10 @@ function App() {
   // AppOpen Ad
   const [wasAppOpenAdShowed, setWasAppOpenAdShowed] = useState(false);
   useEffect(() => { AdsHandler.initialize(setWasAppOpenAdShowed); }, []);
-  useEffect(() => { if (isAppLoaded) { SplashScreen.hideAsync(); } }, [wasAppOpenAdShowed]);
+  useEffect(() => { if (isAppLoaded && wasAppOpenAdShowed && !isSplashScreenHidded) {
+    SplashScreen.hideAsync();
+    setIsSplashScreenHidden(true);
+  }}, [wasAppOpenAdShowed]);
 
   // App state needed to show either AppStack or AuthStack
   const [loggedIn, setLoggedIn] = useState(false);
@@ -39,9 +42,11 @@ function App() {
   refreshTheme(theme, isDarkMode);
 
   // Hide SplashScreen once app is loaded
+  const [isSplashScreenHidded, setIsSplashScreenHidden] = useState(false);
   const onLayoutRootView = useCallback(async () => {
     if (isAppLoaded && wasAppOpenAdShowed) {
       await SplashScreen.hideAsync();
+      setIsSplashScreenHidden(true);
     }
   }, [isAppLoaded]);
 
