@@ -29,13 +29,15 @@ export class AdsHandler {
   }
 
   // Main initialize function
-  static async initialize() {
+  static async initialize(setShowed) {
+    Logger.info("Initializing Ads...");
+
     await this.setConfig();
     await this.getConsentStatus();
     await mobileAds().initialize();
     this.initialized = true;
     
-    if (this.triedShowingAppOpenAd && !this.showedAppOpenAd && this.alreadyOptainedConsent) { this.showAppOpenAd(); }
+    if (this.triedShowingAppOpenAd && !this.showedAppOpenAd && this.alreadyOptainedConsent) { this.showAppOpenAd(setShowed); }
   }
 
   
@@ -43,7 +45,7 @@ export class AdsHandler {
   static triedShowingAppOpenAd = false;
   static showedAppOpenAd = false;
   static appOpenAdID = Platform.OS === "ios" ? "ca-app-pub-1869877675520642/7552640661" : "ca-app-pub-1869877675520642/2337387712";
-  static showAppOpenAd() {
+  static showAppOpenAd(setShowed) {
     this.triedShowingAppOpenAd = true;
     if (!this.initialized) { return; }
     this.showedAppOpenAd = true;
@@ -59,6 +61,9 @@ export class AdsHandler {
       } else if (event.type == AdEventType.ERROR) {
         Logger.info("AppOpen Ad couldn't open...", true);
         Logger.info(event.payload, true);
+        setShowed(true);
+      } else if (event.type === AdEventType.CLOSED) {
+        setShowed(true);
       }
     });
     appOpenAd.load();

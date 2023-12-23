@@ -21,11 +21,13 @@ import { Logger } from "./utils/Logger";
 // Keep SplashScreen on while app is loading
 SplashScreen.preventAutoHideAsync();
 
-// Initialize AdsHandler for AppOpen ad to appear
-AdsHandler.initialize();
-
 // Main App
 function App() {
+  // AppOpen Ad
+  const [wasAppOpenAdShowed, setWasAppOpenAdShowed] = useState(false);
+  useEffect(() => { AdsHandler.initialize(setWasAppOpenAdShowed); }, []);
+  useEffect(() => { if (isAppLoaded) { SplashScreen.hideAsync(); } }, [wasAppOpenAdShowed]);
+
   // App state needed to show either AppStack or AuthStack
   const [loggedIn, setLoggedIn] = useState(false);
   const [isAppLoaded, setIsAppLoaded] = useState(false);
@@ -38,7 +40,7 @@ function App() {
 
   // Hide SplashScreen once app is loaded
   const onLayoutRootView = useCallback(async () => {
-    if (isAppLoaded) {
+    if (isAppLoaded && wasAppOpenAdShowed) {
       await SplashScreen.hideAsync();
     }
   }, [isAppLoaded]);
@@ -46,7 +48,7 @@ function App() {
   // Main initialize function
   useEffect(() => { initialize(); });
   async function initialize() {
-    if (isAppLoaded || loggedIn) { return; }
+    if (isAppLoaded || loggedIn || wasAppOpenAdShowed) { return; }
 
     try {
       // Load fonts
@@ -58,7 +60,8 @@ function App() {
         Logger.load("Detected logged-in account, loading cache...");
 
         // Show AppOpen ad
-        if (Math.random() <= 0.33) { AdsHandler.showAppOpenAd(); }
+        if (Math.random() <= 0.33) { AdsHandler.showAppOpenAd(setWasAppOpenAdShowed); }
+        else { setWasAppOpenAdShowed(true); }
 
         // Load all local files
         await Preferences.load();
