@@ -7,14 +7,22 @@
     "development": {
       "developmentClient": true,
       "distribution": "internal",
-      "node": "18.18.2"
+      "node": "21.5.0"
+    },
+    "development-simulator": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "node": "21.5.0",
+      "ios": {
+        "simulator": true
+      }
     },
     "preview": {
       "distribution": "internal",
-      "node": "18.18.2"
+      "node": "21.5.0"
     },
     "production": {
-      "node": "18.18.2"
+      "node": "21.5.0"
     }
   },
   "submit": {

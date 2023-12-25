@@ -44,7 +44,7 @@ function App() {
   // Hide SplashScreen once app is loaded
   const [isSplashScreenHidded, setIsSplashScreenHidden] = useState(false);
   const onLayoutRootView = useCallback(async () => {
-    if (isAppLoaded && wasAppOpenAdShowed) {
+    if (isAppLoaded && (wasAppOpenAdShowed || !loggedIn)) {
       await SplashScreen.hideAsync();
       setIsSplashScreenHidden(true);
     }
