@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import { Dimensions, View, useWindowDimensions } from "react-native";
 import useState from "react-usestateref";
 
-import { PeriodSwitcher } from "./PeriodSwitcher";
-import { MarksOverview } from "./MarksOverview";
+import PeriodSwitcher from "./PeriodSwitcher";
+import MarksOverview from "./MarksOverview";
 import { BottomSheet } from "../../global_components/BottomSheet";
 import { InformationsPopup } from "./InformationsPopup";
 import { UserData } from "../../../../core/UserData";

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import { View, Text, Dimensions } from 'react-native';
 import { ChevronRightIcon } from 'lucide-react-native';
 import { PressableScale } from 'react-native-pressable-scale';
@@ -118,4 +118,4 @@ function RecentMarkCard({ mark, subject, refreshAverages, setSubjectCoefficient,
   );
 }
 
-export { RecentMarkCard };
+export default memo(RecentMarkCard);

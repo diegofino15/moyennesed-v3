@@ -7,7 +7,7 @@ import { LineChart } from 'react-native-chart-kit';
 import useState from 'react-usestateref';
 import * as Haptics from "expo-haptics";
 
-import { EmbeddedMarkCard } from './EmbeddedMarkCard';
+import EmbeddedMarkCard from './EmbeddedMarkCard';
 import { Separator } from '../../global_components/Separator';
 import { AnimatedComponent } from '../../global_components/AnimatedComponents';
 import { UserData } from '../../../../core/UserData';

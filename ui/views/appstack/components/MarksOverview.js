@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, memo } from "react";
 import { View, ScrollView, Text, ActivityIndicator, Dimensions } from "react-native";
 import { CheckCircle2Icon, DraftingCompassIcon, HelpCircleIcon, TrendingUpIcon, Users2Icon, WifiOffIcon, RefreshCcwIcon, ArrowDownUpIcon, ArrowUpDownIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react-native";
 import { PressableScale } from "react-native-pressable-scale";
@@ -6,8 +6,8 @@ import { LineChart } from "react-native-chart-kit";
 import * as Haptics from 'expo-haptics';
 import useState from "react-usestateref";
 
-import { RecentMarkCard } from "./RecentMarkCard";
-import { SubjectCard } from "./SubjectCard";
+import RecentMarkCard from "./RecentMarkCard";
+import SubjectCard from "./SubjectCard";
 import { AnimatedComponent } from "../../global_components/AnimatedComponents";
 import { formatAverage } from "../../../../utils/Utils";
 import { CoefficientManager } from "../../../../core/CoefficientsManager";
@@ -333,4 +333,4 @@ function MarksOverview({
   );
 }
 
-export { MarksOverview };
+export default memo(MarksOverview);

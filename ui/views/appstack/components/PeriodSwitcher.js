@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, memo } from 'react';
 import { View, Text } from 'react-native';
 import { PressableScale } from 'react-native-pressable-scale';
 import { HapticsHandler } from '../../../../utils/HapticsHandler';
@@ -43,4 +43,4 @@ function PeriodSwitcher({ periods, shownPeriod, setShownPeriod, theme }) {
   );
 }
 
-export { PeriodSwitcher };
+export default memo(PeriodSwitcher);
