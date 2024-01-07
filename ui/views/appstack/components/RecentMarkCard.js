@@ -118,4 +118,4 @@ function RecentMarkCard({ mark, subject, refreshAverages, setSubjectCoefficient,
   );
 }
 
-export default memo(RecentMarkCard);
+export { RecentMarkCard };

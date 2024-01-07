@@ -43,4 +43,4 @@ function PeriodSwitcher({ periods, shownPeriod, setShownPeriod, theme }) {
   );
 }
 
-export default memo(PeriodSwitcher);
+export { PeriodSwitcher };

@@ -15,12 +15,11 @@ import { HapticsHandler } from "../../../utils/HapticsHandler";
 function MainPage({
   connectedRef, connectingRef,
   profilePhotoRef, 
-  scrollViewRef,
+  openProfilePage,
   updateScreen,
   theme
 }) {
   // Account shown on screen
-  const [_selectedChildAccount, setSelectedChildAccount, selectedChildAccountRef] = useState("");
   function getAccount() {
     if (!UserData.mainAccount.isParent) { return UserData.mainAccount; }
     else {
@@ -31,6 +30,7 @@ function MainPage({
       return UserData.childrenAccounts.get(selectedChildAccountRef.current);
     }
   }
+  const [_selectedChildAccount, setSelectedChildAccount, selectedChildAccountRef] = useState("");
   const [_shownAccount, setShownAccount, shownAccountRef] = useState(getAccount());
   useEffect(() => { setShownAccount(getAccount()); }, [connectedRef.current, selectedChildAccountRef.current]);
 
@@ -124,9 +124,6 @@ function MainPage({
     setManualRefreshing(true);
   }
 
-  // Open profile page
-  async function openProfilePage() { scrollViewRef.current?.scrollTo({ x: Dimensions.get('window').width, animated: true }); }
-
   // Welcome message
   const [welcomeMessage, setWelcomeMessage] = useState("");
   useEffect(() => {
@@ -151,7 +148,7 @@ function MainPage({
         `Tu seras ${UserData.mainAccount.gender == "M" ? "premier" : "première"} de classe un jour t'inquiète 🔥`,
         "Allez, pense aux grandes vacances c'est pas si loin...",
         "Déjà des contrôles toutes les semaines...",
-        "Si t'aimes bien l'appli hésite pas à aller la noter !",
+        "Si t'aimes bien l'appli n'hésite pas à la noter !",
         "Corrige les coefs manuellement si ceux-ci ne sont pas bons !",
         "Alors, les graphiques ?",
         "Signale un bug si l'appli ne fonctionne pas bien !",

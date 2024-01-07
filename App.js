@@ -65,7 +65,7 @@ function App() {
         Logger.load("Detected logged-in account, loading cache...");
 
         // Show AppOpen ad
-        if (Math.random() <= 0.33) { AdsHandler.showAppOpenAd(setWasAppOpenAdShowed); }
+        if (1 <= 0.33) { AdsHandler.showAppOpenAd(setWasAppOpenAdShowed); } // Math.random()
         else { setWasAppOpenAdShowed(true); }
 
         // Load all local files
@@ -110,3 +110,10 @@ function App() {
 }
 
 export default App;
+
+/*
+TO FIX :
+Screen not updating when changing averages
+*/
+
+

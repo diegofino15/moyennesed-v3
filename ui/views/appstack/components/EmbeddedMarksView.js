@@ -2,10 +2,8 @@ import { useEffect } from "react";
 import { Dimensions, View, useWindowDimensions } from "react-native";
 import useState from "react-usestateref";
 
-import PeriodSwitcher from "./PeriodSwitcher";
-import MarksOverview from "./MarksOverview";
-import { BottomSheet } from "../../global_components/BottomSheet";
-import { InformationsPopup } from "./InformationsPopup";
+import { PeriodSwitcher } from "./PeriodSwitcher";
+import { MarksOverview } from "./MarksOverview";
 import { UserData } from "../../../../core/UserData";
 import { calculateAllPeriodAverages } from "../../../../core/Period";
 import { CoefficientManager } from "../../../../core/CoefficientsManager";
@@ -78,31 +76,20 @@ function EmbeddedMarksView({
     Logger.core(`Set shown period to ${shownPeriodRef.current}`);
   }, [gotMarks]);
 
+  const [periodToShow, setPeriodToShow] = useState({});
+  useEffect(() => { 
+    setPeriodToShow(shownAccountRef.current.periods.get([...(shownAccountRef.current.periods.keys() ?? [])][shownPeriod] ?? 0) ?? {});
+  }, [shownAccountRef.current.id, gotMarks, shownPeriod]);
+
   // Window dimensions
   const windowDimensions = useWindowDimensions();
 
-  // Informations popup
-  const [infoPopupOpen, setInfoPopupOpen] = useState(false);
-  function renderInfosPopup() {
-    if (!infoPopupOpen) { return null; }
-    return <BottomSheet
-      isOpen={infoPopupOpen}
-      onClose={() => setInfoPopupOpen(false)}
-      snapPoints={[
-        Math.min(325 / Dimensions.get('screen').height * windowDimensions.fontScale, 1) * 100 + "%",
-      ]}
-      children={<InformationsPopup windowDimensions={windowDimensions} theme={theme}/>}
-      theme={theme}
-    />;
-  }
-
   // Period keys
-  const [_periodKeys, setPeriodKeys, periodKeysRef] = useState(["A000"]);
+  const [_periodKeys, setPeriodKeys] = useState(["A000"]);
   useEffect(() => {
-    setPeriodKeys(["A000"]);
     setPeriodKeys([...shownAccountRef.current.periods.keys(), "A000"]);
   }, [gotMarks, shownAccountRef.current.id]);
-  
+
   return (
     <View style={{
       marginHorizontal: 20,
@@ -115,23 +102,19 @@ function EmbeddedMarksView({
         theme={theme}
       />
 
-      {periodKeysRef.current.map((periodKey, index) => {
-        if (index == shownPeriod || shownPeriod == -1) { return <MarksOverview
-          key={periodKey}
-          period={shownAccountRef.current.periods.get(periodKey) ?? {}}
-          accountID={shownAccountRef.current.id}
-          loading={autoRefreshing || isConnecting}
-          redCheck={!isConnected || !gotMarks || marksNeedUpdate}
-          refreshAverages={refreshAverages}
-          setSubjectCoefficient={setSubjectCoefficient}
-          setInfoPopupOpen={setInfoPopupOpen}
-          refresh={refresh}
-          manualRefreshingRef={manualRefreshingRef}
-          windowDimensions={windowDimensions}
-          theme={theme}
-        />;}
-      })}
-      {renderInfosPopup()}
+      <MarksOverview
+        key={shownPeriod}
+        period={periodToShow}
+        accountID={shownAccountRef.current.id}
+        loading={autoRefreshing || isConnecting}
+        redCheck={!isConnected || !gotMarks || marksNeedUpdate}
+        refreshAverages={refreshAverages}
+        setSubjectCoefficient={setSubjectCoefficient}
+        refresh={refresh}
+        manualRefreshingRef={manualRefreshingRef}
+        windowDimensions={windowDimensions}
+        theme={theme}
+      />
     </View>
   );
 }

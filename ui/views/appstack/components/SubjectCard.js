@@ -107,4 +107,4 @@ function SubjectCard({ mainSubject, refreshAverages, setSubjectCoefficient, getM
   );
 }
 
-export default memo(SubjectCard);
+export { SubjectCard };

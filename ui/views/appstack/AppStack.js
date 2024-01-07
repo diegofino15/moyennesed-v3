@@ -10,28 +10,6 @@ import { Logger } from '../../../utils/Logger';
 
 
 function AppStack({ setIsDarkMode, theme }) {
-  // Main connection states
-  const [_connected, setConnected, connectedRef] = useState(UserData.connected);
-  useEffect(() => { if (connectedRef.current && !UserData.connected) { setConnected(UserData.connected); } }, [UserData.connected]);
-  const [_connecting, setConnecting, connectingRef] = useState(UserData.connecting);
-  const [_triedToConnect, setTriedToConnect, triedToConnectRef] = useState(false);
-
-  // Auto-connect (only first launch)
-  if (!(connectedRef.current || connectingRef.current) && !triedToConnectRef.current) {
-    setTriedToConnect(true);
-    Logger.info("Auto-connecting...");
-    refreshLogin();
-  }
-
-  // Refresh login
-  async function refreshLogin() {
-    setConnecting(true);
-    setConnected(false);
-    const successful = await UserData.refreshLogin();
-    setConnected(successful == 1);
-    setConnecting(false);
-  }
-
   // Log-out of account
   const appCtx = useAppContext();
   async function logout() {
@@ -39,10 +17,36 @@ function AppStack({ setIsDarkMode, theme }) {
     appCtx.setLoggedIn(false);
   }
   
+  // Main connection states
+  const [_connected, setConnected, connectedRef] = useState(UserData.connected);
+  useEffect(() => { if (connectedRef.current && !UserData.connected) { setConnected(UserData.connected); } }, [UserData.connected]);
+  const [_connecting, _setConnecting, connectingRef] = useState(UserData.connecting);
+  const [_triedToConnect, _setTriedToConnect, triedToConnectRef] = useState(false);
+
+  // Auto-connect (only first launch)
+  if (!(connectedRef.current || connectingRef.current) && !triedToConnectRef.current) {
+    triedToConnectRef.current = true;
+    Logger.info("Auto-connecting...");
+    refreshLogin();
+  }
+
+  // Refresh login
+  async function refreshLogin() {
+    connectingRef.current = true;
+    setConnected(false);
+    const successful = await UserData.refreshLogin();
+    connectingRef.current = false;
+    setConnected(successful == 1);
+  }
+
+  // Update screen from anywhere
+  const [_updateScreen, setUpdateScreen, updateScreenRef] = useState(false);
+  function updateScreen() { setUpdateScreen(!updateScreenRef.current); }
+  
   // For switching between main page and profile page
   const scrollViewRef = useRef(null);
 
-  // Profile photo
+  // Profile photo (used in MainPage and ProfilePage)
   const [_profilePhoto, setProfilePhoto, profilePhotoRef] = useState(UserData.temporaryProfilePhoto);
   const [_gettingProfilePhoto, _setGettingProfilePhoto, gettingProfilePhotoRef] = useState(false);
   useEffect(() => {
@@ -59,10 +63,6 @@ function AppStack({ setIsDarkMode, theme }) {
     }
   }, [UserData.mainAccount.photoURL]);
 
-  // Update screen from anywhere
-  const [_updateScreen, setUpdateScreen, updateScreenRef] = useState(false);
-  function updateScreen() { setUpdateScreen(!updateScreenRef.current); }
-
   return (
     <ScrollView
       horizontal={true}
@@ -73,14 +73,13 @@ function AppStack({ setIsDarkMode, theme }) {
       decelerationRate={0}
       snapToAlignment='center'
       ref={scrollViewRef}
-      scrollEventThrottle={240} // 5 x second
     >
       {/* Main mage */}
       <MainPage
         connectedRef={connectedRef}
         connectingRef={connectingRef}
         profilePhotoRef={profilePhotoRef}
-        scrollViewRef={scrollViewRef}
+        openProfilePage={() => scrollViewRef.current?.scrollTo({ x: Dimensions.get('window').width, animated: true })}
         updateScreen={updateScreen}
         theme={theme}
       />
@@ -90,11 +89,10 @@ function AppStack({ setIsDarkMode, theme }) {
         connectedRef={connectedRef}
         connectingRef={connectingRef}
         refreshLogin={refreshLogin}
-        scrollViewRef={scrollViewRef}
+        closeProfilePage={() => scrollViewRef.current?.scrollTo({x: 0, animated: true})}
         profilePhotoRef={profilePhotoRef}
         logout={logout}
         updateScreen={updateScreen}
-        updateScreenRef={updateScreenRef}
         setIsDarkMode={setIsDarkMode}
         theme={theme}
       />

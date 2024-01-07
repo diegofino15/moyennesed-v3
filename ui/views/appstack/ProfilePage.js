@@ -17,44 +17,103 @@ import { CoefficientManager } from '../../../core/CoefficientsManager';
 import { HapticsHandler } from '../../../utils/HapticsHandler';
 
 
-function ProfilePage({
-  connectedRef, connectingRef,
-  refreshLogin,
-  scrollViewRef,
-  profilePhotoRef,
-  logout,
-  updateScreen,
-  updateScreenRef,
-  setIsDarkMode,
-  theme
-}) {
-  async function closeProfilePage() { scrollViewRef.current?.scrollTo({x: 0, animated: true}); }
-  
+// Separate sections for better performance when updating screen
+function AdvancedSettingsSection({ windowDimensions, updateScreen, theme }) {
   const [allowGuessMarkCoefficients, setAllowGuessMarkCoefficients] = useState(Preferences.allowGuessMarkCoefficients);
-  useEffect(() => {
-    setAllowGuessMarkCoefficients(Preferences.allowGuessMarkCoefficients);
-  }, [Preferences.allowGuessMarkCoefficients, updateScreenRef.current]);
+  useEffect(() => { setAllowGuessMarkCoefficients(Preferences.allowGuessMarkCoefficients); }, [Preferences.allowGuessMarkCoefficients]);
   const [allowGuessSubjectCoefficients, setAllowGuessSubjectCoefficients] = useState(Preferences.allowGuessSubjectCoefficients);
-  useEffect(() => {
-    setAllowGuessSubjectCoefficients(Preferences.allowGuessSubjectCoefficients);
-  }, [Preferences.allowGuessSubjectCoefficients, updateScreenRef.current]);
+  useEffect(() => { setAllowGuessSubjectCoefficients(Preferences.allowGuessSubjectCoefficients); }, [Preferences.allowGuessSubjectCoefficients]);
   const [allowCustomCoefficients, setAllowCustomCoefficients] = useState(Preferences.allowCustomCoefficients);
-  useEffect(() => {
-    setAllowCustomCoefficients(Preferences.allowCustomCoefficients);
-  }, [Preferences.allowCustomCoefficients, updateScreenRef.current]);
-  const [allowVibrations, setAllowVibrations] = useState(Preferences.vibrate);
-  useEffect(() => {
-    setAllowVibrations(Preferences.vibrate);
-  }, [Preferences.vibrate, updateScreenRef.current]);
+  useEffect(() => { setAllowCustomCoefficients(Preferences.allowCustomCoefficients); }, [Preferences.allowCustomCoefficients]);
+  
+  return <View style={{
+    backgroundColor: theme.colors.surface,
+    borderRadius: 20,
+    marginBottom: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+  }}>
+    <Text style={[theme.fonts.labelLarge, { textAlign: 'justify' }]}>{UserData.mainAccount.isParent ? "Vous n'avez" : "Tu n'as"} pas les coefs ? L'IA de MoyennesED est là pour les deviner !</Text>
+    <Text style={[theme.fonts.labelLarge, { textAlign: 'justify', marginBottom: 10 }]}>Une icône <BrainCircuitIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled} style={{ transform: [{ rotate: '90deg' }] }}/> apparaîtra auprès des coefficients estimés.</Text>
 
-  const [unavailableServers, setUnavailableServers] = useState(UserData.unavailableServers);
-  useEffect(() => {
-    setUnavailableServers(UserData.unavailableServers);
-  }, [UserData.unavailableServers, updateScreenRef.current]);
+    <View style={{
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    }}>
+      <Text style={[theme.fonts.bodyLarge, { width: Dimensions.get('window').width - 140 }]}>Devine coefficient notes</Text>
+      <Switch
+        value={allowGuessMarkCoefficients}
+        onValueChange={async (value) => {
+          Preferences.setAllowGuessMarkCoefficients(value);
+          Preferences.save();
+          UserData.recalculateAllCoefficients();
+          CoefficientManager.save();
+          setAllowGuessMarkCoefficients(value);
+          updateScreen();
+        }}
+      />
+    </View>
+    <View style={{
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginTop: 10,
+    }}>
+      <Text style={[theme.fonts.bodyLarge, { width: Dimensions.get('window').width - 140 }]}>Devine coefficient matières</Text>
+      <Switch
+        value={allowGuessSubjectCoefficients}
+        onValueChange={async (value) => {
+          Preferences.setAllowGuessSubjectCoefficients(value);
+          Preferences.save();
+          UserData.recalculateAllCoefficients();
+          CoefficientManager.save();
+          setAllowGuessSubjectCoefficients(value);
+          updateScreen();
+        }}
+      />
+    </View>
 
-  // Window dimensions
-  const windowDimensions = useWindowDimensions();
+    <Separator theme={theme} style={{ marginTop: 10, marginBottom: 10, backgroundColor: theme.colors.background }}/>
 
+    <Text style={[theme.fonts.labelLarge, { textAlign: 'justify', marginBottom: 10 }]}>{UserData.mainAccount.isParent ? "Vous pourrez" : "Tu pourras"} toujours spécifier un coefficient personnalisé, et une icône <WrenchIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/> apparaîtra.</Text>
+
+    <View style={{
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    }}>
+      <Text style={[theme.fonts.bodyLarge, { width: Dimensions.get('window').width - 140 }]}>Coefficients personnalisés</Text>
+      <Switch
+        value={allowCustomCoefficients}
+        onValueChange={async (value) => {
+          Preferences.setAllowCustomCoefficients(value);
+          Preferences.save();
+          UserData.recalculateAllCoefficients();
+          CoefficientManager.isAverageHistoryUpdated = false;
+          CoefficientManager.save();
+          setAllowCustomCoefficients(value);
+          updateScreen();
+        }}
+      />
+    </View>
+    <PressableScale onPress={() => {
+      CoefficientManager.customMarkCoefficients.clear();
+      CoefficientManager.customSubjectCoefficients.clear();
+      CoefficientManager.isAverageHistoryUpdated = false;
+      CoefficientManager.save();
+      UserData.recalculateAllCoefficients();
+      updateScreen();
+      HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Light);
+    }} style={{
+      marginTop: 5,
+    }}>
+      <Text style={[theme.fonts.labelLarge, { color: theme.colors.tertiary }]}>Effacer coefficients personnalisés</Text>
+    </PressableScale>
+  </View>;
+}
+
+function ProblemReportSection({ windowDimensions, theme }) {
   // Bug report popup
   const [bugReportPopupOpen, setBugReportPopupOpen] = useState(false);
   function renderBugReportPopup() {
@@ -70,12 +129,70 @@ function ProfilePage({
     />;
   }
   
-  // Update screen
-  const [_refresh, _setRefresh] = useState(false);
-  useEffect(() => {
-    _setRefresh(!_refresh);
-  }, [updateScreenRef.current]);
+  return <View>
+    <View style={{
+      backgroundColor: theme.colors.surface,
+      borderRadius: 20,
+      marginBottom: 20,
+      paddingHorizontal: 20,
+      paddingVertical: 15,
+    }}>
+      <CustomLink title="Signaler un bug" onPress={() => setBugReportPopupOpen(true)} icon={<BugIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/>} windowDimensions={windowDimensions} theme={theme}/>
+      <Text style={[theme.fonts.labelLarge, { alignSelf: 'center' }]}>ou</Text>
+      <CustomLink title="Envoyer un mail" link='mailto:moyennesed@gmail.com' icon={<MailIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/>} windowDimensions={windowDimensions} theme={theme}/>
+    </View>
+    {/* Bug report popup */}
+    {renderBugReportPopup()}
+  </View>;
+}
 
+function PreferencesSection({ updateScreen, theme }) {
+  const [allowVibrations, setAllowVibrations] = useState(Preferences.vibrate);
+  useEffect(() => { setAllowVibrations(Preferences.vibrate); }, [Preferences.vibrate]);
+  
+  return <View style={{
+    backgroundColor: theme.colors.surface,
+    borderRadius: 20,
+    marginBottom: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+  }}>
+    <View style={{
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    }}>
+      <Text style={[theme.fonts.bodyLarge, { width: Dimensions.get('window').width - 140 }]}>Vibrations</Text>
+      <Switch
+        value={allowVibrations}
+        onValueChange={async (value) => {
+          Preferences.vibrate = value;
+          Preferences.save();
+          setAllowVibrations(value);
+          updateScreen();
+        }}
+      />
+    </View>
+  </View>;
+}
+
+
+function ProfilePage({
+  connectedRef, connectingRef,
+  refreshLogin,
+  closeProfilePage,
+  profilePhotoRef,
+  logout,
+  updateScreen,
+  setIsDarkMode,
+  theme
+}) {
+  const [unavailableServers, setUnavailableServers] = useState(UserData.unavailableServers);
+  useEffect(() => { setUnavailableServers(UserData.unavailableServers); }, [UserData.unavailableServers]);
+
+  // Window dimensions
+  const windowDimensions = useWindowDimensions();
+  
   return (
     <ScrollView
       bounces={true}
@@ -243,105 +360,11 @@ function ProfilePage({
 
         {/* Advanced settings  */}
         <Text style={[theme.fonts.titleSmall, { marginTop: 20, marginBottom: 10 }]}>Fonctions avancées  <Text style={theme.fonts.labelLarge}>(auto)</Text></Text>
-        <View style={{
-          backgroundColor: theme.colors.surface,
-          borderRadius: 20,
-          marginBottom: 20,
-          paddingHorizontal: 20,
-          paddingVertical: 15,
-        }}>
-          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify' }]}>{UserData.mainAccount.isParent ? "Vous n'avez" : "Tu n'as"} pas les coefs ? L'IA de MoyennesED est là pour les deviner !</Text>
-          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify', marginBottom: 10 }]}>Une icône <BrainCircuitIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled} style={{ transform: [{ rotate: '90deg' }] }}/> apparaîtra auprès des coefficients estimés.</Text>
-
-          <View style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}>
-            <Text style={[theme.fonts.bodyLarge, { width: Dimensions.get('window').width - 140 }]}>Devine coefficient notes</Text>
-            <Switch
-              value={allowGuessMarkCoefficients}
-              onValueChange={async (value) => {
-                Preferences.setAllowGuessMarkCoefficients(value);
-                Preferences.save();
-                UserData.recalculateAllCoefficients();
-                CoefficientManager.save();
-                setAllowGuessMarkCoefficients(value);
-                updateScreen();
-              }}
-            />
-          </View>
-          <View style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginTop: 10,
-          }}>
-            <Text style={[theme.fonts.bodyLarge, { width: Dimensions.get('window').width - 140 }]}>Devine coefficient matières</Text>
-            <Switch
-              value={allowGuessSubjectCoefficients}
-              onValueChange={async (value) => {
-                Preferences.setAllowGuessSubjectCoefficients(value);
-                Preferences.save();
-                UserData.recalculateAllCoefficients();
-                CoefficientManager.save();
-                setAllowGuessSubjectCoefficients(value);
-                updateScreen();
-              }}
-            />
-          </View>
-
-          <Separator theme={theme} style={{ marginTop: 10, marginBottom: 10, backgroundColor: theme.colors.background }}/>
-
-          <Text style={[theme.fonts.labelLarge, { textAlign: 'justify', marginBottom: 10 }]}>{UserData.mainAccount.isParent ? "Vous pourrez" : "Tu pourras"} toujours spécifier un coefficient personnalisé, et une icône <WrenchIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/> apparaîtra.</Text>
-
-          <View style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}>
-            <Text style={[theme.fonts.bodyLarge, { width: Dimensions.get('window').width - 140 }]}>Coefficients personnalisés</Text>
-            <Switch
-              value={allowCustomCoefficients}
-              onValueChange={async (value) => {
-                Preferences.setAllowCustomCoefficients(value);
-                Preferences.save();
-                UserData.recalculateAllCoefficients();
-                CoefficientManager.isAverageHistoryUpdated = false;
-                CoefficientManager.save();
-                setAllowCustomCoefficients(value);
-                updateScreen();
-              }}
-            />
-          </View>
-          <PressableScale onPress={() => {
-            CoefficientManager.customMarkCoefficients.clear();
-            CoefficientManager.customSubjectCoefficients.clear();
-            CoefficientManager.isAverageHistoryUpdated = false;
-            CoefficientManager.save();
-            UserData.recalculateAllCoefficients();
-            updateScreen();
-            HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Light);
-          }} style={{
-            marginTop: 5,
-          }}>
-            <Text style={[theme.fonts.labelLarge, { color: theme.colors.tertiary }]}>Effacer coefficients personnalisés</Text>
-          </PressableScale>
-        </View>
+        <AdvancedSettingsSection windowDimensions={windowDimensions} updateScreen={updateScreen} theme={theme}/>
 
         {/* Bug report */}
         <Text style={[theme.fonts.titleSmall, { marginBottom: 10 }]}>Un problème ?</Text>
-        <View style={{
-          backgroundColor: theme.colors.surface,
-          borderRadius: 20,
-          marginBottom: 20,
-          paddingHorizontal: 20,
-          paddingVertical: 15,
-        }}>
-          <CustomLink title="Signaler un bug" onPress={() => setBugReportPopupOpen(true)} icon={<BugIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/>} windowDimensions={windowDimensions} theme={theme}/>
-          <Text style={[theme.fonts.labelLarge, { alignSelf: 'center' }]}>ou</Text>
-          <CustomLink title="Envoyer un mail" link='mailto:moyennesed@gmail.com' icon={<MailIcon size={20 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled}/>} windowDimensions={windowDimensions} theme={theme}/>
-        </View>
+        <ProblemReportSection windowDimensions={windowDimensions} theme={theme}/>
 
         {/* Informations */}
         <Text style={[theme.fonts.titleSmall, { marginBottom: 10 }]}>Informations</Text>
@@ -364,30 +387,7 @@ function ProfilePage({
 
         {/* Preferences */}
         <Text style={[theme.fonts.titleSmall, { marginBottom: 10 }]}>Préférences</Text>
-        <View style={{
-          backgroundColor: theme.colors.surface,
-          borderRadius: 20,
-          marginBottom: 20,
-          paddingHorizontal: 20,
-          paddingVertical: 15,
-        }}>
-          <View style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}>
-            <Text style={[theme.fonts.bodyLarge, { width: Dimensions.get('window').width - 140 }]}>Vibrations</Text>
-            <Switch
-              value={allowVibrations}
-              onValueChange={async (value) => {
-                Preferences.vibrate = value;
-                Preferences.save();
-                setAllowVibrations(value);
-                updateScreen();
-              }}
-            />
-          </View>
-        </View>
+        <PreferencesSection updateScreen={updateScreen} theme={theme}/>
         
         {/* Disconnect button */}
         <CustomButton
@@ -410,9 +410,6 @@ function ProfilePage({
 
         {/* Extra space */}
         <View style={{ height: 20 }}></View>
-
-        {/* Bug report popup */}
-        {renderBugReportPopup()}
       </SafeAreaView>
     </ScrollView>
   );
