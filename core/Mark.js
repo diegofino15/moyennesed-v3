@@ -29,14 +29,16 @@ function getFormattedMark(jsonData) {
   
   // If value is based on program elements
   var isEffective = !(jsonData.nonSignificatif || jsonData.enLettre);
-  if (!value && !valueOn && valueStr.length == 0) {
+  if (!value || isNaN(value) || valueStr.length == 0) {
     let programElementsSum = 0;
     let programElementsCoef = 0;
     jsonData.elementsProgramme?.forEach((programElement) => {
-      programElementsSum += parseFloat(programElement.valeur.toString().replace(",", ".")),
-      programElementsCoef += 1;
+      let programElementValue = parseFloat(programElement.valeur.toString().trim().replace(",", "."));
+      programElementsSum += isNaN(programElementValue) ? 0 : programElementValue;
+      programElementsCoef += isNaN(programElementValue) ? 0 : 1;
     });
-    value = programElementsSum / (programElementsCoef ?? 1);
+
+    value = programElementsSum / (programElementsCoef ? programElementsCoef : 1);
     if (value < 0) {
       isEffective = false;
       value = 0;

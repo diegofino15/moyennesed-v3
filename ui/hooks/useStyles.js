@@ -1,7 +1,5 @@
 import { loadAsync } from 'expo-font';
 
-import { Preferences } from '../../core/Preferences';
-
 
 // Load all fonts used troughout the app
 const useFonts = async () => await loadAsync({
