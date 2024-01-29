@@ -44,7 +44,7 @@ export class AdsHandler {
   // AppOpen Ad
   static triedShowingAppOpenAd = false;
   static showedAppOpenAd = false;
-  static appOpenAdID = Platform.OS === "ios" ? "ca-app-pub-1869877675520642/7552640661" : "ca-app-pub-1869877675520642/2337387712";
+  static appOpenAdID = Platform.OS === "ios" ? "ca-app-pub-1869877675520642/3240863084" : "ca-app-pub-1869877675520642/6988536409";
   static showAppOpenAd(setShowed) {
     this.triedShowingAppOpenAd = true;
     if (!this.initialized) { return; }
