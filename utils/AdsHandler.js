@@ -5,7 +5,6 @@ import { Logger } from './Logger';
 
 
 export class AdsHandler {
-  static debugMode = true;
   static initialized = false;
 
   // Main configuration
@@ -44,7 +43,7 @@ export class AdsHandler {
   // AppOpen Ad
   static triedShowingAppOpenAd = false;
   static showedAppOpenAd = false;
-  static appOpenAdID = Platform.OS === "ios" ? "ca-app-pub-1869877675520642/3240863084" : "ca-app-pub-1869877675520642/6988536409";
+  static appOpenAdID = Platform.OS === "ios" ? "ca-app-pub-1869877675520642/1544745831" : "ca-app-pub-1869877675520642/8162071175";
   static showAppOpenAd(setShowed) {
     this.triedShowingAppOpenAd = true;
     if (!this.initialized) { return; }
@@ -52,7 +51,7 @@ export class AdsHandler {
 
     Logger.info("Loading AppOpen Ad...");
 
-    const appOpenAd = AppOpenAd.createForAdRequest(this.debugMode ? TestIds.APP_OPEN : this.appOpenAdID, {
+    const appOpenAd = AppOpenAd.createForAdRequest(__DEV__ ? TestIds.APP_OPEN : this.appOpenAdID, {
       requestNonPersonalizedAdsOnly: !this.personalizedAdsConsent,
     });
     appOpenAd.addAdEventsListener((event) => {
