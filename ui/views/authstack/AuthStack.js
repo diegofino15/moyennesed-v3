@@ -40,7 +40,7 @@ function AuthStack({ theme }) {
     }
 
     if (screenIndexRef.current < 2) {
-      scrollViewRef.current?.scrollTo({x: Dimensions.get('window').width * (screenIndexRef.current + 1), animated: true});    
+      scrollViewRef.current?.scrollTo({x: Dimensions.get('window').width * (screenIndexRef.current + 1), animated: true});
     } else {
       setIsConnecting(true);
     }
@@ -66,7 +66,7 @@ function AuthStack({ theme }) {
         decelerationRate={0}
         snapToAlignment='center'
         ref={scrollViewRef}
-        scrollEventThrottle={240} // 5 x second
+        scrollEventThrottle={120} // 10x second
         onScroll={(event) => {
           setScreenIndex(Math.floor((event.nativeEvent.contentOffset.x + Dimensions.get('window').width / 2) / Dimensions.get('window').width));
         }}

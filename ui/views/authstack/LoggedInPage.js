@@ -83,6 +83,7 @@ function LoggedInPage({ selectedAccount, setSelectedAccount, pageStyle, windowDi
           }
           style={{
             width: Dimensions.get('window').width,
+            height: Dimensions.get('window').width,
           }}
         />}
       </View>}

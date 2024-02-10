@@ -1,70 +1,80 @@
+import mobileAds, { AdsConsent, MaxAdContentRating, AppOpenAd, AdEventType, TestIds } from 'react-native-google-mobile-ads';
+import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import { Platform } from 'react-native';
-import mobileAds, { MaxAdContentRating, AdsConsent, AppOpenAd, AdEventType, TestIds, AdsConsentStatus } from 'react-native-google-mobile-ads';
-
-import { Logger } from './Logger';
 
 
-export class AdsHandler {
-  static initialized = false;
+// Set configuration for the app
+async function configureAds() {
+  await mobileAds().setRequestConfiguration({
+    maxAdContentRating: MaxAdContentRating.T,
+    tagForChildDirectedTreatment: true,
+    tagForUnderAgeOfConsent: true,
 
-  // Main configuration
-  static async setConfig() {
-    await mobileAds().setRequestConfiguration({
-      maxAdContentRating: MaxAdContentRating.T, // Teens
-      tagForChildDirectedTreatment: true,
-      tagForUnderAgeOfConsent: true,
-    });
+    testDeviceIdentifiers: __DEV__ ? [
+      'EMULATOR',
+      '00008110-000E34380CD3801E'
+    ] : [],
+  });
+}
+
+// Admob init function
+async function initAds() {
+  await configureAds();
+  await mobileAds().initialize();
+}
+
+// Check ATT consent
+async function checkATTConsent() {
+  const result = await check(PERMISSIONS.IOS.APP_TRACKING_TRANSPARENCY);
+  if (result == RESULTS.DENIED) {
+    const newResult = await request(PERMISSIONS.IOS.APP_TRACKING_TRANSPARENCY);
+    return newResult == RESULTS.GRANTED;
+  }
+  return result == RESULTS.GRANTED;
+}
+
+// Get ad unit id
+function getAppOpenAdUnitID() {
+  return __DEV__ ? TestIds.APP_OPEN : Platform.select({
+    ios: process.env.EXPO_PUBLIC_IOS_APPOPEN_AD_UNIT_ID,
+    android: process.env.EXPO_PUBLIC_ANDROID_APPOPEN_AD_UNIT_ID,
+  });
+}
+
+// Complete function
+async function setupAdmobAndShowAppOpenAd(hideSplashScreen){  
+  // Check consent with Google's UMP message
+  var adsConsentInfo = await AdsConsent.requestInfoUpdate();
+  if (adsConsentInfo.isConsentFormAvailable) { adsConsentInfo = await AdsConsent.loadAndShowConsentFormIfRequired(); }
+  const userPreferences = await AdsConsent.getUserChoices();
+  const allowPersonalizedAds = userPreferences.selectPersonalisedAds;
+
+  // Check consent with Apple's ATT message
+  var attConsent = (Platform.OS == "android");
+  if (Platform.OS == "ios") {
+    attConsent = await checkATTConsent();
   }
 
-  // Consent status
-  static alreadyOptainedConsent = false;
-  static personalizedAdsConsent = false;
-  static async getConsentStatus() {
-    const consentInfo = await AdsConsent.requestInfoUpdate();
-    this.alreadyOptainedConsent = consentInfo.status == AdsConsentStatus.OBTAINED;
-    if (consentInfo.isConsentFormAvailable) { await AdsConsent.loadAndShowConsentFormIfRequired(); }
-    const { selectPersonalisedAds } = await AdsConsent.getUserChoices();
-    this.personalizedAdsConsent = selectPersonalisedAds;
-  }
+  // Init Admob
+  await initAds();
 
-  // Main initialize function
-  static async initialize(setShowed) {
-    Logger.info("Initializing Ads...");
-
-    await this.setConfig();
-    await this.getConsentStatus();
-    await mobileAds().initialize();
-    this.initialized = true;
-    
-    if (this.triedShowingAppOpenAd && !this.showedAppOpenAd && this.alreadyOptainedConsent) { this.showAppOpenAd(setShowed); }
-  }
-
-  
-  // AppOpen Ad
-  static triedShowingAppOpenAd = false;
-  static showedAppOpenAd = false;
-  static appOpenAdID = Platform.OS === "ios" ? "ca-app-pub-1869877675520642/1544745831" : "ca-app-pub-1869877675520642/8162071175";
-  static showAppOpenAd(setShowed) {
-    this.triedShowingAppOpenAd = true;
-    if (!this.initialized) { return; }
-    this.showedAppOpenAd = true;
-
-    Logger.info("Loading AppOpen Ad...");
-
-    const appOpenAd = AppOpenAd.createForAdRequest(__DEV__ ? TestIds.APP_OPEN : this.appOpenAdID, {
-      requestNonPersonalizedAdsOnly: !this.personalizedAdsConsent,
+  // Should show AppOpen Ad ? (30% chance)
+  const shouldShowAppOpenAd = Math.random() < 0.3;
+  if (shouldShowAppOpenAd) {
+    const appOpenAd = AppOpenAd.createForAdRequest(
+      getAppOpenAdUnitID(), {
+      publisherProvidedId: process.env.EXPO_PUBLIC_ADMOB_PUBLISHER_ID,
+      requestNonPersonalizedAdsOnly: !allowPersonalizedAds || !attConsent,
+      keywords: ["élève", "lycée", "collège", "école"],
     });
     appOpenAd.addAdEventsListener((event) => {
-      if (event.type === AdEventType.LOADED) {
-        appOpenAd.show();
-      } else if (event.type == AdEventType.ERROR) {
-        Logger.info("AppOpen Ad couldn't open...", true);
-        Logger.info(event.payload, true);
-        setShowed(true);
-      } else if (event.type === AdEventType.CLOSED) {
-        setShowed(true);
+      if (event.type == AdEventType.LOADED) { appOpenAd.show(); }
+      else if (event.type == AdEventType.CLOSED || event.type == AdEventType.ERROR) {
+        hideSplashScreen();
       }
     });
     appOpenAd.load();
-  }
+  } else { hideSplashScreen(); }
 }
+
+export default setupAdmobAndShowAppOpenAd;

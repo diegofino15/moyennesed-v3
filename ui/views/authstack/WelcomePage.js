@@ -31,6 +31,7 @@ function WelcomePage({ pageStyle, theme }) {
           source={require("../../../assets/lottie/welcome-animation.json")}
           style={{
             width: Dimensions.get('window').width,
+            height: Dimensions.get('window').width,
           }}
         />}
       </View>

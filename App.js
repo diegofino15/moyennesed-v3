@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from "react";
+import { useEffect } from "react";
 import useState from "react-usestateref";
 import { StatusBar } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
@@ -13,7 +13,7 @@ import { useFonts, refreshTheme } from "./ui/hooks/useStyles";
 import { UserData } from "./core/UserData";
 import { Preferences } from "./core/Preferences";
 import { CoefficientManager } from "./core/CoefficientsManager";
-import { AdsHandler } from "./utils/AdsHandler";
+import setupAdmobAndShowAppOpenAd from "./utils/AdsHandler";
 import { AppContextProvider } from "./utils/AppContext";
 import { Logger } from "./utils/Logger";
 
@@ -23,14 +23,6 @@ SplashScreen.preventAutoHideAsync();
 
 // Main App
 function App() {
-  // AppOpen Ad
-  const [wasAppOpenAdShowed, setWasAppOpenAdShowed] = useState(false);
-  useEffect(() => { AdsHandler.initialize(setWasAppOpenAdShowed); }, []);
-  useEffect(() => { if (isAppLoaded && wasAppOpenAdShowed && !isSplashScreenHidded) {
-    SplashScreen.hideAsync();
-    setIsSplashScreenHidden(true);
-  }}, [wasAppOpenAdShowed]);
-
   // App state needed to show either AppStack or AuthStack
   const [loggedIn, setLoggedIn] = useState(false);
   const [isAppLoaded, setIsAppLoaded] = useState(false);
@@ -41,19 +33,10 @@ function App() {
   useEffect(() => { setIsDarkMode(Preferences.isDarkMode); }, [Preferences.isDarkMode]);
   refreshTheme(theme, isDarkMode);
 
-  // Hide SplashScreen once app is loaded
-  const [isSplashScreenHidded, setIsSplashScreenHidden] = useState(false);
-  const onLayoutRootView = useCallback(async () => {
-    if (isAppLoaded && (wasAppOpenAdShowed || !loggedIn)) {
-      await SplashScreen.hideAsync();
-      setIsSplashScreenHidden(true);
-    }
-  }, [isAppLoaded]);
-
   // Main initialize function
   useEffect(() => { initialize(); });
   async function initialize() {
-    if (isAppLoaded || loggedIn || wasAppOpenAdShowed) { return; }
+    if (loggedIn) { return; }
 
     try {
       // Load fonts
@@ -65,8 +48,7 @@ function App() {
         Logger.load("Detected logged-in account, loading cache...");
 
         // Show AppOpen ad
-        if (Math.random() <= 0.33) { AdsHandler.showAppOpenAd(setWasAppOpenAdShowed); }
-        else { setWasAppOpenAdShowed(true); }
+        await setupAdmobAndShowAppOpenAd(SplashScreen.hideAsync);
 
         // Load all local files
         await Preferences.load();
@@ -76,6 +58,7 @@ function App() {
         setLoggedIn(true);
       } else {
         Logger.load("No account detected, showing AuthStack");
+        await SplashScreen.hideAsync();
       }
     } catch (e) {
       Logger.load("An error occured on startup", true);
@@ -89,7 +72,7 @@ function App() {
   if (!isAppLoaded) { return null; }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       {/* Top status bar */}
       <StatusBar
         translucent={true}
