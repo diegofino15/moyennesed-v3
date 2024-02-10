@@ -39,5 +39,6 @@ utils/firebaseUtils.js
 private
 
 # builds
+builds/
 *.ipa
 *.aab
