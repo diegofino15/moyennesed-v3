@@ -26,6 +26,7 @@ function App() {
   // App state needed to show either AppStack or AuthStack
   const [loggedIn, setLoggedIn] = useState(false);
   const [isAppLoaded, setIsAppLoaded] = useState(false);
+  useEffect(() => { if (isAppLoaded) { SplashScreen.hideAsync(); } }, [isAppLoaded]);
 
   // Light/Dark mode
   const theme = useTheme();
@@ -34,10 +35,8 @@ function App() {
   refreshTheme(theme, isDarkMode);
 
   // Main initialize function
-  useEffect(() => { initialize(); });
+  useEffect(() => { initialize(); }, []);
   async function initialize() {
-    if (loggedIn) { return; }
-
     try {
       // Load fonts
       await useFonts();
@@ -47,23 +46,23 @@ function App() {
       if (jsonCredentials) {
         Logger.load("Detected logged-in account, loading cache...");
 
-        // Show AppOpen ad
-        await setupAdmobAndShowAppOpenAd(SplashScreen.hideAsync);
-
         // Load all local files
         await Preferences.load();
         await CoefficientManager.load();
         await UserData.loadCache();
 
-        setLoggedIn(true);
+        // Show AppOpen ad
+        await setupAdmobAndShowAppOpenAd(() => {
+          setLoggedIn(true);
+          setIsAppLoaded(true);
+        });
       } else {
         Logger.load("No account detected, showing AuthStack");
-        await SplashScreen.hideAsync();
+        setIsAppLoaded(true);
       }
     } catch (e) {
       Logger.load("An error occured on startup", true);
       Logger.load(e, true);
-    } finally {
       setIsAppLoaded(true);
     }
   }
