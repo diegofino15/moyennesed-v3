@@ -52,8 +52,8 @@ function App() {
         await UserData.loadCache();
 
         // Show AppOpen ad
+        setLoggedIn(true);
         await setupAdmobAndShowAppOpenAd(() => {
-          setLoggedIn(true);
           setIsAppLoaded(true);
         });
       } else {
