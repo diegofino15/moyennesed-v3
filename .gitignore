@@ -38,6 +38,9 @@ yarn-error.*
 utils/firebaseUtils.js
 private
 
+# admob
+.env
+
 # builds
 builds/
 *.ipa

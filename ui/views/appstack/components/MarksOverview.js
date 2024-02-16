@@ -20,8 +20,8 @@ import { HapticsHandler } from "../../../../utils/HapticsHandler";
 
 // Rewarded ad unit
 const adUnitId = __DEV__ ? TestIds.REWARDED : Platform.select({
-  ios: "--",
-  android: "--",
+  ios: process.env.EXPO_PUBLIC_IOS_REWARDED_AD_UNIT_ID,
+  android: process.env.EXPO_PUBLIC_ANDROID_REWARDED_AD_UNIT_ID,
 });
 const rewarded = RewardedAd.createForAdRequest(adUnitId, {
   keywords: ['élève', 'lycéen', 'collège', 'lycée', 'école', 'éducation'],
