@@ -69,7 +69,6 @@ function MarksOverview({
   const [canShowAverage, setCanShowAverage] = useState(false);
   const [triedToShowAd, setTriedToShowAd] = useState(false);
   useEffect(() => {
-    console.log('CHECKEDDDD !!!');
     // Set ad cooldown for 12 hours
     const AD_COOLDOWN = 12 * 60 * 60 * 1000;
     AsyncStorage.getItem("canShowAverage").then(value => {
