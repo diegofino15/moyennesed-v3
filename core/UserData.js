@@ -267,6 +267,7 @@ export class UserData {
     await CoefficientManager.erase();
     this.temporaryProfilePhoto = "";
     await AsyncStorage.removeItem("photo");
+    await AsyncStorage.removeItem("canShowAverage");
     this.lastBugReport = null;
     resetSubjectColors();
     Logger.info("Logged out !");

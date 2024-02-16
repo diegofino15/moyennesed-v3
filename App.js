@@ -13,9 +13,9 @@ import { useFonts, refreshTheme } from "./ui/hooks/useStyles";
 import { UserData } from "./core/UserData";
 import { Preferences } from "./core/Preferences";
 import { CoefficientManager } from "./core/CoefficientsManager";
-import setupAdmobAndShowAppOpenAd from "./utils/AdsHandler";
 import { AppContextProvider } from "./utils/AppContext";
 import { Logger } from "./utils/Logger";
+import AdsHandler from "./utils/AdsHandler";
 
 
 // Keep SplashScreen on while app is loading
@@ -50,12 +50,12 @@ function App() {
         await Preferences.load();
         await CoefficientManager.load();
         await UserData.loadCache();
-
-        // Show AppOpen ad
         setLoggedIn(true);
-        await setupAdmobAndShowAppOpenAd(() => {
-          setIsAppLoaded(true);
-        });
+
+        // Setup admob
+        await AdsHandler.setupAdmob();
+
+        setIsAppLoaded(true);
       } else {
         Logger.load("No account detected, showing AuthStack");
         setIsAppLoaded(true);

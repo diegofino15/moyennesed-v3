@@ -1,18 +1,32 @@
 import { useEffect, memo } from "react";
-import { View, ScrollView, Text, ActivityIndicator, Dimensions } from "react-native";
-import { CheckCircle2Icon, DraftingCompassIcon, HelpCircleIcon, TrendingUpIcon, Users2Icon, WifiOffIcon, RefreshCcwIcon, ArrowDownUpIcon, ArrowUpDownIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react-native";
+import { View, ScrollView, Text, ActivityIndicator, Dimensions, Platform } from "react-native";
+import { CheckCircle2Icon, DraftingCompassIcon, HelpCircleIcon, TrendingUpIcon, Users2Icon, WifiOffIcon, RefreshCcwIcon, ChevronDownIcon, ChevronUpIcon, LockIcon, VideoIcon } from "lucide-react-native";
+import { RewardedAd, TestIds, AdEventType } from 'react-native-google-mobile-ads';
 import { PressableScale } from "react-native-pressable-scale";
 import { LineChart } from "react-native-chart-kit";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Haptics from 'expo-haptics';
 import useState from "react-usestateref";
 
 import RecentMarkCard from "./RecentMarkCard";
 import SubjectCard from "./SubjectCard";
 import { AnimatedComponent } from "../../global_components/AnimatedComponents";
-import { formatAverage } from "../../../../utils/Utils";
-import { CoefficientManager } from "../../../../core/CoefficientsManager";
 import { Preferences } from "../../../../core/Preferences";
+import { CoefficientManager } from "../../../../core/CoefficientsManager";
+import AdsHandler from "../../../../utils/AdsHandler";
+import { formatAverage } from "../../../../utils/Utils";
 import { HapticsHandler } from "../../../../utils/HapticsHandler";
+
+
+// Rewarded ad unit
+const adUnitId = __DEV__ ? TestIds.REWARDED : Platform.select({
+  ios: "--",
+  android: "--",
+});
+const rewarded = RewardedAd.createForAdRequest(adUnitId, {
+  keywords: ['élève', 'lycéen', 'collège', 'lycée', 'école', 'éducation'],
+  requestNonPersonalizedAdsOnly: !AdsHandler.servePersonalizedAds,
+});
 
 
 function MarksOverview({
@@ -51,6 +65,46 @@ function MarksOverview({
   // Show subject groups class averages
   const [showSubjectGroupClassAverage, setShowSubjectGroupClassAverage] = useState(false);
 
+  // Should show ad to show global average ?
+  const [canShowAverage, setCanShowAverage] = useState(false);
+  const [triedToShowAd, setTriedToShowAd] = useState(false);
+  useEffect(() => {
+    console.log('CHECKEDDDD !!!');
+    // Set ad cooldown for 12 hours
+    const AD_COOLDOWN = 12 * 60 * 60 * 1000;
+    AsyncStorage.getItem("canShowAverage").then(value => {
+      const data = JSON.parse(value);
+      if (data) {
+        const lastAdShowedDate = new Date(data?.lastAdShowedDate ?? 0);
+        if (Date.now() - lastAdShowedDate <= AD_COOLDOWN) {
+          setCanShowAverage(true);
+          return;
+        }
+      } else {
+        setCanShowAverage(true);
+        AsyncStorage.setItem("canShowAverage", JSON.stringify({
+          lastAdShowedDate: Date.now(),
+        }));
+        return;
+      }
+
+      // Setup ad
+      if (AdsHandler.canServeAds) {
+        rewarded.addAdEventsListener(event => {
+          if (event.type === AdEventType.LOADED) {
+            if (triedToShowAd) { rewarded.show(); }
+          } else if (event.type === AdEventType.CLOSED || event.type === AdEventType.ERROR) {
+            setCanShowAverage(true);
+            AsyncStorage.setItem("canShowAverage", JSON.stringify({
+              lastAdShowedDate: Date.now(),
+            }));
+          }
+        });
+        rewarded.load();
+      } else { setCanShowAverage(true); }
+    });
+  }, []);
+
   return (
     <View>
       <AnimatedComponent index={0} forceUpdate={forceUpdateRef.current} children={<View style={{
@@ -75,8 +129,10 @@ function MarksOverview({
           }}>
             {period.average ? <View style={{ flexDirection: 'row' }}>
               <PressableScale onPress={() => {
-                setIsGraphSelected(!isGraphSelected);
-                HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Light);
+                if (canShowAverage) {
+                  setIsGraphSelected(!isGraphSelected);
+                  HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Light);
+                }
               }} style={{
                 backgroundColor: theme.colors.background,
                 borderRadius: 5,
@@ -93,7 +149,7 @@ function MarksOverview({
                   <Text style={theme.fonts.labelMedium}>Moyenne</Text>
                 </View>}
               </PressableScale>
-              {isGraphSelected && !CoefficientManager.isAverageHistoryUpdated && !manualRefreshingRef.current && <PressableScale onPress={refresh} style={{
+              {(isGraphSelected && !CoefficientManager.isAverageHistoryUpdated && !manualRefreshingRef.current) || (!canShowAverage) ? <PressableScale onPress={canShowAverage ? refresh : null} style={{
                 backgroundColor: theme.colors.primary,
                 borderColor: theme.colors.surface,
                 borderWidth: 1,
@@ -104,8 +160,8 @@ function MarksOverview({
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-                <RefreshCcwIcon size={20} color={theme.colors.onPrimary}/>
-              </PressableScale>}
+                {canShowAverage ? <RefreshCcwIcon size={20} color={theme.colors.onPrimary}/> : <LockIcon size={20} color={theme.colors.onPrimary}/>}
+              </PressableScale> : null}
             </View> : <View/>}
             {loading
               ? <ActivityIndicator size={25 * windowDimensions.fontScale} color={theme.colors.onSurface}/>
@@ -114,19 +170,36 @@ function MarksOverview({
                 : <CheckCircle2Icon size={25 * windowDimensions.fontScale} color={theme.colors.secondary}/>}
           </View>
 
-          {!isGraphSelected ? <View style={{
-            alignItems: 'center',
-            minHeight: 100,
-            justifyContent: 'center',
-          }}>
-            <Text style={theme.fonts.headlineLarge}>{formatAverage(period.average)}</Text>
-            <Text style={[theme.fonts.labelMedium, { marginBottom: 5, marginRight: 5 }]}>MOYENNE GÉNÉRALE</Text>
-            
-            <View style={{ flexDirection: 'row' }}>
-              <Users2Icon size={15 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled} style={{ marginRight: 5 }}/>
-              <Text style={[theme.fonts.labelSmall, { bottom: 1 }]}>: </Text>
-              <Text style={[theme.fonts.labelSmall, { fontFamily: 'Bitter-Regular' }]}>{formatAverage(period.classAverage)}</Text>
-            </View>
+          {!isGraphSelected ? <View>
+            {canShowAverage ? <View style={{
+              alignItems: 'center',
+              minHeight: 100,
+              justifyContent: 'center',
+            }}>
+              <Text style={theme.fonts.headlineLarge}>{formatAverage(period.average)}</Text>
+              <Text style={[theme.fonts.labelMedium, { marginBottom: 5, marginRight: 5 }]}>MOYENNE GÉNÉRALE</Text>
+              
+              <View style={{ flexDirection: 'row' }}>
+                <Users2Icon size={15 * windowDimensions.fontScale} color={theme.colors.onSurfaceDisabled} style={{ marginRight: 5 }}/>
+                <Text style={[theme.fonts.labelSmall, { bottom: 1 }]}>: </Text>
+                <Text style={[theme.fonts.labelSmall, { fontFamily: 'Bitter-Regular' }]}>{formatAverage(period.classAverage)}</Text>
+              </View>
+            </View> : <PressableScale style={{
+              height: 100,
+              width: 150,
+              borderWidth: 2,
+              borderColor: theme.colors.background,
+              borderRadius: 10,
+              alignItems: 'center',
+              justifyContent: 'space-evenly',
+              padding: 10,
+            }} onPress={() => {
+              if (rewarded.loaded) { rewarded.show(); }
+              else { setTriedToShowAd(true); }
+            }}>
+              <Text style={[theme.fonts.labelMedium, { textAlign: 'center' }]}>DÉVOILER LA MOYENNE</Text>
+              <VideoIcon size={30} color={theme.colors.onSurfaceDisabled}/>
+            </PressableScale>}
           </View> : <View style={{
             height: 100,
           }}>
