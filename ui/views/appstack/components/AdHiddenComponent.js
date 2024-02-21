@@ -75,9 +75,6 @@ function AdHiddenComponent({
 
   return canShowContent ? null : (
     <PressableScale style={{
-      position: 'absolute',
-      left: -width/2,
-      top: -height/2,
       width: width,
       height: height,
       borderWidth: 2,

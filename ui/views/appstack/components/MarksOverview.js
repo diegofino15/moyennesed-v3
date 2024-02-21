@@ -136,9 +136,8 @@ function MarksOverview({
               </View>
             </View>
             <View style={{
-              position: 'absolute',
-              left: (Dimensions.get('window').width - 20) / 2 - 100,
-              top: 50,
+              top: -100,
+              marginBottom: canShowAverage ? 0 : -100,
             }}>
               <AdHiddenComponent
                 canShowContent={canShowAverage}
