@@ -1,10 +1,8 @@
-import { useEffect, memo } from "react";
-import { View, ScrollView, Text, ActivityIndicator, Dimensions, Platform } from "react-native";
-import { CheckCircle2Icon, DraftingCompassIcon, HelpCircleIcon, TrendingUpIcon, Users2Icon, WifiOffIcon, RefreshCcwIcon, ChevronDownIcon, ChevronUpIcon, LockIcon, VideoIcon } from "lucide-react-native";
-import { RewardedAd, TestIds, AdEventType } from 'react-native-google-mobile-ads';
+import { useEffect } from "react";
+import { View, ScrollView, Text, ActivityIndicator, Dimensions } from "react-native";
+import { CheckCircle2Icon, DraftingCompassIcon, HelpCircleIcon, TrendingUpIcon, Users2Icon, WifiOffIcon, RefreshCcwIcon, ChevronDownIcon, ChevronUpIcon, LockIcon } from "lucide-react-native";
 import { PressableScale } from "react-native-pressable-scale";
 import { LineChart } from "react-native-chart-kit";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Haptics from 'expo-haptics';
 import useState from "react-usestateref";
 
@@ -13,20 +11,9 @@ import SubjectCard from "./SubjectCard";
 import { AnimatedComponent } from "../../global_components/AnimatedComponents";
 import { Preferences } from "../../../../core/Preferences";
 import { CoefficientManager } from "../../../../core/CoefficientsManager";
-import AdsHandler from "../../../../utils/AdsHandler";
 import { formatAverage } from "../../../../utils/Utils";
 import { HapticsHandler } from "../../../../utils/HapticsHandler";
-
-
-// Rewarded ad unit
-const adUnitId = __DEV__ ? TestIds.REWARDED : Platform.select({
-  ios: process.env.EXPO_PUBLIC_IOS_REWARDED_AD_UNIT_ID,
-  android: process.env.EXPO_PUBLIC_ANDROID_REWARDED_AD_UNIT_ID,
-});
-const rewarded = RewardedAd.createForAdRequest(adUnitId, {
-  keywords: ['élève', 'lycéen', 'collège', 'lycée', 'école', 'éducation'],
-  requestNonPersonalizedAdsOnly: !AdsHandler.servePersonalizedAds,
-});
+import AdHiddenComponent from "./AdHiddenComponent";
 
 
 function MarksOverview({
@@ -65,44 +52,8 @@ function MarksOverview({
   // Show subject groups class averages
   const [showSubjectGroupClassAverage, setShowSubjectGroupClassAverage] = useState(false);
 
-  // Should show ad to show global average ?
+  // Can show average ?
   const [canShowAverage, setCanShowAverage] = useState(false);
-  const [triedToShowAd, setTriedToShowAd] = useState(false);
-  useEffect(() => {
-    // Set ad cooldown for 12 hours
-    const AD_COOLDOWN = 12 * 60 * 60 * 1000;
-    AsyncStorage.getItem("canShowAverage").then(value => {
-      const data = JSON.parse(value);
-      if (data) {
-        const lastAdShowedDate = new Date(data?.lastAdShowedDate ?? 0);
-        if (Date.now() - lastAdShowedDate <= AD_COOLDOWN) {
-          setCanShowAverage(true);
-          return;
-        }
-      } else {
-        setCanShowAverage(true);
-        AsyncStorage.setItem("canShowAverage", JSON.stringify({
-          lastAdShowedDate: Date.now(),
-        }));
-        return;
-      }
-
-      // Setup ad
-      if (AdsHandler.canServeAds) {
-        rewarded.addAdEventsListener(event => {
-          if (event.type === AdEventType.LOADED) {
-            if (triedToShowAd) { rewarded.show(); }
-          } else if (event.type === AdEventType.CLOSED || event.type === AdEventType.ERROR) {
-            setCanShowAverage(true);
-            AsyncStorage.setItem("canShowAverage", JSON.stringify({
-              lastAdShowedDate: Date.now(),
-            }));
-          }
-        });
-        rewarded.load();
-      } else { setCanShowAverage(true); }
-    });
-  }, []);
 
   return (
     <View>
@@ -170,7 +121,7 @@ function MarksOverview({
           </View>
 
           {!isGraphSelected ? <View>
-            {canShowAverage ? <View style={{
+            <View style={{
               alignItems: 'center',
               minHeight: 100,
               justifyContent: 'center',
@@ -183,22 +134,20 @@ function MarksOverview({
                 <Text style={[theme.fonts.labelSmall, { bottom: 1 }]}>: </Text>
                 <Text style={[theme.fonts.labelSmall, { fontFamily: 'Bitter-Regular' }]}>{formatAverage(period.classAverage)}</Text>
               </View>
-            </View> : <PressableScale style={{
-              height: 100,
-              width: 150,
-              borderWidth: 2,
-              borderColor: theme.colors.background,
-              borderRadius: 10,
-              alignItems: 'center',
-              justifyContent: 'space-evenly',
-              padding: 10,
-            }} onPress={() => {
-              if (rewarded.loaded) { rewarded.show(); }
-              else { setTriedToShowAd(true); }
+            </View>
+            <View style={{
+              position: 'absolute',
+              left: (Dimensions.get('window').width - 20) / 2 - 100,
+              top: 50,
             }}>
-              <Text style={[theme.fonts.labelMedium, { textAlign: 'center' }]}>DÉVOILER LA MOYENNE</Text>
-              <VideoIcon size={30} color={theme.colors.onSurfaceDisabled}/>
-            </PressableScale>}
+              <AdHiddenComponent
+                canShowContent={canShowAverage}
+                setCanShowContent={setCanShowAverage}
+                width={200}
+                height={100}
+                theme={theme}
+              />
+            </View>
           </View> : <View style={{
             height: 100,
           }}>
@@ -405,4 +354,4 @@ function MarksOverview({
   );
 }
 
-export default memo(MarksOverview);
+export default MarksOverview;

@@ -1,4 +1,4 @@
-import { useState, memo } from 'react';
+import { useState } from 'react';
 import { View, Text, Dimensions } from 'react-native';
 import { ArrowRightIcon } from 'lucide-react-native';
 import { PressableScale } from 'react-native-pressable-scale';
@@ -107,4 +107,4 @@ function SubjectCard({ mainSubject, refreshAverages, setSubjectCoefficient, getM
   );
 }
 
-export default memo(SubjectCard);
+export default SubjectCard;

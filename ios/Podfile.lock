@@ -3,12 +3,12 @@ PODS:
   - DoubleConversion (1.1.6)
   - EXConstants (15.4.5):
     - ExpoModulesCore
-  - EXFont (11.10.2):
+  - EXFont (11.10.3):
     - ExpoModulesCore
   - EXJSONUtils (0.12.3)
   - EXManifests (0.13.2):
     - ExpoModulesCore
-  - Expo (50.0.6):
+  - Expo (50.0.7):
     - ExpoModulesCore
   - expo-dev-client (3.3.8):
     - EXManifests
@@ -77,13 +77,15 @@ PODS:
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
+  - ExpoBlur (12.9.2):
+    - ExpoModulesCore
   - ExpoFileSystem (16.0.6):
     - ExpoModulesCore
   - ExpoHaptics (12.8.1):
     - ExpoModulesCore
   - ExpoKeepAwake (12.8.2):
     - ExpoModulesCore
-  - ExpoModulesCore (1.11.8):
+  - ExpoModulesCore (1.11.9):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -1245,6 +1247,7 @@ DEPENDENCIES:
   - expo-dev-launcher (from `../node_modules/expo-dev-launcher`)
   - expo-dev-menu (from `../node_modules/expo-dev-menu`)
   - expo-dev-menu-interface (from `../node_modules/expo-dev-menu-interface/ios`)
+  - ExpoBlur (from `../node_modules/expo-blur/ios`)
   - ExpoFileSystem (from `../node_modules/expo-file-system/ios`)
   - ExpoHaptics (from `../node_modules/expo-haptics/ios`)
   - ExpoKeepAwake (from `../node_modules/expo-keep-awake/ios`)
@@ -1347,6 +1350,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-dev-menu"
   expo-dev-menu-interface:
     :path: "../node_modules/expo-dev-menu-interface/ios"
+  ExpoBlur:
+    :path: "../node_modules/expo-blur/ios"
   ExpoFileSystem:
     :path: "../node_modules/expo-file-system/ios"
   ExpoHaptics:
@@ -1477,18 +1482,19 @@ SPEC CHECKSUMS:
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
   DoubleConversion: fea03f2699887d960129cc54bba7e52542b6f953
   EXConstants: 988aa430ca0f76b43cd46b66e7fae3287f9cc2fc
-  EXFont: 21b9c760abd593ce8f0d5386b558ced76018506f
+  EXFont: f20669cb266ef48b004f1eb1f2b20db96cd1df9f
   EXJSONUtils: 5c42959e87be238b045ef37cc5268b16a6c0ad4a
   EXManifests: 5e8c29f36c716af768a4ea47ec05e1b89ab93091
-  Expo: fb745b3074989670b6641f9f20463e8ee56a69ca
+  Expo: 1cf3922a9b26262b2556544d4defcecccd37d033
   expo-dev-client: 025dce84f48b04c60c3891547732f001f6aad777
   expo-dev-launcher: 4e83baafc5b7090c0da29acbceb6007e0a7ed3d8
   expo-dev-menu: 1b221587615ce11b37a64da5520e9a639496571b
   expo-dev-menu-interface: 7ba029c9d1a82ac22b9b584c00514860b060553e
+  ExpoBlur: e832d874bd94afc0645daddbd3162ec1ce172080
   ExpoFileSystem: a9273932e69a9a1e1a8d01b6ba895bb8294bbea2
   ExpoHaptics: 28a771b630353cd6e8dcf1b1e3e693e38ad7c3c3
   ExpoKeepAwake: 0f5cad99603a3268e50af9a6eb8b76d0d9ac956c
-  ExpoModulesCore: 2346e83abf90c2b2c16a54c3fc4a1169ae12816c
+  ExpoModulesCore: e3935209adc73469033e62992a504077def5bd40
   ExpoSystemUI: 40e222dd9d52222fe1bce389724ac52e662158dc
   EXSplashScreen: e12df5ed7e7880913a3e4bad91ba252596993b90
   EXUpdatesInterface: 3e444e2093e25b7ca0999a7d8c16e8392dee70c3

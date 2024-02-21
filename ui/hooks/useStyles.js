@@ -32,6 +32,7 @@ function refreshTheme(theme, isDarkMode) {
   
       tertiary: '#DA3633',
     };
+    theme.dark = false;
   } else {
     theme.colors = {
       background: '#0D1117',
@@ -50,6 +51,7 @@ function refreshTheme(theme, isDarkMode) {
   
       tertiary: '#DA3633',
     };
+    theme.dark = true;
   }
 
   theme.fonts = {
