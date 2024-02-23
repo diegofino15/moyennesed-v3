@@ -2,7 +2,7 @@
   "expo": {
     "name": "MoyennesED",
     "slug": "moyennesed-v3",
-    "version": "3.4.1",
+    "version": "3.4.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -25,7 +25,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "me.diegof.moyennesed",
-      "versionCode": 24
+      "versionCode": 25
     },
     "extra": {
       "eas": {
@@ -61,6 +61,7 @@
   "react-native-google-mobile-ads": {
     "android_app_id": "ca-app-pub-1869877675520642~9782266497",
     "ios_app_id": "ca-app-pub-1869877675520642~9540112976",
+    "delay_app_measurement_init": true,
     "user_tracking_usage_description": "Autorisez-vous les publicités personnalisées sur MoyennesED ?",
     "sk_ad_network_items": [
       "cstr6suwn9.skadnetwork",

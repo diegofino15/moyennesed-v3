@@ -15,6 +15,7 @@ import { UserData } from '../../../core/UserData';
 import { Preferences } from '../../../core/Preferences';
 import { CoefficientManager } from '../../../core/CoefficientsManager';
 import { HapticsHandler } from '../../../utils/HapticsHandler';
+import AdsHandler from '../../../utils/AdsHandler';
 
 
 function ProfilePage({
@@ -388,6 +389,29 @@ function ProfilePage({
             />
           </View>
         </View>
+
+        {/* DEV */}
+        {__DEV__ && (
+          <View>
+            <Text style={[theme.fonts.titleSmall, { marginBottom: 10 }]}>Dev options</Text>
+            <View style={{
+              backgroundColor: theme.colors.surface,
+              borderRadius: 20,
+              marginBottom: 20,
+              paddingHorizontal: 20,
+              paddingVertical: 15,
+            }}>
+              <CustomLink
+                title={"Open ad inspector"}
+                onPress={() => {
+                  AdsHandler.openDebugger();
+                }}
+                windowDimensions={windowDimensions}
+                theme={theme}
+              />
+            </View>
+          </View>
+        )}
         
         {/* Disconnect button */}
         <CustomButton
