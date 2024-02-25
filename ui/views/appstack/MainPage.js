@@ -17,6 +17,7 @@ function MainPage({
   profilePhotoRef, 
   scrollViewRef,
   updateScreen,
+  adStuff,
   theme
 }) {
   // Account shown on screen
@@ -229,6 +230,7 @@ function MainPage({
           autoRefreshing={!manualRefreshingRef.current && refreshingRef.current}
           refresh={refresh}
           manualRefreshingRef={manualRefreshingRef}
+          adStuff={adStuff}
           theme={theme}
         />
 

@@ -27,6 +27,7 @@ function MarksOverview({
   refresh,
   manualRefreshingRef,
   windowDimensions,
+  adStuff,
   theme
 }) {
   // Work with subject groups
@@ -53,7 +54,7 @@ function MarksOverview({
   const [showSubjectGroupClassAverage, setShowSubjectGroupClassAverage] = useState(false);
 
   // Can show average ?
-  const [canShowAverage, setCanShowAverage] = useState(false);
+  const { canShowContent } = adStuff;
 
   return (
     <View>
@@ -79,7 +80,7 @@ function MarksOverview({
           }}>
             {period.average ? <View style={{ flexDirection: 'row' }}>
               <PressableScale onPress={() => {
-                if (canShowAverage) {
+                if (canShowContent) {
                   setIsGraphSelected(!isGraphSelected);
                   HapticsHandler.vibrate(Haptics.ImpactFeedbackStyle.Light);
                 }
@@ -99,7 +100,7 @@ function MarksOverview({
                   <Text style={theme.fonts.labelMedium}>Moyenne</Text>
                 </View>}
               </PressableScale>
-              {(isGraphSelected && !CoefficientManager.isAverageHistoryUpdated && !manualRefreshingRef.current) || (!canShowAverage) ? <PressableScale onPress={canShowAverage ? refresh : null} style={{
+              {(isGraphSelected && !CoefficientManager.isAverageHistoryUpdated && !manualRefreshingRef.current) || (!canShowContent) ? <PressableScale onPress={canShowContent ? refresh : null} style={{
                 backgroundColor: theme.colors.primary,
                 borderColor: theme.colors.surface,
                 borderWidth: 1,
@@ -110,7 +111,7 @@ function MarksOverview({
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-                {canShowAverage ? <RefreshCcwIcon size={20} color={theme.colors.onPrimary}/> : <LockIcon size={20} color={theme.colors.onPrimary}/>}
+                {canShowContent ? <RefreshCcwIcon size={20} color={theme.colors.onPrimary}/> : <LockIcon size={20} color={theme.colors.onPrimary}/>}
               </PressableScale> : null}
             </View> : <View/>}
             {loading
@@ -137,11 +138,10 @@ function MarksOverview({
             </View>
             <View style={{
               top: -100,
-              marginBottom: canShowAverage ? 0 : -100,
+              marginBottom: canShowContent ? 0 : -100,
             }}>
               <AdHiddenComponent
-                canShowContent={canShowAverage}
-                setCanShowContent={setCanShowAverage}
+                adStuff={adStuff}
                 width={200}
                 height={100}
                 theme={theme}
