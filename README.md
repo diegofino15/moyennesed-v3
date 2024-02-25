@@ -10,8 +10,8 @@ MoyennesED est une application mobile conçue pour permettre aux élèves de con
   - [x] + Coefficients personnalisables
   - [x] Paramètres configurables sur l'onglet profil
 - [x] Groupements de matières (ex: Spécialités / Tronc commun) + Sous matières (ex: Français > Écrit)
-- [x] Graphique d'évolution de la moyenne générale
-- [x] Système de signalement de bugs
+- [x] Graphiques de la moyenne générale et des dernières notes des matières
+- [x] Système de signalement de bugs + Contact par mail depuis l'appli
 
 ## ⚛️ Fonctionnement
 Structure : **JavaScript** avec **React Native** et **Expo**  
@@ -25,17 +25,28 @@ L'application est disponible sur l'AppStore, et sur le GooglePlay !
 
 ## Comment participer ?
 N'hésitez pas à faire des pulls requests pour ajouter des fonctionnalités ou régler des bugs !  
-Pour se faire, clonez le projet :
+Pour ce faire, clonez le projet :
 ```bash
 git clone https://github.com/diegofino15/moyennesed-v3.git
 cd moyennesed-v3
 ```
-Ensuite, installez les dependencies et lancez le projet avec expo et yarn :
+
+iOS (simulateur) :
 ```bash
-yarn install
-yarn start
+cd ios && pod install && cd ..
+npx expo run:ios
 ```
-Puis installez l'application ExpoGo sur votre appareil ou lancez un simulateur, et connectez vous au serveur lancé avec ```yarn start```
+
+Android (simulateur) :
+```bash
+npx expo run:android
+```
+
+Vous pouvez lancer l'appli sur votre téléphone avec ces commandes (il doit être connecté avec un câble) :
+```bash
+npx expo run:ios --device
+npx expo run:android --device
+```
 
 ## Contact
 Si vous avez des questions ou des suggestions, n’hésitez pas à ouvrir une issue sur GitHub ou à me contacter directement via mail à moyennesed@gmail.com.
