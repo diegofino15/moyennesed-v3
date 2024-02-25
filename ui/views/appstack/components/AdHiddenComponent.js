@@ -52,16 +52,7 @@ function AdHiddenComponent({
         rewarded.addAdEventsListener(event => {
           if (event.type === AdEventType.LOADED) {
             if (triedToShowAd) { rewarded.show(); }
-          } else if (event.type === AdEventType.CLOSED) {
-            setCanShowContent(true);
-            AsyncStorage.setItem("canShowAverage", JSON.stringify({
-              lastAdShowedDate: Date.now(),
-            }));
-            rewarded = RewardedAd.createForAdRequest(adUnitId, {
-              keywords: ['élève', 'lycéen', 'collège', 'lycée', 'école', 'éducation'],
-              requestNonPersonalizedAdsOnly: !AdsHandler.servePersonalizedAds,
-            });
-          } else if (event.type === AdEventType.ERROR) {
+          } else if (event.type === AdEventType.CLOSED || event.type === AdEventType.ERROR) {
             setCanShowContent(true);
             AsyncStorage.setItem("canShowAverage", JSON.stringify({
               lastAdShowedDate: Date.now(),
